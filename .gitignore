@@ -1,0 +1,25 @@
+# Ignore build and VS files
+x64/
+Debug/
+Release/
+*/x64/
+*/Debug/
+*/Release/
+.vs/
+*.vcxproj.user
+*.suo
+*.sdf
+*.opensdf
+*.VC.db
+*.obj
+*.pdb
+*.idb
+*.ipch
+*.aps
+*.ncb
+*.log
+*.tmp
+*.cache
+*.user
+*.userosscache
+*.sln.docstates
