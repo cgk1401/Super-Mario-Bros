@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\src\Animation.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="..\src\PlayState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\headers\Animation.h" />
     <ClInclude Include="..\headers\Button.h" />
     <ClInclude Include="..\headers\Character.h" />
     <ClInclude Include="..\headers\Game.h" />

@@ -72,6 +72,9 @@
     <ClCompile Include="..\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Animation.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Character.h">
@@ -100,6 +103,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\PlayState.h">
       <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Animation.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
