@@ -1,6 +1,6 @@
-#include "PauseState.h"
-#include "Global.h"
-#include "MenuState.h"
+#include "../headers/PauseState.h"
+#include "../headers/Global.h"
+#include "../headers/MenuState.h"
  void PauseState::handleInput(Game& game) {
 
  }

@@ -1,7 +1,7 @@
 #include "raylib.h"
-#include "Game.h"
-#include "MenuState.h"
-#include "Global.h"
+#include "../headers/Game.h"
+#include "../headers/MenuState.h"
+#include "../headers/Global.h"
 
 int main() {
 

@@ -1,6 +1,6 @@
-#include "GUI.h"
-#include "Global.h"
-#include "MenuState.h"
+#include "../headers/GUI.h"
+#include "../headers/Global.h"
+#include "../headers/MenuState.h"
 #include <string>
 using namespace std;
 

@@ -127,26 +127,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Button.cpp" />
-    <ClCompile Include="Character.cpp" />
-    <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Global.cpp" />
-    <ClCompile Include="GUI.cpp" />
-    <ClCompile Include="MenuState.cpp" />
-    <ClCompile Include="PauseState.cpp" />
-    <ClCompile Include="PlayState.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\src\Button.cpp" />
+    <ClCompile Include="..\src\Character.cpp" />
+    <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\Global.cpp" />
+    <ClCompile Include="..\src\GUI.cpp" />
+    <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\MenuState.cpp" />
+    <ClCompile Include="..\src\PauseState.cpp" />
+    <ClCompile Include="..\src\PlayState.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Button.h" />
-    <ClInclude Include="Character.h" />
-    <ClInclude Include="Game.h" />
-    <ClInclude Include="GameState.h" />
-    <ClInclude Include="Global.h" />
-    <ClInclude Include="GUI.h" />
-    <ClInclude Include="MenuState.h" />
-    <ClInclude Include="PauseState.h" />
-    <ClInclude Include="PlayState.h" />
+    <ClInclude Include="..\headers\Button.h" />
+    <ClInclude Include="..\headers\Character.h" />
+    <ClInclude Include="..\headers\Game.h" />
+    <ClInclude Include="..\headers\GameState.h" />
+    <ClInclude Include="..\headers\Global.h" />
+    <ClInclude Include="..\headers\GUI.h" />
+    <ClInclude Include="..\headers\MenuState.h" />
+    <ClInclude Include="..\headers\PauseState.h" />
+    <ClInclude Include="..\headers\PlayState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

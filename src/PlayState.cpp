@@ -1,6 +1,6 @@
-#include "PlayState.h"
-#include "Game.h"
-#include "MenuState.h"
+#include "../headers/PlayState.h"
+#include "../headers/Game.h"
+#include "../headers/MenuState.h"
 
 void PlayState::handleInput(Game& game){
 

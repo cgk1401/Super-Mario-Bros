@@ -1,5 +1,5 @@
-#include "Button.h"
-#include "Global.h"
+#include "../headers/Button.h"
+#include "../headers/Global.h"
 #include <iostream>
 //CONSTRUCTORS & DESTRUCTOR
 Button::Button() {

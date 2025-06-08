@@ -1,4 +1,4 @@
-#include "Global.h"
+#include "../headers/Global.h"
 
 Texture2D resizedImage(const char* imagePath, float width, float height){
     Image img = LoadImage(imagePath);
