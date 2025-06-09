@@ -2,6 +2,7 @@
 
 Mario::Mario(Vector2 position) {
 	this->position = position;
+	speed = 5.0f;
 	LoadSource();
 }
 
@@ -13,14 +14,11 @@ void Mario::LoadSource() {
 	texture = LoadTexture(".....");
 
 	Animation idle;
-
-	idle.frame = { {11, 18, 12, 16}, {43,17, 15, 16}, {76, 17, 15, 16} };// test thử
+	idle.frame = { {}, {}, {} };
 	idle.currentframe = 0;
 	idle.durationtime = 0.3f;
 	idle.currenttime = 0;
 	animation[Actionstate::IDLE] = idle;
-
-
 }
 
 void Mario::Draw() {
@@ -30,3 +28,9 @@ void Mario::Draw() {
 	DrawTexturePro(texture, currentFrame, dest, { 0,0 }, 0, WHITE);
 
 }
+
+void Mario::MoveLeft() { position.x -= speed; }
+
+void Mario::MoveRight() { position.x += speed; }
+
+

@@ -11,5 +11,7 @@ public :
 	void Update(float deltatime) override;
 	void LoadSource() override;
 	void Draw() override;
+	void MoveLeft() override;
+	void MoveRight() override;
 
 };
