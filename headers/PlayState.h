@@ -7,14 +7,15 @@
 
 class PlayState : public GameState{
 public:
-    bool isPlaying;
+    PlayState();
+    ~PlayState();
     void    handleInput(Game& game) override;
-    void    init(Game& game ) override;
     void    update(Game& game) override;
-    void    render(Game& game) override;
+    void    render() override;
 private:
+    bool isPlaying;
     GUI gui;
-    PauseState pause_button;
+    PauseState pauseMenu;
 };
 
 #endif

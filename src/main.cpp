@@ -1,4 +1,4 @@
-#include "raylib.h"
+﻿#include "raylib.h"
 #include "../headers/Game.h"
 #include "../headers/MenuState.h"
 #include "../headers/Global.h"

@@ -9,12 +9,15 @@ using namespace std;
 
 class MenuState : public GameState {
 private:
-    vector<Button> buttons;
-    
+    vector<Button*> buttons;
+    Font font;
+    Texture2D background;
+    Texture2D mario_character;
 public:
+    MenuState();
+    ~MenuState();
     void    handleInput(Game& game) override;
-    void    init(Game& game ) override;
     void    update(Game& game) override;
-    void    render(Game& game) override;
+    void    render() override;
 };
 #endif

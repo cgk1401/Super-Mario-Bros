@@ -3,12 +3,11 @@
 #include "raylib.h"
 #include "GameState.h"
 
-//Áp dụng Singleton Pattern: chỉ 1 instance của class này suốt cả quá trình chạy game
+//Áp dụng Singleton Pattern
 class Game{
 private: 
     static Game* instance;
     GameState* currentState;
-
     Game();
     ~Game();
 

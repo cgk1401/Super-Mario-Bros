@@ -6,9 +6,8 @@ Game* Game::instance = nullptr;
 
 Game* Game::getInstance(){
      if (!instance) {
-            instance = new Game();
-           
-        }
+         instance = new Game();
+     }
     return instance;
 }
 
@@ -27,25 +26,27 @@ Game::~Game(){
 }
 
 void Game::run(){
-
+    
     while(!WindowShouldClose()){
         //Xử lí event
         currentState->update(*this);
 
         BeginDrawing();
-            ClearBackground(WHITE);
+            ClearBackground(SKYBLUE);
             //Vẽ 
-            currentState->render(*this);
+        
+            currentState->render();
         EndDrawing();
     }
     
 }
+
 void Game::init(){
     currentState = nullptr;
 }
 
 void Game::changeState(GameState* newState){
     if (currentState) delete currentState;
+    
     currentState = newState;
-    currentState->init(*this); // initialize tài nguyên
  }

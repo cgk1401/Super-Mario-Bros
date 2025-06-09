@@ -8,9 +8,8 @@ class Game;
 class GameState{
 public:
     virtual void handleInput(Game& game) = 0;
-    virtual void init(Game& game) = 0;
     virtual void update(Game& game) = 0;
-    virtual void render(Game& game) = 0;
+    virtual void render() = 0;
     virtual ~GameState() = default;
 };
 

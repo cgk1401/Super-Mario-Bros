@@ -1,13 +1,23 @@
 #include "../headers/GUI.h"
 #include "../headers/Global.h"
 #include "../headers/MenuState.h"
+#include "../headers/PauseState.h"
 #include <string>
 using namespace std;
 
 GUI::GUI(){
-  
+    coins = 0;
+    time = 300.5;
+    score = 0;
+    map = 1;
+    lives = 3;
+    hudRect = Rectangle{ 0, 0,  screenWidth, 0.2f * screenHeight };
+    font = LoadFont("../assets/font/PolygonParty.ttf");
+    fontSize = 40;
+    PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
 }
-
+GUI::~GUI() {
+}
 void GUI::setScore(int s){
     this->score = s;
 }
@@ -24,37 +34,25 @@ void GUI::setMapLevel(int m){
 void GUI::setTime(int t){
     this->time = t;
 }
-void GUI::init(){
-    coins = 0;
-    time = 60.5;
-    score = 0;
-    map = 1;
-    lives = 3;
-    hudRect = Rectangle{0, 0,  screenWidth, 0.2f * screenHeight};
-    fontSize = 40;
-    PauseButton = Button(hudRect.x + 10, hudRect.y + hudRect.height * 0.2f, 100, 50, "||", RED, BLUE, GREEN);
-}
+
 bool GUI::PauseButton_IsPressed(){
-    return PauseButton.IsClicked();
+    return PauseButton->IsClicked();
 }
 void GUI::update(Game& game){
-    PauseButton.update();
-    if(PauseButton.IsClicked()){
-        game.changeState(new MenuState());
-    }
-    if(time > 0) time -= GetFrameTime();
+    PauseButton->update();
+    if(time > 0) time -= 2 * GetFrameTime();
     else {
         time = 0;
-        //Time out => Out Game => Display this menu: Restart + Menu
+        //Time out => Display this menu: Restart + Menu
     }
     
 }
 void GUI::draw(){
-    DrawText(TextFormat("Score\n %d", score), hudRect.x + hudRect.width * 0.2f, hudRect.y + hudRect.height * 0.1f, fontSize, BLACK );
-    DrawText(TextFormat("Coins\n %d", coins), hudRect.x + hudRect.width * 0.35f, hudRect.y + hudRect.height * 0.1f, fontSize, BLACK );
-    DrawText(TextFormat("Map\n %d", map), hudRect.x + hudRect.width * 0.5f, hudRect.y + hudRect.height * 0.1f, fontSize, BLACK );
-    DrawText(TextFormat("Time\n %d", (int)time), hudRect.x + hudRect.width * 0.65f, hudRect.y + hudRect.height * 0.1f, fontSize, BLACK );
-    DrawText(TextFormat("Lives\n %d", lives), hudRect.x + hudRect.width * 0.8f, hudRect.y + hudRect.height * 0.1f, fontSize, BLACK );
+    DrawTextEx(font, TextFormat("Score\n %d", score), { hudRect.x + hudRect.width * 0.22f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, BLACK);
+    DrawTextEx(font, TextFormat("Coins\n %d", coins), { hudRect.x + hudRect.width * 0.37f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, BLACK);
+    DrawTextEx(font, TextFormat("Map\n %d", map), { hudRect.x + hudRect.width * 0.54f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, BLACK);
+    DrawTextEx(font, TextFormat("Time\n %d", (int)time), { hudRect.x + hudRect.width * 0.67f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, BLACK);
+    DrawTextEx(font, TextFormat("Lives\n %d", lives), {hudRect.x + hudRect.width * 0.82f, hudRect.y + hudRect.height * 0.1f}, fontSize, 5, BLACK );
 
-    PauseButton.draw();
+    PauseButton->draw();
 }
