@@ -1,26 +1,53 @@
 #include "../headers/PauseState.h"
 #include "../headers/Global.h"
 #include "../headers/MenuState.h"
- void PauseState::handleInput(Game& game) {
+#include "../headers/PlayState.h"
 
- }
+PauseState::PauseState() {
+    buttons.resize(4);
+    buttons[0] = new Button("../assets/GUI/Button.png", screenWidth * 0.34f, screenHeight * 0.2f, screenWidth / 3, screenHeight * 0.15f, "RESUME", WHITE, 40);
+    buttons[1] = new Button("../assets/GUI/Button.png", screenWidth * 0.34f, screenHeight * 0.35f + 5, screenWidth / 3, screenHeight * 0.15f, "RESTART", WHITE, 40);
+    buttons[2] = new Button("../assets/GUI/Button.png", screenWidth * 0.34f, screenHeight * 0.5f + 10, screenWidth / 3, screenHeight * 0.15f, "SAVE", WHITE, 40);
+    buttons[3] = new Button("../assets/GUI/Button.png", screenWidth * 0.34f, screenHeight * 0.65f + 15, screenWidth / 3, screenHeight * 0.15f, "MENU", WHITE, 40);
 
-void PauseState::init(Game& game ) {
-    buttons.push_back(Button(screenWidth * 0.4f, screenHeight / 2, 100, 50, "RESUME", RED, BLUE, GREEN));
-    buttons.push_back(Button(screenWidth * 0.4f, screenHeight * 0.7f, 100, 50, "MENU", RED, BLUE, GREEN));
+ 
+}
+
+PauseState::~PauseState() {
+    for (auto& button : buttons) {
+        delete button;
+    }
+}
+
+void PauseState::handleInput(Game& game) {
+    
+}
+
+bool PauseState::resume_IsCLicked() {
+    return buttons[0]->IsClicked();
+}
+
+bool PauseState::save_IsCLicked() {
+    return buttons[2]->IsClicked();
 }
 
 void PauseState::update(Game& game){
     for(auto& button: buttons){
-        button.update();
+        button->update();
     }
 
-    if(buttons[1].IsClicked()){ //Menu 
+    //Button Clicking
+    if(buttons[3]->IsClicked()){ //Menu 
         game.changeState(new MenuState());
     }
+    else if (buttons[1]->IsClicked()) {
+        game.changeState(new PlayState());
+    }
+
 }
-void PauseState::render(Game& game){
+void PauseState::render(){
+    DrawRectangleRec(Rectangle{0, 0, screenWidth, screenHeight}, Fade(LIGHTGRAY, 0.6f));
     for(auto& button: buttons){
-        button.draw();
+        button->draw();
     }
 }

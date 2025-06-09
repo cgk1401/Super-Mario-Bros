@@ -2,25 +2,39 @@
 #include "../headers/Game.h"
 #include "../headers/MenuState.h"
 
+PlayState::PlayState() {
+    gui = GUI();
+    isPlaying = true;
+}
+PlayState::~PlayState() {
+
+}
 void PlayState::handleInput(Game& game){
 
 }
-
-void PlayState::init(Game& game ){
-   gui.init();
-   pause_button.init(game);
-   isPlaying = true;
-}
-
 void PlayState::update(Game& game){
-    if(gui.PauseButton_IsPressed()) isPlaying = false;
-    if(isPlaying == false) pause_button.update(game);
-    else gui.update(game);
+    if (gui.PauseButton_IsPressed() && isPlaying) {
+        isPlaying = false;
+    }
+    else {
+        if (pauseMenu.resume_IsCLicked()) {
+            isPlaying = true;
+        }
+        else if (pauseMenu.save_IsCLicked()) {
+            //save map
+        }
+    }
+    if (isPlaying) {
+        gui.update(game); 
+    }
+    else {
+        pauseMenu.update(game);  
+    }
 }
 
-void PlayState::render(Game& game){
+void PlayState::render(){
     gui.draw();
     if(isPlaying == false) {
-        pause_button.render(game);
+        pauseMenu.render();
     }
 }

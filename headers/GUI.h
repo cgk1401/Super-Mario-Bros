@@ -13,11 +13,13 @@ private:
     int coins;
     int map;
     int lives;
-    Button PauseButton; 
+    Button* PauseButton;
+    Font font;
     int fontSize;
     Rectangle hudRect; //vùng giới hạn các position của các thông số trên 
 public:
     GUI();
+    ~GUI();
     void setScore(int s);
     void setCoins(int c);
     void setLives(int l);
