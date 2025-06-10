@@ -104,6 +104,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -127,23 +128,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\headers\InputHandler.cpp" />
+    <ClCompile Include="..\src\Animation.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
     <ClCompile Include="..\src\main.cpp" />
+    <ClCompile Include="..\src\mario.cpp" />
     <ClCompile Include="..\src\MenuState.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PlayState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\headers\Animation.h" />
     <ClInclude Include="..\headers\Button.h" />
     <ClInclude Include="..\headers\Character.h" />
+    <ClInclude Include="..\headers\Command.h" />
     <ClInclude Include="..\headers\Game.h" />
     <ClInclude Include="..\headers\GameState.h" />
     <ClInclude Include="..\headers\Global.h" />
     <ClInclude Include="..\headers\GUI.h" />
+    <ClInclude Include="..\headers\InputHandler.h" />
+    <ClInclude Include="..\headers\Mario.h" />
     <ClInclude Include="..\headers\MenuState.h" />
     <ClInclude Include="..\headers\PauseState.h" />
     <ClInclude Include="..\headers\PlayState.h" />
