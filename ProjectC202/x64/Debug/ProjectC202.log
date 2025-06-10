@@ -1,1 +1,4 @@
-﻿  ProjectC202.vcxproj -> C:\Users\HP\source\repos\Super-Mario-Bros\x64\Debug\ProjectC202.exe
+﻿  LINK : C:\Users\HP\Source\Repos\Super-Mario-Bros\x64\Debug\ProjectC202.exe not found or not built by the last incremental link; performing full link
+  ProjectC202.vcxproj -> C:\Users\HP\Source\Repos\Super-Mario-Bros\x64\Debug\ProjectC202.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.
