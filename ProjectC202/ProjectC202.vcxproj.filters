@@ -43,11 +43,14 @@
     <Filter Include="Source Files\States">
       <UniqueIdentifier>{b7fba8bd-bfa6-4425-8a33-e92c86ef69ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity\InputManage">
+      <UniqueIdentifier>{dfc22d98-42de-4ad2-b21f-2a87b3fd8438}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity\InputManage">
+      <UniqueIdentifier>{f1caceed-dca2-474f-bd9e-2baa4ac46af9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\src\Character.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Game.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
@@ -72,11 +75,20 @@
     <ClCompile Include="..\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Animation.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Character.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\mario.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\headers\InputHandler.cpp">
+      <Filter>Source Files\Entity\InputManage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\headers\Character.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="..\headers\Game.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
@@ -100,6 +112,21 @@
     </ClInclude>
     <ClInclude Include="..\headers\PlayState.h">
       <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Animation.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Character.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Mario.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Command.h">
+      <Filter>Header Files\Entity\InputManage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\InputHandler.h">
+      <Filter>Header Files\Entity\InputManage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
