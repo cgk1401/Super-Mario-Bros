@@ -1,5 +1,10 @@
 ﻿#include "../headers/Mario.h"
 
+Mario::Mario() {
+	this->position = { 50, 50 };
+	speed = 5.0f;
+	LoadSource();
+}
 Mario::Mario(Vector2 position) {
 	this->position = position;
 	speed = 5.0f;
@@ -11,10 +16,12 @@ void Mario::Update(float deltatime) {
 }
 
 void Mario::LoadSource() {
-	texture = LoadTexture(".....");
-
+	texture = LoadTexture("../assets/Mario/mario_custom_spritesheet.png");
+	
+	int texW = 16;
+	int texH = 24;
 	Animation idle;
-	idle.frame = { {}, {}, {} };
+	idle.frame = { Rectangle{92, 27, (float) texW, (float) texH}};
 	idle.currentframe = 0;
 	idle.durationtime = 0.3f;
 	idle.currenttime = 0;
@@ -23,8 +30,8 @@ void Mario::LoadSource() {
 
 void Mario::Draw() {
 	Rectangle currentFrame = animation[currentstate].getcurrentframe();
-	float scale = 3.0f;
-	Rectangle dest = { position.x, position.y, currentFrame.x * scale, currentFrame.y * scale };
+	float scale = 13.0f;
+	Rectangle dest = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
 	DrawTexturePro(texture, currentFrame, dest, { 0,0 }, 0, WHITE);
 
 }

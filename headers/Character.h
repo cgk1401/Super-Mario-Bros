@@ -3,7 +3,7 @@
 #include "Animation.h"
 #include <map>
 
-enum class Actionstate {
+enum Actionstate {
 	IDLE,
 	Run,
 	Jump,

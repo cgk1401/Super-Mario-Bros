@@ -34,7 +34,6 @@ void Game::run(){
         BeginDrawing();
             ClearBackground(SKYBLUE);
             //Vẽ 
-        
             currentState->render();
         EndDrawing();
     }
@@ -47,6 +46,5 @@ void Game::init(){
 
 void Game::changeState(GameState* newState){
     if (currentState) delete currentState;
-    
     currentState = newState;
  }

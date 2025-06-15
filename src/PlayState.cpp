@@ -5,9 +5,15 @@
 PlayState::PlayState() {
     gui = GUI();
     isPlaying = true;
+    map = new Map("../assets/Map/tileset_gutter64x64.png");
+    map->loadFromFile("map1.txt");
+    camera.offset = { 0,0 };
+    camera.target = { 0, 0 };
+    camera.rotation = 0;
+    camera.zoom = 1.0;
 }
 PlayState::~PlayState() {
-
+    delete map;
 }
 void PlayState::handleInput(Game& game){
 
@@ -30,11 +36,15 @@ void PlayState::update(Game& game){
     else {
         pauseMenu.update(game);  
     }
+
+    map->update(camera);
 }
 
 void PlayState::render(){
+    map->draw(camera); // add camera cua mario
     gui.draw();
     if(isPlaying == false) {
         pauseMenu.render();
     }
+    
 }

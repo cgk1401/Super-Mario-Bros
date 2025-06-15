@@ -1,6 +1,7 @@
 #include "../headers/MenuState.h"
 #include "../headers/Game.h"
 #include "../headers/PlayState.h"
+#include "../headers/MapEditor.h"
 
 MenuState::MenuState() {
     TraceLog(LOG_INFO, "Menu: Constructor");
@@ -34,6 +35,9 @@ void MenuState::update(Game& game){
 
     if(buttons[0]->IsClicked()){
         game.changeState(new PlayState());
+    }
+    else if (buttons[1]->IsClicked()) {
+        game.changeState(new MapEditor("../assets/Map/tileset_gutter64x64.png"));
     }
     else if(buttons[2]->IsClicked()){
         exit(0);

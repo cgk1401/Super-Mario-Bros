@@ -136,7 +136,9 @@
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
     <ClCompile Include="..\src\main.cpp" />
-    <ClCompile Include="..\src\mario.cpp" />
+    <ClCompile Include="..\src\Map.cpp" />
+    <ClCompile Include="..\src\MapEditor.cpp" />
+    <ClCompile Include="..\src\Mario.cpp" />
     <ClCompile Include="..\src\MenuState.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PlayState.cpp" />
@@ -146,15 +148,20 @@
     <ClInclude Include="..\headers\Button.h" />
     <ClInclude Include="..\headers\Character.h" />
     <ClInclude Include="..\headers\Command.h" />
+    <ClInclude Include="..\headers\ConcreteTileBehavior.h" />
     <ClInclude Include="..\headers\Game.h" />
     <ClInclude Include="..\headers\GameState.h" />
     <ClInclude Include="..\headers\Global.h" />
     <ClInclude Include="..\headers\GUI.h" />
     <ClInclude Include="..\headers\InputHandler.h" />
+    <ClInclude Include="..\headers\Map.h" />
+    <ClInclude Include="..\headers\MapEditor.h" />
     <ClInclude Include="..\headers\Mario.h" />
     <ClInclude Include="..\headers\MenuState.h" />
     <ClInclude Include="..\headers\PauseState.h" />
     <ClInclude Include="..\headers\PlayState.h" />
+    <ClInclude Include="..\headers\Tile.h" />
+    <ClInclude Include="..\headers\TileBehavior.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

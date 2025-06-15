@@ -1,8 +1,8 @@
 #ifndef GUI_H
 #define GUI_H
-#include <raylib.h>
-#include "Button.h"
-#include "Game.h"
+#include "raylib.h"
+#include "../headers/Button.h"
+#include "../headers/Mario.h"
 
 class Game;
 
@@ -11,12 +11,13 @@ private:
     float time;
     int score;
     int coins;
-    int map;
+    int map_level;
     int lives;
     Button* PauseButton;
     Font font;
     int fontSize;
     Rectangle hudRect; //vùng giới hạn các position của các thông số trên 
+   
 public:
     GUI();
     ~GUI();
@@ -27,7 +28,6 @@ public:
     void setTime(int t);
     bool PauseButton_IsPressed();
 
-    void init();
     void update(Game& game);
     void draw();
 };

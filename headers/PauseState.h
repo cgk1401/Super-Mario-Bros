@@ -5,7 +5,7 @@
 #include "Game.h"
 using namespace std;
 
-//Displau Menu: Resume, Restart, Save, Menu
+//Display Menu: Resume, Restart, Save, Menu
 class PauseState {
 private:
     vector<Button*> buttons;

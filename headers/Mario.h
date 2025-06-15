@@ -2,10 +2,11 @@
 
 #include "Character.h"
 #include <map>
-#include <raylib.h>
+#include "raylib.h"
 
 class Mario : public Character {
 public :
+	Mario();
 	Mario(Vector2 position);
 
 	void Update(float deltatime) override;

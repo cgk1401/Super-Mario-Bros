@@ -19,12 +19,6 @@
     <Filter Include="Header Files\GUI">
       <UniqueIdentifier>{0b4d54f1-489a-4008-a1b3-fecaf4a11e79}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Game">
-      <UniqueIdentifier>{981ec7d3-b936-46c4-be92-0ecd89e354c8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\GameWorld">
-      <UniqueIdentifier>{0a5f6865-53b7-4674-9fa4-0545af0037d2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\States">
       <UniqueIdentifier>{4ee2f3d6-57ba-46a0-b3c1-b7e154c30aac}</UniqueIdentifier>
     </Filter>
@@ -34,28 +28,34 @@
     <Filter Include="Source Files\GUI">
       <UniqueIdentifier>{1e78c6fb-1247-4be6-a5e1-6ad04910aa64}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Game">
-      <UniqueIdentifier>{adbb5846-8c31-4d8f-8ec9-12c99da87b7e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\GameWorld">
-      <UniqueIdentifier>{c4f719c1-e7fe-4c6f-bc43-cc3f6cb90877}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\States">
       <UniqueIdentifier>{b7fba8bd-bfa6-4425-8a33-e92c86ef69ab}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Entity\InputManage">
-      <UniqueIdentifier>{dfc22d98-42de-4ad2-b21f-2a87b3fd8438}</UniqueIdentifier>
+    <Filter Include="Header Files\Core">
+      <UniqueIdentifier>{981ec7d3-b936-46c4-be92-0ecd89e354c8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Entity\InputManage">
-      <UniqueIdentifier>{f1caceed-dca2-474f-bd9e-2baa4ac46af9}</UniqueIdentifier>
+    <Filter Include="Source Files\Core">
+      <UniqueIdentifier>{adbb5846-8c31-4d8f-8ec9-12c99da87b7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Input">
+      <UniqueIdentifier>{285bef3f-3da5-41cd-bc96-a94ee4ed5361}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Input">
+      <UniqueIdentifier>{a571650c-0c62-4ec2-b221-4de0265a8162}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Map">
+      <UniqueIdentifier>{7432a302-5bc0-4711-9610-b8c490f6b569}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Map">
+      <UniqueIdentifier>{a0a59575-44de-4334-a927-0be97b69726a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Game.cpp">
-      <Filter>Source Files\Game</Filter>
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Global.cpp">
-      <Filter>Source Files\Game</Filter>
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Button.cpp">
       <Filter>Source Files\GUI</Filter>
@@ -81,19 +81,25 @@
     <ClCompile Include="..\src\Character.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\mario.cpp">
+    <ClCompile Include="..\src\Mario.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
     <ClCompile Include="..\headers\InputHandler.cpp">
-      <Filter>Source Files\Entity\InputManage</Filter>
+      <Filter>Source Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Map.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MapEditor.cpp">
+      <Filter>Source Files\Map</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
-      <Filter>Header Files\Game</Filter>
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Global.h">
-      <Filter>Header Files\Game</Filter>
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Button.h">
       <Filter>Header Files\GUI</Filter>
@@ -123,10 +129,25 @@
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Command.h">
-      <Filter>Header Files\Entity\InputManage</Filter>
+      <Filter>Header Files\Input</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\InputHandler.h">
-      <Filter>Header Files\Entity\InputManage</Filter>
+      <Filter>Header Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Map.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Tile.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\ConcreteTileBehavior.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\TileBehavior.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\MapEditor.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

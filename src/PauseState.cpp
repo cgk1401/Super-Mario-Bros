@@ -46,7 +46,7 @@ void PauseState::update(Game& game){
 
 }
 void PauseState::render(){
-    DrawRectangleRec(Rectangle{0, 0, screenWidth, screenHeight}, Fade(LIGHTGRAY, 0.6f));
+    DrawRectangleRec(Rectangle{0, 0, screenWidth, screenHeight}, Fade(BLACK, 0.6f));
     for(auto& button: buttons){
         button->draw();
     }
