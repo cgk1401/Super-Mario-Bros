@@ -83,6 +83,14 @@ bool Button::IsClicked() {
     return isHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON);
 }
 
+bool Button::IsMouseDown() {
+    return isHovered && IsMouseButtonDown(MOUSE_LEFT_BUTTON);
+}
+
+void Button::updatePos(Vector2 newPos) {
+    this->bounds.x = newPos.x;
+    this->bounds.y = newPos.y;
+}
 Rectangle Button::getBounds() const {
     return bounds;
 }

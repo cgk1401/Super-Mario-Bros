@@ -8,9 +8,11 @@ PlayState::PlayState() {
     map = new Map("../assets/Map/tileset_gutter64x64.png");
     map->loadFromFile("map1.txt");
     camera.offset = { 0,0 };
-    camera.target = { 0, 0 };
+    camera.target = { 0,0 };
     camera.rotation = 0;
     camera.zoom = 1.0;
+
+   /* mario = Mario({ 50, 50 });*/
 }
 PlayState::~PlayState() {
     delete map;
@@ -32,17 +34,23 @@ void PlayState::update(Game& game){
     }
     if (isPlaying) {
         gui.update(game); 
+        mario.Update(GetFrameTime(), map);
+        map->update(camera);
     }
     else {
         pauseMenu.update(game);  
     }
 
-    map->update(camera);
+    
 }
 
 void PlayState::render(){
-    map->draw(camera); // add camera cua mario
+   // camera.target = mario.getPos();
+    map->draw(camera); // add camera 
     gui.draw();
+    mario.Draw();
+    
+
     if(isPlaying == false) {
         pauseMenu.render();
     }

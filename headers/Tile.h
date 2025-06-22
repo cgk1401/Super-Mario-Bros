@@ -24,8 +24,8 @@ public:
 	Tile(int _id = 0, Rectangle _sourceRect = { 0 }, TileType _type = EMPTY, TileBehavior* _behavior = nullptr)
 		: id(_id), srcRect(_sourceRect), type(_type), behavior(_behavior) {}
 
-	Tile(const Tile&) = delete; // Prevent co2g
-	Tile& operator=(const Tile&) = delete; // Prevent assignment
+	//Tile(const Tile&) = delete; // Prevent co2g
+	//Tile& operator=(const Tile&) = delete; // Prevent assignment
 	Tile(Tile&&) = default; // Allow moving
 	Tile& operator=(Tile&&) = default;
 

@@ -26,7 +26,10 @@ public:
     void operator=(const Button& b);
     void update();
     void draw();
+
+    void updatePos(Vector2 newPos);
     bool IsClicked();
+    bool IsMouseDown();
     Rectangle getBounds() const;
 };
 

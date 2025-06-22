@@ -49,6 +49,9 @@
     <Filter Include="Source Files\Map">
       <UniqueIdentifier>{a0a59575-44de-4334-a927-0be97b69726a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Map\Tile">
+      <UniqueIdentifier>{5af8d7d6-1519-4e8d-af16-9120859d585b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Game.cpp">
@@ -137,17 +140,17 @@
     <ClInclude Include="..\headers\Map.h">
       <Filter>Header Files\Map</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Tile.h">
+    <ClInclude Include="..\headers\MapEditor.h">
       <Filter>Header Files\Map</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\ConcreteTileBehavior.h">
-      <Filter>Header Files\Map</Filter>
+      <Filter>Header Files\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Tile.h">
+      <Filter>Header Files\Map\Tile</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\TileBehavior.h">
-      <Filter>Header Files\Map</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\MapEditor.h">
-      <Filter>Header Files\Map</Filter>
+      <Filter>Header Files\Map\Tile</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

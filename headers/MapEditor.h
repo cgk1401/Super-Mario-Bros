@@ -10,11 +10,11 @@ private:
     Button* backButton;
     int mapWidth;
     int uiWidth;
-
+    Button* expandAreaButton;
 public:
     MapEditor(const char* path, int r = 12, int c = 32);
     Camera2D camera{};
-
+    Camera2D cameraEditor{};
     void saveToFile(const char* filename);
 
     //Inherit GameState

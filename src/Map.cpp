@@ -19,7 +19,7 @@ Map::Map(const char* texturePath, int r, int c) {
     }
     for (int x = 0; x < tileRows; x++) {
         for (int y = 0; y < tileColumns; y++) {
-            tileSetSourceRects[x][y] = { (float)x * side, (float)y * side, (float)side, (float)side };
+            tileSetSourceRects[x][y] = { (float)y * side, (float)x * side, (float)side, (float)side };
         }
     }
     createTileCatalog();
@@ -44,31 +44,36 @@ void Map::createTileCatalog() {
     tileCatalog.clear();
     tileCatalog.emplace(0, Tile(0, tileSetSourceRects[0][0], EMPTY, new EmptyTileBehavior())); //EMPTY tile
     tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
-    
+    tileCatalog.emplace(getTileIDFromCoords(1, 2), Tile(1, tileSetSourceRects[1 - 1][2 - 1], BRICK, new BrickTileBehavior())); //Ground tile
+    //tileCatalog.emplace(1, Tile(1, tile, )));
     
     //....
 
 
 }
-void Map::update(Camera2D& camera) {
-    float dt = GetFrameTime();
-    float speed = 200;
-    if (IsKeyDown(KEY_RIGHT)) {
-        if (IsKeyDown(KEY_LEFT_CONTROL)) {
-            speed = 1000;
-        }
-        camera.target.x += speed * dt;
+void Map::update(Camera2D& camera,  bool isEditing) {
+    
+    if (isEditing) {
+        float dt = GetFrameTime();
+        float speed = 200;
 
-    }
-    if (IsKeyDown(KEY_LEFT)) {
-        if (IsKeyDown(KEY_LEFT_CONTROL)) {
-            speed = 1000;
-        }
-        camera.target.x -= speed * dt;
-    }
+        if (IsKeyDown(KEY_RIGHT)) {
+            if (IsKeyDown(KEY_LEFT_CONTROL)) {
+                speed = 1000;
+            }
+            camera.target.x += speed * dt;
 
-    if (camera.target.x < 0) {
-        camera.target.x = 0;
+        }
+        if (IsKeyDown(KEY_LEFT)) {
+            if (IsKeyDown(KEY_LEFT_CONTROL)) {
+                speed = 1000;
+            }
+            camera.target.x -= speed * dt;
+        }
+
+        if (camera.target.x < 0) {
+            camera.target.x = 0;
+        }
     }
 }
 
@@ -102,7 +107,10 @@ Tile Map::getTile(int tileID) const {
 }
 
 Tile Map::getTile(int row, int col) const {
-    int tileID = getTileIDFromCoords(row, col);
+    if (row < 0 || row >= rows || col < 0 || col >= columns) {
+        return getTile(0); // Return empty tile info for out of bounds
+    }
+    int tileID = mapData[row][col].tileID;
     return getTile(tileID);
 }
 
@@ -165,7 +173,6 @@ void Map::loadFromFile(const char* filename) {
                     int tileX = stoi(s.substr(0, commaPos));
                     int tileY = stoi(s.substr(commaPos + 1));
                     // Convert (tileX, tileY) from file (1-based) to our TileID
-                    // This assumes map1.txt uses (row, col) from the tileset
                     int tileID = getTileIDFromCoords(tileX, tileY);
                     setTile(x, y, tileID);
                 }
