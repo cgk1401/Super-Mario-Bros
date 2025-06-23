@@ -18,7 +18,7 @@ protected:
 	std::map <Actionstate, Animation> animation;
 	Actionstate currentstate = Actionstate::IDLE;
 	Vector2 position = { 0,0 };
-	float speed = 0.0f;
+	const float speed = 2;
 
 	const float gravity;
 	Vector2 velocity;
@@ -27,6 +27,7 @@ protected:
 
 	bool onGround;
 	bool isJumpingUp;
+
 public:
 	Character();
 	//virtual ~Character();

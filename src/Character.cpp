@@ -4,11 +4,12 @@
 using namespace std;
 
 
-Character::Character() : gravity(1500), velocity({ 5, 0 }) {
+Character::Character() : gravity(1500), velocity({ 0, 0 }) {
 	scale = 1;
 	bound = {};
 	onGround = false;
 	isJumpingUp = false;
+    
 }
 
 /*
@@ -54,29 +55,30 @@ void Character::handleCollision(Map* map){
                     if (overlapX > 0 && overlapY > 0) {
                         if (overlapY < overlapX) { // trên dưới của tile
                             if (velocity.y > 0) { // is falling
-                                position.y = tileRect.y - bound.height;
+                                position.y -= overlapY;
                                 velocity.y = 0;
                                 onGround = true;
                                 isJumpingUp = false;
                                 tile.behavior->onFootCollision(this, x, y, map, tileInstance);
                             }
                             else if (velocity.y < 0) { // chạm đầu
-                                position.y = tileRect.y + tileRect.height;
+                                position.y += overlapY;
                                 velocity.y = 0;
                                 isJumpingUp = false;
                                 tile.behavior->onHeadCollision(this, x, y, map, tileInstance);
                             }
+
+                            
                             //position.y = floor(position.y);
                         }
                         else { // 2 bên của tile 
-                            if (velocity.x > 0) { // Đang đi sang phải
-                                position.x = tileRect.x - bound.width;
-                                velocity.x = 0;
+                            if (velocity.x > 0) { // đang đi sang phải → đụng bên trái tile
+                                position.x -= overlapX;
                             }
-                            else if (velocity.x < 0) { // Sang trái
-                                position.x = tileRect.x + tileRect.width + 1;
-                                velocity.x = 0;
+                            else if (velocity.x < 0) { // đang đi sang trái → đụng bên phải tile
+                                position.x += overlapX;
                             }
+                            velocity.x = 0;
                             tile.behavior->onGeneralCollision(this, x, y, map, tileInstance);
                         }
                         bound.x = position.x;

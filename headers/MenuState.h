@@ -1,10 +1,8 @@
 #ifndef MENU_STATE_H
 #define MENU_STATE_H
-#include "GameState.h"
-#include "Global.h"
-#include <raylib.h>
-#include <iostream>
-#include <vector>
+#include "../headers/GameState.h"
+#include "../headers/Global.h"
+#include "../headers/Button.h"
 using namespace std;
 
 class MenuState : public GameState {
