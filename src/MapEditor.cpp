@@ -50,7 +50,9 @@ void MapEditor::saveToFile(const char* filename) {
 void MapEditor::render() {
     //Tile map
     BeginScissorMode(0, 0, screenWidth * 0.75f, screenHeight);
-    Map::draw(camera, true); // Draw map with grid lines
+    BeginMode2D(camera);
+    Map::draw(true); // Draw map with grid lines
+    EndMode2D();
     EndScissorMode();
 
     
@@ -102,7 +104,28 @@ void MapEditor::render() {
 }
 
 void MapEditor::update(Game& game) {
-    Map::update(camera, true); // Update camera movement
+    Map::update(true); // Update camera movement
+    float dt = GetFrameTime();
+    float speed = 200;
+
+    if (IsKeyDown(KEY_RIGHT)) {
+        if (IsKeyDown(KEY_LEFT_CONTROL)) {
+            speed = 1000;
+        }
+        camera.target.x += speed * dt;
+
+    }
+    if (IsKeyDown(KEY_LEFT)) {
+        if (IsKeyDown(KEY_LEFT_CONTROL)) {
+            speed = 1000;
+        }
+        camera.target.x -= speed * dt;
+    }
+
+    if (camera.target.x < 0) {
+        camera.target.x = 0;
+    }
+
     uiWidth = screenWidth - (int)mapWidth;
     int uiStartX = mapWidth;
     Vector2 mouseWorld = GetScreenToWorld2D(GetMousePosition(), camera);
@@ -150,8 +173,8 @@ void MapEditor::update(Game& game) {
     }
 
     //CameraEditor update
-    float dt = GetFrameTime();
-    float speed = 200;
+    // dt = GetFrameTime();
+    //float speed = 200;
     float wheel = GetMouseWheelMove();
     Vector2 mousePos = GetMousePosition();
 

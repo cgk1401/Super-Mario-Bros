@@ -3,7 +3,6 @@
 
 class Map;
 
-
 Mario::Mario() {
 	LoadSource();
 	this->position = { 50, 50 };
@@ -12,10 +11,12 @@ Mario::Mario() {
 	scale = 64 / 16;
 	currentDirection = Direction::RIGHT;
 }
+
 Mario::Mario(Vector2 position) {
 	this->position = position;
 	LoadSource();
 }
+
 float clamp(float value, float minvalue, float maxvalue) {
 	if (value > maxvalue) return maxvalue;
 	else if (value < minvalue) return minvalue;
@@ -27,44 +28,45 @@ float approach(float current, float target, float increase) {
 	}
 	return max(current - increase, target);
 }
-void Mario::Update(float deltatime, Map* map) {
-	animation[currentstate].Update(deltatime);
 
-	// Apply acceleration based on key input
+void Mario::handleInput(float deltatime) {
+	float mut = 1.0f;
+	float targetSpeed = 0.0f;
+	if (IsKeyDown(KEY_LEFT_CONTROL)) {
+		targetSpeed = maxSpeed;  // Tăng tốc 
+	}
+	else {
+		targetSpeed = speed;     // Bình thường
+	}
+
 	if (IsKeyDown(KEY_RIGHT)) {
-		
-		float mut = 1;
+
 		if (velocity.x < 0) {
 			mut = 3;
 		}
-		velocity.x = approach(velocity.x, speed, acceleration * mut * deltatime);
+		velocity.x = approach(velocity.x, targetSpeed, acceleration * mut * deltatime);
 	}
 
 	if (IsKeyDown(KEY_LEFT)) {
-		
-		float mut = 1;
+
 		if (velocity.x > 0) {
 			mut = 3;
 		}
-		velocity.x = approach(velocity.x, -speed, acceleration * mut * deltatime);
+		velocity.x = approach(velocity.x, -targetSpeed, acceleration * mut * deltatime);
 	}
 
-	//FRICTION
-	if(!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
+	//FRICTION 
+	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
 		// If no keys are pressed, apply friction
-		currentstate =Actionstate::IDLE;
+		currentstate = Actionstate::IDLE;
 		if (onGround) {
 			velocity.x = approach(velocity.x, 0, friction * deltatime);
 		}
 		//add 'friction' animation
 		position.x += velocity.x;
-		
+
 	}
-	 
-	else if (IsKeyDown(KEY_LEFT_CONTROL)) {
-		velocity.x *= 2;
-		velocity.x = clamp(velocity.x, -maxSpeed, maxSpeed);
-	}
+
 
 	const float maxJumpTime = 0.32;
 
@@ -91,6 +93,12 @@ void Mario::Update(float deltatime, Map* map) {
 		isJumpingUp = false;
 	}
 
+	inputHandler.HandInput(this);
+}
+void Mario::Update(float deltatime, Map* map) {
+	animation[currentstate].Update(deltatime);
+	handleInput(deltatime);
+
 	if (!onGround) {
 		velocity.y += gravity * deltatime;
 	}
@@ -104,8 +112,6 @@ void Mario::Update(float deltatime, Map* map) {
 
 	position.y += velocity.y * deltatime;
 	
-
-	inputHandler.HandInput(this);
 	Character::handleCollision(map);
 	
 }

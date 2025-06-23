@@ -29,23 +29,25 @@ void Character::handleCollision(Map* map){
 
     onGround = false;
 
+    if (position.x < 0) position.x = 0;
     int characterLeftTile = (int)(bound.x / Map::side);
     int characterRightTile = (int)((bound.x + bound.width) / Map::side);
     int characterTopTile = (int)(bound.y / Map::side);
     int characterBottomTile = (int)((bound.y + bound.height) / Map::side);
 
-    int startCol = max(0, characterLeftTile - 3);
-    int endCol = min(map->columns - 1, characterRightTile + 4);
-    int startRow = max(0, characterTopTile - 3);
-    int endRow = min(map->rows - 1, characterBottomTile + 3);
+    int startCol = max(0, characterLeftTile - 1);
+    int endCol = min(map->columns - 1, characterRightTile + 1);
+    int startRow = max(0, characterTopTile - 1);
+    int endRow = min(map->rows - 1, characterBottomTile + 1);
 
     for (int x = startRow; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
             Tile tile = map->getTile(x, y);
+
             MapTileInstance* tileInstance = map->getMapTileInstance(x, y);
             Rectangle tileRect = { (float)(y * Map::side), (float)(x * Map::side), (float)Map::side, (float)Map::side };
 
-            if (tileInstance->tileID == 0) continue;
+            //if (!tileInstance || tileInstance->tileID == 0) continue;
 
             if (CheckCollisionRecs(bound, tileRect)) {
                 if (tile.behavior->isSolid()) {
@@ -72,10 +74,10 @@ void Character::handleCollision(Map* map){
                             //position.y = floor(position.y);
                         }
                         else { // 2 bên của tile 
-                            if (velocity.x > 0) { // đang đi sang phải → đụng bên trái tile
+                            if (velocity.x > 0) { // đang đi sang phải,  đụng bên trái tile
                                 position.x -= overlapX;
                             }
-                            else if (velocity.x < 0) { // đang đi sang trái → đụng bên phải tile
+                            else if (velocity.x < 0) { // đang đi sang trái, đụng bên phải tile
                                 position.x += overlapX;
                             }
                             velocity.x = 0;

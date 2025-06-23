@@ -24,10 +24,11 @@ public :
 	Mario();
 	Mario(Vector2 position);
 
+	void handleInput(float deltatime);
 	void Update(float deltatime, Map* map) override;
 	void LoadSource() override;
 	void Draw() override;
 	void MoveLeft() override;
 	void MoveRight() override;
-
+	bool isRunning() { return currentstate == Actionstate::Run; }
 };

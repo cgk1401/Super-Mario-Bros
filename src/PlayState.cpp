@@ -7,20 +7,24 @@ PlayState::PlayState() {
     isPlaying = true;
     map = new Map("../assets/Map/tileset_gutter64x64.png");
     map->loadFromFile("map1.txt");
-    camera.offset = { 0,0 };
-    camera.target = { 0,0 };
-    camera.rotation = 0;
-    camera.zoom = 1.0;
-
+    camera.init({0,0});
+    bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.005, 7.2);
+    bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 7.2);
+    bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.4, 7.2);
+    
    /* mario = Mario({ 50, 50 });*/
 }
 PlayState::~PlayState() {
     delete map;
+    bg.unload();
 }
 void PlayState::handleInput(Game& game){
 
 }
 void PlayState::update(Game& game){
+    float dt = GetFrameTime();
+    
+
     if (gui.PauseButton_IsPressed() && isPlaying) {
         isPlaying = false;
     }
@@ -33,9 +37,11 @@ void PlayState::update(Game& game){
         }
     }
     if (isPlaying) {
+        camera.update(mario.getBound(), screenWidth);
         gui.update(game); 
+        bg.update( mario,camera.getCamera(), dt);
         mario.Update(GetFrameTime(), map);
-        map->update(camera);
+        map->update();
     }
     else {
         pauseMenu.update(game);  
@@ -44,15 +50,18 @@ void PlayState::update(Game& game){
     
 }
 
-void PlayState::render(){
-   // camera.target = mario.getPos();
-    map->draw(camera); // add camera 
-    gui.draw();
+void PlayState::render() {
+    BeginMode2D(camera.getCamera());
+    bg.draw();
+    map->draw();
     mario.Draw();
     
+    EndMode2D();
 
+    gui.draw();
     if(isPlaying == false) {
         pauseMenu.render();
     }
+   
     
 }

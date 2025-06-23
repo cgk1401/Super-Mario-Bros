@@ -27,9 +27,9 @@ public:
     Map(const char* path, int r = 12, int c = 32);
 
     void initMap(int r, int c);
-    void update(Camera2D& camera, bool isEditing = false);
+    void update(bool isEditing = false);
     void loadFromFile(const char* filename);
-    void draw(Camera2D& camera, bool isEditing = false);
+    void draw(bool isEditing = false);
 
     Tile getTile(int tileID) const; 
     Tile getTile(int row, int col) const; 

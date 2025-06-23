@@ -40,4 +40,5 @@ public:
 	virtual void MoveRight() = 0;
 	virtual void handleCollision(Map* map);
 	virtual Vector2 getPos();
+	virtual Rectangle getBound() { return bound; }
 };

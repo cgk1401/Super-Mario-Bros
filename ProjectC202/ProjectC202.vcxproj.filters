@@ -96,6 +96,12 @@
     <ClCompile Include="..\src\MapEditor.cpp">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CameraController.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ParallaxManager.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -151,6 +157,12 @@
     </ClInclude>
     <ClInclude Include="..\headers\TileBehavior.h">
       <Filter>Header Files\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CameraController.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\ParallaxManager.h">
+      <Filter>Header Files\Map</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

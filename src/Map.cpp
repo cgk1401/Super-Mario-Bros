@@ -51,34 +51,11 @@ void Map::createTileCatalog() {
 
 
 }
-void Map::update(Camera2D& camera,  bool isEditing) {
-    
-    if (isEditing) {
-        float dt = GetFrameTime();
-        float speed = 200;
+void Map::update(bool isEditing) {
 
-        if (IsKeyDown(KEY_RIGHT)) {
-            if (IsKeyDown(KEY_LEFT_CONTROL)) {
-                speed = 1000;
-            }
-            camera.target.x += speed * dt;
-
-        }
-        if (IsKeyDown(KEY_LEFT)) {
-            if (IsKeyDown(KEY_LEFT_CONTROL)) {
-                speed = 1000;
-            }
-            camera.target.x -= speed * dt;
-        }
-
-        if (camera.target.x < 0) {
-            camera.target.x = 0;
-        }
-    }
 }
 
-void Map::draw(Camera2D& camera, bool isEditing) {
-    BeginMode2D(camera);
+void Map::draw(bool isEditing) {
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
             int id = mapData[x][y].tileID;
@@ -90,7 +67,6 @@ void Map::draw(Camera2D& camera, bool isEditing) {
             if (isEditing) DrawRectangleLinesEx(mapRects[x][y], 0.5f, DARKGRAY);
         }
     }
-    EndMode2D();
 }
 
 int Map::getTileIDFromCoords(int fileRow, int fileCol) const {

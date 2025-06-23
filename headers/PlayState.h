@@ -1,11 +1,13 @@
 #ifndef PLAY_STATE_H
 #define PLAY_STATE_H
+#include <raylib.h>
+
 #include "../headers/GameState.h"
 #include "../headers/GUI.h"
-#include <raylib.h>
 #include "../headers/PauseState.h"
 #include "../headers/Map.h"
-
+#include "../headers/CameraController.h"
+#include "../headers/ParallaxManager.h"
 class PlayState : public GameState{
 public:
     PlayState();
@@ -19,7 +21,10 @@ private:
     PauseState pauseMenu;
     Map* map;
     Mario mario;
-    Camera2D camera{};
+    CameraController camera;
+    ParallaxManager bg; //background
+    
+
 };
 
 #endif
