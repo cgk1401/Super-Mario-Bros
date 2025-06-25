@@ -52,6 +52,9 @@
     <Filter Include="Header Files\Map\Tile">
       <UniqueIdentifier>{5af8d7d6-1519-4e8d-af16-9120859d585b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Map\Tile">
+      <UniqueIdentifier>{d2bb5825-f8f0-4c8d-80bd-2618ed9a0d88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Game.cpp">
@@ -95,6 +98,9 @@
     </ClCompile>
     <ClCompile Include="..\src\MapEditor.cpp">
       <Filter>Source Files\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ConcreteTileBehavior.cpp">
+      <Filter>Source Files\Map\Tile</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

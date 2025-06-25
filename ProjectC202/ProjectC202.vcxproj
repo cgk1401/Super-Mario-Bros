@@ -132,6 +132,7 @@
     <ClCompile Include="..\src\Animation.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
+    <ClCompile Include="..\src\ConcreteTileBehavior.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />

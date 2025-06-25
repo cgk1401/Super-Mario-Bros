@@ -1,0 +1,2 @@
+#include "../headers/Star.h"
+
