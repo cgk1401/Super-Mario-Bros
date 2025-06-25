@@ -29,28 +29,28 @@ public:
 
 class BrickTileBehavior : public TileBehavior {
 public:
-	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{} // bị vỡ ra -> add effect mảnh vỡ
-	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{} // đứng lên thì ko sao -> giống solid -> dùng lại SolidTileBehavior::onFootCollision(..)
-	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{} // tương tự
-	bool isSolid() override { return true; }
+	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override; // bị vỡ ra -> add effect mảnh vỡ
+	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override; // đứng lên thì ko sao -> giống solid -> dùng lại SolidTileBehavior::onFootCollision(..)
+	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override; // tương tự
+	bool isSolid() override;
 	~BrickTileBehavior() = default;
 };
 
 class QuestionTileBehavior : public TileBehavior { // sẽ xuất hiện coin(chủ yếu), xuất hiện mushroom khi đang ở dạng nhỏ xí, xuất hiện flower khi đang ở dạng super cấp 1, star thì ....
 public:
-	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	bool isSolid() override{}
+	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override;
+	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override;
+	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override;
+	bool isSolid() override;
 	~QuestionTileBehavior() = default;
 };
 
 class CoinTileBehavior : public TileBehavior {
 public:
-	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	bool isSolid() override{}
+	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override;
+	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override;
+	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override;
+	bool isSolid() override;
 	~CoinTileBehavior() = default;
 };
 
