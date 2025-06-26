@@ -17,9 +17,14 @@ Map::Map(const char* texturePath, int r, int c) {
 
     //    t.resize(tileColumns);
     //}
-    for (int i = 0; i < 8; i++) {
+    //this is the old method, result in some invisible tiles
+
+    for (int i = 0; i < 8; i += 2) {
 		tileSetSourceRects[i].resize(33);
     }
+    for (int i = 1; i < 8; i += 2) {
+        tileSetSourceRects[i].resize(30);
+	}
     for (int i = 8; i < tileRows; i++) {
         tileSetSourceRects[i].resize(24);
     }
@@ -29,6 +34,9 @@ Map::Map(const char* texturePath, int r, int c) {
             tileSetSourceRects[x][y] = { (float)y * side, (float)x * side, (float)side, (float)side };
         }
     }
+	//this prevents some invisible tiles
+
+
     createTileCatalog();
 }
 
@@ -50,10 +58,8 @@ void Map::initMap(int r, int c) {
 void Map::createTileCatalog() {
     tileCatalog.clear();
     tileCatalog.emplace(0, Tile(0, tileSetSourceRects[0][0], EMPTY, new EmptyTileBehavior())); //EMPTY tile
-    tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
-
-
-
+    //tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
+    
     //tileCatalog.emplace(1, Tile(1, tile, ));
 
     //....
@@ -103,8 +109,13 @@ void Map::draw(Camera2D& camera, bool isEditing) {
 }
 
 int Map::getTileIDFromCoords(int fileRow, int fileCol) const {
-    if (fileRow < 9) return (fileRow - 1) * tileColumns + fileCol;
-	else return 264+ (fileRow - 9) * 24 + fileCol; // Adjust for rows with fewer columns
+    if (fileRow < 3) {
+        return (fileRow - 1) * 33 + fileCol;
+    }
+    else if (fileRow > 2 && fileRow < 9) {
+        return (fileRow - 1) * 33 + fileCol - (fileRow - 1) / 2 * 3;
+    }
+	else return 252 + (fileRow - 9) * 24 + fileCol; // Adjust for rows with fewer columns
 }
 
 
