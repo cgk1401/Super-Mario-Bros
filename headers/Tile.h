@@ -10,7 +10,6 @@ enum TileType {
 	COINS_BLOCK,     //A block of multiple coins
 	QUESTION_BLOCK, // consisting of coin, power-up items such as flower, star,. depending on game, level or mario's super form
 	USED_QUESTION_BLOCK,
-	PROJECTILE,
 	DECORATION_BLOCK, // background tile, not interactable
 	ITEM, // item tile, can be mushroom, flower, star, coin, etc.
 	LAVA_FLOOR, // lava tile, can be used for traps
