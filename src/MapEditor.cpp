@@ -64,7 +64,7 @@ void MapEditor::render() {
     Vector2 mouseEditorWorld = GetScreenToWorld2D(GetMousePosition(), cameraEditor);
     BeginMode2D(cameraEditor);
     for (int r = 0; r < tileRows; r++) {
-        for (int c = 0; c < tileColumns; c++) {
+        for (int c = 0; c < tileSetSourceRects[r].size(); c++) {
             Rectangle tileSrc = tileSetSourceRects[r][c];
             Rectangle tileDest = { (float)uiStartX + 10 + (float)c * (side + 4), (float)currentY + (float)r * (side + 4), (float)side, (float)side };
 

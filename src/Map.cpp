@@ -9,16 +9,23 @@ Map::Map(const char* texturePath, int r, int c) {
     texture = LoadTexture(texturePath);
     initMap(r, c);
 
-    tileRows = texture.width / side;
-    tileColumns = texture.height / side;
+    tileRows = texture.height / side;
+    tileColumns = texture.width / side;
 
     tileSetSourceRects.resize(tileRows);
-    for (auto& t : tileSetSourceRects) {
+    //for (auto& t : tileSetSourceRects) {
 
-        t.resize(tileColumns);
+    //    t.resize(tileColumns);
+    //}
+    for (int i = 0; i < 8; i++) {
+		tileSetSourceRects[i].resize(33);
     }
+    for (int i = 8; i < tileRows; i++) {
+        tileSetSourceRects[i].resize(24);
+    }
+
     for (int x = 0; x < tileRows; x++) {
-        for (int y = 0; y < tileColumns; y++) {
+        for (int y = 0; y < tileSetSourceRects[x].size(); y++) {
             tileSetSourceRects[x][y] = { (float)y * side, (float)x * side, (float)side, (float)side };
         }
     }
@@ -44,15 +51,17 @@ void Map::createTileCatalog() {
     tileCatalog.clear();
     tileCatalog.emplace(0, Tile(0, tileSetSourceRects[0][0], EMPTY, new EmptyTileBehavior())); //EMPTY tile
     tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
-    tileCatalog.emplace(getTileIDFromCoords(1, 2), Tile(1, tileSetSourceRects[1 - 1][2 - 1], BRICK, new BrickTileBehavior())); //Ground tile
-    //tileCatalog.emplace(1, Tile(1, tile, )));
-    
+
+
+
+    //tileCatalog.emplace(1, Tile(1, tile, ));
+
     //....
 
 
 }
-void Map::update(Camera2D& camera,  bool isEditing) {
-    
+void Map::update(Camera2D& camera, bool isEditing) {
+
     if (isEditing) {
         float dt = GetFrameTime();
         float speed = 200;
@@ -82,9 +91,9 @@ void Map::draw(Camera2D& camera, bool isEditing) {
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
             int id = mapData[x][y].tileID;
-            
+
             auto it = tileCatalog.find(id);
-            if ( id && it != tileCatalog.end() ) {
+            if (id && it != tileCatalog.end()) {
                 DrawTexturePro(texture, it->second.srcRect, mapRects[x][y], { 0,0 }, 0, WHITE);
             }
             if (isEditing) DrawRectangleLinesEx(mapRects[x][y], 0.5f, DARKGRAY);
@@ -94,7 +103,8 @@ void Map::draw(Camera2D& camera, bool isEditing) {
 }
 
 int Map::getTileIDFromCoords(int fileRow, int fileCol) const {
-    return (fileRow - 1) * tileColumns + fileCol;
+    if (fileRow < 9) return (fileRow - 1) * tileColumns + fileCol;
+	else return 264+ (fileRow - 9) * 24 + fileCol; // Adjust for rows with fewer columns
 }
 
 
@@ -133,7 +143,7 @@ void Map::setTile(int row, int col, int tileID) {
     if (it->second.type == QUESTION_BLOCK || it->second.type == COINS_BLOCK) {
         mapData[row][col].hasItem = true;
     }
-    
+
 }
 
 void Map::loadFromFile(const char* filename) {
