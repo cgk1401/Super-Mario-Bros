@@ -133,16 +133,20 @@
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
     <ClCompile Include="..\src\ConcreteTileBehavior.cpp" />
+    <ClCompile Include="..\src\Flower.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
+    <ClCompile Include="..\src\Item.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Map.cpp" />
     <ClCompile Include="..\src\MapEditor.cpp" />
     <ClCompile Include="..\src\Mario.cpp" />
     <ClCompile Include="..\src\MenuState.cpp" />
+    <ClCompile Include="..\src\Mushroom.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PlayState.cpp" />
+    <ClCompile Include="..\src\Star.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Animation.h" />
@@ -150,17 +154,21 @@
     <ClInclude Include="..\headers\Character.h" />
     <ClInclude Include="..\headers\Command.h" />
     <ClInclude Include="..\headers\ConcreteTileBehavior.h" />
+    <ClInclude Include="..\headers\Flower.h" />
     <ClInclude Include="..\headers\Game.h" />
     <ClInclude Include="..\headers\GameState.h" />
     <ClInclude Include="..\headers\Global.h" />
     <ClInclude Include="..\headers\GUI.h" />
     <ClInclude Include="..\headers\InputHandler.h" />
+    <ClInclude Include="..\headers\Item.h" />
     <ClInclude Include="..\headers\Map.h" />
     <ClInclude Include="..\headers\MapEditor.h" />
     <ClInclude Include="..\headers\Mario.h" />
     <ClInclude Include="..\headers\MenuState.h" />
+    <ClInclude Include="..\headers\Mushrooom.h" />
     <ClInclude Include="..\headers\PauseState.h" />
     <ClInclude Include="..\headers\PlayState.h" />
+    <ClInclude Include="..\headers\Star.h" />
     <ClInclude Include="..\headers\Tile.h" />
     <ClInclude Include="..\headers\TileBehavior.h" />
   </ItemGroup>

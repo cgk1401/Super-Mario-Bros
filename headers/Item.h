@@ -3,6 +3,8 @@
 #include <string>
 class Item {
 public:
+	Item() = default;
+	Item(Vector2 v);
 	virtual ~Item() = default;
 	virtual void draw() = 0;
 	virtual void update() = 0;

@@ -102,6 +102,18 @@
     <ClCompile Include="..\src\ConcreteTileBehavior.cpp">
       <Filter>Source Files\Map\Tile</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Item.cpp">
+      <Filter>Source Files\Map\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Mushroom.cpp">
+      <Filter>Source Files\Map\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Star.cpp">
+      <Filter>Source Files\Map\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Flower.cpp">
+      <Filter>Source Files\Map\Tile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -156,6 +168,18 @@
       <Filter>Header Files\Map\Tile</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\TileBehavior.h">
+      <Filter>Header Files\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Item.h">
+      <Filter>Header Files\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Mushrooom.h">
+      <Filter>Header Files\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Flower.h">
+      <Filter>Header Files\Map\Tile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Star.h">
       <Filter>Header Files\Map\Tile</Filter>
     </ClInclude>
   </ItemGroup>

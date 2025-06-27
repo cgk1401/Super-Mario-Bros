@@ -1,5 +1,6 @@
 #include "../headers/ConcreteTileBehavior.h"
 #include "../headers/Map.h"
+#include "../headers/Item.h"
 
 void BrickTileBehavior::onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) {
 	map->setTile(tileRow, tileCol, 0);
