@@ -9,19 +9,34 @@ Map::Map(const char* texturePath, int r, int c) {
     texture = LoadTexture(texturePath);
     initMap(r, c);
 
-    tileRows = texture.width / side;
-    tileColumns = texture.height / side;
+    tileRows = texture.height / side;
+    tileColumns = texture.width / side;
 
     tileSetSourceRects.resize(tileRows);
-    for (auto& t : tileSetSourceRects) {
+    //for (auto& t : tileSetSourceRects) {
 
-        t.resize(tileColumns);
+    //    t.resize(tileColumns);
+    //}
+    //this is the old method, result in some invisible tiles
+
+    for (int i = 0; i < 8; i += 2) {
+		tileSetSourceRects[i].resize(33);
     }
+    for (int i = 1; i < 8; i += 2) {
+        tileSetSourceRects[i].resize(30);
+	}
+    for (int i = 8; i < tileRows; i++) {
+        tileSetSourceRects[i].resize(24);
+    }
+
     for (int x = 0; x < tileRows; x++) {
-        for (int y = 0; y < tileColumns; y++) {
+        for (int y = 0; y < tileSetSourceRects[x].size(); y++) {
             tileSetSourceRects[x][y] = { (float)y * side, (float)x * side, (float)side, (float)side };
         }
     }
+	//this prevents some invisible tiles
+
+
     createTileCatalog();
 }
 
@@ -43,10 +58,156 @@ void Map::initMap(int r, int c) {
 void Map::createTileCatalog() {
     tileCatalog.clear();
     tileCatalog.emplace(0, Tile(0, tileSetSourceRects[0][0], EMPTY, new EmptyTileBehavior())); //EMPTY tile
-    tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
-    tileCatalog.emplace(getTileIDFromCoords(1, 2), Tile(1, tileSetSourceRects[1 - 1][2 - 1], BRICK, new BrickTileBehavior())); //Ground tile
-    //tileCatalog.emplace(1, Tile(1, tile, )));
+    for (int i = 1; i < 9; i++) {
+        for (int j = 1; j < 7; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tile
+        }
+		//ground tiles, solid, not breakable, not interactable, no effect (except for cannon head)
+
+
+
+        for (int j = 7; j < 9; j++) {
+			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], BRICK, new BrickTileBehavior())); //Brick tile
+        }
+		//brick tiles, solid, breakable if hit under, no effect
+
+
+
+        for (int j = 9; j < 16; j++) {
+			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+        }
+		//castle tiles, work as decoration
+
+
+
+		tileCatalog.emplace(getTileIDFromCoords(i, 16), Tile(1, tileSetSourceRects[i - 1][16 - 1], PIPE, new SolidTileBehavior())); //Pipe tile
+		//pipe tiles, solid, not breakable, not interactable, has pipe effect (add later)
+
+
+
+        for (int j = 17; j < 20; j++) {
+			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+        }
+		//decoration tiles, work as decoration
+
+
+
+		if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(1, tileSetSourceRects[i - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior())); //Question Block tile
+		else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(1, tileSetSourceRects[i - 1][20 - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+        //invisible question block tile, solid, not breakable, not interactable, has question block effect (add later)
+		//decoration tile, work as decoration
+
+
+
+        for (int j = 21; j < 24; j++) {
+			if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior())); //Question block tile
+			//Question block tiles, solid, not breakable, not interactable, has question block effect (add later)
+
+
+
+            else tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], ITEM, new ItemBehavior()));
+			//Item tile, not solid, not breakable, disappear when collision with player (effect add later)
+        }
+
+
+
+        if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 24), Tile(1, tileSetSourceRects[i - 1][24 - 1], USED_QUESTION_BLOCK, new SolidTileBehavior())); //Ground tile
+        else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 24), Tile(1, tileSetSourceRects[i - 1][24 - 1], ITEM, new ItemBehavior())); //Item tile
+        //ground tiles, solid, not breakable, not interactable, no effect
+        //Item tile, not solid, not breakable, disappear when collision with player (effect add later)
+
+
+
+        tileCatalog.emplace(getTileIDFromCoords(i, 25), Tile(1, tileSetSourceRects[i - 1][25 - 1], ITEM, new ItemBehavior())); //Item tile
+        //Item tile, not solid, not breakable, disappear when collision with player (effect add later)
+
+
+
+        for (int j = 26; j < 29; j++) {
+			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+        }
+		//decoration tiles, work as decoration
+
+
+
+        tileCatalog.emplace(getTileIDFromCoords(i, 29), Tile(1, tileSetSourceRects[i - 1][29 - 1], LAVA_FLOOR, new DecorationTileBehavior())); //Decoration tile
+		//lava floor tile, work as a trap, die when touch, somehow has the same behavior as decoration tile
+        
+
+
+		tileCatalog.emplace(getTileIDFromCoords(i, 30), Tile(1, tileSetSourceRects[i - 1][30 - 1], GROUND, new SolidTileBehavior())); //ground tile
+		//ground tile, solid, not breakable, not interactable, the bridge tile has effect (add later)
+
+
+
+        for (int j = 30; j < 34; j++) {
+            if (i % 2 == 1) {
+                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tile
+            }
+            //ground tiles, solid, not breakable, not interactable, no effect
+        }
+    }
+	//catalog for first 8 rows, which follow the origin color palettes (overworld, underground, castle, underwater)
+
+
+
+
+    for (int i = 9; i < 21; i++) {
+        for (int j = 1; j < 6; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], PIPE, new SolidTileBehavior())); //Pipe tiles
+        }
+        //Pipe 
+
+
+
+        for (int j = 6; j < 9; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tiles
+        }
+        //Ground
+
+
+
+        for (int j = 9; j < 12; j++) {
+            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tiles
+            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+        }
+        //Ground
+        //Decoration
+
+
+
+        tileCatalog.emplace(getTileIDFromCoords(i, 12), Tile(1, tileSetSourceRects[i - 1][12 - 1], FINISHING_POLE, new DecorationTileBehavior())); //Ground tiles
+        //Finishing pole
+
+
+
+        for (int j = 13; j < 19; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+        }
+        //Decoration
+
+
+        if ( i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(1, tileSetSourceRects[i - 1][19 - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+        else if ( i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(1, tileSetSourceRects[i - 1][19 - 1], GROUND, new SolidTileBehavior())); //Solid tiles
+        //
+        //
+
+
+
+        for (int j = 20; j < 25; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+        }
+        //Decoration
+    }
+    //catalog for the rest, which have 6 palettes instead of 4 (add snow and mushroom)
+
+
+
+
+    //tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
     
+    //tileCatalog.emplace(1, Tile(1, tile, ));
+
     //....
 
 
@@ -59,9 +220,9 @@ void Map::draw(bool isEditing) {
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
             int id = mapData[x][y].tileID;
-            
+
             auto it = tileCatalog.find(id);
-            if ( id && it != tileCatalog.end() ) {
+            if (id && it != tileCatalog.end()) {
                 DrawTexturePro(texture, it->second.srcRect, mapRects[x][y], { 0,0 }, 0, WHITE);
             }
             if (isEditing) DrawRectangleLinesEx(mapRects[x][y], 0.5f, DARKGRAY);
@@ -70,7 +231,13 @@ void Map::draw(bool isEditing) {
 }
 
 int Map::getTileIDFromCoords(int fileRow, int fileCol) const {
-    return (fileRow - 1) * tileColumns + fileCol;
+    if (fileRow < 3) {
+        return (fileRow - 1) * 33 + fileCol;
+    }
+    else if (fileRow > 2 && fileRow < 9) {
+        return (fileRow - 1) * 33 + fileCol - (fileRow - 1) / 2 * 3;
+    }
+	else return 252 + (fileRow - 9) * 24 + fileCol; // Adjust for rows with fewer columns
 }
 
 
@@ -109,7 +276,7 @@ void Map::setTile(int row, int col, int tileID) {
     if (it->second.type == QUESTION_BLOCK || it->second.type == COINS_BLOCK) {
         mapData[row][col].hasItem = true;
     }
-    
+
 }
 
 void Map::loadFromFile(const char* filename) {
