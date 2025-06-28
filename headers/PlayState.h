@@ -23,6 +23,7 @@ private:
     Mario mario;
     CameraController camera;
     ParallaxManager bg; //background
+    ParallaxManager fg; //foreground
     
 
 };

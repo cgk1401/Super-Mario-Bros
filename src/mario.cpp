@@ -1,6 +1,6 @@
 ﻿#include "../headers/Mario.h"
 #include "../headers/Global.h"
-
+#include "../headers/Collision.h"
 class Map;
 
 Mario::Mario() {
@@ -58,15 +58,13 @@ void Mario::handleInput(float deltatime) {
 	//FRICTION 
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
 		// If no keys are pressed, apply friction
-		currentstate = Actionstate::IDLE;
 		if (onGround) {
-			velocity.x = approach(velocity.x, 0, friction * deltatime);
+			velocity.x = approach(velocity.x, 0, friction * deltatime); 
+			 currentstate = Actionstate::IDLE;
 		}
 		//add 'friction' animation
 		position.x += velocity.x;
-
 	}
-
 
 	const float maxJumpTime = 0.32;
 
@@ -99,8 +97,11 @@ void Mario::Update(float deltatime, Map* map) {
 	animation[currentstate].Update(deltatime);
 	handleInput(deltatime);
 
+	
+
 	if (!onGround) {
 		velocity.y += gravity * deltatime;
+		if(isJumpingUp) currentstate = Actionstate::Jump;
 	}
 	else {
 		velocity.y = 0; 
@@ -112,19 +113,19 @@ void Mario::Update(float deltatime, Map* map) {
 
 	position.y += velocity.y * deltatime;
 	
-	Character::handleCollision(map);
+	Collision::getInstance()->handlePlayerCollision(this, map);
 	
 }
 
 void Mario::LoadSource() {
 	texture = LoadTexture("../assets/Mario/mario_custom_spritesheet.png");
-	
+
 	int texW = 16;
 	int texH = 22;
 	//IDLE STATE
 	Animation idle;
 	for (int i = 0; i < 1; i++) {
-		idle.frame.push_back(Rectangle{(float)( 92 + i * 18), 29, (float)texW, (float)texH });
+		idle.frame.push_back(Rectangle{ (float)(92 + i * 18), 29, (float)texW, (float)texH });
 	}
 	idle.currentframe = 0;
 	idle.durationtime = 0.08;
@@ -137,13 +138,18 @@ void Mario::LoadSource() {
 		run.frame.push_back(Rectangle{ (float)(92 + i * 18), 29, (float)texW, (float)texH });
 	}
 	run.currentframe = 0;
-	run.durationtime = 0.08;
-	idle.currenttime = 0;
+	run.durationtime = 0.07;
+	run.currenttime = 0;
 	animation[Actionstate::Run] = run;
 
 	//JUMPING STATE
 	Animation jump;
-	
+	jump.frame.push_back(Rectangle{ (float)(92 + 7 * 18 ), 29, (float)texW, (float)texH});
+	jump.currentframe = 0;
+	jump.durationtime = 0.08;
+	jump.currenttime = 0;
+	animation[Actionstate::Jump] = jump;
+
 	
 }
 

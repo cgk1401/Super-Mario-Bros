@@ -2,7 +2,9 @@
 
 InputHandler::InputHandler() {
 	bindKey(KEY_LEFT, new MoveLeft());
+	bindKey(KEY_A, new MoveLeft());
 	bindKey(KEY_RIGHT, new MoveRight());
+	bindKey(KEY_D, new MoveRight());
 }
 
 void InputHandler::bindKey(int key, Command* command) {

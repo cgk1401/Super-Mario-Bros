@@ -8,10 +8,11 @@ PlayState::PlayState() {
     map = new Map("../assets/Map/tileset_gutter64x64.png");
     map->loadFromFile("map1.txt");
     camera.init({0,0});
-    bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.005, 7.2);
+    bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.05, 7.2);
     bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 7.2);
-    bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.4, 7.2);
+    bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 7.2);
     
+    //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
 }
 PlayState::~PlayState() {
@@ -40,6 +41,7 @@ void PlayState::update(Game& game){
         camera.update(mario.getBound(), screenWidth);
         gui.update(game); 
         bg.update( mario,camera.getCamera(), dt);
+        //fg.update( mario,camera.getCamera(), dt);
         mario.Update(GetFrameTime(), map);
         map->update();
     }
@@ -53,9 +55,10 @@ void PlayState::update(Game& game){
 void PlayState::render() {
     BeginMode2D(camera.getCamera());
     bg.draw();
+   
     map->draw();
     mario.Draw();
-    
+    //fg.draw();
     EndMode2D();
 
     gui.draw();

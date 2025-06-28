@@ -1,6 +1,5 @@
 #pragma once
 #include "raylib.h"
-
 #include "../headers/Mario.h"
 #include "../headers/Global.h"
 #include <vector>

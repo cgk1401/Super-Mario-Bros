@@ -8,11 +8,10 @@ void ParallaxManager::addLayer(const char* filepath, Rectangle srcRect, float sp
     ParallaxLayer layer;
     layer.texture = tex;
     layer.srcRect = srcRect;
-    layer.scrollSpeed = speed; // Tốc độ cuộn, giá trị dương để cuộn sang trái
+    layer.scrollSpeed = speed; 
     layer.scale = scale;
-    layer.scrollX = 0.0f;
+    layer.scrollX = 0.0;
 
-    // Tính toán chiều rộng texture sau khi scale
     layer.scaledWidth = srcRect.width * scale;
 
     layers.push_back(layer);
@@ -25,10 +24,8 @@ void ParallaxManager::update(Mario& mario, Camera2D& camera, float deltaTime) {
 
     
         for (auto& layer : layers) {
-            // Cập nhật vị trí cuộn dựa trên tốc độ và deltaTime
-            layer.scrollX = -camera.target.x * layer.scrollSpeed / layer.scale;
+            layer.scrollX = -camera.target.x * layer.scrollSpeed * 0.8;
 
-            // Đảm bảo scrollX nằm trong khoảng [-scaledWidth, 0] để lặp vô hạn
             if (layer.scrollX >= layer.scaledWidth) {
                 layer.scrollX -= layer.scaledWidth;
             }
@@ -42,16 +39,14 @@ void ParallaxManager::update(Mario& mario, Camera2D& camera, float deltaTime) {
 void ParallaxManager::draw() {
     float screenWidth = (float)GetScreenWidth();
     for (const auto& layer : layers) {
-        // Tính số lần texture cần vẽ để lấp đầy màn hình
-        int numRepeats = (int)ceil((screenWidth + layer.scaledWidth) / layer.scaledWidth);
+        //int numRepeats = (int)ceil((screenWidth + layer.scaledWidth) / layer.scaledWidth);
 
-        // Vẽ nhiều texture để tạo hiệu ứng lặp vô hạn
         for (int i = -1; i <  20; i++) {
             Rectangle destRect = {
-                layer.scrollX + i * layer.scaledWidth, // Vị trí X
-                0.0f,                                 // Vị trí Y
-                layer.scaledWidth,                    // Chiều rộng
-                layer.srcRect.height * layer.scale    // Chiều cao
+                layer.scrollX + i * layer.scaledWidth, 
+                0.0f,                                 
+                layer.scaledWidth,                    
+                layer.srcRect.height * layer.scale   
             };
             DrawTexturePro(layer.texture, layer.srcRect, destRect, { 0.0f, 0.0f }, 0.0f, WHITE);
         }
