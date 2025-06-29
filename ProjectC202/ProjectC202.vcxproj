@@ -136,6 +136,7 @@
     <ClCompile Include="..\src\Collision.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
+    <ClCompile Include="..\src\GoomBa.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Map.cpp" />
@@ -154,9 +155,11 @@
     <ClInclude Include="..\headers\Collision.h" />
     <ClInclude Include="..\headers\Command.h" />
     <ClInclude Include="..\headers\ConcreteTileBehavior.h" />
+    <ClInclude Include="..\headers\Enemy.h" />
     <ClInclude Include="..\headers\Game.h" />
     <ClInclude Include="..\headers\GameState.h" />
     <ClInclude Include="..\headers\Global.h" />
+    <ClInclude Include="..\headers\GoomBa.h" />
     <ClInclude Include="..\headers\GUI.h" />
     <ClInclude Include="..\headers\InputHandler.h" />
     <ClInclude Include="..\headers\Map.h" />

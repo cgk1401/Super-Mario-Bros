@@ -1,4 +1,4 @@
-#include "../headers/PlayState.h"
+﻿#include "../headers/PlayState.h"
 #include "../headers/Game.h"
 #include "../headers/MenuState.h"
 
@@ -44,6 +44,19 @@ void PlayState::update(Game& game){
         //fg.update( mario,camera.getCamera(), dt);
         mario.Update(GetFrameTime(), map);
         map->update();
+        
+        // test thử goomba
+        goomba.Update(dt);
+        if (IsKeyPressed(KEY_B)) {
+            goomba.ChangeState(GoomBaState::Die);
+        }
+        else if (IsKeyPressed(KEY_N)) {
+            goomba.ChangeState(GoomBaState::Run);
+        }
+        else if (IsKeyDown(KEY_M)) {
+            goomba.moveUp();
+        }
+
     }
     else {
         pauseMenu.update(game);  
@@ -58,6 +71,7 @@ void PlayState::render() {
    
     map->draw();
     mario.Draw();
+    goomba.Draw();
     //fg.draw();
     EndMode2D();
 

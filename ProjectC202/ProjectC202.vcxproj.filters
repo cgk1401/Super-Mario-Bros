@@ -52,6 +52,18 @@
     <Filter Include="Header Files\Map\Tile">
       <UniqueIdentifier>{5af8d7d6-1519-4e8d-af16-9120859d585b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity\Enemy">
+      <UniqueIdentifier>{907f051b-27ec-45ba-bda6-8a476dcbb304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\Character">
+      <UniqueIdentifier>{29b1c5d5-faf3-46ad-940e-c4825f39fb8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity\Character">
+      <UniqueIdentifier>{0bba9594-e98d-4ec0-9e9c-2fd8539d17b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity\Enemy">
+      <UniqueIdentifier>{64792c18-ef9f-4bc6-914f-d0b1704d6f23}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Game.cpp">
@@ -81,12 +93,6 @@
     <ClCompile Include="..\src\Animation.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Character.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Mario.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="..\headers\InputHandler.cpp">
       <Filter>Source Files\Input</Filter>
     </ClCompile>
@@ -104,6 +110,15 @@
     </ClCompile>
     <ClCompile Include="..\src\Collision.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Character.cpp">
+      <Filter>Source Files\Entity\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Mario.cpp">
+      <Filter>Source Files\Entity\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GoomBa.cpp">
+      <Filter>Source Files\Entity\Enemy</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -132,12 +147,6 @@
       <Filter>Header Files\States</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Animation.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\Character.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\Mario.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Command.h">
@@ -169,6 +178,18 @@
     </ClInclude>
     <ClInclude Include="..\headers\Collision.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Mario.h">
+      <Filter>Header Files\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Character.h">
+      <Filter>Header Files\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Enemy.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\GoomBa.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
