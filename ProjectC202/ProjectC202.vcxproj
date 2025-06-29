@@ -138,6 +138,7 @@
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GoomBa.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
+    <ClCompile Include="..\src\KoopaTroopa.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Map.cpp" />
     <ClCompile Include="..\src\MapEditor.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="..\headers\GoomBa.h" />
     <ClInclude Include="..\headers\GUI.h" />
     <ClInclude Include="..\headers\InputHandler.h" />
+    <ClInclude Include="..\headers\KoopaTroopa.h" />
     <ClInclude Include="..\headers\Map.h" />
     <ClInclude Include="..\headers\MapEditor.h" />
     <ClInclude Include="..\headers\Mario.h" />

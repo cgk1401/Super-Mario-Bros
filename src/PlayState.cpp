@@ -57,6 +57,18 @@ void PlayState::update(Game& game){
             goomba.moveUp();
         }
 
+        // test thử koopatroopa
+        kooptroopa.Update(dt);
+        if (IsKeyDown(KEY_D)) {
+            kooptroopa.ChangeDirection(DirectionKoopa::Right);
+            kooptroopa.moveRight();
+        }else if (IsKeyPressed(KEY_A)){
+            kooptroopa.ChangeDirection(DirectionKoopa::Left);
+        }
+        else if (IsKeyDown(KEY_DOWN)) {
+            kooptroopa.Fall();
+        }
+
     }
     else {
         pauseMenu.update(game);  
@@ -72,6 +84,7 @@ void PlayState::render() {
     map->draw();
     mario.Draw();
     goomba.Draw();
+    kooptroopa.Draw();
     //fg.draw();
     EndMode2D();
 

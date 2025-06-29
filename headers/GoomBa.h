@@ -1,5 +1,4 @@
 ﻿#pragma once
-
 #include "Enemy.h"
 #include <map>
 using namespace std;
@@ -10,7 +9,7 @@ enum class GoomBaState {
 };
 
 class GoomBa : public Enemy {
-private :
+private:
 	map <GoomBaState, Animation> animation;
 	GoomBaState currentState = GoomBaState::Run;
 	const float speed = 5.0f;
@@ -20,7 +19,7 @@ private :
 	float velocity = 0.0f;
 	bool isGround = true;
 
-public :
+public:
 	GoomBa();
 	GoomBa(Vector2 position);
 	~GoomBa() override;

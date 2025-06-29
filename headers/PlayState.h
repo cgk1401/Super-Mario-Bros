@@ -9,6 +9,8 @@
 #include "../headers/CameraController.h"
 #include "../headers/ParallaxManager.h"
 #include "../headers/GoomBa.h"
+#include "../headers/KoopaTroopa.h"
+
 class PlayState : public GameState{
 public:
     PlayState();
@@ -23,6 +25,7 @@ private:
     Map* map;
     Mario mario;
     GoomBa goomba;
+    KoopTroopa kooptroopa;
     CameraController camera;
     ParallaxManager bg; //background
     ParallaxManager fg; //foreground
