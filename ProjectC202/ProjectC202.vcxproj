@@ -146,6 +146,7 @@
     <ClCompile Include="..\src\MenuState.cpp" />
     <ClCompile Include="..\src\ParallaxManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
+    <ClCompile Include="..\src\PiranhaPlant.cpp" />
     <ClCompile Include="..\src\PlayState.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,6 +171,7 @@
     <ClInclude Include="..\headers\MenuState.h" />
     <ClInclude Include="..\headers\ParallaxManager.h" />
     <ClInclude Include="..\headers\PauseState.h" />
+    <ClInclude Include="..\headers\PiranhaPlant.h" />
     <ClInclude Include="..\headers\PlayState.h" />
     <ClInclude Include="..\headers\Tile.h" />
     <ClInclude Include="..\headers\TileBehavior.h" />

@@ -123,6 +123,9 @@
     <ClCompile Include="..\src\KoopaTroopa.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PiranhaPlant.cpp">
+      <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -195,6 +198,9 @@
       <Filter>Header Files\Entity\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\KoopaTroopa.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\PiranhaPlant.h">
       <Filter>Header Files\Entity\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

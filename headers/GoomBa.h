@@ -27,8 +27,10 @@ public:
 	void LoadSource() override;
 	void Draw() override;
 	void Update(float deltatime) override;
+
 	void moveLeft(); // goomba luôn di chuyển sang trái tấn công character
 	void moveRight(); // gặp chướng ngại vật(map, ống) goomba di chuyển sang phải
 	void moveUp(); // xảy ra khi goomba bị rùa tấn công, goomba sẽ nhảy lên sau đó die
+
 	void ChangeState(GoomBaState newState); // thay đổi trạng thái khi collision
 };

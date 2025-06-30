@@ -10,6 +10,7 @@
 #include "../headers/ParallaxManager.h"
 #include "../headers/GoomBa.h"
 #include "../headers/KoopaTroopa.h"
+#include "../headers/PiranhaPlant.h"
 
 class PlayState : public GameState{
 public:
@@ -26,6 +27,7 @@ private:
     Mario mario;
     GoomBa goomba;
     KoopTroopa kooptroopa;
+    PiranhaPlant piranhaPlant; 
     CameraController camera;
     ParallaxManager bg; //background
     ParallaxManager fg; //foreground

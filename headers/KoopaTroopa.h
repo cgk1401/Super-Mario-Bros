@@ -36,8 +36,10 @@ public :
 	void LoadSource() override;
 	void Draw() override;
 	void Update(float deltatime) override;
+
 	void moveLeft();
 	void moveRight();
+
 	void ChangeDirection(DirectionKoopa direction);
 	void Fall();
 };

@@ -69,6 +69,8 @@ void PlayState::update(Game& game){
             kooptroopa.Fall();
         }
 
+        // test thử piranhaPlant
+        piranhaPlant.Update(dt);
     }
     else {
         pauseMenu.update(game);  
@@ -85,6 +87,8 @@ void PlayState::render() {
     mario.Draw();
     goomba.Draw();
     kooptroopa.Draw();
+    piranhaPlant.Draw();
+    DrawRectangle(500, 200, 150, 150, RED);
     //fg.draw();
     EndMode2D();
 
