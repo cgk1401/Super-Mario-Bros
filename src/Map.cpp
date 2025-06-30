@@ -9,8 +9,8 @@ Map::Map(const char* texturePath, int r, int c) {
     texture = LoadTexture(texturePath);
     initMap(r, c);
 
-    tileRows = texture.height / side;
-    tileColumns = texture.width / side;
+    tileRows = texture.height / TILE_SIZE;
+    tileColumns = texture.width / TILE_SIZE;
 
     tileSetSourceRects.resize(tileRows);
     //for (auto& t : tileSetSourceRects) {
@@ -31,7 +31,7 @@ Map::Map(const char* texturePath, int r, int c) {
 
     for (int x = 0; x < tileRows; x++) {
         for (int y = 0; y < tileSetSourceRects[x].size(); y++) {
-            tileSetSourceRects[x][y] = { (float)y * side, (float)x * side, (float)side, (float)side };
+            tileSetSourceRects[x][y] = { (float)y * TILE_SIZE, (float)x * TILE_SIZE, (float)TILE_SIZE, (float)TILE_SIZE };
         }
     }
 	//this prevents some invisible tiles
@@ -39,7 +39,18 @@ Map::Map(const char* texturePath, int r, int c) {
 
     createTileCatalog();
 }
-
+Map::~Map(){
+    for (int x = 0; x < rows; x++) {
+        for (int y = 0; y < columns; y++) {
+            delete mapData[x][y].state;
+            mapData[x][y].state = nullptr;
+        }
+    }
+    tileCatalog.clear();
+    mapRects.clear();
+    mapData.clear();
+    UnloadTexture(texture);
+}
 void Map::initMap(int r, int c) {
     rows = r;
     columns = c;
@@ -49,7 +60,7 @@ void Map::initMap(int r, int c) {
 
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
-            mapRects[x][y] = { (float)(y * side), (float)(x * side), (float)side, (float)side };
+            mapRects[x][y] = { (float)(y * TILE_SIZE), (float)(x * TILE_SIZE), (float)TILE_SIZE, (float)TILE_SIZE };
             mapData[x][y] = { 0, false };
         }
     }
@@ -212,8 +223,29 @@ void Map::createTileCatalog() {
 
 
 }
+bool operator!=(Vector2 v1, Vector2 v2) {
+    return v1.x != v2.x || v1.y != v2.y;
+}
 void Map::update(bool isEditing) {
+    float dt = GetFrameTime();
+    for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < columns; col++) {
+            int id = mapData[row][col].tileID;
+            if (id != 0) {
+                //tileCatalog[id].behavior->update(GetFrameTime(), row, col, this, &mapData[row][col]);
+               Tile tile = getTile(row, col);
 
+                MapTileInstance* tileInstance = getMapTileInstance(row, col);
+                
+                //if (!tileInstance || tileInstance->tileID == 0) continue;
+                //tile.behavior->update(GetFrameTime(), x, y, map, tileInstance);
+                Vector2 ori = { 0, 0 };
+             
+                if(tile.behavior) tile.behavior->update(dt, row, col, this, tileInstance);
+                
+            }
+        }
+    }
 }
 
 void Map::draw(bool isEditing) {
@@ -223,7 +255,13 @@ void Map::draw(bool isEditing) {
 
             auto it = tileCatalog.find(id);
             if (id && it != tileCatalog.end()) {
-                DrawTexturePro(texture, it->second.srcRect, mapRects[x][y], { 0,0 }, 0, WHITE);
+                Vector2 drawPos = {
+                   mapRects[x][y].x + mapData[x][y].offsetPos.x,
+                    mapRects[x][y].y + mapData[x][y].offsetPos.y
+                };
+
+                Rectangle destRect = { drawPos.x, drawPos.y, TILE_SIZE, TILE_SIZE };
+                DrawTexturePro(texture, it->second.srcRect, destRect, { 0,0 }, 0, WHITE);
             }
             if (isEditing) DrawRectangleLinesEx(mapRects[x][y], 0.5f, DARKGRAY);
         }
@@ -278,6 +316,13 @@ void Map::setTile(int row, int col, int tileID) {
     }
 
 }
+void Map::updateTileInstancePosition(int row, int col, Vector2 offset){
+    if (row >= 0 && row < rows && col >= 0 && col < columns) {
+        mapData[row][col].offsetPos = offset;
+        //cout << mapData[row][col].offsetPos.x << " - " << mapData[row][col].offsetPos.y << endl;
+    }
+}
+
 
 void Map::loadFromFile(const char* filename) {
     ifstream MyReadFile(filename);

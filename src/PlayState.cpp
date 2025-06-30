@@ -54,7 +54,7 @@ void PlayState::update(Game& game){
 
 void PlayState::render() {
     BeginMode2D(camera.getCamera());
-    bg.draw();
+    //bg.draw();
    
     map->draw();
     mario.Draw();

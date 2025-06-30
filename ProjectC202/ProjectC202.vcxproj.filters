@@ -52,6 +52,12 @@
     <Filter Include="Header Files\Map\Tile">
       <UniqueIdentifier>{5af8d7d6-1519-4e8d-af16-9120859d585b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity\Mario">
+      <UniqueIdentifier>{84b9999e-5443-4f64-a045-c87c233f7521}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Map\Tile">
+      <UniqueIdentifier>{029596d5-65cd-4be0-83f0-6c6a6261b888}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Game.cpp">
@@ -105,6 +111,9 @@
     <ClCompile Include="..\src\Collision.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\ConcreteTileBehavior.cpp">
+      <Filter>Source Files\Map\Tile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -137,9 +146,6 @@
     <ClInclude Include="..\headers\Character.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Mario.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="..\headers\Command.h">
       <Filter>Header Files\Input</Filter>
     </ClInclude>
@@ -169,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="..\headers\Collision.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Mario.h">
+      <Filter>Header Files\Entity\Mario</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Timer.h">
+      <Filter>Source Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -134,6 +134,7 @@
     <ClCompile Include="..\src\CameraController.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
     <ClCompile Include="..\src\Collision.cpp" />
+    <ClCompile Include="..\src\ConcreteTileBehavior.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="..\headers\PlayState.h" />
     <ClInclude Include="..\headers\Tile.h" />
     <ClInclude Include="..\headers\TileBehavior.h" />
+    <ClInclude Include="..\headers\Timer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

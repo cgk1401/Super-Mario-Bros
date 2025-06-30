@@ -17,10 +17,10 @@ void Collision::handlePlayerCollision(Character* mario, Map* map){
     mario->onGround = false;
 
     if (mario->position.x < 0) mario->position.x = 0;
-    int characterLeftTile = (int)(mario->bound.x / Map::side);
-    int characterRightTile = (int)((mario->bound.x + mario->bound.width) / Map::side);
-    int characterTopTile = (int)(mario->bound.y / Map::side);
-    int characterBottomTile = (int)((mario->bound.y + mario->bound.height) / Map::side);
+    int characterLeftTile = (int)((mario->bound.x + mario->bound.width / 2) / Map::TILE_SIZE);
+    int characterRightTile = (int)((mario->bound.x + mario->bound.width) / Map::TILE_SIZE);
+    int characterTopTile = (int)(mario->bound.y / Map::TILE_SIZE);
+    int characterBottomTile = (int)((mario->bound.y + mario->bound.height) / Map::TILE_SIZE);
 
     int startCol = max(0, characterLeftTile - 1);
     int endCol = min(map->columns - 1, characterRightTile + 1);
@@ -32,10 +32,11 @@ void Collision::handlePlayerCollision(Character* mario, Map* map){
             Tile tile = map->getTile(x, y);
 
             MapTileInstance* tileInstance = map->getMapTileInstance(x, y);
-            Rectangle tileRect = { (float)(y * Map::side), (float)(x * Map::side), (float)Map::side, (float)Map::side };
+            Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             //if (!tileInstance || tileInstance->tileID == 0) continue;
-
+            //tile.behavior->update(GetFrameTime(), x, y, map, tileInstance);
+          
             if (CheckCollisionRecs(mario->bound, tileRect)) {
                 if (tile.behavior->isSolid()) {
                     float overlapX = fmin(mario->bound.x + mario->bound.width, tileRect.x + tileRect.width) - fmax(mario->bound.x, tileRect.x);
@@ -87,10 +88,10 @@ void Collision::handleEnemyCollision(vector<Character*> enemies, Map* map){
         e->onGround = false;
 
         if (e->position.x < 0) e->position.x = 0;
-        int characterLeftTile = (int)(e->bound.x / Map::side);
-        int characterRightTile = (int)((e->bound.x + e->bound.width) / Map::side);
-        int characterTopTile = (int)(e->bound.y / Map::side);
-        int characterBottomTile = (int)((e->bound.y + e->bound.height) / Map::side);
+        int characterLeftTile = (int)(e->bound.x / Map::TILE_SIZE);
+        int characterRightTile = (int)((e->bound.x + e->bound.width) / Map::TILE_SIZE);
+        int characterTopTile = (int)(e->bound.y / Map::TILE_SIZE);
+        int characterBottomTile = (int)((e->bound.y + e->bound.height) / Map::TILE_SIZE);
 
         int startCol = max(0, characterLeftTile - 1);
         int endCol = min(map->columns - 1, characterRightTile + 1);
@@ -102,7 +103,7 @@ void Collision::handleEnemyCollision(vector<Character*> enemies, Map* map){
                 Tile tile = map->getTile(x, y);
 
                 MapTileInstance* tileInstance = map->getMapTileInstance(x, y);
-                Rectangle tileRect = { (float)(y * Map::side), (float)(x * Map::side), (float)Map::side, (float)Map::side };
+                Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
                 //if (!tileInstance || tileInstance->tileID == 0) continue;
 

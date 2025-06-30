@@ -118,15 +118,13 @@ void Mario::Update(float deltatime, Map* map) {
 }
 
 void Mario::LoadSource() {
-	texture = LoadTexture("../assets/Mario/mario_custom_spritesheet.png");
+	texture = LoadTexture("../assets/Mario/Mario & Luigi.png");
 
 	int texW = 16;
-	int texH = 22;
+	int texH = 16;
 	//IDLE STATE
 	Animation idle;
-	for (int i = 0; i < 1; i++) {
-		idle.frame.push_back(Rectangle{ (float)(92 + i * 18), 29, (float)texW, (float)texH });
-	}
+	idle.frame.push_back(Rectangle{ 0, 8, (float)texW, (float)texH });
 	idle.currentframe = 0;
 	idle.durationtime = 0.08;
 	idle.currenttime = 0;
@@ -134,8 +132,8 @@ void Mario::LoadSource() {
 
 	//RUNNING STATE
 	Animation run;
-	for (int i = 1; i <= 6; i++) {
-		run.frame.push_back(Rectangle{ (float)(92 + i * 18), 29, (float)texW, (float)texH });
+	for (int i = 0; i < 3; i++) {
+		run.frame.push_back(Rectangle{ (float)(20 + i * 18), 8, (float)texW, (float)texH });
 	}
 	run.currentframe = 0;
 	run.durationtime = 0.07;
@@ -144,7 +142,7 @@ void Mario::LoadSource() {
 
 	//JUMPING STATE
 	Animation jump;
-	jump.frame.push_back(Rectangle{ (float)(92 + 7 * 18 ), 29, (float)texW, (float)texH});
+	jump.frame.push_back(Rectangle{ 96, 8, (float)texW, (float)texH});
 	jump.currentframe = 0;
 	jump.durationtime = 0.08;
 	jump.currenttime = 0;

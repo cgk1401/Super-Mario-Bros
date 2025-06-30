@@ -1,5 +1,6 @@
 ﻿#pragma once
-#include "TileBehavior.h"
+#include "../headers/TileBehavior.h"
+#include "../headers/Timer.h"
 //Strategy pattern
 
 //ko là block gì hết
@@ -8,6 +9,8 @@ public:
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+	
 	bool isSolid() override { return false; }
 	~EmptyTileBehavior() = default;
 };
@@ -16,6 +19,8 @@ public:
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+
 	bool isSolid() override { return false; }
 	~DecorationTileBehavior() = default;
 };
@@ -25,6 +30,7 @@ public:
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	bool isSolid() override { return false; }
 	~ItemBehavior() = default;
 };
@@ -38,15 +44,26 @@ public:
 	
 	}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+
 	bool isSolid() override { return true; }
 	~SolidTileBehavior() = default;
 };
 
+//BRICK
+struct BrickTileState : public TileState {
+    bool isBouncing = false;
+    Timer bounceTimer;
+    BrickTileState() : bounceTimer(0.2f) {}
+};
+
+
 class BrickTileBehavior : public TileBehavior {
 public:
-	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{} // bị vỡ ra -> add effect mảnh vỡ
-	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{} // đứng lên thì ko sao -> giống solid -> dùng lại SolidTileBehavior::onFootCollision(..)
-	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{} // tương tự
+	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override; // bị vỡ ra -> add effect mảnh vỡ
+	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override; // đứng lên thì ko sao -> giống solid -> dùng lại SolidTileBehavior::onFootCollision(..)
+	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override; // tương tự
+	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override;
 	bool isSolid() override { return true; }
 	~BrickTileBehavior() = default;
 };
@@ -56,6 +73,8 @@ public:
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+
 	bool isSolid() override { return true; }
 	~QuestionTileBehavior() = default;
 };
@@ -65,6 +84,8 @@ public:
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+
 	bool isSolid() override{}
 	~CoinTileBehavior() = default;
 };
