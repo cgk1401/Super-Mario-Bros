@@ -27,7 +27,6 @@ protected:
 	vector<vector<Rectangle>> tileSetSourceRects;	                //Lưu srcRect của từng tile trong tileSet
     void createTileCatalog();
 public:
-    static const int side = 64; 
     int rows = 12, columns = 16;
     int tileRows, tileColumns; 
     static constexpr int TILE_SIZE = 64;
@@ -46,4 +45,5 @@ public:
     void updateTileInstancePosition(int tileRow, int tileCol, Vector2 offset);
  
     void setTile(int row, int col, int tileID);
+    void removeTile(int row, int col);
 };

@@ -31,4 +31,5 @@ public:
 
     bool isFinished() const { return !running && elapsed >= duration; }
     bool isRunning() const { return running; }
+    
 };

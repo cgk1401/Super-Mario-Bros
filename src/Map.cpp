@@ -316,6 +316,19 @@ void Map::setTile(int row, int col, int tileID) {
     }
 
 }
+void Map::removeTile(int row, int col) {
+    if (row < 0 || row >= rows || col < 0 || col >= columns) return;
+
+    mapData[row][col].tileID = 0;
+    mapData[row][col].hasItem = false;
+    mapData[row][col].offsetPos = { 0, 0 };
+
+    if (mapData[row][col].state) {
+        delete mapData[row][col].state;
+        mapData[row][col].state = nullptr;
+    }
+}
+
 void Map::updateTileInstancePosition(int row, int col, Vector2 offset){
     if (row >= 0 && row < rows && col >= 0 && col < columns) {
         mapData[row][col].offsetPos = offset;

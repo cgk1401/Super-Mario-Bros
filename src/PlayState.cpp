@@ -1,6 +1,7 @@
 #include "../headers/PlayState.h"
 #include "../headers/Game.h"
 #include "../headers/MenuState.h"
+#include "../headers/EffectManager.h"
 
 PlayState::PlayState() {
     gui = GUI();
@@ -44,6 +45,7 @@ void PlayState::update(Game& game){
         //fg.update( mario,camera.getCamera(), dt);
         mario.Update(GetFrameTime(), map);
         map->update();
+        EffectManager::get().update(dt);
     }
     else {
         pauseMenu.update(game);  
@@ -57,6 +59,7 @@ void PlayState::render() {
     //bg.draw();
    
     map->draw();
+    EffectManager::get().draw();
     mario.Draw();
     //fg.draw();
     EndMode2D();

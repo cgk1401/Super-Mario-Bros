@@ -130,11 +130,13 @@
   <ItemGroup>
     <ClCompile Include="..\headers\InputHandler.cpp" />
     <ClCompile Include="..\src\Animation.cpp" />
+    <ClCompile Include="..\src\BrickBreakEffect.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CameraController.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
     <ClCompile Include="..\src\Collision.cpp" />
     <ClCompile Include="..\src\ConcreteTileBehavior.cpp" />
+    <ClCompile Include="..\src\EffectManager.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
@@ -149,12 +151,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Animation.h" />
+    <ClInclude Include="..\headers\BaseEffect.h" />
+    <ClInclude Include="..\headers\BrickBreakEffect.h" />
     <ClInclude Include="..\headers\Button.h" />
     <ClInclude Include="..\headers\CameraController.h" />
     <ClInclude Include="..\headers\Character.h" />
     <ClInclude Include="..\headers\Collision.h" />
     <ClInclude Include="..\headers\Command.h" />
     <ClInclude Include="..\headers\ConcreteTileBehavior.h" />
+    <ClInclude Include="..\headers\EffectManager.h" />
     <ClInclude Include="..\headers\Game.h" />
     <ClInclude Include="..\headers\GameState.h" />
     <ClInclude Include="..\headers\Global.h" />

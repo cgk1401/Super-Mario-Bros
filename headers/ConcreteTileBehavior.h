@@ -54,6 +54,7 @@ public:
 struct BrickTileState : public TileState {
     bool isBouncing = false;
     Timer bounceTimer;
+	bool hasBroken = false;
     BrickTileState() : bounceTimer(0.2f) {}
 };
 
@@ -61,8 +62,8 @@ struct BrickTileState : public TileState {
 class BrickTileBehavior : public TileBehavior {
 public:
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override; // bị vỡ ra -> add effect mảnh vỡ
-	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override; // đứng lên thì ko sao -> giống solid -> dùng lại SolidTileBehavior::onFootCollision(..)
-	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override; // tương tự
+	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override {} // đứng lên thì ko sao -> giống solid -> dùng lại SolidTileBehavior::onFootCollision(..)
+	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override {} // tương tự
 	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override;
 	bool isSolid() override { return true; }
 	~BrickTileBehavior() = default;

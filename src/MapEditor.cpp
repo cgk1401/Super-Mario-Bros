@@ -68,7 +68,7 @@ void MapEditor::render() {
     for (int r = 0; r < tileRows; r++) {
         for (int c = 0; c < tileSetSourceRects[r].size(); c++) {
             Rectangle tileSrc = tileSetSourceRects[r][c];
-            Rectangle tileDest = { (float)uiStartX + 10 + (float)c * (side + 4), (float)currentY + (float)r * (side + 4), (float)side, (float)side };
+            Rectangle tileDest = { (float)uiStartX + 10 + (float)c * (TILE_SIZE + 4), (float)currentY + (float)r * (TILE_SIZE + 4), (float)TILE_SIZE, (float)TILE_SIZE };
 
             DrawTexturePro(texture, tileSrc, tileDest, { 0,0 }, 0, WHITE);
 
@@ -153,7 +153,7 @@ void MapEditor::update(Game& game) {
 
     backButton->update();
     expandAreaButton->update();
-    //Editor Side handling
+    //Editor TILE_SIZE handling
     if (expandAreaButton->IsMouseDown()) {
         Vector2 mouseDel = GetMouseDelta();
         mapWidth += mouseDel.x;

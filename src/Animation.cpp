@@ -13,3 +13,8 @@ void Animation::Update(float deltatime) {
 Rectangle Animation::getcurrentframe() {
 	return frame[currentframe];
 }
+
+void Animation::reset(){
+	 currenttime = 0;
+    currentframe = 0;
+}

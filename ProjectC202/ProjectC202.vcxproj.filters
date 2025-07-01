@@ -58,6 +58,12 @@
     <Filter Include="Source Files\Map\Tile">
       <UniqueIdentifier>{029596d5-65cd-4be0-83f0-6c6a6261b888}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Effect">
+      <UniqueIdentifier>{5a18827e-55b5-4c97-93d7-98e2511a2ab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Effect">
+      <UniqueIdentifier>{d78df01e-0648-4f30-8c1e-413a9a8ae0f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Game.cpp">
@@ -113,6 +119,12 @@
     </ClCompile>
     <ClCompile Include="..\src\ConcreteTileBehavior.cpp">
       <Filter>Source Files\Map\Tile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\EffectManager.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\BrickBreakEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -179,8 +191,17 @@
     <ClInclude Include="..\headers\Mario.h">
       <Filter>Header Files\Entity\Mario</Filter>
     </ClInclude>
+    <ClInclude Include="..\headers\EffectManager.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
     <ClInclude Include="..\headers\Timer.h">
-      <Filter>Source Files\Core</Filter>
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\BaseEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\BrickBreakEffect.h">
+      <Filter>Header Files\Effect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
