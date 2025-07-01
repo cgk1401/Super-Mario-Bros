@@ -90,8 +90,6 @@ void Mario::handleInput(float deltatime) {
 	else {
 		isJumpingUp = false;
 	}
-
-	inputHandler.HandInput(this);
 }
 void Mario::Update(float deltatime, Map* map) {
 	animation[currentstate].Update(deltatime);

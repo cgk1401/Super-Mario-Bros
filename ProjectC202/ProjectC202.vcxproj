@@ -128,7 +128,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\headers\InputHandler.cpp" />
     <ClCompile Include="..\src\Animation.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CameraController.cpp" />
@@ -155,7 +154,6 @@
     <ClInclude Include="..\headers\CameraController.h" />
     <ClInclude Include="..\headers\Character.h" />
     <ClInclude Include="..\headers\Collision.h" />
-    <ClInclude Include="..\headers\Command.h" />
     <ClInclude Include="..\headers\ConcreteTileBehavior.h" />
     <ClInclude Include="..\headers\Enemy.h" />
     <ClInclude Include="..\headers\Game.h" />
@@ -163,7 +161,6 @@
     <ClInclude Include="..\headers\Global.h" />
     <ClInclude Include="..\headers\GoomBa.h" />
     <ClInclude Include="..\headers\GUI.h" />
-    <ClInclude Include="..\headers\InputHandler.h" />
     <ClInclude Include="..\headers\KoopaTroopa.h" />
     <ClInclude Include="..\headers\Map.h" />
     <ClInclude Include="..\headers\MapEditor.h" />

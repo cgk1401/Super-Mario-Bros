@@ -37,12 +37,6 @@
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{adbb5846-8c31-4d8f-8ec9-12c99da87b7e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Input">
-      <UniqueIdentifier>{285bef3f-3da5-41cd-bc96-a94ee4ed5361}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Input">
-      <UniqueIdentifier>{a571650c-0c62-4ec2-b221-4de0265a8162}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Map">
       <UniqueIdentifier>{7432a302-5bc0-4711-9610-b8c490f6b569}</UniqueIdentifier>
     </Filter>
@@ -92,9 +86,6 @@
     </ClCompile>
     <ClCompile Include="..\src\Animation.cpp">
       <Filter>Source Files\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\headers\InputHandler.cpp">
-      <Filter>Source Files\Input</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Map.cpp">
       <Filter>Source Files\Map</Filter>
@@ -154,12 +145,6 @@
     </ClInclude>
     <ClInclude Include="..\headers\Animation.h">
       <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\Command.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\InputHandler.h">
-      <Filter>Header Files\Input</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Map.h">
       <Filter>Header Files\Map</Filter>

@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "../headers/Character.h"
-#include "../headers/InputHandler.h"
 #include <map>
 #include "raylib.h"
 
@@ -12,7 +11,6 @@ enum class Direction {
 
 class Mario : public Character {
 private:
-	InputHandler inputHandler;
 	Direction currentDirection;
 	float jumpTimeElapsed;
 	float jumpDuration;
