@@ -38,11 +38,11 @@ void PlayState::update(Game& game){
         }
     }
     if (isPlaying) {
-        camera.update(mario.getBound(), screenWidth);
+        //camera.update(mario.getBound(), screenWidth);
         gui.update(game); 
         bg.update( mario,camera.getCamera(), dt);
         //fg.update( mario,camera.getCamera(), dt);
-        mario.Update(GetFrameTime(), map);
+        //mario.Update(GetFrameTime(), map);
         map->update();
         
         // test thử goomba
@@ -84,7 +84,7 @@ void PlayState::render() {
     bg.draw();
    
     map->draw();
-    mario.Draw();
+    //mario.Draw();
     goomba.Draw();
     kooptroopa.Draw();
     piranhaPlant.Draw();

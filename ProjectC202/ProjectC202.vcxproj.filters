@@ -58,6 +58,9 @@
     <Filter Include="Source Files\Entity\Enemy">
       <UniqueIdentifier>{64792c18-ef9f-4bc6-914f-d0b1704d6f23}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity\CharacterState">
+      <UniqueIdentifier>{1f5b8ce6-12eb-47a4-9659-d64abc9fac7e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Game.cpp">
@@ -116,6 +119,9 @@
     </ClCompile>
     <ClCompile Include="..\src\PiranhaPlant.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Luigi.cpp">
+      <Filter>Source Files\Entity\Character</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +193,15 @@
     </ClInclude>
     <ClInclude Include="..\headers\PiranhaPlant.h">
       <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Luigi.h">
+      <Filter>Header Files\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CharacterState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\NormalState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

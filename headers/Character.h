@@ -2,9 +2,17 @@
 
 #include "Animation.h"
 #include <map>
+#include "CharacterState.h"
+#include <iostream>
+
+using namespace std;
+
+class CharacterState;
+class NormalState;
+
 class Map;
 
-enum Actionstate {
+enum class ActionState {
 	IDLE,
 	Run,
 	Jump,
@@ -12,33 +20,24 @@ enum Actionstate {
 	DIE,
 };
 
-class Character : public Animation{
+enum class Direction {
+	Left,
+	Right
+};
+
+enum class CharacterType {
+	Mario,
+	Luigi,
+};
+
+class Character {
+	friend class CharacterState;
+	friend class NormalState;
+
 protected:
-	Texture2D texture{};
-	std::map <Actionstate, Animation> animation;
-	Actionstate currentstate = Actionstate::IDLE;
-	Vector2 position = { 0,0 };
-	const float speed = 2;
 
-	const float gravity;
-	Vector2 velocity;
-	float scale;
-	Rectangle bound;
-
-	bool onGround;
-	bool isJumpingUp;
 
 public:
-	Character();
-	//virtual ~Character();
-	friend class Collision;
+	virtual ~Character();
 
-	virtual void Update(float deltatime, Map* map) = 0;
-	virtual void Draw() = 0;
-	virtual void LoadSource() = 0;
-	virtual void MoveLeft() = 0;
-	virtual void MoveRight() = 0;
-
-	virtual Vector2 getPos();
-	virtual Rectangle getBound() { return bound; }
 };

@@ -1,32 +1,15 @@
 ﻿#pragma once
 
-#include "../headers/Character.h"
+#include "Character.h"
 #include <map>
 #include "raylib.h"
+#include "NormalState.h"
 
-enum class Direction {
-	LEFT,
-	RIGHT
-};
 
 class Mario : public Character {
-private:
-	Direction currentDirection;
-	float jumpTimeElapsed;
-	float jumpDuration;
 
-	const float maxSpeed = 3.5;
-	const float acceleration = 8; 
-	const float friction = 5;
 public :
 	Mario();
-	Mario(Vector2 position);
+	~Mario() override;
 
-	void handleInput(float deltatime);
-	void Update(float deltatime, Map* map) override;
-	void LoadSource() override;
-	void Draw() override;
-	void MoveLeft() override;
-	void MoveRight() override;
-	bool isRunning() { return currentstate == Actionstate::Run; }
 };
