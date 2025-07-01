@@ -16,15 +16,16 @@ private:
 
     //EFFECTs
     vector<BaseEffect*> brickEffects;
-     Animation brickExplosionAnim;
-    
+    Animation brickExplosionAnim;
+    Animation coinCollectAnim;
+
     EffectManager();
     ~EffectManager(){delete instance;}
 public:
 
     //EFFECT METHODs
     void spawnBrickBreak(int row, int col);
-
+    void spawnCoin(int row, int col);
 
     void update(float dt);
     void draw();

@@ -126,6 +126,9 @@
     <ClCompile Include="..\src\BrickBreakEffect.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CoinCollectEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -201,6 +204,9 @@
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\BrickBreakEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CoinCollectEffect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
   </ItemGroup>

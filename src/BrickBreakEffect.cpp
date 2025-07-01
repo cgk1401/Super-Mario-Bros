@@ -30,7 +30,6 @@ BrickBreakEffect::~BrickBreakEffect(){
 }
 
 void BrickBreakEffect::update(float dt) {
-    if (isFinished()) return;
     anim.Update(dt);
     time.update(dt);
 
@@ -44,7 +43,6 @@ void BrickBreakEffect::update(float dt) {
 
 
 void BrickBreakEffect::draw(const Texture2D& texture) {
-    if(isFinished()) return;
     for (auto& p : particle) {
         DrawTexturePro(texture, anim.getcurrentframe(),
             { p.x, p.y, anim.getcurrentframe().width * 3, anim.getcurrentframe().height * 3 },

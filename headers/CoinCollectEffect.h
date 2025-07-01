@@ -7,17 +7,20 @@
 #include "../headers/BaseEffect.h"
 using namespace std;
 
-class BrickBreakEffect : public BaseEffect {
+
+
+class CoinCollectEffect : public BaseEffect {
 private:
     Vector2 pos;
-    vector<Vector2> particle;
-    vector<Vector2> velocity;
+    float height;
+    Vector2 coinPos;
+    float coinHeight;
     Animation anim;
     Timer time;
+
 public:
-    BrickBreakEffect() {}
-    BrickBreakEffect(Vector2 position, const Animation& templateAnim);
-    ~BrickBreakEffect();
+    CoinCollectEffect() {}
+    CoinCollectEffect(Vector2 position, const Animation& templateAnim);
     
     void update(float dt) override;
     void draw(const Texture2D& texture) override;

@@ -56,8 +56,9 @@ void BrickTileBehavior::update(float dt, int tileRow, int tileCol, Map* map, Map
     }
     */
      if (brickState->hasBroken) {
-        EffectManager::get().spawnBrickBreak(tileRow, tileCol);
-        map->removeTile(tileRow, tileCol);
+        EffectManager::get().spawnCoin(tileRow, tileCol);
+        brickState->hasBroken = false;
+        //map->removeTile(tileRow, tileCol);
     }
 
 }
