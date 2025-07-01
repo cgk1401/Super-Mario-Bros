@@ -1,4 +1,4 @@
-#include "../headers/PlayState.h"
+﻿#include "../headers/PlayState.h"
 #include "../headers/Game.h"
 #include "../headers/MenuState.h"
 #include "../headers/EffectManager.h"
@@ -46,6 +46,33 @@ void PlayState::update(Game& game){
         mario.Update(GetFrameTime(), map);
         map->update();
         EffectManager::get().update(dt);
+        
+        // test thử goomba
+        goomba.Update(dt);
+        if (IsKeyPressed(KEY_B)) {
+            goomba.ChangeState(GoomBaState::Die);
+        }
+        else if (IsKeyPressed(KEY_N)) {
+            goomba.ChangeState(GoomBaState::Run);
+        }
+        else if (IsKeyDown(KEY_M)) {
+            goomba.moveUp();
+        }
+
+        // test thử koopatroopa
+        kooptroopa.Update(dt);
+        if (IsKeyDown(KEY_D)) {
+            kooptroopa.ChangeDirection(DirectionKoopa::Right);
+            kooptroopa.moveRight();
+        }else if (IsKeyPressed(KEY_A)){
+            kooptroopa.ChangeDirection(DirectionKoopa::Left);
+        }
+        else if (IsKeyDown(KEY_DOWN)) {
+            kooptroopa.Fall();
+        }
+
+        // test thử piranhaPlant
+        piranhaPlant.Update(dt);
     }
     else {
         pauseMenu.update(game);  
@@ -61,6 +88,10 @@ void PlayState::render() {
     map->draw();
     EffectManager::get().draw();
     mario.Draw();
+    goomba.Draw();
+    kooptroopa.Draw();
+    piranhaPlant.Draw();
+    DrawRectangle(500, 200, 150, 150, RED);
     //fg.draw();
     EndMode2D();
 

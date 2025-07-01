@@ -8,6 +8,10 @@
 #include "../headers/Map.h"
 #include "../headers/CameraController.h"
 #include "../headers/ParallaxManager.h"
+#include "../headers/GoomBa.h"
+#include "../headers/KoopaTroopa.h"
+#include "../headers/PiranhaPlant.h"
+
 class PlayState : public GameState{
 public:
     PlayState();
@@ -21,11 +25,12 @@ private:
     PauseState pauseMenu;
     Map* map;
     Mario mario;
+    GoomBa goomba;
+    KoopTroopa kooptroopa;
+    PiranhaPlant piranhaPlant; 
     CameraController camera;
     ParallaxManager bg; //background
     ParallaxManager fg; //foreground
-    
-
 };
 
 #endif

@@ -140,7 +140,9 @@
     <ClCompile Include="..\src\EffectManager.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
+    <ClCompile Include="..\src\GoomBa.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
+    <ClCompile Include="..\src\KoopaTroopa.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Map.cpp" />
     <ClCompile Include="..\src\MapEditor.cpp" />
@@ -148,6 +150,7 @@
     <ClCompile Include="..\src\MenuState.cpp" />
     <ClCompile Include="..\src\ParallaxManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
+    <ClCompile Include="..\src\PiranhaPlant.cpp" />
     <ClCompile Include="..\src\PlayState.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -162,17 +165,21 @@
     <ClInclude Include="..\headers\Command.h" />
     <ClInclude Include="..\headers\ConcreteTileBehavior.h" />
     <ClInclude Include="..\headers\EffectManager.h" />
+    <ClInclude Include="..\headers\Enemy.h" />
     <ClInclude Include="..\headers\Game.h" />
     <ClInclude Include="..\headers\GameState.h" />
     <ClInclude Include="..\headers\Global.h" />
+    <ClInclude Include="..\headers\GoomBa.h" />
     <ClInclude Include="..\headers\GUI.h" />
     <ClInclude Include="..\headers\InputHandler.h" />
+    <ClInclude Include="..\headers\KoopaTroopa.h" />
     <ClInclude Include="..\headers\Map.h" />
     <ClInclude Include="..\headers\MapEditor.h" />
     <ClInclude Include="..\headers\Mario.h" />
     <ClInclude Include="..\headers\MenuState.h" />
     <ClInclude Include="..\headers\ParallaxManager.h" />
     <ClInclude Include="..\headers\PauseState.h" />
+    <ClInclude Include="..\headers\PiranhaPlant.h" />
     <ClInclude Include="..\headers\PlayState.h" />
     <ClInclude Include="..\headers\Tile.h" />
     <ClInclude Include="..\headers\TileBehavior.h" />
