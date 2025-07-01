@@ -20,13 +20,11 @@ private :
 	KoopaState currentState = KoopaState::Walk;
 	DirectionKoopa currentDirection = DirectionKoopa::Left;
 
-	const float walkSpeed = 3.0f;
-	const float shellSpeed = 8.0f;
+	const float walkSpeed = 100.0f;
+	const float shellSpeed = 500.0f;
 
-	float gravity = 0.5f; // vận tốc rơi
-	float velocity = 0;
+	float gravity = 35; // vận tốc rơi
 	const float scale = 3.0f;
-	bool onGround = true;
 
 public :
 	KoopTroopa();
@@ -35,7 +33,7 @@ public :
 
 	void LoadSource() override;
 	void Draw() override;
-	void Update(float deltatime) override;
+	void Update(float deltatime, Map* map) override;
 
 	void moveLeft();
 	void moveRight();

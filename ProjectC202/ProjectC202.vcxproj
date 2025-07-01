@@ -152,6 +152,7 @@
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PiranhaPlant.cpp" />
     <ClCompile Include="..\src\PlayState.cpp" />
+    <ClCompile Include="..\src\TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Animation.h" />
@@ -181,6 +182,7 @@
     <ClInclude Include="..\headers\PauseState.h" />
     <ClInclude Include="..\headers\PiranhaPlant.h" />
     <ClInclude Include="..\headers\PlayState.h" />
+    <ClInclude Include="..\headers\TextureManager.h" />
     <ClInclude Include="..\headers\Tile.h" />
     <ClInclude Include="..\headers\TileBehavior.h" />
     <ClInclude Include="..\headers\Timer.h" />

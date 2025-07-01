@@ -1,4 +1,6 @@
 #include "../Headers/KoopaTroopa.h"
+#include "../headers/Collision.h"
+class Map;
 
 KoopTroopa::KoopTroopa() : Enemy() {
 	this->position = { 200, 200 };
@@ -44,26 +46,46 @@ void KoopTroopa::Draw() {
 	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
 }
 
-void KoopTroopa::Update(float deltatime) {
+void KoopTroopa::Update(float deltatime, Map* map) {
 	animation[currentState].Update(deltatime);
+
+	if (!onGround) {
+		velocity.y += gravity * deltatime;
+	}
+	else {
+		velocity.y = 0;
+	}
+
+	if (onGround && velocity.y > 0) {
+		velocity.y = 0;
+	}
+	position.y += velocity.y;
+
+	Rectangle currentFrame = animation[currentState].getcurrentframe();
+	bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
+
+	Collision::getInstance()->handleEnemyCollision(this, map);
 }
 
 void KoopTroopa::moveLeft() {
+
 	if (currentState == KoopaState::Walk) {
-		position.x -= walkSpeed;
+		velocity.x = -walkSpeed * GetFrameTime();
 	}
 	else if (currentState == KoopaState::Shell) {
-		position.x -= shellSpeed;
+		velocity.x = -shellSpeed * GetFrameTime();
 	}
+	position.x += velocity.x;
 }
 
 void KoopTroopa::moveRight() {
 	if (currentState == KoopaState::Walk) {
-		position.x += walkSpeed;
+		velocity.x = walkSpeed * GetFrameTime();
 	}
 	else if (currentState == KoopaState::Shell) {
-		position.x += shellSpeed;
+		velocity.x = shellSpeed * GetFrameTime();
 	}
+	position.x += velocity.x;
 }
 
 void KoopTroopa::ChangeDirection(DirectionKoopa direction) {
@@ -71,6 +93,7 @@ void KoopTroopa::ChangeDirection(DirectionKoopa direction) {
 }
 
 void KoopTroopa::Fall() {
-	velocity += gravity;
-	position.y += velocity;
+	currentState = KoopaState::Shell;
+	velocity.y += gravity * GetFrameTime();
+	position.y += velocity.y;
 }

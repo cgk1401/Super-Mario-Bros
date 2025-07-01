@@ -15,7 +15,7 @@ private:
     static EffectManager* instance;
 
     //EFFECTs
-    vector<BaseEffect*> brickEffects;
+    vector<BaseEffect*> effects;
     Animation brickExplosionAnim;
     Animation coinCollectAnim;
 
@@ -29,7 +29,6 @@ public:
 
     void update(float dt);
     void draw();
-    bool isFinished() const;
 
     static EffectManager& get(){
         if(!instance)

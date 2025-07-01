@@ -43,12 +43,18 @@ void PlayState::update(Game& game){
         gui.update(game); 
         bg.update( mario,camera.getCamera(), dt);
         //fg.update( mario,camera.getCamera(), dt);
-        mario.Update(GetFrameTime(), map);
+        mario.Update(dt, map);
         map->update();
         EffectManager::get().update(dt);
         
         // test thử goomba
-        goomba.Update(dt);
+        goomba.Update(dt, map);
+        if (IsKeyDown(KEY_J)) {
+            goomba.moveLeft();
+        }
+        else if (IsKeyDown(KEY_K)) {
+            goomba.moveRight();
+        }
         if (IsKeyPressed(KEY_B)) {
             goomba.ChangeState(GoomBaState::Die);
         }
@@ -60,19 +66,21 @@ void PlayState::update(Game& game){
         }
 
         // test thử koopatroopa
-        kooptroopa.Update(dt);
+        kooptroopa.Update(dt, map);
         if (IsKeyDown(KEY_D)) {
             kooptroopa.ChangeDirection(DirectionKoopa::Right);
             kooptroopa.moveRight();
-        }else if (IsKeyPressed(KEY_A)){
+        }else if (IsKeyDown(KEY_A)){
             kooptroopa.ChangeDirection(DirectionKoopa::Left);
+            kooptroopa.moveLeft();
         }
+  
         else if (IsKeyDown(KEY_DOWN)) {
             kooptroopa.Fall();
         }
 
         // test thử piranhaPlant
-        piranhaPlant.Update(dt);
+        piranhaPlant.Update(dt, map);
     }
     else {
         pauseMenu.update(game);  

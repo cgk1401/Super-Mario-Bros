@@ -1,6 +1,6 @@
 ﻿#include "../headers/GoomBa.h"
 #include <iostream>
-
+#include "../headers/Collision.h"
 GoomBa::GoomBa() : Enemy(){
 	this->position = { 150, 500 };
 	LoadSource();
@@ -42,25 +42,45 @@ void GoomBa::Draw() {
 	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
 }
 
-void GoomBa::Update(float deltatime) {
+void GoomBa::Update(float deltatime, Map* map) {
 	animation[currentState].Update(deltatime);
+
+	if (!onGround) {
+		velocity.y += gravity * deltatime;
+	}
+	else {
+		velocity.y = 0;
+	}
+
+	if (onGround && velocity.y > 0) {
+		velocity.y = 0;
+	}
+	position.y += velocity.y;
+
+	Rectangle currentFrame = animation[currentState].getcurrentframe();
+    bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
+
+	Collision::getInstance()->handleEnemyCollision(this, map);
+
 }
 
 void GoomBa::moveLeft() {
-	position.x -= speed;
+	velocity.x = -speed * GetFrameTime();
+	position.x += velocity.x;
 }
 
 void GoomBa::moveRight() {
-	position.x += speed;
+	velocity.x = speed *  GetFrameTime();
+	position.x += velocity.x;
 }
 
 void GoomBa::moveUp() {
-	if (isGround == true) {
-		isGround = false;
-		velocity = jump;
+	if (onGround == true) {
+		onGround = false;
+		velocity.y = jump;
 	}
-	velocity += gravity;
-	position.y += velocity;
+	velocity.y += gravity * GetFrameTime();
+	position.y += velocity.y;
 }
 
 void GoomBa::ChangeState(GoomBaState newState) {
@@ -69,5 +89,6 @@ void GoomBa::ChangeState(GoomBaState newState) {
 	animation[currentState].currenttime = 0;
 	if (newState == GoomBaState::Die) {
 		// tăng position.y
+		
 	}
 }

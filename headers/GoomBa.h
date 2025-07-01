@@ -12,12 +12,10 @@ class GoomBa : public Enemy {
 private:
 	map <GoomBaState, Animation> animation;
 	GoomBaState currentState = GoomBaState::Run;
-	const float speed = 5.0f;
+	const float speed = 100.0f;
 	const float scale = 3.0f;
-	float jump = -10.f;
-	float gravity = 0.5f;
-	float velocity = 0.0f;
-	bool isGround = true;
+	float jump = -10;
+	float gravity = 50;
 
 public:
 	GoomBa();
@@ -26,7 +24,7 @@ public:
 
 	void LoadSource() override;
 	void Draw() override;
-	void Update(float deltatime) override;
+	void Update(float deltatime, Map* map) override;
 
 	void moveLeft(); // goomba luôn di chuyển sang trái tấn công character
 	void moveRight(); // gặp chướng ngại vật(map, ống) goomba di chuyển sang phải

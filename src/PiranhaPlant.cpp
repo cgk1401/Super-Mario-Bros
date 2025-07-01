@@ -1,4 +1,6 @@
 #include "../headers/PiranhaPlant.h"
+class Map;
+
 
 PiranhaPlant::PiranhaPlant() : Enemy(){
 	basePos = { 500,200 };
@@ -39,7 +41,7 @@ void PiranhaPlant::LoadSource() {
 	animation.frame.push_back({ 18, 138, 16, 24 });
 }
 
-void PiranhaPlant::Update(float deltatime) {
+void PiranhaPlant::Update(float deltatime, Map* map) {
 	animation.Update(deltatime);
 
 	timer += deltatime;

@@ -28,7 +28,7 @@ public:
 	~PiranhaPlant();
 
 	void LoadSource() override;
-	void Update(float deltatime) override;
+	void Update(float deltatime, Map* map) override;
 	void Draw() override;
 
 	void ChangeState(PlantState newState);

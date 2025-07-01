@@ -1,6 +1,7 @@
 #pragma once
-
-#include "Command.h"
+#include <map>
+#include "../headers/Command.h"
+#include "raylib.h"
 
 class InputHandler {
 private :

@@ -33,7 +33,7 @@ void EffectManager::spawnBrickBreak(int row, int col){
 
     Vector2 spawnPos = { x + Map::TILE_SIZE / 2 - 8, y + Map::TILE_SIZE / 2 - 8 }; // căn giữa tile
     
-    brickEffects.emplace_back(new BrickBreakEffect(spawnPos, brickExplosionAnim));
+    effects.emplace_back(new BrickBreakEffect(spawnPos, brickExplosionAnim));
     
 }
 
@@ -43,29 +43,21 @@ void EffectManager::spawnCoin(int row, int col){
 
     Vector2 spawnPos = { x + Map::TILE_SIZE / 2 - 8, y};
     
-    brickEffects.emplace_back(new CoinCollectEffect(spawnPos, coinCollectAnim));
+    effects.emplace_back(new CoinCollectEffect(spawnPos, coinCollectAnim));
 }
 
 void EffectManager::update(float dt){
-    for(auto& b : brickEffects){
+    for(auto& b : effects){
         b->update(dt);
     }
     //xoa nhung effect da hoan thanh
-    erase_if(brickEffects, [](BaseEffect* e) {
+    erase_if(effects, [](BaseEffect* e) {
         return e->isFinished();
         });
 }
 
 void EffectManager::draw(){
-    for(auto& b : brickEffects){
+    for(auto& b : effects){
         b->draw(texture);
     }
-}
-
-bool EffectManager::isFinished() const {
-   
-    for (auto& b : brickEffects) {
-        if (!b->isFinished()) return false;
-    }
-    return true;
 }

@@ -12,9 +12,9 @@ enum Actionstate {
 	DIE,
 };
 
-class Character : public Animation{
+class Character {
 protected:
-	Texture2D texture{};
+	Texture2D texture;
 	std::map <Actionstate, Animation> animation;
 	Actionstate currentstate = Actionstate::IDLE;
 	Vector2 position = { 0,0 };

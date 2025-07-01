@@ -97,8 +97,6 @@ void Mario::Update(float deltatime, Map* map) {
 	animation[currentstate].Update(deltatime);
 	handleInput(deltatime);
 
-	
-
 	if (!onGround) {
 		velocity.y += gravity * deltatime;
 		if(isJumpingUp) currentstate = Actionstate::Jump;
@@ -113,6 +111,9 @@ void Mario::Update(float deltatime, Map* map) {
 
 	position.y += velocity.y * deltatime;
 	
+	Rectangle currentFrame =animation[currentstate].getcurrentframe();
+    bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
+
 	Collision::getInstance()->handlePlayerCollision(this, map);
 	
 }

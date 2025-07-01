@@ -1,8 +1,7 @@
 #pragma once
-#include <vector>
-using namespace std;
 
 class Character;
+class Enemy;
 class Map;
 
 class Collision{
@@ -18,5 +17,5 @@ public:
         return instance;
     }
     void handlePlayerCollision(Character* mario, Map* map);
-    void handleEnemyCollision(vector<Character*> enemies, Map* map);
+    void handleEnemyCollision(Enemy* enemies, Map* map);
 };
