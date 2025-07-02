@@ -10,6 +10,10 @@ class Mario : public Character {
 
 public :
 	Mario();
-	~Mario() override;
+	Mario(Vector2 position);
+	
+	~Mario() override = default;
+
+	CharacterType getCharacterType() override;
 
 };

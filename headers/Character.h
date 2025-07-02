@@ -35,9 +35,25 @@ class Character {
 	friend class NormalState;
 
 protected:
+	Texture texture;
+	map <ActionState, Animation> animations;
+	Vector2 position;
 
+	CharacterType type;
+	CharacterState* currentState;
+	ActionState currentAction;
+	Direction currentdirection;
+
+	float scale = 5.0f;
 
 public:
 	virtual ~Character();
 
+	void ChangeState(CharacterState* newState);
+	CharacterState* GetCurrentState() const;
+	virtual CharacterType getCharacterType() = 0;
+	void setActionState(ActionState newActionState);
+	void setDirection(Direction newDirection);
+
+	void Draw();
 };

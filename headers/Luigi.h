@@ -8,6 +8,10 @@ class Luigi : public Character {
 
 public :
 	Luigi();
-	~Luigi() override;
+	Luigi(Vector2 position);
+
+	~Luigi() override = default;
+
+	CharacterType getCharacterType() override;
 
 };
