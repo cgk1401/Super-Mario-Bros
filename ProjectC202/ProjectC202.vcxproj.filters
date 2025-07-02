@@ -61,6 +61,9 @@
     <Filter Include="Header Files\Entity\CharacterState">
       <UniqueIdentifier>{1f5b8ce6-12eb-47a4-9659-d64abc9fac7e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entity\CharacterState">
+      <UniqueIdentifier>{1171ea3a-e3a0-407f-8998-b7e0ced36552}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Game.cpp">
@@ -122,6 +125,12 @@
     </ClCompile>
     <ClCompile Include="..\src\Luigi.cpp">
       <Filter>Source Files\Entity\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CharacterState.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\NormalState.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

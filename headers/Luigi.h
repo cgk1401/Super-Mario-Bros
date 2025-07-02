@@ -1,8 +1,9 @@
 #pragma once
 
 #include "Character.h"
-#include "NormalState.h"
 #include <map>
+#include "raylib.h"
+#include "NormalState.h"
 
 class Luigi : public Character {
 

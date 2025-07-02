@@ -132,6 +132,7 @@
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CameraController.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
+    <ClCompile Include="..\src\CharacterState.cpp" />
     <ClCompile Include="..\src\Collision.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="..\src\MapEditor.cpp" />
     <ClCompile Include="..\src\Mario.cpp" />
     <ClCompile Include="..\src\MenuState.cpp" />
+    <ClCompile Include="..\src\NormalState.cpp" />
     <ClCompile Include="..\src\ParallaxManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PiranhaPlant.cpp" />

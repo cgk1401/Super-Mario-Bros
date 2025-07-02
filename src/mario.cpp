@@ -5,19 +5,21 @@ class Map;
 
 Mario::Mario() {
 	type = CharacterType::Mario;
-
-	currentAction = ActionState::IDLE;
-	// currentState = new NornmalState()
+	currentAction = ActionState::Run;
+	currentState = new NormalState(this);
+	currentState->SetAnimation(this);
 	currentdirection = Direction::Right;
-	position = { 100, 100 };
+
+	position = { 100, 300 };
 }
 
 Mario::Mario(Vector2 position) {
 	type = CharacterType::Mario;
-
-	currentAction = ActionState::IDLE;
-	// currentState = new NornmalState()
+	currentAction = ActionState::Run;
+	currentState = new NormalState(this);
+	currentState->SetAnimation(this);
 	currentdirection = Direction::Right;
+
 	this->position = position;
 }
 

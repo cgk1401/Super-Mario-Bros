@@ -43,3 +43,7 @@ void Character::Draw() {
 
 	DrawTexturePro(texture, currentframe, destination, { 0,0 }, 0, WHITE);
 }
+
+void Character::Update(float deltatime) {
+	currentState->Update(deltatime);
+}

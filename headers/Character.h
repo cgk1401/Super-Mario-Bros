@@ -44,7 +44,7 @@ protected:
 	ActionState currentAction;
 	Direction currentdirection;
 
-	float scale = 5.0f;
+	float scale = 4.0f;
 
 public:
 	virtual ~Character();
@@ -56,4 +56,5 @@ public:
 	void setDirection(Direction newDirection);
 
 	void Draw();
+	void Update(float deltatime);
 };

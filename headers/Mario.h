@@ -5,7 +5,6 @@
 #include "raylib.h"
 #include "NormalState.h"
 
-
 class Mario : public Character {
 
 public :

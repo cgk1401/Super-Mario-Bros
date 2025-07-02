@@ -11,6 +11,9 @@
 #include "../headers/GoomBa.h"
 #include "../headers/KoopaTroopa.h"
 #include "../headers/PiranhaPlant.h"
+#include "../headers/Character.h"
+#include "../headers/Luigi.h"
+#include "../headers/Mario.h"
 
 class PlayState : public GameState{
 public:
@@ -24,7 +27,8 @@ private:
     GUI gui;
     PauseState pauseMenu;
     Map* map;
-    Mario mario;
+    //Mario mario;
+    Character* mario = new Mario({700, 300});
     GoomBa goomba;
     KoopTroopa kooptroopa;
     PiranhaPlant piranhaPlant; 
