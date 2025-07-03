@@ -1,9 +1,7 @@
 #include "../Headers/CharacterState.h"
 #include <iostream>
 
-CharacterState::CharacterState(Character* character) : character(character) {
-
-}
+CharacterState::CharacterState(Character* character) : character(character) {}
 
 float CharacterState::approach(float current, float target, float increase) {
 	if (current < target) {

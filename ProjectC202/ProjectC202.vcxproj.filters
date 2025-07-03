@@ -132,6 +132,9 @@
     <ClCompile Include="..\src\NormalState.cpp">
       <Filter>Source Files\Entity\CharacterState</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SuperState.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -210,6 +213,9 @@
       <Filter>Header Files\Entity\CharacterState</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\NormalState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\SuperState.h">
       <Filter>Header Files\Entity\CharacterState</Filter>
     </ClInclude>
   </ItemGroup>

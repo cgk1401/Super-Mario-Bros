@@ -14,6 +14,8 @@
 #include "../headers/Character.h"
 #include "../headers/Luigi.h"
 #include "../headers/Mario.h"
+#include "../headers/NormalState.h"
+#include "../headers/SuperState.h"
 
 class PlayState : public GameState{
 public:
@@ -28,7 +30,7 @@ private:
     PauseState pauseMenu;
     Map* map;
     //Mario mario;
-    Character* mario = new Mario({100, 500});
+    Character* mario = new Luigi({100, 500});
     GoomBa goomba;
     KoopTroopa kooptroopa;
     PiranhaPlant piranhaPlant; 

@@ -11,10 +11,15 @@ Character::~Character() {
 }
 
 void Character::ChangeState(CharacterState* newState) {
+	float newposition = position.y + animations[currentAction].getcurrentframe().height * scale;
 	if (currentState) {
 		delete currentState;
 	}
 	currentState = newState;
+	currentAction = ActionState::Idle;
+	currentState->SetAnimation(this);
+	newposition -= currentState->getCharacter()->animations[currentState->getCharacter()->currentAction].getcurrentframe().height * scale;
+	currentState->getCharacter()->position.y = newposition;
 }
 
 CharacterState* Character::GetCurrentState() const {

@@ -2,7 +2,7 @@
 
 Luigi::Luigi() {
 	type = CharacterType::Luigi;
-	currentAction = ActionState::IDLE;
+	currentAction = ActionState::Idle;
 	position = { 100, 300 };
 	currentState = new NormalState(this);
 	currentState->SetAnimation(this);
@@ -11,7 +11,7 @@ Luigi::Luigi() {
 
 Luigi::Luigi(Vector2 position) {
 	type = CharacterType::Luigi;
-	currentAction = ActionState::IDLE;
+	currentAction = ActionState::Idle;
 	this->position = position;
 	currentState = new NormalState(this);
 	currentState->SetAnimation(this);

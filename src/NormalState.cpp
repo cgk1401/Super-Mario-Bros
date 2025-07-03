@@ -17,9 +17,9 @@ void NormalState::SetAnimation(Character* c) {
 		idle.currentframe = 0;
 		idle.currenttime = 0;
 		idle.durationtime = 0.1f;
-		idle.frame.push_back({ 2,8, 12, 16 });
+		idle.frame.push_back({ 2, 8, 12, 16 });
 
-		character->animations[ActionState::IDLE] = idle;
+		character->animations[ActionState::Idle] = idle;
 
 		Animation run;
 		run.currentframe = 0;
@@ -44,7 +44,7 @@ void NormalState::SetAnimation(Character* c) {
 		die.durationtime = 0.1f;
 		die.frame.push_back({ 117, 8, 14, 14 });
 
-		character->animations[ActionState::DIE] = die;
+		character->animations[ActionState::Die] = die;
 		
 	}
 	else if (c->getCharacterType() == CharacterType::Luigi) {
@@ -54,9 +54,9 @@ void NormalState::SetAnimation(Character* c) {
 		idle.currentframe = 0;
 		idle.currenttime = 0;
 		idle.durationtime = 0.1f;
-		idle.frame.push_back({ 290,8, 12, 16 });
+		idle.frame.push_back({ 290, 8, 12, 16 });
 
-		character->animations[ActionState::IDLE] = idle;
+		character->animations[ActionState::Idle] = idle;
 
 		Animation run;
 		run.currentframe = 0;
@@ -81,7 +81,7 @@ void NormalState::SetAnimation(Character* c) {
 		die.durationtime = 0.1f;
 		die.frame.push_back({ 405, 8, 14, 14 });
 
-		character->animations[ActionState::DIE] = die;
+		character->animations[ActionState::Die] = die;
 	}
 }
 
@@ -109,7 +109,7 @@ void NormalState::Update(float deltatime) {
 		isJumpingUp = false;
 
 		if (fabs(character->velocity.x) < 0.1f) {
-			character->setActionState(ActionState::IDLE);
+			character->setActionState(ActionState::Idle);
 		}
 		else {
 			character->setActionState(ActionState::Run);
@@ -135,10 +135,9 @@ void NormalState::HandleInput(float deltatime) {
 	}
 
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
-		// áp dụng ma sát
-		character->velocity.x = approach(character->velocity.x, 0.0f, FICTION * deltatime);
-		if (isGround && fabs(character->velocity.x) < 0.1f) {
-			character->setActionState(ActionState::IDLE);
+		if (isGround ) {
+			character->velocity.x = 0.0f;
+			character->setActionState(ActionState::Idle);
 		}
 	}
 

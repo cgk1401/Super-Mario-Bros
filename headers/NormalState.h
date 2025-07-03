@@ -6,7 +6,7 @@ class NormalState : public CharacterState {
 private :
 	const float SPEED = 250.0f;
 	const float MAX_SPEED = 350.0f;
-	const float  ACCELERATION = 500.0f;
+	const float ACCELERATION = 500.0f;
 	const float FICTION = 700.0f;
 	const float JUMPFORCE = -400.0f;
 	const float GRAVITY = 1300.0f;

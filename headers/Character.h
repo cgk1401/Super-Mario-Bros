@@ -9,15 +9,16 @@ using namespace std;
 
 class CharacterState;
 class NormalState;
+class SuperState;
 
 class Map;
 
 enum class ActionState {
-	IDLE,
+	Idle,
 	Run,
 	Jump,
-	Fall,
-	DIE,
+	Sit,
+	Die,
 };
 
 enum class Direction {
@@ -33,6 +34,7 @@ enum class CharacterType {
 class Character {
 	friend class CharacterState;
 	friend class NormalState;
+	friend class SuperState;
 
 protected:
 	Texture texture;
