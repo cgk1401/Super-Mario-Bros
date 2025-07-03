@@ -38,13 +38,14 @@ protected:
 	Texture texture;
 	map <ActionState, Animation> animations;
 	Vector2 position;
+	Vector2 velocity;
 
 	CharacterType type;
 	CharacterState* currentState;
 	ActionState currentAction;
 	Direction currentdirection;
 
-	float scale = 4.0f;
+	float scale = 3.0f;
 
 public:
 	virtual ~Character();

@@ -47,3 +47,4 @@ void Character::Draw() {
 void Character::Update(float deltatime) {
 	currentState->Update(deltatime);
 }
+

@@ -1,9 +1,12 @@
-#include "../Headers/NormalState.h"
+﻿#include "../Headers/NormalState.h"
 #include "../headers/Character.h"
 #include <raylib.h>
 
 NormalState::NormalState(Character* character) : CharacterState(character){
-
+	isGround = true;
+	BasePosition = character->position.y;
+	isJumpingUp = false;
+	jumpTimeElapsed = 0.0f;
 }
 
 void NormalState::SetAnimation(Character* c) {
@@ -13,7 +16,7 @@ void NormalState::SetAnimation(Character* c) {
 		Animation idle;
 		idle.currentframe = 0;
 		idle.currenttime = 0;
-		idle.durationtime = 0.3f;
+		idle.durationtime = 0.1f;
 		idle.frame.push_back({ 2,8, 12, 16 });
 
 		character->animations[ActionState::IDLE] = idle;
@@ -21,7 +24,7 @@ void NormalState::SetAnimation(Character* c) {
 		Animation run;
 		run.currentframe = 0;
 		run.currenttime = 0;
-		run.durationtime = 0.3f;
+		run.durationtime = 0.1f;
 		run.frame.push_back({ 20, 8, 15, 16 });
 		run.frame.push_back({ 58, 8, 13, 17 });
 
@@ -30,7 +33,7 @@ void NormalState::SetAnimation(Character* c) {
 		Animation jump;
 		jump.currentframe = 0;
 		jump.currenttime = 0;
-		jump.durationtime = 0.3f;
+		jump.durationtime = 0.1f;
 		jump.frame.push_back({ 96, 8, 16, 16 });
 
 		character->animations[ActionState::Jump] = jump;
@@ -38,7 +41,7 @@ void NormalState::SetAnimation(Character* c) {
 		Animation die;
 		die.currentframe = 0;
 		die.currenttime = 0;
-		die.durationtime = 0.3f;
+		die.durationtime = 0.1f;
 		die.frame.push_back({ 117, 8, 14, 14 });
 
 		character->animations[ActionState::DIE] = die;
@@ -50,7 +53,7 @@ void NormalState::SetAnimation(Character* c) {
 		Animation idle;
 		idle.currentframe = 0;
 		idle.currenttime = 0;
-		idle.durationtime = 0.3f;
+		idle.durationtime = 0.1f;
 		idle.frame.push_back({ 290,8, 12, 16 });
 
 		character->animations[ActionState::IDLE] = idle;
@@ -58,7 +61,7 @@ void NormalState::SetAnimation(Character* c) {
 		Animation run;
 		run.currentframe = 0;
 		run.currenttime = 0;
-		run.durationtime = 0.3f;
+		run.durationtime = 0.1f;
 		run.frame.push_back({ 308, 8, 15, 16 });
 		run.frame.push_back({ 346, 8, 13, 16 });
 
@@ -67,7 +70,7 @@ void NormalState::SetAnimation(Character* c) {
 		Animation jump;
 		jump.currentframe = 0;
 		jump.currenttime = 0;
-		jump.durationtime = 0.3f;
+		jump.durationtime = 0.1f;
 		jump.frame.push_back({ 384, 8, 16, 16 });
 
 		character->animations[ActionState::Jump] = jump;
@@ -75,7 +78,7 @@ void NormalState::SetAnimation(Character* c) {
 		Animation die;
 		die.currentframe = 0;
 		die.currenttime = 0;
-		die.durationtime = 0.3f;
+		die.durationtime = 0.1f;
 		die.frame.push_back({ 405, 8, 14, 14 });
 
 		character->animations[ActionState::DIE] = die;
@@ -84,4 +87,75 @@ void NormalState::SetAnimation(Character* c) {
 
 void NormalState::Update(float deltatime) {
 	character->animations[character->currentAction].Update(deltatime);
+
+	HandleInput(deltatime);
+	if (!isGround) {
+		if (isJumpingUp && jumpTimeElapsed < MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
+			character->velocity.y += GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
+		}
+		else {
+			character->velocity.y += GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
+		}
+		character->setActionState(ActionState::Jump);
+	}
+
+	character->position.x += character->velocity.x * deltatime;
+	character->position.y += character->velocity.y * deltatime;
+
+	if (character->position.y >= BasePosition) {
+		character->position.y = BasePosition;
+		character->velocity.y = 0;
+		isGround = true;
+		isJumpingUp = false;
+
+		if (fabs(character->velocity.x) < 0.1f) {
+			character->setActionState(ActionState::IDLE);
+		}
+		else {
+			character->setActionState(ActionState::Run);
+		}
+	}
 }
+
+void NormalState::HandleInput(float deltatime) {
+	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? MAX_SPEED : SPEED;
+	float acc = ACCELERATION;
+
+	if (IsKeyDown(KEY_RIGHT)) {
+		if (character->velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
+		character->velocity.x = approach(character->velocity.x, targetspeed, acc * deltatime);
+		character->setActionState(ActionState::Run);
+		character->setDirection(Direction::Right);
+	}
+	else if (IsKeyDown(KEY_LEFT)) {
+		if (character->velocity.x > 0) acc *= 3.0f;
+		character->velocity.x = approach(character->velocity.x, -targetspeed, acc * deltatime);
+		character->setActionState(ActionState::Run);
+		character->setDirection(Direction::Left);
+	}
+
+	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
+		// áp dụng ma sát
+		character->velocity.x = approach(character->velocity.x, 0.0f, FICTION * deltatime);
+		if (isGround && fabs(character->velocity.x) < 0.1f) {
+			character->setActionState(ActionState::IDLE);
+		}
+	}
+
+	// xử lý nhảy
+	if (IsKeyPressed(KEY_SPACE) && isGround) {
+		character->velocity.y = JUMPFORCE;
+		isGround = false;
+		isJumpingUp = true;
+		jumpTimeElapsed = 0.0f;
+		character->setActionState(ActionState::Jump);
+	}
+
+	if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < MAXJUMPTIME) {
+		jumpTimeElapsed += deltatime;
+	}
+	else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
+		isJumpingUp = false;
+	}
+}
+

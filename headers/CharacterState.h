@@ -12,5 +12,6 @@ public :
 
 	virtual void SetAnimation(Character* c) = 0;
 	virtual void Update(float deltatime) = 0;
-
+	virtual void HandleInput(float deltatime) = 0;
+	float approach(float current, float target, float increase);
 };

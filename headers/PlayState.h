@@ -28,7 +28,7 @@ private:
     PauseState pauseMenu;
     Map* map;
     //Mario mario;
-    Character* mario = new Mario({700, 300});
+    Character* mario = new Mario({100, 500});
     GoomBa goomba;
     KoopTroopa kooptroopa;
     PiranhaPlant piranhaPlant; 

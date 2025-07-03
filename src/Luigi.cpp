@@ -3,21 +3,19 @@
 Luigi::Luigi() {
 	type = CharacterType::Luigi;
 	currentAction = ActionState::IDLE;
+	position = { 100, 300 };
 	currentState = new NormalState(this);
 	currentState->SetAnimation(this);
 	currentdirection = Direction::Right;
-
-	position = { 100, 300 };
 }
 
 Luigi::Luigi(Vector2 position) {
 	type = CharacterType::Luigi;
 	currentAction = ActionState::IDLE;
+	this->position = position;
 	currentState = new NormalState(this);
 	currentState->SetAnimation(this);
 	currentdirection = Direction::Right;
-
-	this->position = position;
 }
 
 CharacterType Luigi::getCharacterType() {
