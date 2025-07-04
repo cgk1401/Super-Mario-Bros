@@ -3,8 +3,8 @@
 #include "CharacterState.h"
 
 class SuperState : public CharacterState {
-private :
-
+private:
+	PhysicsConfig config;
 public:
 	SuperState(Character* character);
 	~SuperState() override = default;
