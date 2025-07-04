@@ -11,6 +11,8 @@
 #include "../headers/GoomBa.h"
 #include "../headers/KoopaTroopa.h"
 #include "../headers/PiranhaPlant.h"
+#include "../headers/Enemy.h"
+
 
 class PlayState : public GameState{
 public:
@@ -25,9 +27,8 @@ private:
     PauseState pauseMenu;
     Map* map;
     Mario mario;
-    GoomBa goomba;
-    KoopTroopa kooptroopa;
-    PiranhaPlant piranhaPlant; 
+    vector<Enemy*> enemies;
+
     CameraController camera;
     ParallaxManager bg; //background
     ParallaxManager fg; //foreground

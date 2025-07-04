@@ -22,4 +22,5 @@ public:
 	virtual void Update(float deltatime, Map* map) = 0;
 	virtual void Draw() = 0;
 	virtual void LoadSource() = 0;
+	virtual bool isDead() = 0; 
 };

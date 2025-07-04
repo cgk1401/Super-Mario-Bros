@@ -1,5 +1,7 @@
 #include "../Headers/KoopaTroopa.h"
 #include "../headers/Collision.h"
+#include "../headers/TextureManager.h"
+
 class Map;
 
 KoopTroopa::KoopTroopa() : Enemy() {
@@ -19,7 +21,7 @@ KoopTroopa::~KoopTroopa() {
 }
 
 void KoopTroopa::LoadSource() {
-	texture = LoadTexture("../assets/Enemy/Enemies_Bosses.png");
+	texture = TextureManager::get().load(TextureType::ENEMY);
 
 	Animation walk;
 	walk.currentframe = 0;
@@ -86,6 +88,10 @@ void KoopTroopa::moveRight() {
 		velocity.x = shellSpeed * GetFrameTime();
 	}
 	position.x += velocity.x;
+}
+
+bool KoopTroopa::isDead(){
+	return position.y >= GetScreenHeight() + 50;
 }
 
 void KoopTroopa::ChangeDirection(DirectionKoopa direction) {

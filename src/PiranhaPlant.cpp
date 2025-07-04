@@ -1,4 +1,5 @@
 #include "../headers/PiranhaPlant.h"
+#include "../headers/TextureManager.h"
 class Map;
 
 
@@ -32,7 +33,7 @@ PiranhaPlant::~PiranhaPlant() {
 }
 
 void PiranhaPlant::LoadSource() {
-	texture = LoadTexture("../assets/Enemy/Enemies_Bosses.png");
+	texture = TextureManager::get().load(TextureType::ENEMY);
 
 	animation.currentframe = 0;
 	animation.currenttime = 0;

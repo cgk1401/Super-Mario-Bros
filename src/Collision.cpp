@@ -54,6 +54,7 @@ void Collision::handlePlayerCollision(Character* mario, Map* map){
                                 mario->position.y += overlapY;
                                 mario->velocity.y = 0;
                                 mario->isJumpingUp = false;
+                                cout << x << " - " << y << endl;
                                 tile.behavior->onHeadCollision(mario, x, y, map, tileInstance);
                             }
 

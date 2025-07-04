@@ -34,10 +34,12 @@ public :
 	void LoadSource() override;
 	void Draw() override;
 	void Update(float deltatime, Map* map) override;
-
+	bool isDead() override;
+	
 	void moveLeft();
 	void moveRight();
 
 	void ChangeDirection(DirectionKoopa direction);
 	void Fall();
+	
 };

@@ -19,6 +19,7 @@ private:
     ~TextureManager();
 public:
     static TextureManager& get(){
+        //TraceLog(LOG_INFO, "Load texture");
         if(!instance)
             instance = new TextureManager;
         return *instance;

@@ -150,6 +150,9 @@
     <ClCompile Include="..\src\PiranhaPlant.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\TextureManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\PiranhaPlant.h">
       <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\TextureManager.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

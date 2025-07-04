@@ -22,7 +22,7 @@ MapEditor::MapEditor(const char* path, int r, int c) : Map(path, r, c) {
     uiWidth = screenWidth - (int)mapWidth;
 
     backButton = new Button("../assets/GUI/Button.png", 10, 10 , screenWidth / 3 * 0.5f, screenHeight * 0.15f * 0.5f, "HOME", WHITE);
-    expandAreaButton = new Button(mapWidth - 20, screenHeight / 2 - 35, 40, 70, "||", LIGHTGRAY, GRAY, WHITE);
+    //expandAreaButton = new Button(mapWidth - 20, screenHeight / 2 - 35, 40, 70, "||", LIGHTGRAY, GRAY, WHITE);
 }
 
 void MapEditor::saveToFile(const char* filename) {
@@ -32,6 +32,21 @@ void MapEditor::saveToFile(const char* filename) {
         cerr << "Error: Could not open file for saving: " << filename << endl;
         return;
     }
+    
+  
+    int limitCol = 0;
+    for (int y = columns - 1; y >= 0; y--) {
+        for (int x = 0; x < rows; x++) {
+            if (mapData[x][y].tileID != 0) {
+                limitCol = y;
+                goto found;
+            }
+        }
+    }
+    found:
+
+
+    cout << "Limit column: "<< limitCol <<endl;
 
     MyFile << rows << " " << columns << "\n";
     for (int x = 0; x < rows; x++) {
@@ -100,7 +115,7 @@ void MapEditor::render() {
     }
 
     backButton->draw();
-    expandAreaButton->draw();
+    //expandAreaButton->draw();
 }
 
 void MapEditor::update(Game& game) {
@@ -122,16 +137,14 @@ void MapEditor::update(Game& game) {
         camera.target.x -= speed * dt;
     }
 
-    if (camera.target.x < 0) {
-        camera.target.x = 0;
-    }
-
+ 
     uiWidth = screenWidth - (int)mapWidth;
     int uiStartX = mapWidth;
     Vector2 mouseWorld = GetScreenToWorld2D(GetMousePosition(), camera);
 
     // Check if mouse is over the map area
-    
+     float wheel = GetMouseWheelMove();
+    Vector2 mousePos = GetMousePosition();
     Rectangle mapDrawingArea = { 0, 0, (float)mapWidth, (float)screenHeight };
     if (CheckCollisionPointRec(GetMousePosition(), mapDrawingArea)) {
         for (int x = 0; x < rows; x++) {
@@ -148,18 +161,32 @@ void MapEditor::update(Game& game) {
                 }
             }
         }
+
+        if (wheel != 0) {
+    // cameraEditor.target = GetMousePosition();
+            camera.zoom += wheel * 0.1f;
+            if (camera.zoom < 0.2f) camera.zoom = 0.2f;
+            if (camera.zoom > 2.0f) camera.zoom = 2.0f;
+        }
+         if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+            Vector2 delta = GetMouseDelta();
+            delta = Vector2Scale(delta, -1.0f / camera.zoom);
+            camera.target = Vector2Add(camera.target, delta);
+    }
+
+
     }
    
 
     backButton->update();
-    expandAreaButton->update();
+   // expandAreaButton->update();
     //Editor TILE_SIZE handling
-    if (expandAreaButton->IsMouseDown()) {
-        Vector2 mouseDel = GetMouseDelta();
-        mapWidth += mouseDel.x;
-        expandAreaButton->updatePos({(float) mapWidth - 20, screenHeight / 2 - 35 });
-        cout << 1;
-    }
+    //if (expandAreaButton->IsMouseDown()) {
+    //    Vector2 mouseDel = GetMouseDelta();
+    //    mapWidth += mouseDel.x;
+    //    expandAreaButton->updatePos({(float) mapWidth - 20, screenHeight / 2 - 35 });
+    //    //cout << 1;
+    //}
 
     //File saving
     if (IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_S))
@@ -175,22 +202,30 @@ void MapEditor::update(Game& game) {
     //CameraEditor update
     // dt = GetFrameTime();
     //float speed = 200;
-    float wheel = GetMouseWheelMove();
-    Vector2 mousePos = GetMousePosition();
-
-    if (wheel != 0) {
-        // cameraEditor.target = GetMousePosition();
-        cameraEditor.zoom += wheel * 0.1f;
-        if (cameraEditor.zoom < 0.2f) cameraEditor.zoom = 0.2f;
-        if (cameraEditor.zoom > 5.0f) cameraEditor.zoom = 5.0f;
-    }
-
+   
     Rectangle workplace = {mapWidth, 0, screenWidth, screenHeight};
-    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-        if (CheckCollisionPointRec(mousePos, workplace)) {
-            Vector2 delta = GetMouseDelta();
-            delta = Vector2Scale(delta, -1.0f / cameraEditor.zoom);
-            cameraEditor.target = Vector2Add(cameraEditor.target, delta);
+    if (CheckCollisionPointRec(mousePos, workplace)) {
+        if (wheel != 0) {
+            // cameraEditor.target = GetMousePosition();
+            cameraEditor.zoom += wheel * 0.1f;
+            if (cameraEditor.zoom < 0.2f) cameraEditor.zoom = 0.2f;
+            if (cameraEditor.zoom > 5.0f) cameraEditor.zoom = 5.0f;
         }
+
+    
+        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+        
+                Vector2 delta = GetMouseDelta();
+                delta = Vector2Scale(delta, -1.0f / cameraEditor.zoom);
+                cameraEditor.target = Vector2Add(cameraEditor.target, delta);
+                
+        }
+     }
+
+        if (camera.target.x < 0) {
+        camera.target.x = 0;
+    }
+    else if(camera.target.x > TILE_SIZE * columns){
+        camera.target.x = TILE_SIZE * columns;
     }
 }

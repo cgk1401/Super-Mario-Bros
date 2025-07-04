@@ -52,14 +52,19 @@ Map::~Map(){
     UnloadTexture(texture);
 }
 void Map::initMap(int r, int c) {
+    mapRects.clear();
+    mapData.clear();
+
     rows = r;
     columns = c;
 
+    //cout << "column: " << c << endl;;
     mapRects.resize(rows, vector<Rectangle>(columns));
     mapData.resize(rows, vector<MapTileInstance>(columns));
 
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
+            // << x << " - " << y << endl;
             mapRects[x][y] = { (float)(y * TILE_SIZE), (float)(x * TILE_SIZE), (float)TILE_SIZE, (float)TILE_SIZE };
             mapData[x][y] = { 0, false };
         }
@@ -296,7 +301,7 @@ Tile Map::getTile(int row, int col) const {
 }
 
 MapTileInstance* Map::getMapTileInstance(int row, int col) {
-    if (row < 0 || row >= tileRows || col < 0 || col >= tileColumns) {
+    if (row < 0 || row >= rows || col < 0 || col >= columns) {
         return nullptr;
     }
     return &mapData[row][col];

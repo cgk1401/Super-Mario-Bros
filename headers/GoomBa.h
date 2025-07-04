@@ -25,6 +25,7 @@ public:
 	void LoadSource() override;
 	void Draw() override;
 	void Update(float deltatime, Map* map) override;
+	bool isDead() override;
 
 	void moveLeft(); // goomba luôn di chuyển sang trái tấn công character
 	void moveRight(); // gặp chướng ngại vật(map, ống) goomba di chuyển sang phải

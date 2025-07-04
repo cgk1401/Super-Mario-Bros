@@ -1,6 +1,8 @@
 ﻿#include "../headers/GoomBa.h"
 #include <iostream>
 #include "../headers/Collision.h"
+#include "../headers/TextureManager.h"
+
 GoomBa::GoomBa() : Enemy(){
 	this->position = { 150, 500 };
 	LoadSource();
@@ -18,7 +20,7 @@ GoomBa::~GoomBa() {
 }
 
 void GoomBa::LoadSource() {
-	texture = LoadTexture("../assets/Enemy/Enemies_Bosses.png");
+	texture = TextureManager::get().load(TextureType::ENEMY);
 
 	Animation run;
 	run.currentframe = 0;
@@ -63,7 +65,9 @@ void GoomBa::Update(float deltatime, Map* map) {
 	Collision::getInstance()->handleEnemyCollision(this, map);
 
 }
-
+bool GoomBa::isDead() {
+	return currentState == GoomBaState::Die;
+}
 void GoomBa::moveLeft() {
 	velocity.x = -speed * GetFrameTime();
 	position.x += velocity.x;

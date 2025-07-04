@@ -8,7 +8,7 @@ void BrickTileBehavior::onHeadCollision(Character* character, int tileRow, int t
     //if(mario is small ) -> ko the bi vo  
     // Nếu chưa có state → tạo mới
     //BOUNCE
- 
+    //if (!tileInstance) return;
     auto* brickState = dynamic_cast<BrickTileState*>(tileInstance->state);
     if (!brickState) {
         brickState = new BrickTileState();
@@ -31,7 +31,7 @@ void BrickTileBehavior::onHeadCollision(Character* character, int tileRow, int t
 } // bị vỡ ra -> add effect mảnh vỡ
 void BrickTileBehavior::update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) {
     
-    
+    //if (!tileInstance) return;
     auto* brickState = dynamic_cast<BrickTileState*>(tileInstance->state);
     //if (!brickState || !brickState->isBouncing) return;
     if (!brickState) return;
@@ -57,6 +57,7 @@ void BrickTileBehavior::update(float dt, int tileRow, int tileCol, Map* map, Map
     */
      if (brickState->hasBroken) {
         EffectManager::get().spawnCoin(tileRow, tileCol);
+        EffectManager::get().spawnBrickBreak(tileRow, tileCol);
         brickState->hasBroken = false;
         //map->removeTile(tileRow, tileCol);
     }

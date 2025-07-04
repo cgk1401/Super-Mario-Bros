@@ -2,6 +2,7 @@
 #include "../headers/Game.h"
 #include "../headers/MenuState.h"
 #include "../headers/EffectManager.h"
+#include "../headers/EnemyFactory.h"
 
 PlayState::PlayState() {
     gui = GUI();
@@ -13,6 +14,9 @@ PlayState::PlayState() {
     bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 7.2);
     bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 7.2);
     
+    enemies.push_back(EnemyFactory::createEnemy(EnemyType::GOOMBA, {100, 100}));
+    enemies.push_back(EnemyFactory::createEnemy(EnemyType::KOOPA, {200, 100}));
+    enemies.push_back(EnemyFactory::createEnemy(EnemyType::PIRANT_PLANT, {300, 100}));
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
 }
@@ -25,7 +29,6 @@ void PlayState::handleInput(Game& game){
 }
 void PlayState::update(Game& game){
     float dt = GetFrameTime();
-    
 
     if (gui.PauseButton_IsPressed() && isPlaying) {
         isPlaying = false;
@@ -46,41 +49,25 @@ void PlayState::update(Game& game){
         mario.Update(dt, map);
         map->update();
         EffectManager::get().update(dt);
+            
+        for(auto& e: enemies){
+            e->Update(dt, map);
+        }
+
+        //remove if any enemies die
+        enemies.erase(remove_if(enemies.begin(), enemies.end(),
+            [](Enemy* e) {
+                if (e->isDead()) {
+                    delete e;
+                    return true;
+                }
+        return false;
+
         
-        // test thử goomba
-        goomba.Update(dt, map);
-        if (IsKeyDown(KEY_J)) {
-            goomba.moveLeft();
-        }
-        else if (IsKeyDown(KEY_K)) {
-            goomba.moveRight();
-        }
-        if (IsKeyPressed(KEY_B)) {
-            goomba.ChangeState(GoomBaState::Die);
-        }
-        else if (IsKeyPressed(KEY_N)) {
-            goomba.ChangeState(GoomBaState::Run);
-        }
-        else if (IsKeyDown(KEY_M)) {
-            goomba.moveUp();
-        }
+    }),
+    enemies.end());
 
-        // test thử koopatroopa
-        kooptroopa.Update(dt, map);
-        if (IsKeyDown(KEY_D)) {
-            kooptroopa.ChangeDirection(DirectionKoopa::Right);
-            kooptroopa.moveRight();
-        }else if (IsKeyDown(KEY_A)){
-            kooptroopa.ChangeDirection(DirectionKoopa::Left);
-            kooptroopa.moveLeft();
-        }
-  
-        else if (IsKeyDown(KEY_DOWN)) {
-            kooptroopa.Fall();
-        }
-
-        // test thử piranhaPlant
-        piranhaPlant.Update(dt, map);
+        
     }
     else {
         pauseMenu.update(game);  
@@ -96,9 +83,12 @@ void PlayState::render() {
     map->draw();
     EffectManager::get().draw();
     mario.Draw();
-    goomba.Draw();
-    kooptroopa.Draw();
-    piranhaPlant.Draw();
+    for(auto& e: enemies){
+        e->Draw();
+    }
+    // goomba.Draw();
+    // kooptroopa.Draw();
+    // piranhaPlant.Draw();
     DrawRectangle(500, 200, 150, 150, RED);
     //fg.draw();
     EndMode2D();
