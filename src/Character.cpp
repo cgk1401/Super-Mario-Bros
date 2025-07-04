@@ -11,15 +11,18 @@ Character::~Character() {
 }
 
 void Character::ChangeState(CharacterState* newState) {
-	float newposition = position.y + animations[currentAction].getcurrentframe().height * scale;
-	if (currentState) {
-		delete currentState;
+	if (currentAction == ActionState::Idle) {
+		float newposition = position.y + animations[currentAction].getcurrentframe().height * scale;
+		if (currentState) {
+			delete currentState;
+		}
+		currentState = newState;
+		currentAction = ActionState::Idle;
+		currentState->SetAnimation(this);
+		newposition -= animations[currentAction].getcurrentframe().height * scale;
+		currentState->getCharacter()->position.y = newposition;
+		currentState->SetBasePosition(newposition);
 	}
-	currentState = newState;
-	currentAction = ActionState::Idle;
-	currentState->SetAnimation(this);
-	newposition -= currentState->getCharacter()->animations[currentState->getCharacter()->currentAction].getcurrentframe().height * scale;
-	currentState->getCharacter()->position.y = newposition;
 }
 
 CharacterState* Character::GetCurrentState() const {
@@ -27,6 +30,11 @@ CharacterState* Character::GetCurrentState() const {
 }
 
 void Character::setActionState(ActionState newActionState) {
+	if (currentAction != newActionState && currentState->getIsGround()) {
+		float previousHeight = animations[currentAction].getcurrentframe().height * scale;
+		float currentHeight = animations[newActionState].getcurrentframe().height * scale;
+		position.y += previousHeight - currentHeight;
+	}
 	currentAction = newActionState;
 }
 

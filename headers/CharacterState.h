@@ -2,10 +2,24 @@
 
 class Character;
 
+struct PhysicsConfig {
+	float SPEED = 250.0f;
+	float MAX_SPEED = 350.0f;
+	float ACCELERATION = 500.0f;
+	float FRICTION = 700.0f;
+	float JUMPFORCE = -400.0f;
+	float GRAVITY = 1300.0f;
+	float MAXJUMPTIME = 0.32f;
+};
+
 class CharacterState {
 protected :
 	Character* character;
 
+	float BasePosition;
+	bool isGround;
+	bool isJumpingUp;
+	float jumpTimeElapsed;
 public :
 	CharacterState(Character* character);
 	virtual ~CharacterState() = default;
@@ -15,5 +29,7 @@ public :
 	virtual void HandleInput(float deltatime) = 0;
 	float approach(float current, float target, float increase);
 
-	Character* getCharacter() { return this->character; }
+	Character* getCharacter();
+	bool getIsGround();
+	void SetBasePosition(float newposition);
 };

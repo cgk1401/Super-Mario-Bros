@@ -2,12 +2,7 @@
 #include "../headers/Character.h"
 #include <raylib.h>
 
-NormalState::NormalState(Character* character) : CharacterState(character){
-	isGround = true;
-	BasePosition = character->position.y;
-	isJumpingUp = false;
-	jumpTimeElapsed = 0.0f;
-}
+NormalState::NormalState(Character* character) : CharacterState(character){}
 
 void NormalState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
@@ -90,11 +85,11 @@ void NormalState::Update(float deltatime) {
 
 	HandleInput(deltatime);
 	if (!isGround) {
-		if (isJumpingUp && jumpTimeElapsed < MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
-			character->velocity.y += GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
+		if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
+			character->velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
 		}
 		else {
-			character->velocity.y += GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
+			character->velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
 		}
 		character->setActionState(ActionState::Jump);
 	}
@@ -118,8 +113,8 @@ void NormalState::Update(float deltatime) {
 }
 
 void NormalState::HandleInput(float deltatime) {
-	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? MAX_SPEED : SPEED;
-	float acc = ACCELERATION;
+	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
+	float acc = config.ACCELERATION;
 
 	if (IsKeyDown(KEY_RIGHT)) {
 		if (character->velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
@@ -135,7 +130,7 @@ void NormalState::HandleInput(float deltatime) {
 	}
 
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
-		if (isGround ) {
+		if (isGround) {
 			character->velocity.x = 0.0f;
 			character->setActionState(ActionState::Idle);
 		}
@@ -143,14 +138,14 @@ void NormalState::HandleInput(float deltatime) {
 
 	// xử lý nhảy
 	if (IsKeyPressed(KEY_SPACE) && isGround) {
-		character->velocity.y = JUMPFORCE;
+		character->velocity.y = config.JUMPFORCE;
 		isGround = false;
 		isJumpingUp = true;
 		jumpTimeElapsed = 0.0f;
 		character->setActionState(ActionState::Jump);
 	}
 
-	if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < MAXJUMPTIME) {
+	if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
 		jumpTimeElapsed += deltatime;
 	}
 	else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
