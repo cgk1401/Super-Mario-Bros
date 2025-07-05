@@ -41,6 +41,15 @@ void SuperState::SetAnimation(Character* c) {
 		sit.frame.push_back({ 116, 42, 16, 22 });
 
 		character->animations[ActionState::Sit] = sit; 
+
+		Animation flagpolehold;
+		flagpolehold.currentframe = 0;
+		flagpolehold.currenttime = 0;
+		flagpolehold.durationtime = 0.1f;
+		flagpolehold.frame.push_back({ 136, 33, 16, 30 });
+		flagpolehold.frame.push_back({ 154, 33, 16, 27 });
+
+		character->animations[ActionState::FlagpoleHold] = flagpolehold;
 	}
 	else if (c->getCharacterType() == CharacterType::Luigi) {
 		character->texture = LoadTexture("../Assets/Mario/Mario_&_Luigi.png");
@@ -77,6 +86,15 @@ void SuperState::SetAnimation(Character* c) {
 		sit.frame.push_back({ 404, 42, 16, 22 });
 
 		character->animations[ActionState::Sit] = sit;
+
+		Animation flagpolehold;
+		flagpolehold.currentframe = 0;
+		flagpolehold.currenttime = 0;
+		flagpolehold.durationtime = 0.1f;
+		flagpolehold.frame.push_back({ 426, 33, 14, 30 });
+		flagpolehold.frame.push_back({ 444, 33, 14, 27 });
+
+		character->animations[ActionState::FlagpoleHold] = flagpolehold;
 	}
 
 	// cập nhật position cho SuperState;
@@ -100,15 +118,20 @@ void SuperState::Update(float deltatime) {
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
 
+	// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
+	if (isGround) {
+		if (IsKeyDown(KEY_P)) {
+			character->setActionState(ActionState::FlagpoleHold);
+		}
+	}
+
+	// trạng thái đang rơi xuống
 	if (character->position.y + character->animations[character->currentAction].getcurrentframe().height * character->scale >= character->BasePosition && isGround == false) {
 		character->position.y = character->BasePosition - character->animations[character->currentAction].getcurrentframe().height * character->scale;
 		character->velocity.y = 0;
 		isGround = true;
 		isJumpingUp = false;
 
-		//if (IsKeyDown(KEY_DOWN)) {
-		//	character->setActionState(ActionState::Sit);
-		//}
 		if (fabs(character->velocity.x) < 0.1f) {
 			character->setActionState(ActionState::Idle);
 		}

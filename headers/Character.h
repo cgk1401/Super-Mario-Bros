@@ -20,6 +20,7 @@ enum class ActionState {
 	Jump,
 	Sit,
 	Die,
+	FlagpoleHold,
 };
 
 enum class Direction {

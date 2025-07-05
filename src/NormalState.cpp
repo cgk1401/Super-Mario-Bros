@@ -42,6 +42,15 @@ void NormalState::SetAnimation(Character* c) {
 		die.frame.push_back({ 117, 8, 14, 14 });
 
 		character->animations[ActionState::Die] = die;
+
+		Animation flagpolehold;
+		flagpolehold.currentframe = 0;
+		flagpolehold.currenttime = 0;
+		flagpolehold.durationtime = 0.1f;
+		flagpolehold.frame.push_back({ 140, 8, 12, 16 });
+		flagpolehold.frame.push_back({ 156, 8, 14, 16 });
+
+		character->animations[ActionState::FlagpoleHold] = flagpolehold;
 		
 	}
 	else if (c->getCharacterType() == CharacterType::Luigi) {
@@ -79,6 +88,15 @@ void NormalState::SetAnimation(Character* c) {
 		die.frame.push_back({ 405, 8, 14, 14 });
 
 		character->animations[ActionState::Die] = die;
+
+		Animation flagpolehold;
+		flagpolehold.currentframe = 0;
+		flagpolehold.currenttime = 0;
+		flagpolehold.durationtime = 0.1f;
+		flagpolehold.frame.push_back({ 426, 8, 12, 16 });
+		flagpolehold.frame.push_back({ 445, 8, 13, 16 });
+
+		character->animations[ActionState::FlagpoleHold] = flagpolehold;
 	}
 	// cập nhật Baseposition
 	Rectangle currentframe = character->animations[character->currentAction].getcurrentframe();
@@ -108,14 +126,21 @@ void NormalState::Update(float deltatime) {
 		isGround = true;
 		isJumpingUp = false;
 
+		// vận tốc bằng không bấm phím KEY_P thì đặt trạng thái thành FlagpoleHold, nếu không bấm trạng thái sẽ thành Idle
 		if (fabs(character->velocity.x) < 0.1f) {
-			character->setActionState(ActionState::Idle);
+			if (IsKeyDown(KEY_P)) {
+				character->setActionState(ActionState::FlagpoleHold);
+			}
+			else {
+				character->setActionState(ActionState::Idle);
+			}
 		}
 		else {
 			character->setActionState(ActionState::Run);
 		}
 	}
 
+	// Nhấn phím KEY_L chuyển trạng thái từ NormalState thành SuperState
 	if (IsKeyPressed(KEY_L)) {
 		character->ChangeState(new TransformState(character,CharacterTransformState::Super));
 	}
