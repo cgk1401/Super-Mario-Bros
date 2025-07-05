@@ -1,5 +1,6 @@
 ﻿#include "../Headers/NormalState.h"
 #include "../headers/Character.h"
+#include "../headers/SuperState.h"
 #include <raylib.h>
 
 NormalState::NormalState(Character* character) : CharacterState(character){}
@@ -78,6 +79,9 @@ void NormalState::SetAnimation(Character* c) {
 
 		character->animations[ActionState::Die] = die;
 	}
+	// cập nhật Baseposition
+	Rectangle currentframe = character->animations[character->currentAction].getcurrentframe();
+	character->BasePosition += currentframe.height * character->scale;
 }
 
 void NormalState::Update(float deltatime) {
@@ -97,8 +101,8 @@ void NormalState::Update(float deltatime) {
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
 
-	if (character->position.y >= BasePosition) {
-		character->position.y = BasePosition;
+	if (character->position.y + character->animations[character->currentAction].getcurrentframe().height * character->scale >= character->BasePosition) {
+		character->position.y = character->BasePosition - character->animations[character->currentAction].getcurrentframe().height * character->scale;
 		character->velocity.y = 0;
 		isGround = true;
 		isJumpingUp = false;
@@ -109,6 +113,10 @@ void NormalState::Update(float deltatime) {
 		else {
 			character->setActionState(ActionState::Run);
 		}
+	}
+
+	if (IsKeyPressed(KEY_L)) {
+		character->ChangeState(new SuperState(character));
 	}
 }
 

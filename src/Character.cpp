@@ -12,16 +12,12 @@ Character::~Character() {
 
 void Character::ChangeState(CharacterState* newState) {
 	if (currentAction == ActionState::Idle) {
-		float newposition = position.y + animations[currentAction].getcurrentframe().height * scale;
 		if (currentState) {
 			delete currentState;
 		}
 		currentState = newState;
 		currentAction = ActionState::Idle;
 		currentState->SetAnimation(this);
-		newposition -= animations[currentAction].getcurrentframe().height * scale;
-		currentState->getCharacter()->position.y = newposition;
-		currentState->SetBasePosition(newposition);
 	}
 }
 
@@ -31,11 +27,13 @@ CharacterState* Character::GetCurrentState() const {
 
 void Character::setActionState(ActionState newActionState) {
 	if (currentAction != newActionState && currentState->getIsGround()) {
-		float previousHeight = animations[currentAction].getcurrentframe().height * scale;
-		float currentHeight = animations[newActionState].getcurrentframe().height * scale;
-		position.y += previousHeight - currentHeight;
+		currentAction = newActionState;
+		Rectangle currentframe = animations[currentAction].getcurrentframe();
+		position.y = BasePosition - currentframe.height * scale;
 	}
-	currentAction = newActionState;
+	else {
+		currentAction = newActionState;
+	}
 }
 
 void Character::setDirection(Direction newDirection) {

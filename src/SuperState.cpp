@@ -79,6 +79,9 @@ void SuperState::SetAnimation(Character* c) {
 		character->animations[ActionState::Sit] = sit;
 	}
 
+	// cập nhật position cho SuperState;
+	Rectangle currentframe = character->animations[character->currentAction].getcurrentframe();
+	character->position.y = character->BasePosition - currentframe.height * character->scale;
 }
 void SuperState::Update(float deltatime) {
 	character->animations[character->currentAction].Update(deltatime);
@@ -97,8 +100,8 @@ void SuperState::Update(float deltatime) {
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
 
-	if (character->position.y >= BasePosition && isGround == false) {
-		character->position.y = BasePosition;
+	if (character->position.y + character->animations[character->currentAction].getcurrentframe().height * character->scale >= character->BasePosition && isGround == false) {
+		character->position.y = character->BasePosition - character->animations[character->currentAction].getcurrentframe().height * character->scale;
 		character->velocity.y = 0;
 		isGround = true;
 		isJumpingUp = false;

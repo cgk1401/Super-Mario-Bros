@@ -4,7 +4,6 @@
 
 CharacterState::CharacterState(Character* character) : character(character) {
 	isGround = true;
-	BasePosition = character->position.y;
 	isJumpingUp = false;
 	jumpTimeElapsed = 0.0f;
 }
@@ -25,5 +24,5 @@ bool CharacterState::getIsGround() {
 }
 
 void CharacterState::SetBasePosition(float newposition) {
-	this->BasePosition = newposition;
+	character->BasePosition = newposition;
 }

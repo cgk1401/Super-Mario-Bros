@@ -48,6 +48,7 @@ protected:
 	Direction currentdirection;
 
 	float scale = 3.0f;
+	float BasePosition;
 
 public:
 	virtual ~Character();

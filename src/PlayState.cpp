@@ -45,9 +45,6 @@ void PlayState::update(Game& game){
         //mario.Update(GetFrameTime(), map);
         map->update();
         mario->Update(dt);
-        if (IsKeyPressed(KEY_L)) {
-            mario->ChangeState(new SuperState(mario));
-        }
         
         // test thử goomba
         goomba.Update(dt);

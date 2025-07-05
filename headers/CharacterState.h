@@ -16,7 +16,6 @@ class CharacterState {
 protected :
 	Character* character;
 
-	float BasePosition;
 	bool isGround;
 	bool isJumpingUp;
 	float jumpTimeElapsed;
