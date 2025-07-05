@@ -151,6 +151,7 @@
     <ClCompile Include="..\src\PiranhaPlant.cpp" />
     <ClCompile Include="..\src\PlayState.cpp" />
     <ClCompile Include="..\src\SuperState.cpp" />
+    <ClCompile Include="..\src\TransformState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Animation.h" />
@@ -180,6 +181,7 @@
     <ClInclude Include="..\headers\SuperState.h" />
     <ClInclude Include="..\headers\Tile.h" />
     <ClInclude Include="..\headers\TileBehavior.h" />
+    <ClInclude Include="..\headers\TransformState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

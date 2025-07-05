@@ -10,6 +10,7 @@ using namespace std;
 class CharacterState;
 class NormalState;
 class SuperState;
+class TransformState;
 
 class Map;
 
@@ -31,10 +32,15 @@ enum class CharacterType {
 	Luigi,
 };
 
+enum class CharacterTransformState {
+	Super,
+};
+
 class Character {
 	friend class CharacterState;
 	friend class NormalState;
 	friend class SuperState;
+	friend class TransformState;
 
 protected:
 	Texture texture;

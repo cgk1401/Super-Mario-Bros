@@ -1,6 +1,7 @@
 ﻿#include "../Headers/NormalState.h"
 #include "../headers/Character.h"
 #include "../headers/SuperState.h"
+#include "../headers/TransformState.h"
 #include <raylib.h>
 
 NormalState::NormalState(Character* character) : CharacterState(character){}
@@ -116,7 +117,7 @@ void NormalState::Update(float deltatime) {
 	}
 
 	if (IsKeyPressed(KEY_L)) {
-		character->ChangeState(new SuperState(character));
+		character->ChangeState(new TransformState(character,CharacterTransformState::Super));
 	}
 }
 
