@@ -11,6 +11,7 @@ class CharacterState;
 class NormalState;
 class SuperState;
 class TransformState;
+class FireState;
 
 class Map;
 
@@ -42,6 +43,7 @@ class Character {
 	friend class NormalState;
 	friend class SuperState;
 	friend class TransformState;
+	friend class FireState;
 
 protected:
 	Texture texture;

@@ -1,4 +1,5 @@
 ﻿#include "../headers/SuperState.h"
+#include "../headers/FireState.h"
 #include "../headers/Character.h"
 #include <raylib.h>
 
@@ -138,6 +139,11 @@ void SuperState::Update(float deltatime) {
 		else {
 			character->setActionState(ActionState::Run);
 		}
+	}
+
+	// nhấn phím KEY_I để chuyển trạng thái từ Superstate sang FireState
+	if (IsKeyPressed(KEY_I)) {
+		character->ChangeState(new FireState(character));
 	}
 }
 
