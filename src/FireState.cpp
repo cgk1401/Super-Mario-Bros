@@ -1,4 +1,4 @@
-#include "../headers/FireState.h"
+﻿#include "../headers/FireState.h"
 #include "../headers/Character.h"
 #include <raylib.h>
 
@@ -57,10 +57,91 @@ void FireState::SetAnimation(Character* c) {
 }
 
 void FireState::Update(float deltatime) {
+	character->animations[character->currentAction].Update(deltatime);
+
+	HandleInput(deltatime);
+	if (!isGround) {
+		if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
+			character->velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
+		}
+		else {
+			character->velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
+		}
+		character->setActionState(ActionState::Jump);
+	}
+
+	character->position.x += character->velocity.x * deltatime;
+	character->position.y += character->velocity.y * deltatime;
+
+	// trạng thái đang rơi xuống
+	if (character->position.y + character->animations[character->currentAction].getcurrentframe().height * character->scale >= character->BasePosition && isGround == false) {
+		character->position.y = character->BasePosition - character->animations[character->currentAction].getcurrentframe().height * character->scale;
+		character->velocity.y = 0;
+		isGround = true;
+		isJumpingUp = false;
+
+		if (fabs(character->velocity.x) < 0.1f) {
+			character->setActionState(ActionState::Idle);
+		}
+		else {
+			character->setActionState(ActionState::Run);
+		}
+	}
 
 }
 
 void FireState::HandleInput(float deltatime) {
+	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
+	float acc = config.ACCELERATION;
 
+	if (IsKeyDown(KEY_RIGHT)) {
+		if (character->velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
+		character->velocity.x = approach(character->velocity.x, targetspeed, acc * deltatime);
+		character->setActionState(ActionState::Run);
+		character->setDirection(Direction::Right);
+	}
+	else if (IsKeyDown(KEY_LEFT)) {
+		if (character->velocity.x > 0) acc *= 3.0f;
+		character->velocity.x = approach(character->velocity.x, -targetspeed, acc * deltatime);
+		character->setActionState(ActionState::Run);
+		character->setDirection(Direction::Left);
+	}
+	else if (IsKeyDown(KEY_DOWN)) {
+		if (isGround) {
+			character->setActionState(ActionState::Sit);
+			character->velocity.x = 0;
+		}
+
+	}
+
+	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {
+		if (isGround) {
+			// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
+			if (IsKeyDown(KEY_P)) {
+				character->setActionState(ActionState::FlagpoleHold);
+			}
+			else {
+				// không bấm phím nào thì sẽ đặt trạng thái thành idle
+				character->velocity.x = 0.0f;
+				character->setActionState(ActionState::Idle);
+			}
+		}
+	}
+
+	// xử lý nhảy
+	if (IsKeyPressed(KEY_SPACE) && isGround && character->currentAction != ActionState::Sit) {
+		character->velocity.y = config.JUMPFORCE;
+		isGround = false;
+		isJumpingUp = true;
+		jumpTimeElapsed = 0.0f;
+		character->setActionState(ActionState::Jump);
+	}
+
+	if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
+		jumpTimeElapsed += deltatime;
+	}
+	else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
+		isJumpingUp = false;
+	}
 }
 

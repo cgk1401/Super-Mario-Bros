@@ -119,13 +119,6 @@ void SuperState::Update(float deltatime) {
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
 
-	// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
-	if (isGround) {
-		if (IsKeyDown(KEY_P)) {
-			character->setActionState(ActionState::FlagpoleHold);
-		}
-	}
-
 	// trạng thái đang rơi xuống
 	if (character->position.y + character->animations[character->currentAction].getcurrentframe().height * character->scale >= character->BasePosition && isGround == false) {
 		character->position.y = character->BasePosition - character->animations[character->currentAction].getcurrentframe().height * character->scale;
@@ -173,8 +166,15 @@ void SuperState::HandleInput(float deltatime) {
 
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {
 		if (isGround) {
-			character->velocity.x = 0.0f;
-			character->setActionState(ActionState::Idle);
+			// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
+			if (IsKeyDown(KEY_P)) {
+				character->setActionState(ActionState::FlagpoleHold);
+			}
+			else {
+				// không bấm phím nào thì sẽ đặt trạng thái thành idle
+				character->velocity.x = 0.0f;
+				character->setActionState(ActionState::Idle);
+			}
 		}
 	}
 
