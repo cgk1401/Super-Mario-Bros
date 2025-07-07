@@ -134,6 +134,7 @@
     <ClCompile Include="..\src\Character.cpp" />
     <ClCompile Include="..\src\CharacterState.cpp" />
     <ClCompile Include="..\src\Collision.cpp" />
+    <ClCompile Include="..\src\FireBall.cpp" />
     <ClCompile Include="..\src\FireState.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="..\headers\Collision.h" />
     <ClInclude Include="..\headers\ConcreteTileBehavior.h" />
     <ClInclude Include="..\headers\Enemy.h" />
+    <ClInclude Include="..\headers\FireBall.h" />
     <ClInclude Include="..\headers\FireState.h" />
     <ClInclude Include="..\headers\Game.h" />
     <ClInclude Include="..\headers\GameState.h" />

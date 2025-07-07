@@ -4,6 +4,13 @@
 
 FireState::FireState(Character* character) : CharacterState(character) {}
 
+FireState::~FireState() {
+	for (auto fireball : fireballs) {
+		delete fireball;
+	}
+	fireballs.clear();
+}
+
 void FireState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
 		character->texture = LoadTexture("../Assets/Mario/Mario_&_Luigi.png");
@@ -49,8 +56,15 @@ void FireState::SetAnimation(Character* c) {
 		flagpolehold.frame.push_back({ 156, 141, 14, 27 });
 
 		character->animations[ActionState::FlagpoleHold] = flagpolehold;
-	}
 
+		Animation fireball;
+		fireball.currentframe = 0;
+		fireball.currenttime = 0;
+		fireball.durationtime = 0.1f;
+		fireball.frame.push_back({ 136, 182, 16, 30 });
+
+		character->animations[ActionState::Fireball] = fireball;
+	}
 
 	Rectangle currentframe = character->animations[character->currentAction].getcurrentframe();
 	character->position.y = character->BasePosition - currentframe.height * character->scale;
@@ -58,6 +72,20 @@ void FireState::SetAnimation(Character* c) {
 
 void FireState::Update(float deltatime) {
 	character->animations[character->currentAction].Update(deltatime);
+
+	for (auto fireball : fireballs) {
+		fireball->Update(deltatime);
+	}
+
+	for (auto it = fireballs.begin(); it != fireballs.end();) {
+		if (!(*it)->isActive) {
+			delete* it;
+			it = fireballs.erase(it);
+		}
+		else {
+			++it;
+		}
+	}
 
 	HandleInput(deltatime);
 	if (!isGround) {
@@ -116,9 +144,29 @@ void FireState::HandleInput(float deltatime) {
 
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {
 		if (isGround) {
-			// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
-			if (IsKeyDown(KEY_P)) {
+			if (IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL)) {
+				if (fireballs.size() < maxFireBalls) {
+					FireBall* fireball;
+					if (character->currentdirection == Direction::Right) {
+						fireball = new FireBall({ character->position.x + character->animations[character->currentAction].getcurrentframe().width * character->scale + 20,
+						character->position.y + 30 }, character, character->BasePosition);
+						fireball->SetVelocity({ fireball->FIREBALL_SPEEDX , 0 });
+					}
+					else if (character->currentdirection == Direction::Left) {
+						fireball = new FireBall({ character->position.x - character->animations[character->currentAction].getcurrentframe().width * character->scale + 20,
+						character->position.y + 30 }, character, character->BasePosition);
+						fireball->SetVelocity({ -fireball->FIREBALL_SPEEDX , 0 });
+					}
+
+					fireballs.push_back(fireball);
+				}
+			}
+			else if (IsKeyDown(KEY_P)) {
+				// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
 				character->setActionState(ActionState::FlagpoleHold);
+			}
+			else if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL) && fireballs.size() != 0) {
+				character->setActionState(ActionState::Fireball);
 			}
 			else {
 				// không bấm phím nào thì sẽ đặt trạng thái thành idle
@@ -145,3 +193,6 @@ void FireState::HandleInput(float deltatime) {
 	}
 }
 
+vector<FireBall*> FireState::getFireBall() {
+	return fireballs;
+}

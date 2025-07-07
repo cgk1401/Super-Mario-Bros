@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Animation.h"
-#include <map>
-#include "CharacterState.h"
 #include <iostream>
+#include <map>
+#include "Animation.h"
+#include "CharacterState.h"
+#include "FireState.h"
 
 using namespace std;
 
@@ -12,6 +13,7 @@ class NormalState;
 class SuperState;
 class TransformState;
 class FireState;
+class FireBall;
 
 class Map;
 
@@ -22,6 +24,7 @@ enum class ActionState {
 	Sit,
 	Die,
 	FlagpoleHold,
+	Fireball,
 };
 
 enum class Direction {
@@ -44,6 +47,7 @@ class Character {
 	friend class SuperState;
 	friend class TransformState;
 	friend class FireState;
+	friend class FireBall;
 
 protected:
 	Texture texture;

@@ -53,6 +53,16 @@ void Character::Draw() {
 	Rectangle destination = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
 
 	DrawTexturePro(texture, currentframe, destination, { 0,0 }, 0, WHITE);
+
+	FireState* firestate = dynamic_cast <FireState*> (currentState);
+	if (firestate) {
+		for (int i = 0; i < firestate->getFireBall().size(); i++) {
+			if (firestate->getFireBall()[i]->isActive) {
+				firestate->getFireBall()[i]->Draw(firestate->getCharacter());
+			}
+		}
+	}
+
 }
 
 void Character::Update(float deltatime) {

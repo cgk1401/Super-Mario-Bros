@@ -141,6 +141,9 @@
     <ClCompile Include="..\src\FireState.cpp">
       <Filter>Source Files\Entity\CharacterState</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\FireBall.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -228,6 +231,9 @@
       <Filter>Header Files\Entity\CharacterState</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\FireState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\FireBall.h">
       <Filter>Header Files\Entity\CharacterState</Filter>
     </ClInclude>
   </ItemGroup>
