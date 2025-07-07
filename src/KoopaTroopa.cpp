@@ -15,9 +15,6 @@ KoopTroopa::KoopTroopa(Vector2 position) {
 }
 
 KoopTroopa::~KoopTroopa() {
-	if (texture.id != 0) {
-		UnloadTexture(texture);
-	}
 }
 
 void KoopTroopa::LoadSource() {

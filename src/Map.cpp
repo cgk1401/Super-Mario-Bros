@@ -36,6 +36,14 @@ Map::Map(const char* texturePath, int r, int c) {
     }
 	//this prevents some invisible tiles
 
+      for (int r = 0; r < tileRows; r++) {
+        cout << r <<": ";
+        for (int c = 0; c < tileSetSourceRects[r].size(); c++) {
+            cout << c <<" " ;
+        }
+        cout << endl;
+        }
+
 
     createTileCatalog();
 }
@@ -274,19 +282,24 @@ void Map::draw(bool isEditing) {
 }
 
 int Map::getTileIDFromCoords(int fileRow, int fileCol) const {
-    if (fileRow < 3) {
-        return (fileRow - 1) * 33 + fileCol;
+    if (fileRow < 0 || fileRow >= tileRows ||
+        fileCol < 0 || fileCol >= tileSetSourceRects[fileRow].size()) {
+        TraceLog(LOG_ERROR, "OUT OF RANGE");
+        return 0;
     }
-    else if (fileRow > 2 && fileRow < 9) {
-        return (fileRow - 1) * 33 + fileCol - (fileRow - 1) / 2 * 3;
+
+    int idOffset = 0;
+    for (int r = 0; r < fileRow; ++r) {
+        idOffset += tileSetSourceRects[r].size();
     }
-	else return 252 + (fileRow - 9) * 24 + fileCol; // Adjust for rows with fewer columns
+    return idOffset + fileCol;
 }
 
 
 Tile Map::getTile(int tileID) const {
     auto it = tileCatalog.find(tileID);
     if (it == tileCatalog.end()) {
+        TraceLog(LOG_INFO, "inavailable in catalog");
         return Tile(0, tileSetSourceRects[0][0], EMPTY, tileCatalog.at(0).behavior);
     }
     return Tile(it->second.id, it->second.srcRect, it->second.type, it->second.behavior);
@@ -327,7 +340,7 @@ void Map::removeTile(int row, int col) {
     mapData[row][col].tileID = 0;
     mapData[row][col].hasItem = false;
     mapData[row][col].offsetPos = { 0, 0 };
-
+    
     if (mapData[row][col].state) {
         delete mapData[row][col].state;
         mapData[row][col].state = nullptr;

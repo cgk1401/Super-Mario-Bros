@@ -27,9 +27,9 @@ PiranhaPlant::PiranhaPlant(Vector2 pipeTop, float riseHeight) {
 	LoadSource();
 }
 PiranhaPlant::~PiranhaPlant() {
-	if (texture.id > 0) {
+	/*if (texture.id > 0) {
 		UnloadTexture(texture);
-	}
+	}*/
 }
 
 void PiranhaPlant::LoadSource() {

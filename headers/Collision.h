@@ -10,7 +10,7 @@ private:
 
     ~Collision();
 public:
-
+  
     static Collision* getInstance() {
         if (!instance)
             instance = new Collision;

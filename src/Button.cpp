@@ -37,10 +37,10 @@ Button::Button(const char* imagePath, float x, float y, float width, float heigh
 
 Button::~Button() {
     //Ơ sao bị lỗi Unload liên tục => ko draw dc texture nè.
-    if (useTexture && texture.id != 0) {
-        TraceLog(LOG_INFO, "Unloading texture: %s", label.c_str());
-        UnloadTexture(texture);
-    }
+    // if (useTexture && texture.id != 0) {
+    //     TraceLog(LOG_INFO, "Unloading texture: %s", label.c_str());
+    //     UnloadTexture(texture);
+    // }
 }
 void Button::operator=(const Button& b) {
     bounds = b.bounds;

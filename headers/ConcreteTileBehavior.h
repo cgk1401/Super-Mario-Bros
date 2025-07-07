@@ -6,6 +6,7 @@
 //ko là block gì hết
 class EmptyTileBehavior : public TileBehavior {
 public:
+	TileBehavior* clone() const override {return new EmptyTileBehavior(*this);}
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
@@ -16,6 +17,7 @@ public:
 };
 class DecorationTileBehavior : public TileBehavior {
 public:
+	TileBehavior* clone() const override {return new DecorationTileBehavior(*this);}
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
@@ -27,6 +29,7 @@ public:
 
 class ItemBehavior : public TileBehavior {
 public:
+	TileBehavior* clone() const override {return new ItemBehavior(*this);}
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
@@ -36,6 +39,7 @@ public:
 };
 class SolidTileBehavior : public TileBehavior { //dùng chugn cho ground + mấy block đứng lên dc nhưng ko chứa item hay hiệu ứng j (pipe, ...)
 public:
+	TileBehavior* clone() const override {return new SolidTileBehavior(*this);}
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{
 	
 		//..
@@ -61,6 +65,7 @@ struct BrickTileState : public TileState {
 
 class BrickTileBehavior : public TileBehavior {
 public:
+	TileBehavior* clone() const override {return new BrickTileBehavior(*this);}
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override; // bị vỡ ra -> add effect mảnh vỡ
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override {} // đứng lên thì ko sao -> giống solid -> dùng lại SolidTileBehavior::onFootCollision(..)
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override {} // tương tự
@@ -71,6 +76,7 @@ public:
 
 class QuestionTileBehavior : public TileBehavior { // sẽ xuất hiện coin(chủ yếu), xuất hiện mushroom khi đang ở dạng nhỏ xí, xuất hiện flower khi đang ở dạng super cấp 1, star thì ....
 public:
+	TileBehavior* clone() const override {return new QuestionTileBehavior(*this);}
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
@@ -82,6 +88,7 @@ public:
 
 class CoinTileBehavior : public TileBehavior {
 public:
+	TileBehavior* clone() const override {return new CoinTileBehavior(*this);}
 	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
