@@ -13,13 +13,15 @@ Collision::~Collision() {
 
 void Collision::handlePlayerCollision(Character* mario, Map* map){
     
-    mario->onGround = false;
+    mario->currentState->isGround = false;
+
+    Rectangle bound = mario->getBound();
 
     if (mario->position.x < 0) mario->position.x = 0;
-    int characterLeftTile = (int)((mario->bound.x + mario->bound.width / 2) / Map::TILE_SIZE);
-    int characterRightTile = (int)((mario->bound.x + mario->bound.width) / Map::TILE_SIZE);
-    int characterTopTile = (int)(mario->bound.y / Map::TILE_SIZE);
-    int characterBottomTile = (int)((mario->bound.y + mario->bound.height) / Map::TILE_SIZE);
+    int characterLeftTile = (int)((bound.x + bound.width / 2) / Map::TILE_SIZE);
+    int characterRightTile = (int)((bound.x + bound.width) / Map::TILE_SIZE);
+    int characterTopTile = (int)(bound.y / Map::TILE_SIZE);
+    int characterBottomTile = (int)((bound.y + bound.height) / Map::TILE_SIZE);
 
     int startCol = max(0, characterLeftTile - 1);
     int endCol = min(map->columns - 1, characterRightTile + 1);
@@ -36,24 +38,24 @@ void Collision::handlePlayerCollision(Character* mario, Map* map){
             //if (!tileInstance || tileInstance->tileID == 0) continue;
             //tile.behavior->update(GetFrameTime(), x, y, map, tileInstance);
           
-            if (CheckCollisionRecs(mario->bound, tileRect)) {
+            if (CheckCollisionRecs(bound, tileRect)) {
                 if (tile.behavior->isSolid()) {
-                    float overlapX = fmin(mario->bound.x + mario->bound.width, tileRect.x + tileRect.width) - fmax(mario->bound.x, tileRect.x);
-                    float overlapY = fmin(mario->bound.y + mario->bound.height, tileRect.y + tileRect.height) - fmax(mario->bound.y, tileRect.y);
+                    float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);
+                    float overlapY = fmin(bound.y + bound.height, tileRect.y + tileRect.height) - fmax(bound.y, tileRect.y);
 
                     if (overlapX > 0 && overlapY > 0) {
                         if (overlapY < overlapX) { // trên dưới của tile
                             if (mario->velocity.y > 0) { // is falling
                                 mario->position.y -= overlapY;
                                 mario->velocity.y = 0;
-                                mario->onGround = true;
-                                mario->isJumpingUp = false;
+                                mario->currentState->isGround = true;
+                                mario->currentState->isJumpingUp = false;
                                 tile.behavior->onFootCollision(mario, x, y, map, tileInstance);
                             }
                             else if (mario->velocity.y < 0) { // chạm đầu
                                 mario->position.y += overlapY;
                                 mario->velocity.y = 0;
-                                mario->isJumpingUp = false;
+                                mario->currentState->isJumpingUp = false;
                                 cout << x << " - " << y << endl;
                                 tile.behavior->onHeadCollision(mario, x, y, map, tileInstance);
                             }
@@ -71,8 +73,8 @@ void Collision::handlePlayerCollision(Character* mario, Map* map){
                             mario->velocity.x = 0;
                             tile.behavior->onGeneralCollision(mario, x, y, map, tileInstance);
                         }
-                        mario->bound.x = mario->position.x;
-                        mario->bound.y = mario->position.y;
+                        bound.x = mario->position.x;
+                        bound.y = mario->position.y;
                     }
                 }
             }

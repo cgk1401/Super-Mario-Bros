@@ -42,17 +42,19 @@ void PlayState::update(Game& game){
         }
     }
     if (isPlaying) {
-        camera.update(mario.getBound(), screenWidth);
+        //camera.update(mario.getBound(), screenWidth);
         gui.update(game); 
-        bg.update( mario,camera.getCamera(), dt);
+        //bg.update( mario,camera.getCamera(), dt);
         //fg.update( mario,camera.getCamera(), dt);
-        mario.Update(dt, map);
+        //mario.Update(dt, map);
         map->update();
+        mario->Update(dt);
         EffectManager::get().update(dt);
             
         for(auto& e: enemies){
             e->Update(dt, map);
         }
+    
 
         //remove if any enemies die
         enemies.erase(remove_if(enemies.begin(), enemies.end(),
@@ -82,7 +84,7 @@ void PlayState::render() {
    
     map->draw();
     EffectManager::get().draw();
-    mario.Draw();
+    mario->Draw();
     for(auto& e: enemies){
         e->Draw();
     }

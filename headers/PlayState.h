@@ -26,7 +26,8 @@ private:
     GUI gui;
     PauseState pauseMenu;
     Map* map;
-    Mario mario;
+    //Mario mario;
+    Character* mario = new Mario({100, 500});
     vector<Enemy*> enemies;
 
     CameraController camera;
