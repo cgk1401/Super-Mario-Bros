@@ -1,44 +1,89 @@
 #pragma once
 
-#include "Animation.h"
+#include <iostream>
 #include <map>
+#include "Animation.h"
+#include "CharacterState.h"
+#include "FireState.h"
+
+using namespace std;
+
+class CharacterState;
+class NormalState;
+class SuperState;
+class TransformState;
+class FireState;
+class FireBall;
+
 class Map;
 
-enum Actionstate {
-	IDLE,
+enum class ActionState {
+	Idle,
 	Run,
 	Jump,
-	Fall,
-	DIE,
+	Sit,
+	Die,
+	FlagpoleHold,
+	Fireball,
 };
 
-class Character : public Animation{
+// class Character {
+// protected:
+// 	Texture2D texture;
+// 	std::map <Actionstate, Animation> animation;
+// 	Actionstate currentstate = Actionstate::IDLE;
+// 	Vector2 position = { 0,0 };
+// 	const float speed = 2;
+
+// 	const float gravity;
+enum class Direction {
+	Left,
+	Right
+};
+
+enum class CharacterType {
+	Mario,
+	Luigi,
+};
+
+enum class CharacterTransformState {
+	Super,
+};
+
+class Character {
+	friend class Collision;
+	friend class CharacterState;
+	friend class NormalState;
+	friend class SuperState;
+	friend class TransformState;
+	friend class FireState;
+	friend class FireBall;
+
 protected:
-	Texture2D texture{};
-	std::map <Actionstate, Animation> animation;
-	Actionstate currentstate = Actionstate::IDLE;
-	Vector2 position = { 0,0 };
-	const float speed = 2;
-
-	const float gravity;
+	Texture texture;
+	map <ActionState, Animation> animations;
+	Vector2 position;
 	Vector2 velocity;
-	float scale;
-	Rectangle bound;
 
-	bool onGround;
-	bool isJumpingUp;
+	CharacterType type;
+	CharacterState* currentState;
+	ActionState currentAction;
+	Direction currentdirection;
+
+	float scale = 4.0f;
+	float BasePosition;
 
 public:
-	Character();
-	//virtual ~Character();
-	friend class Collision;
+	virtual ~Character();
 
-	virtual void Update(float deltatime, Map* map) = 0;
-	virtual void Draw() = 0;
-	virtual void LoadSource() = 0;
-	virtual void MoveLeft() = 0;
-	virtual void MoveRight() = 0;
-
-	virtual Vector2 getPos();
-	virtual Rectangle getBound() { return bound; }
+	void ChangeState(CharacterState* newState);
+	CharacterState* GetCurrentState() const;
+	virtual CharacterType getCharacterType() = 0;
+	void setActionState(ActionState newActionState);
+	void setDirection(Direction newDirection);
+	Rectangle getBound() const;
+	ActionState getCurrentAction() const;
+	
+	void Draw();
+	void Update(float deltatime);
 };

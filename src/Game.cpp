@@ -32,7 +32,7 @@ void Game::run(){
         currentState->update(*this);
 
         BeginDrawing();
-            ClearBackground(SKYBLUE);
+            ClearBackground(Color(92, 148, 252));
             //Vẽ 
             currentState->render();
         EndDrawing();

@@ -1,11 +1,7 @@
-﻿#include "../headers/Mario.h"
-#include "../headers/Global.h"
-#include "../headers/Collision.h"
+#include "../headers/Luigi.h"
 
-class Map;
-
-Mario::Mario() {
-	type = CharacterType::Mario;
+Luigi::Luigi() {
+	type = CharacterType::Luigi;
 	currentAction = ActionState::Idle;
 	position = { 100, 300 };
 	this->BasePosition = 300;
@@ -14,8 +10,8 @@ Mario::Mario() {
 	currentdirection = Direction::Right;
 }
 
-Mario::Mario(Vector2 position) {
-	type = CharacterType::Mario;
+Luigi::Luigi(Vector2 position) {
+	type = CharacterType::Luigi;
 	currentAction = ActionState::Idle;
 	this->position = position;
 	this->BasePosition = position.y;
@@ -24,6 +20,6 @@ Mario::Mario(Vector2 position) {
 	currentdirection = Direction::Right;
 }
 
-CharacterType Mario::getCharacterType() {
-	return CharacterType::Mario;
+CharacterType Luigi::getCharacterType() {
+	return CharacterType::Luigi;
 }

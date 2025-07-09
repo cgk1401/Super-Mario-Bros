@@ -1,17 +1,17 @@
-﻿#pragma once
+#pragma once
 
 #include "Character.h"
 #include <map>
 #include "raylib.h"
 #include "NormalState.h"
 
-class Mario : public Character {
+class Luigi : public Character {
 
 public :
-	Mario();
-	Mario(Vector2 position);
-	
-	~Mario() override = default;
+	Luigi();
+	Luigi(Vector2 position);
+
+	~Luigi() override = default;
 
 	CharacterType getCharacterType() override;
 

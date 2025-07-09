@@ -8,6 +8,12 @@
 #include "../headers/Map.h"
 #include "../headers/CameraController.h"
 #include "../headers/ParallaxManager.h"
+#include "../headers/GoomBa.h"
+#include "../headers/KoopaTroopa.h"
+#include "../headers/PiranhaPlant.h"
+#include "../headers/Enemy.h"
+
+
 class PlayState : public GameState{
 public:
     PlayState();
@@ -20,12 +26,13 @@ private:
     GUI gui;
     PauseState pauseMenu;
     Map* map;
-    Mario mario;
+    //Mario mario;
+    Character* mario = new Mario({100, 500});
+    vector<Enemy*> enemies;
+
     CameraController camera;
     ParallaxManager bg; //background
     ParallaxManager fg; //foreground
-    
-
 };
 
 #endif

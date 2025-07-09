@@ -7,13 +7,13 @@ enum TileType {
 	GROUND,
 	BRICK,
 	PIPE,
-	COINS_BLOCK,     //A block of multiple coins
-	QUESTION_BLOCK, // consisting of coin, power-up items such as flower, star,. depending on game, level or mario's super form
+	COINS_BLOCK,			//A block of multiple coins
+	QUESTION_BLOCK,			// consisting of coin, power-up items such as flower, star,. depending on game, level or mario's super form
 	USED_QUESTION_BLOCK,
-	DECORATION_BLOCK, // background tile, not interactable
-	ITEM, // item tile, can be mushroom, flower, star, coin, etc.
-	LAVA_FLOOR, // lava tile, can be used for traps
-	FINISHING_POLE, // finishing pole tile, used in some levels to mark the end. trigger some events when mario touches it
+	DECORATION_BLOCK,		// background tile, not interactable
+	ITEM,					// item tile, can be mushroom, flower, star, coin, etc.
+	LAVA_FLOOR,				// lava tile, can be used for traps
+	FINISHING_POLE,			// finishing pole tile, used in some levels to mark the end. trigger some events when mario touches it
 	//list ra hết mấy loại tile nha...
 };
 
@@ -29,11 +29,23 @@ public:
 		: id(_id), srcRect(_sourceRect), type(_type), behavior(_behavior) {
 	}
 
-	//Tile(const Tile&) = delete; // Prevent co2g
-	//Tile& operator=(const Tile&) = delete; // Prevent assignment
+	Tile(const Tile& other)
+    : id(other.id), srcRect(other.srcRect), type(other.type) {
+    behavior = other.behavior ? other.behavior->clone() : nullptr;
+	}
+	Tile& operator=(const Tile& other) {
+    if (this != &other) {
+        id = other.id;
+        srcRect = other.srcRect;
+        type = other.type;
+        delete behavior;
+        behavior = other.behavior ? other.behavior->clone() : nullptr;
+    }
+    return *this;
+}
 	Tile(Tile&&) = default; // Allow moving
 	Tile& operator=(Tile&&) = default;
-
+	
 	/*
 	* loi memory ko delete dc..  ;-;
 	~Tile() {
