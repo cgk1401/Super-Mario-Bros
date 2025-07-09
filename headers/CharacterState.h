@@ -13,6 +13,7 @@ struct PhysicsConfig {
 };
 
 class CharacterState {
+	friend class Collision;
 protected :
 	Character* character;
 

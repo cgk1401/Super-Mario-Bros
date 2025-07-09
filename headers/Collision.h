@@ -5,17 +5,7 @@ class Enemy;
 class Map;
 
 class Collision{
-private:
-    static Collision* instance;
-
-    ~Collision();
 public:
-  
-    static Collision* getInstance() {
-        if (!instance)
-            instance = new Collision;
-        return instance;
-    }
-    void handlePlayerCollision(Character* mario, Map* map);
-    void handleEnemyCollision(Enemy* enemies, Map* map);
+    static void handlePlayerCollision(Character* mario, Map* map);
+    static void handleEnemyCollision(Enemy* enemies, Map* map);
 };

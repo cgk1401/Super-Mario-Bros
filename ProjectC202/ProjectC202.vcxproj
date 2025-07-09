@@ -134,7 +134,6 @@
     <ClCompile Include="..\src\CameraController.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
     <ClCompile Include="..\src\CoinCollectEffect.cpp" />
-    <ClCompile Include="..\src\Collision.cpp" />
     <ClCompile Include="..\src\CharacterState.cpp" />
     <ClCompile Include="..\src\Collision.cpp" />
     <ClCompile Include="..\src\ConcreteTileBehavior.cpp" />

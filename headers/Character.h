@@ -51,6 +51,7 @@ enum class CharacterTransformState {
 };
 
 class Character {
+	friend class Collision;
 	friend class CharacterState;
 	friend class NormalState;
 	friend class SuperState;
@@ -69,7 +70,7 @@ protected:
 	ActionState currentAction;
 	Direction currentdirection;
 
-	float scale = 3.0f;
+	float scale = 4.0f;
 	float BasePosition;
 
 public:
@@ -80,7 +81,9 @@ public:
 	virtual CharacterType getCharacterType() = 0;
 	void setActionState(ActionState newActionState);
 	void setDirection(Direction newDirection);
-
+	Rectangle getBound() const;
+	ActionState getCurrentAction() const;
+	
 	void Draw();
 	void Update(float deltatime);
 };

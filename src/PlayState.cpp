@@ -3,6 +3,7 @@
 #include "../headers/MenuState.h"
 #include "../headers/EffectManager.h"
 #include "../headers/EnemyFactory.h"
+#include "../headers/Collision.h"
 
 PlayState::PlayState() {
     gui = GUI();
@@ -42,13 +43,15 @@ void PlayState::update(Game& game){
         }
     }
     if (isPlaying) {
-        //camera.update(mario.getBound(), screenWidth);
+        camera.update(mario->getBound(), screenWidth);
         gui.update(game); 
         //bg.update( mario,camera.getCamera(), dt);
         //fg.update( mario,camera.getCamera(), dt);
         //mario.Update(dt, map);
         map->update();
+        Collision::handlePlayerCollision(mario, map);
         mario->Update(dt);
+        
         EffectManager::get().update(dt);
             
         for(auto& e: enemies){
@@ -88,10 +91,6 @@ void PlayState::render() {
     for(auto& e: enemies){
         e->Draw();
     }
-    // goomba.Draw();
-    // kooptroopa.Draw();
-    // piranhaPlant.Draw();
-    DrawRectangle(500, 200, 150, 150, RED);
     //fg.draw();
     EndMode2D();
 

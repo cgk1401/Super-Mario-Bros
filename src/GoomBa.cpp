@@ -62,7 +62,7 @@ void GoomBa::Update(float deltatime, Map* map) {
 	Rectangle currentFrame = animation[currentState].getcurrentframe();
     bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
 
-	Collision::getInstance()->handleEnemyCollision(this, map);
+	Collision::handleEnemyCollision(this, map);
 
 }
 bool GoomBa::isDead() {

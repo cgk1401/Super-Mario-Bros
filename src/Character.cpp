@@ -26,20 +26,31 @@ CharacterState* Character::GetCurrentState() const {
 }
 
 void Character::setActionState(ActionState newActionState) {
-	if (currentAction != newActionState && currentState->getIsGround()) {
+	if (currentAction != newActionState) {
 		currentAction = newActionState;
-		Rectangle currentframe = animations[currentAction].getcurrentframe();
-		position.y = BasePosition - currentframe.height * scale;
-	}
-	else {
-		currentAction = newActionState;
+		animations[currentAction].reset();
+		//Rectangle currentframe = animations[currentAction].getcurrentframe();
+		//position.y = BasePosition - currentframe.height * scale;
 	}
 }
 
 void Character::setDirection(Direction newDirection) {
 	currentdirection = newDirection;
 }
+Rectangle Character::getBound() const {
+    Rectangle frame = animations.at(currentAction).getcurrentframe();
+	
+    return {
+        position.x,
+        position.y,
+        frame.width * scale,
+        frame.height * scale
+    };
+}
 
+ActionState Character::getCurrentAction() const{
+	return currentAction;
+}
 void Character::Draw() {
 	Rectangle currentframe = animations[currentAction].getcurrentframe();
 	

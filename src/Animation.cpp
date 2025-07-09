@@ -10,7 +10,7 @@ void Animation::Update(float deltatime) {
 	}
 }
 
-Rectangle Animation::getcurrentframe() {
+Rectangle Animation::getcurrentframe() const {
 	return frame[currentframe];
 }
 

@@ -1,5 +1,6 @@
 ﻿#include "../headers/FireState.h"
 #include "../headers/Character.h"
+#include "../headers/TextureManager.h"
 #include <raylib.h>
 
 FireState::FireState(Character* character) : CharacterState(character) {}
@@ -13,7 +14,7 @@ FireState::~FireState() {
 
 void FireState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
-		character->texture = LoadTexture("../Assets/Mario/Mario_&_Luigi.png");
+		character->texture = TextureManager::get().load(TextureType::MARIO);
 
 		Animation idle;
 		idle.currentframe = 0;
@@ -27,7 +28,8 @@ void FireState::SetAnimation(Character* c) {
 		run.currentframe = 0;
 		run.currenttime = 0;
 		run.durationtime = 0.1f;
-		run.frame.push_back({ 20, 142, 16, 30 });
+		run.frame.push_back({ 20, 140, 16, 32 });
+		run.frame.push_back({ 38, 140, 16, 32});
 		run.frame.push_back({ 56, 140, 16, 32 });
 
 		character->animations[ActionState::Run] = run;
@@ -52,8 +54,8 @@ void FireState::SetAnimation(Character* c) {
 		flagpolehold.currentframe = 0;
 		flagpolehold.currenttime = 0;
 		flagpolehold.durationtime = 0.1f;
-		flagpolehold.frame.push_back({ 138, 141, 14, 29 });
-		flagpolehold.frame.push_back({ 156, 141, 14, 27 });
+		flagpolehold.frame.push_back({ 136, 139, 16, 32 });
+		flagpolehold.frame.push_back({ 154, 139, 16, 32 });
 
 		character->animations[ActionState::FlagpoleHold] = flagpolehold;
 
@@ -61,7 +63,7 @@ void FireState::SetAnimation(Character* c) {
 		fireball.currentframe = 0;
 		fireball.currenttime = 0;
 		fireball.durationtime = 0.1f;
-		fireball.frame.push_back({ 136, 182, 16, 30 });
+		fireball.frame.push_back({ 136, 180, 16, 32 });
 
 		character->animations[ActionState::Fireball] = fireball;
 	}
@@ -95,27 +97,24 @@ void FireState::Update(float deltatime) {
 		else {
 			character->velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
 		}
-		character->setActionState(ActionState::Jump);
+		if(isJumpingUp) character->setActionState(ActionState::Jump);
+	}
+	else {
+		if (fabs(character->velocity.x) < 0.1f) {
+			if (IsKeyDown(KEY_P)) {
+				character->setActionState(ActionState::FlagpoleHold);
+			 }
+			// else {
+			// 	character->setActionState(ActionState::Idle);
+			// }
+		} 
+		// else {
+		// 	character->setActionState(ActionState::Run);
+		// }
 	}
 
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
-
-	// trạng thái đang rơi xuống
-	if (character->position.y + character->animations[character->currentAction].getcurrentframe().height * character->scale >= character->BasePosition && isGround == false) {
-		character->position.y = character->BasePosition - character->animations[character->currentAction].getcurrentframe().height * character->scale;
-		character->velocity.y = 0;
-		isGround = true;
-		isJumpingUp = false;
-
-		if (fabs(character->velocity.x) < 0.1f) {
-			character->setActionState(ActionState::Idle);
-		}
-		else {
-			character->setActionState(ActionState::Run);
-		}
-	}
-
 }
 
 void FireState::HandleInput(float deltatime) {
@@ -145,11 +144,12 @@ void FireState::HandleInput(float deltatime) {
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {
 		if (isGround) {
 			if (IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL)) {
+				
 				if (fireballs.size() < maxFireBalls) {
 					FireBall* fireball;
 					if (character->currentdirection == Direction::Right) {
 						fireball = new FireBall({ character->position.x + character->animations[character->currentAction].getcurrentframe().width * character->scale + 20,
-						character->position.y + 30 }, character, character->BasePosition);
+						character->position.y + 30 }, character, character->position.y + character->animations[character->currentAction].getcurrentframe().height * character->scale);
 						fireball->SetVelocity({ fireball->FIREBALL_SPEEDX , 0 });
 					}
 					else if (character->currentdirection == Direction::Left) {
@@ -177,20 +177,35 @@ void FireState::HandleInput(float deltatime) {
 	}
 
 	// xử lý nhảy
-	if (IsKeyPressed(KEY_SPACE) && isGround && character->currentAction != ActionState::Sit) {
+	// if (IsKeyPressed(KEY_SPACE) && isGround && character->currentAction != ActionState::Sit) {
+	// 	character->velocity.y = config.JUMPFORCE;
+	// 	isGround = false;
+	// 	isJumpingUp = true;
+	// 	jumpTimeElapsed = 0.0f;
+	// 	character->setActionState(ActionState::Jump);
+	// }
+
+	// if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
+	// 	jumpTimeElapsed += deltatime;
+	// }
+	// else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
+	// 	isJumpingUp = false;
+	// }
+	if (IsKeyDown(KEY_SPACE)) {
+	if (isGround) {
 		character->velocity.y = config.JUMPFORCE;
 		isGround = false;
 		isJumpingUp = true;
 		jumpTimeElapsed = 0.0f;
-		character->setActionState(ActionState::Jump);
 	}
-
-	if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
+	else if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
 		jumpTimeElapsed += deltatime;
+		character->velocity.y = config.JUMPFORCE;  // hoặc scale theo thời gian
 	}
-	else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
+	} else {
 		isJumpingUp = false;
 	}
+
 }
 
 vector<FireBall*> FireState::getFireBall() {

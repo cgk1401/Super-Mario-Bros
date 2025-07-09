@@ -117,9 +117,6 @@
     <ClCompile Include="..\src\ParallaxManager.cpp">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Collision.cpp">
-      <Filter>Source Files\Core</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\ConcreteTileBehavior.cpp">
       <Filter>Source Files\Map\Tile</Filter>
     </ClCompile>
@@ -149,6 +146,7 @@
     </ClCompile>
     <ClCompile Include="..\src\TextureManager.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Luigi.cpp">
       <Filter>Source Files\Entity\Character</Filter>
     </ClCompile>
@@ -169,6 +167,9 @@
     </ClCompile>
     <ClCompile Include="..\src\FireBall.cpp">
       <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Collision.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,9 +245,6 @@
     <ClInclude Include="..\headers\CoinCollectEffect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Mario.h">
-      <Filter>Header Files\Entity\Character</Filter>
-    </ClInclude>
     <ClInclude Include="..\headers\Character.h">
       <Filter>Header Files\Entity\Character</Filter>
     </ClInclude>
@@ -264,6 +262,7 @@
     </ClInclude>
     <ClInclude Include="..\headers\TextureManager.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
     <ClInclude Include="..\headers\Luigi.h">
       <Filter>Header Files\Entity\Character</Filter>
     </ClInclude>
