@@ -20,13 +20,17 @@ Map::Map(const char* texturePath, int r, int c) {
     //this is the old method, result in some invisible tiles
 
     for (int i = 0; i < 8; i += 2) {
-		tileSetSourceRects[i].resize(33);
+		tileSetSourceRects[i].resize(30);
     }
     for (int i = 1; i < 8; i += 2) {
-        tileSetSourceRects[i].resize(30);
+        tileSetSourceRects[i].resize(27);
 	}
-    for (int i = 8; i < tileRows; i++) {
+    for (int i = 8; i < 21; i++) {
         tileSetSourceRects[i].resize(24);
+    }
+
+    for (int i = 21; i < 28; i++) {
+        tileSetSourceRects[i].resize(15);
     }
 
     for (int x = 0; x < tileRows; x++) {
@@ -86,89 +90,76 @@ void Map::createTileCatalog() {
         for (int j = 1; j < 7; j++) {
             tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tile
         }
-		//ground tiles, solid, not breakable, not interactable, no effect (except for cannon head)
+        //ground tiles, solid, not breakable, not interactable, no effect (except for cannon head)
 
 
 
         for (int j = 7; j < 9; j++) {
-			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], BRICK, new BrickTileBehavior())); //Brick tile
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], BRICK, new BrickTileBehavior())); //Brick tile
         }
-		//brick tiles, solid, breakable if hit under, no effect
+        //brick tiles, solid, breakable if hit under, no effect
 
 
 
         for (int j = 9; j < 16; j++) {
-			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
         }
-		//castle tiles, work as decoration
+        //castle tiles, work as decoration
 
 
 
-		tileCatalog.emplace(getTileIDFromCoords(i, 16), Tile(1, tileSetSourceRects[i - 1][16 - 1], PIPE, new SolidTileBehavior())); //Pipe tile
-		//pipe tiles, solid, not breakable, not interactable, has pipe effect (add later)
+        tileCatalog.emplace(getTileIDFromCoords(i, 16), Tile(1, tileSetSourceRects[i - 1][16 - 1], PIPE, new SolidTileBehavior())); //Pipe tile
+        //pipe tiles, solid, not breakable, not interactable, has pipe effect (add later)
 
 
 
         for (int j = 17; j < 20; j++) {
-			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
         }
-		//decoration tiles, work as decoration
+        //decoration tiles, work as decoration
 
 
 
-		if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(1, tileSetSourceRects[i - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior())); //Question Block tile
-		else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(1, tileSetSourceRects[i - 1][20 - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+        if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(1, tileSetSourceRects[i - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior())); //Question Block tile
+        else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(1, tileSetSourceRects[i - 1][20 - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
         //invisible question block tile, solid, not breakable, not interactable, has question block effect (add later)
-		//decoration tile, work as decoration
+        //decoration tile, work as decoration
 
+        ////
 
-
-        for (int j = 21; j < 24; j++) {
-			if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior())); //Question block tile
-			//Question block tiles, solid, not breakable, not interactable, has question block effect (add later)
-
-
-
-            else tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], ITEM, new ItemBehavior()));
-			//Item tile, not solid, not breakable, disappear when collision with player (effect add later)
-        }
-
-
-
-        if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 24), Tile(1, tileSetSourceRects[i - 1][24 - 1], USED_QUESTION_BLOCK, new SolidTileBehavior())); //Ground tile
-        else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 24), Tile(1, tileSetSourceRects[i - 1][24 - 1], ITEM, new ItemBehavior())); //Item tile
-        //ground tiles, solid, not breakable, not interactable, no effect
-        //Item tile, not solid, not breakable, disappear when collision with player (effect add later)
-
-
-
-        tileCatalog.emplace(getTileIDFromCoords(i, 25), Tile(1, tileSetSourceRects[i - 1][25 - 1], ITEM, new ItemBehavior())); //Item tile
-        //Item tile, not solid, not breakable, disappear when collision with player (effect add later)
-
-
-
-        for (int j = 26; j < 29; j++) {
-			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
-        }
-		//decoration tiles, work as decoration
-
-
-
-        tileCatalog.emplace(getTileIDFromCoords(i, 29), Tile(1, tileSetSourceRects[i - 1][29 - 1], LAVA_FLOOR, new DecorationTileBehavior())); //Decoration tile
-		//lava floor tile, work as a trap, die when touch, somehow has the same behavior as decoration tile
-        
-
-
-		tileCatalog.emplace(getTileIDFromCoords(i, 30), Tile(1, tileSetSourceRects[i - 1][30 - 1], GROUND, new SolidTileBehavior())); //ground tile
-		//ground tile, solid, not breakable, not interactable, the bridge tile has effect (add later)
-
-
-
-        for (int j = 30; j < 34; j++) {
+        for (int j = 21; j < 23; j++) {
+            if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], ITEM, new ItemBehavior()));
             if (i % 2 == 1) {
-                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tile
+                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior()));
+                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], USED_QUESTION_BLOCK, new SolidTileBehavior()));
             }
-            //ground tiles, solid, not breakable, not interactable, no effect
+        }
+        //Items
+        //Quesion block
+        //Used Question block
+
+
+        for (int j = 23; j < 26; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+        }
+        //decoration tiles, work as decoration
+
+
+
+        tileCatalog.emplace(getTileIDFromCoords(i, 26), Tile(1, tileSetSourceRects[i - 1][26 - 1], LAVA_FLOOR, new DecorationTileBehavior())); //Decoration tile
+        //lava floor tile, work as a trap, die when touch, somehow has the same behavior as decoration tile
+
+
+
+        tileCatalog.emplace(getTileIDFromCoords(i, 27), Tile(1, tileSetSourceRects[i - 1][27 - 1], GROUND, new SolidTileBehavior())); //ground tile
+        //ground tile, solid, not breakable, not interactable, the bridge tile has effect (add later)
+
+
+        if (i % 2 == 1) {
+            for (int j = 28; j < 31; j++) {
+                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground 
+                //ground tiles, solid, not breakable, not interactable, no effect
+            }
         }
     }
 	//catalog for first 8 rows, which follow the origin color palettes (overworld, underground, castle, underwater)
@@ -225,14 +216,17 @@ void Map::createTileCatalog() {
     }
     //catalog for the rest, which have 6 palettes instead of 4 (add snow and mushroom)
 
+    for (int i = 21; i <= tileRows; i++) {
+        for (int j = 1; j < 16; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior()));
+        }
+    }
+    //temporary enemies to add to map
 
-
+ 
 
     //tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
-    
     //tileCatalog.emplace(1, Tile(1, tile, ));
-
-    //....
 
 
 }
@@ -282,8 +276,9 @@ void Map::draw(bool isEditing) {
 }
 
 int Map::getTileIDFromCoords(int fileRow, int fileCol) const {
+    fileRow--;
     if (fileRow < 0 || fileRow >= tileRows ||
-        fileCol < 0 || fileCol >= tileSetSourceRects[fileRow].size()) {
+        fileCol-1 < 0 || fileCol-1 >= tileSetSourceRects[fileRow].size()) {
         TraceLog(LOG_ERROR, "OUT OF RANGE");
         return 0;
     }
