@@ -180,6 +180,9 @@
     <ClCompile Include="..\src\ItemManager.cpp">
       <Filter>Source Files\Entity\Item</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SoundManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -307,6 +310,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\ItemManager.h">
       <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\SoundManager.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

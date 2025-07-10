@@ -157,6 +157,7 @@
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PiranhaPlant.cpp" />
     <ClCompile Include="..\src\PlayState.cpp" />
+    <ClCompile Include="..\src\SoundManager.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
     <ClCompile Include="..\src\SuperState.cpp" />
     <ClCompile Include="..\src\TransformState.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="..\headers\PauseState.h" />
     <ClInclude Include="..\headers\PiranhaPlant.h" />
     <ClInclude Include="..\headers\PlayState.h" />
+    <ClInclude Include="..\headers\SoundManager.h" />
     <ClInclude Include="..\headers\Star.h" />
     <ClInclude Include="..\headers\TextureManager.h" />
     <ClInclude Include="..\headers\SuperState.h" />

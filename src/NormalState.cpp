@@ -4,6 +4,7 @@
 #include "../headers/TransformState.h"
 #include "../headers/TextureManager.h"
 #include "../headers/Collision.h"
+#include "../headers/SoundManager.h"
 #include <raylib.h>
 
 NormalState::NormalState(Character* character) : CharacterState(character){}
@@ -193,6 +194,7 @@ void NormalState::HandleInput(float deltatime) {
 
 	if (IsKeyDown(KEY_SPACE)) {
 	if (isGround) {
+		SoundManager::get()->play(SoundType::JUMP);
 		character->velocity.y = config.JUMPFORCE;
 		isGround = false;
 		isJumpingUp = true;
