@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "../headers/TileBehavior.h"
 #include "../headers/Timer.h"
+#include <raylib.h>
 //Strategy pattern
 
 //ko là block gì hết
@@ -74,13 +75,21 @@ public:
 	~BrickTileBehavior() = default;
 };
 
+
+//QUESTION
+struct QuestionTileState : public TileState{
+	bool isBouncing = false;
+	Timer bounceTimer;
+	
+};
+
 class QuestionTileBehavior : public TileBehavior { // sẽ xuất hiện coin(chủ yếu), xuất hiện mushroom khi đang ở dạng nhỏ xí, xuất hiện flower khi đang ở dạng super cấp 1, star thì ....
 public:
 	TileBehavior* clone() const override {return new QuestionTileBehavior(*this);}
-	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override;
 	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
 	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
+	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override;
 
 	bool isSolid() override { return true; }
 	~QuestionTileBehavior() = default;

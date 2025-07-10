@@ -76,6 +76,12 @@
     <Filter Include="Source Files\Entity\CharacterState">
       <UniqueIdentifier>{1171ea3a-e3a0-407f-8998-b7e0ced36552}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity\Item">
+      <UniqueIdentifier>{b190ea6e-c1ce-40f2-9639-2f6a4deabb17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity\Item">
+      <UniqueIdentifier>{55a6198f-c489-4597-a9b1-f13352f9ffca}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Game.cpp">
@@ -169,6 +175,12 @@
       <Filter>Source Files\Entity\CharacterState</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Collision.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ItemManager.cpp">
+      <Filter>Source Files\Entity\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SoundManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -283,6 +295,24 @@
     </ClInclude>
     <ClInclude Include="..\headers\FireBall.h">
       <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Item.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Flower.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Mushroom.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Star.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\ItemManager.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\SoundManager.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

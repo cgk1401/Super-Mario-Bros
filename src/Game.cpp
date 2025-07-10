@@ -1,4 +1,5 @@
 #include "../headers/Game.h"
+#include "../headers/SoundManager.h"
 #include <iostream>
 using namespace std;
 
@@ -22,7 +23,9 @@ Game::Game(){
 Game::~Game(){
     // cout << "Game: Destructor is called" << endl;
     delete currentState;
+    CloseAudioDevice();
     CloseWindow();
+
 }
 
 void Game::run(){
@@ -30,9 +33,9 @@ void Game::run(){
     while(!WindowShouldClose()){
         //Xử lí event
         currentState->update(*this);
-
+        SoundManager::get()->updateMusic();
         BeginDrawing();
-            ClearBackground(Color(92, 148, 252));
+            ClearBackground(Color{92, 148, 252});
             //Vẽ 
             currentState->render();
         EndDrawing();
@@ -41,6 +44,7 @@ void Game::run(){
 }
 
 void Game::init(){
+    InitAudioDevice();
     currentState = nullptr;
 }
 
