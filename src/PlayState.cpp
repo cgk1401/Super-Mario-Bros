@@ -4,6 +4,7 @@
 #include "../headers/EffectManager.h"
 #include "../headers/EnemyFactory.h"
 #include "../headers/Collision.h"
+#include "../headers/ItemManager.h"
 
 PlayState::PlayState() {
     gui = GUI();
@@ -24,6 +25,7 @@ PlayState::PlayState() {
 PlayState::~PlayState() {
     delete map;
     bg.unload();
+    ItemManager::get().clearItems();
 }
 void PlayState::handleInput(Game& game){
 
@@ -49,11 +51,12 @@ void PlayState::update(Game& game){
         //fg.update( mario,camera.getCamera(), dt);
         //mario.Update(dt, map);
         map->update();
-        Collision::handlePlayerCollision(mario, map);
-        mario->Update(dt);
         
+        mario->Update(dt);
+        Collision::handlePlayerCollision(mario, map);
         EffectManager::get().update(dt);
-            
+        ItemManager::get().Update(dt, mario, map);
+
         for(auto& e: enemies){
             e->Update(dt, map);
         }
@@ -84,7 +87,7 @@ void PlayState::update(Game& game){
 void PlayState::render() {
     BeginMode2D(camera.getCamera());
     //bg.draw();
-   
+    ItemManager::get().Draw();
     map->draw();
     EffectManager::get().draw();
     mario->Draw();

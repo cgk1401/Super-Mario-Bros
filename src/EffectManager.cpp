@@ -2,11 +2,12 @@
 #include "../headers/CoinCollectEffect.h"
 #include <algorithm>
 #include "../headers/Map.h"
+#include "../headers/TextureManager.h"
 
 EffectManager* EffectManager::instance = nullptr;
 
 EffectManager::EffectManager(){
-    texture = LoadTexture("../assets/Item/Items Objects and NPCs.png");
+    texture = TextureManager::get().load(TextureType::ITEM);
 
     //BRICK BREAK
     vector<Rectangle> brickFrames;

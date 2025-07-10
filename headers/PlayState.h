@@ -21,6 +21,7 @@ public:
     void    handleInput(Game& game) override;
     void    update(Game& game)      override;
     void    render()                override;
+
 private:
     bool isPlaying;
     GUI gui;

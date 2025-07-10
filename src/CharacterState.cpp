@@ -25,4 +25,4 @@ bool CharacterState::getIsGround() {
 
 void CharacterState::SetBasePosition(float newposition) {
 	character->BasePosition = newposition;
-}
+}		

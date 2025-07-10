@@ -324,8 +324,15 @@ void Map::setTile(int row, int col, int tileID) {
     if (row < 0 || row >= rows || col < 0 || col >= columns) {
         return;
     }
+
+    if ( mapData[row][col].tileID == tileID) return;
+
+    cout << tileID << endl;
     auto it = tileCatalog.find(tileID);
-    if (it == tileCatalog.end()) return;
+    if (it == tileCatalog.end()) {
+        TraceLog(LOG_ERROR, "INVALID ID");
+        return;
+    }
 
     mapData[row][col].tileID = tileID;
     mapData[row][col].hasItem = false;
