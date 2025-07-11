@@ -24,20 +24,19 @@ MenuState::~MenuState() {
     UnloadTexture(mario_character);
     UnloadFont(font);
 }
-void MenuState::handleInput(Game& game){
 
-}
-
-void MenuState::update(Game& game){
+void MenuState::update(float deltatime){
     for(auto& button: buttons){
         button->update();
     }
 
     if(buttons[0]->IsClicked()){
-        game.changeState(new PlayState());
+        Game::getInstance()->clear();
+        Game::getInstance()->addState(new PlayState());
     }
     else if (buttons[1]->IsClicked()) {
-        game.changeState(new MapEditor("../assets/Map/tileset_gutter64x64.png"));
+        Game::getInstance()->clear();
+        Game::getInstance()->addState(new MapEditor("../assets/Map/tileset_gutter64x64.png"));
     }
     else if(buttons[2]->IsClicked()){
         exit(0);

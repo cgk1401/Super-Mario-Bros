@@ -5,10 +5,11 @@
 #include "../headers/EnemyFactory.h"
 #include "../headers/Collision.h"
 #include "../headers/ItemManager.h"
-
+#include "../headers/SoundManager.h"
 PlayState::PlayState() {
+    SoundManager::get()->playMusic(MusicType::MAIN_THEME_OVERWORLD);
     gui = GUI();
-    isPlaying = true;
+ 
     map = new Map("../assets/Map/tileset_gutter64x64.png");
     map->loadFromFile("map1.txt");
     camera.init({0,0});
@@ -26,61 +27,43 @@ PlayState::~PlayState() {
     delete map;
     bg.unload();
     ItemManager::get().clearItems();
+    SoundManager::get()->stopMusic();
 }
-void PlayState::handleInput(Game& game){
 
-}
-void PlayState::update(Game& game){
-    float dt = GetFrameTime();
+void PlayState::update(float dt){
+    SoundManager::get()->updateMusic();
+    if (gui.PauseButton_IsPressed()) {       
+        Game::getInstance()->addState(new PauseState());
+    }
 
-    if (gui.PauseButton_IsPressed() && isPlaying) {
-        isPlaying = false;
-    }
-    else {
-        if (pauseMenu.resume_IsCLicked()) {
-            isPlaying = true;
-        }
-        else if (pauseMenu.save_IsCLicked()) {
-            //save map
-        }
-    }
-    if (isPlaying) {
-        camera.update(mario->getBound(), screenWidth);
-        gui.update(game); 
-        //bg.update( mario,camera.getCamera(), dt);
-        //fg.update( mario,camera.getCamera(), dt);
-        //mario.Update(dt, map);
-        map->update();
+
+    camera.update(mario->getBound(), screenWidth);
+    gui.update(); 
+    //bg.update( mario,camera.getCamera(), dt);
+    //fg.update( mario,camera.getCamera(), dt);
+    //mario.Update(dt, map);
+    map->update();
         
-        mario->Update(dt);
-        Collision::handlePlayerCollision(mario, map);
-        EffectManager::get().update(dt);
-        ItemManager::get().Update(dt, mario, map);
+    mario->Update(dt);
+    Collision::handlePlayerCollision(mario, map);
+    EffectManager::get().update(dt);
+    ItemManager::get().Update(dt, mario, map);
 
-        for(auto& e: enemies){
-            e->Update(dt, map);
-        }
+    for(auto& e: enemies){
+        e->Update(dt, map);
+    }
     
 
-        //remove if any enemies die
-        enemies.erase(remove_if(enemies.begin(), enemies.end(),
-            [](Enemy* e) {
-                if (e->isDead()) {
-                    delete e;
-                    return true;
-                }
-        return false;
-
-        
+    //remove if any enemies die
+    enemies.erase(remove_if(enemies.begin(), enemies.end(),
+        [](Enemy* e) {
+            if (e->isDead()) {
+                delete e;
+                return true;
+            }
+    return false;
     }),
     enemies.end());
-
-        
-    }
-    else {
-        pauseMenu.update(game);  
-    }
-
     
 }
 
@@ -89,18 +72,14 @@ void PlayState::render() {
     //bg.draw();
     ItemManager::get().Draw();
     map->draw();
-    EffectManager::get().draw();
     mario->Draw();
     for(auto& e: enemies){
         e->Draw();
     }
+    EffectManager::get().draw();
     //fg.draw();
     EndMode2D();
 
     gui.draw();
-    if(isPlaying == false) {
-        pauseMenu.render();
-    }
-   
     
 }

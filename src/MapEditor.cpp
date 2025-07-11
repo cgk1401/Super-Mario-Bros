@@ -62,7 +62,7 @@ void MapEditor::saveToFile(const char* filename) {
     MyFile.close();
 }
 
-void MapEditor::handleInput(Game& game) {
+void MapEditor::handleInput() {
      float dt = GetFrameTime();
     float speed = 200;
 
@@ -207,9 +207,9 @@ void MapEditor::render() {
     //expandAreaButton->draw();
 }
 
-void MapEditor::update(Game& game) {
+void MapEditor::update(float deltatime) {
     Map::update(true); // Update camera movement
-    handleInput(game);
+    handleInput();
  
     uiWidth = screenWidth - (int)mapWidth;
     int uiStartX = mapWidth;
@@ -287,7 +287,8 @@ void MapEditor::update(Game& game) {
         loadFromFile("map1.txt");
     //Back to menu
     if (backButton->IsClicked()) {
-       Game::getInstance()->changeState(new MenuState());
+        Game::getInstance()->clear();
+       Game::getInstance()->addState(new MenuState());
     }
 
     //CameraEditor update

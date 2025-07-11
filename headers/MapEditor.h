@@ -24,7 +24,8 @@ public:
     void saveToFile(const char* filename);
 
     //Inherit GameState
-    void handleInput(Game& game) override;
-    void update(Game& game) override;
+    void update(float deltatime) override;
     void render() override;
+
+    void handleInput();
 };

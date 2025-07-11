@@ -41,7 +41,7 @@ void GUI::setTime(int t){
 bool GUI::PauseButton_IsPressed(){
     return PauseButton->IsClicked();
 }
-void GUI::update(Game& game){
+void GUI::update(){
     PauseButton->update();
     if(time > 0) time -= 2 * GetFrameTime();
     else {

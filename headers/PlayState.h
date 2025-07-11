@@ -18,16 +18,12 @@ class PlayState : public GameState{
 public:
     PlayState();
     ~PlayState();
-    void    handleInput(Game& game) override;
-    void    update(Game& game)      override;
-    void    render()                override;
+    void update(float deltatime) override;
+    void render() override;
 
 private:
-    bool isPlaying;
     GUI gui;
-    PauseState pauseMenu;
     Map* map;
-    //Mario mario;
     Character* mario = new Mario({100, 500});
     vector<Enemy*> enemies;
 

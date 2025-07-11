@@ -7,9 +7,10 @@ class Game;
 //State Pattern
 class GameState{
 public:
-    virtual void handleInput(Game& game) = 0;
-    virtual void update(Game& game) = 0;
+    //virtual void handleInput() = 0;
+    virtual void update(float deltatime) = 0;
     virtual void render() = 0;
+    virtual bool allowUpdateBelow() { return true; }
     virtual ~GameState() = default;
 };
 

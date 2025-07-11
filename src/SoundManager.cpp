@@ -21,7 +21,7 @@ void SoundManager::load() {
     sounds[SoundType::JUMP] = LoadSound("../assets/sfx/jump.wav");
     sounds[SoundType::COIN] = LoadSound("../assets/sfx/coin.wav");
     sounds[SoundType::DIE] = LoadSound("../assets/sfx/death.wav");
-	sounds[SoundType::BRICK_BREAK] = LoadSound("../assets/sfx/bricks.wav");
+	sounds[SoundType::BRICK_BREAK] = LoadSound("../assets/sfx/brick.wav");
 	sounds[SoundType::POWERUP] = LoadSound("../assets/sfx/powerup.wav");
 	sounds[SoundType::ONEUP] = LoadSound("../assets/sfx/1up.wav");
 	sounds[SoundType::BOWSERFALL] = LoadSound("../assets/sfx/bowserfall.wav");

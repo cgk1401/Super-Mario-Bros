@@ -7,6 +7,7 @@
 #include "../headers/FireState.h"
 #include "../headers/SuperState.h"
 #include "../headers/ItemManager.h"
+#include "../headers/SoundManager.h"
 
 void BrickTileBehavior::onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) {
     //if(mario is small ) -> ko the bi vo  
@@ -24,6 +25,7 @@ void BrickTileBehavior::onHeadCollision(Character* character, int tileRow, int t
     ////bounce
     if(currentState == dynamic_cast<NormalState*>(currentState)){
         if (!brickState->isBouncing) {
+            SoundManager::get()->play(SoundType::BUMP);
             brickState->isBouncing = true;
             brickState->bounceTimer.start(0.2);
         }
@@ -31,6 +33,7 @@ void BrickTileBehavior::onHeadCollision(Character* character, int tileRow, int t
     }
     else if(currentState == dynamic_cast<SuperState*>(currentState) || currentState == dynamic_cast<FireState*>(currentState)){
         if (!brickState->hasBroken) {
+            SoundManager::get()->play(SoundType::BRICK_BREAK);
             brickState->hasBroken = true;
         }
 
@@ -85,7 +88,9 @@ void QuestionTileBehavior::onHeadCollision(Character* character, int tileRow, in
         tileState->bounceTimer.start(0.2f);
         //cout << tileRow << " - " << tileCol << endl;
         Vector2 starPos = {(tileRow - 2 < 0 ? 0 :(tileRow - 2)) * Map::TILE_SIZE, tileRow * Map::TILE_SIZE};
-        ItemManager::get().Spawn(ItemType::STAR, starPos);
+                starPos = {(float) tileRow * Map::TILE_SIZE, (float) tileRow * Map::TILE_SIZE};
+
+        ItemManager::get().Spawn(ItemType::MUSHROOM, starPos);
         //spawn items
     }
 

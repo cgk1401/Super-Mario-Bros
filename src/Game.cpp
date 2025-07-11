@@ -22,22 +22,33 @@ Game::Game(){
 //Destructor
 Game::~Game(){
     // cout << "Game: Destructor is called" << endl;
-    delete currentState;
+    for (auto& s : stateStack) delete s;
     CloseAudioDevice();
     CloseWindow();
 
 }
 
 void Game::run(){
-    
+
     while(!WindowShouldClose()){
         //Xử lí event
-        currentState->update(*this);
-        SoundManager::get()->updateMusic();
+        float deltatime = GetFrameTime();
+
+        for (int i = stateStack.size() - 1; i >= 0; i--) {
+            
+             stateStack[i]->update(deltatime);
+             if (i > stateStack.size() - 1) break;
+             if (!stateStack[i]->allowUpdateBelow()) break;
+        }
+    
         BeginDrawing();
             ClearBackground(Color{92, 148, 252});
             //Vẽ 
-            currentState->render();
+            
+            for (int i = 0; i < stateStack.size(); i++) {
+                stateStack[i]->render();
+            }
+           
         EndDrawing();
     }
     
@@ -45,10 +56,32 @@ void Game::run(){
 
 void Game::init(){
     InitAudioDevice();
-    currentState = nullptr;
 }
 
-void Game::changeState(GameState* newState){
-    if (currentState) delete currentState;
-    currentState = newState;
- }
+//void Game::changeState(GameState* newState){
+//    if (currentState) delete currentState;
+//    currentState = newState;
+// }
+
+void Game::addState(GameState* newGameState) {
+    stateStack.push_back(newGameState);
+}
+void Game::pop() {
+    if (!stateStack.empty()) {
+        delete stateStack.back();  // FREE
+        stateStack.pop_back();
+    }
+}
+void Game::replaceState(GameState* newState) {
+    pop();
+    addState(newState);
+}
+
+void Game::clear() {
+    for (auto& s : stateStack) delete s;
+    stateStack.clear();
+}
+
+int Game::getStateCount() {
+    return stateStack.size();
+}

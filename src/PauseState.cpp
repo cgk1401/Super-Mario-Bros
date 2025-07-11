@@ -19,30 +19,25 @@ PauseState::~PauseState() {
     }
 }
 
-void PauseState::handleInput(Game& game) {
-    
-}
 
-bool PauseState::resume_IsCLicked() {
-    return buttons[0]->IsClicked();
-}
-
-bool PauseState::save_IsCLicked() {
-    return buttons[2]->IsClicked();
-}
-
-void PauseState::update(Game& game){
+void PauseState::update(float deltatime){
     for(auto& button: buttons){
         button->update();
     }
 
     //Button Clicking
     if(buttons[3]->IsClicked()){ //Menu 
-        game.changeState(new MenuState());
+        Game::getInstance()->clear();
+        Game::getInstance()->addState(new MenuState);
     }
-    else if (buttons[1]->IsClicked()) {
-        game.changeState(new PlayState());
+    else if (buttons[1]->IsClicked()) { //Restart
+        Game::getInstance()->clear();
+        Game::getInstance()->addState(new PlayState);
     }
+    else if (buttons[0]->IsClicked()) {
+         Game::getInstance()->pop();
+    }
+
 
 }
 void PauseState::render(){
