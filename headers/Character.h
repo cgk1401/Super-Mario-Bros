@@ -4,7 +4,7 @@
 #include <map>
 #include "Animation.h"
 #include "CharacterState.h"
-#include "FireState.h"
+#include "Global.h"
 
 using namespace std;
 
@@ -14,41 +14,9 @@ class SuperState;
 class TransformState;
 class FireState;
 class FireBall;
+class StarmanState;
 
 class Map;
-
-enum class ActionState {
-	Idle,
-	Run,
-	Jump,
-	Sit,
-	Die,
-	FlagpoleHold,
-	Fireball,
-};
-
-// class Character {
-// protected:
-// 	Texture2D texture;
-// 	std::map <Actionstate, Animation> animation;
-// 	Actionstate currentstate = Actionstate::IDLE;
-// 	Vector2 position = { 0,0 };
-// 	const float speed = 2;
-
-// 	const float gravity;
-enum class Direction {
-	Left,
-	Right
-};
-
-enum class CharacterType {
-	Mario,
-	Luigi,
-};
-
-enum class CharacterTransformState {
-	Super,
-};
 
 class Character {
 	friend class Collision;
@@ -58,6 +26,7 @@ class Character {
 	friend class TransformState;
 	friend class FireState;
 	friend class FireBall;
+	friend class StarmanState;
 
 protected:
 	Texture texture;
@@ -76,7 +45,8 @@ protected:
 public:
 	virtual ~Character();
 
-	void ChangeState(CharacterState* newState);
+	void ChangeState(CharacterStateType newState, CharacterStateType previousState);
+	void ChangeMiddleState(CharacterStateType newState);
 	CharacterState* GetCurrentState() const;
 	virtual CharacterType getCharacterType() = 0;
 	void setActionState(ActionState newActionState);

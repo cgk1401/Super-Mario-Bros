@@ -57,9 +57,9 @@ void PlayState::update(Game& game){
         EffectManager::get().update(dt);
         ItemManager::get().Update(dt, mario, map);
 
-        for(auto& e: enemies){
-            e->Update(dt, map);
-        }
+        //for(auto& e: enemies){
+        //    e->Update(dt, map);
+        //}
     
 
         //remove if any enemies die

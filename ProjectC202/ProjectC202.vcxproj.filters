@@ -46,9 +46,6 @@
     <Filter Include="Header Files\Map\Tile">
       <UniqueIdentifier>{5af8d7d6-1519-4e8d-af16-9120859d585b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Entity\Mario">
-      <UniqueIdentifier>{84b9999e-5443-4f64-a045-c87c233f7521}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Map\Tile">
       <UniqueIdentifier>{029596d5-65cd-4be0-83f0-6c6a6261b888}</UniqueIdentifier>
     </Filter>
@@ -183,6 +180,9 @@
     <ClCompile Include="..\src\SoundManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\StarmanState.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -212,9 +212,6 @@
     <ClInclude Include="..\headers\Animation.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Character.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
     <ClInclude Include="..\headers\Map.h">
       <Filter>Header Files\Map</Filter>
     </ClInclude>
@@ -238,9 +235,6 @@
     </ClInclude>
     <ClInclude Include="..\headers\Collision.h">
       <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\Mario.h">
-      <Filter>Header Files\Entity\Mario</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\EffectManager.h">
       <Filter>Header Files\Effect</Filter>
@@ -313,6 +307,15 @@
     </ClInclude>
     <ClInclude Include="..\headers\SoundManager.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Character.h">
+      <Filter>Header Files\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Mario.h">
+      <Filter>Header Files\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\StarmanState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,7 +1,4 @@
 ﻿#include "../headers/SuperState.h"
-#include "../headers/FireState.h"
-#include "../headers/Character.h"
-#include "../headers/TextureManager.h"
 #include <raylib.h>
 
 SuperState::SuperState(Character* character) : CharacterState(character){}
@@ -143,7 +140,7 @@ void SuperState::Update(float deltatime) {
 
 	// nhấn phím KEY_I để chuyển trạng thái từ Superstate sang FireState
 	if (IsKeyPressed(KEY_I)) {
-		character->ChangeState(new FireState(character));
+		character->ChangeMiddleState(CharacterStateType::StarmanState);
 	}
 }
 
@@ -216,4 +213,8 @@ void SuperState::HandleInput(float deltatime) {
 		isJumpingUp = false;
 	}
 
+}
+
+CharacterStateType SuperState::getStateType() {
+	return CharacterStateType::SuperState;
 }

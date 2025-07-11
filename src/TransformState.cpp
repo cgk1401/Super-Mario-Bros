@@ -1,16 +1,14 @@
 ﻿#include "../headers/TransformState.h"
-#include "../headers/SuperState.h"
 
 
-TransformState::TransformState(Character* character, CharacterTransformState transformstate) : CharacterState(character) {
+TransformState::TransformState(Character* character, CharacterStateType statetype, CharacterStateType previoustype) : CharacterState(character), statetype(statetype), previoustype(previoustype) {
 	transformduration = 0.0f;
 	elapsedTime = 0.0f;
-	this->transformstate = transformstate;
 }
 
 void TransformState::SetAnimation(Character* c) {
 	if (character->getCharacterType() == CharacterType::Mario) {
-		if (transformstate == CharacterTransformState::Super) {
+		if (statetype == CharacterStateType::SuperState) {
 
 			Animation idle;
 
@@ -28,7 +26,7 @@ void TransformState::SetAnimation(Character* c) {
 
 	}
 	else if (character->getCharacterType() == CharacterType::Luigi) {
-		if (transformstate == CharacterTransformState::Super) {
+		if (statetype == CharacterStateType::SuperState) {
 			Animation idle;
 
 			idle.durationtime = 0.3f;
@@ -50,24 +48,16 @@ void TransformState::SetAnimation(Character* c) {
 void TransformState::Update(float deltatime) {
 	elapsedTime += deltatime;
 
-	if (elapsedTime <= transformduration) {
+	if (transformduration != 0 && elapsedTime <= transformduration) {
 		Rectangle currentframe = character->animations[character->currentAction].getcurrentframe();
 		character->position.y = character->BasePosition - currentframe.height * character->scale;
 		character->animations[ActionState::Idle].Update(deltatime);
 	}
 	else {
-		switch (transformstate)
-		{
-		case CharacterTransformState::Super:
-			if (character->getCharacterType() == CharacterType::Mario) {
-				character->ChangeState(new SuperState(character));
-			}
-			else if (character->getCharacterType() == CharacterType::Luigi) {
-				character->ChangeState(new SuperState(character));
-			}
-			break;
-		default:
-			break;
-		}
+		character->ChangeState(statetype, previoustype);
 	}
+}
+
+CharacterStateType TransformState::getStateType() {
+	return CharacterStateType::TransformState;
 }

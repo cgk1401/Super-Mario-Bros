@@ -1,6 +1,7 @@
 #pragma once
 
 class Character;
+#include "Global.h"
 
 struct PhysicsConfig {
 	float SPEED = 250.0f;
@@ -28,6 +29,7 @@ public :
 	virtual void Update(float deltatime) = 0;
 	virtual void HandleInput(float deltatime) = 0;
 	float approach(float current, float target, float increase);
+	virtual CharacterStateType getStateType() = 0;
 
 	Character* getCharacter();
 	bool getIsGround();

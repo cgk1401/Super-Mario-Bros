@@ -1,6 +1,4 @@
 ﻿#include "../headers/FireState.h"
-#include "../headers/Character.h"
-#include "../headers/TextureManager.h"
 #include <raylib.h>
 
 FireState::FireState(Character* character) : CharacterState(character) {}
@@ -206,6 +204,10 @@ void FireState::HandleInput(float deltatime) {
 		isJumpingUp = false;
 	}
 
+}
+
+CharacterStateType FireState::getStateType() {
+	return CharacterStateType::FireState;
 }
 
 vector<FireBall*> FireState::getFireBall() {

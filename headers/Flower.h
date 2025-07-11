@@ -48,7 +48,7 @@ public:
             //get more coin scores
             return;
         }
-        player->ChangeState(new FireState(player));
+        player->ChangeMiddleState(CharacterStateType::FireState);
         collected = true;
     }
 

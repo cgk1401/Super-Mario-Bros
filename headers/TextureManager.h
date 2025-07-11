@@ -5,6 +5,7 @@ using namespace std;
 
 enum class TextureType{
     MARIO,
+    MARIOINVINCIBILITY,
     ENEMY,
     TILESET,
     ITEM,
