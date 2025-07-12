@@ -32,7 +32,6 @@ void Character::ChangeState(CharacterStateType newState, CharacterStateType prev
 			currentState = new FireState(this);
 			break;
 		case CharacterStateType::StarmanState:
-			cout << "1";
 			currentState = new StarmanState(this, previosState);
 			break;
 		default:

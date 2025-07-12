@@ -142,7 +142,7 @@ void NormalState::Update(float deltatime) {
 	
 	// Nhấn phím KEY_L chuyển trạng thái từ NormalState thành SuperState
 	if (IsKeyPressed(KEY_L)) {
-		character->ChangeMiddleState(CharacterStateType::SuperState);
+		character->ChangeMiddleState(CharacterStateType::StarmanState);
 	}
 }
 

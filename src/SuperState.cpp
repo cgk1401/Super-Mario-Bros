@@ -5,7 +5,7 @@ SuperState::SuperState(Character* character) : CharacterState(character){}
 
 void SuperState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
-		character->texture = TextureManager::get().load(TextureType::MARIO);
+		character->texture = TextureManager::get().load(TextureType::MARIOINVINCIBILITY);
 		
 		const float texW = 16;
 		const float texH = 32;
@@ -14,7 +14,7 @@ void SuperState::SetAnimation(Character* c) {
 		idle.currentframe = 0;
 		idle.currenttime = 0;
 		idle.durationtime = 0.1f;
-		idle.frame.push_back({ 0, 32, 16, 32 });
+		idle.frame.push_back({ 80, 1, 16, 32 });
 
 		character->animations[ActionState::Idle] = idle;
 
@@ -22,9 +22,9 @@ void SuperState::SetAnimation(Character* c) {
 		run.currentframe = 0;
 		run.currenttime = 0;
 		run.durationtime = 0.1f;
-		run.frame.push_back({ 20, 32, 16, 32 });
-		run.frame.push_back({ 38, 32, 16, 32 });
-		run.frame.push_back({ 56, 32, 16, 32 });
+		run.frame.push_back({ 97, 3, 16, 30 });
+		run.frame.push_back({ 115, 2, 14, 31 });
+		run.frame.push_back({ 131, 1, 16, 32 });
 
 		character->animations[ActionState::Run] = run;
 
@@ -32,7 +32,7 @@ void SuperState::SetAnimation(Character* c) {
 		jump.currentframe = 0;
 		jump.currenttime = 0;
 		jump.durationtime = 0.1f;
-		jump.frame.push_back({ 96, 32, 16, 32 });
+		jump.frame.push_back({ 165, 1, 16, 32 });
 
 		character->animations[ActionState::Jump] = jump;
 
@@ -40,7 +40,7 @@ void SuperState::SetAnimation(Character* c) {
 		sit.currentframe = 0;
 		sit.currenttime = 0;
 		sit.durationtime = 0.1f;
-		sit.frame.push_back({ 116, 42, 16, 22 });
+		sit.frame.push_back({ 182, 11, 16, 22 });
 
 		character->animations[ActionState::Sit] = sit; 
 
@@ -48,8 +48,8 @@ void SuperState::SetAnimation(Character* c) {
 		flagpolehold.currentframe = 0;
 		flagpolehold.currenttime = 0;
 		flagpolehold.durationtime = 0.1f;
-		flagpolehold.frame.push_back({ 136, 33, 16, 32 });
-		flagpolehold.frame.push_back({ 154, 33, 16, 32 });
+		flagpolehold.frame.push_back({ 201, 3, 14, 30 });
+		flagpolehold.frame.push_back({ 218, 3, 14, 27 });
 
 		character->animations[ActionState::FlagpoleHold] = flagpolehold;
 		

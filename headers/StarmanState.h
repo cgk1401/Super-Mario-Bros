@@ -10,6 +10,8 @@ class StarmanState : public CharacterState {
 private:
 	PhysicsConfig config;
 	CharacterStateType previousState;
+	const float duration = 5.0f;
+	float currentTime = 0.0f;
 
 public:
 	StarmanState(Character* character, CharacterStateType previousState);
