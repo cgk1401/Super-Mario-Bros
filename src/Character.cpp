@@ -27,6 +27,14 @@ CharacterState* Character::GetCurrentState() const {
 
 void Character::setActionState(ActionState newActionState) {
 	if (currentAction != newActionState) {
+		//avoid conflict between 2 frames if they are different of size
+		Vector2 prevFrame = {animations[currentAction].getcurrentframe().width, animations[currentAction].getcurrentframe().height};
+		Vector2 newFrame = {animations[newActionState].getcurrentframe().width, animations[newActionState].getcurrentframe().height};
+		float heightDiff = prevFrame.y - newFrame.y;
+		float widthDiff = prevFrame.x - newFrame.x;
+		position.y += heightDiff * scale;
+		//position.x += widthDiff * scale;
+
 		currentAction = newActionState;
 		animations[currentAction].reset();
 		//Rectangle currentframe = animations[currentAction].getcurrentframe();

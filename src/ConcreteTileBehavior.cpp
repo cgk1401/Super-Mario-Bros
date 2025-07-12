@@ -86,11 +86,11 @@ void QuestionTileBehavior::onHeadCollision(Character* character, int tileRow, in
     if(!tileState->isBouncing){
         tileState->isBouncing = true;
         tileState->bounceTimer.start(0.2f);
-        //cout << tileRow << " - " << tileCol << endl;
+        cout << tileRow << " - " << tileCol << endl;
         Vector2 starPos = {(tileRow - 2 < 0 ? 0 :(tileRow - 2)) * Map::TILE_SIZE, tileRow * Map::TILE_SIZE};
-                starPos = {(float) tileRow * Map::TILE_SIZE, (float) tileRow * Map::TILE_SIZE};
+                //starPos = {(float) tileRow * Map::TILE_SIZE, (float) tileRow * Map::TILE_SIZE};
 
-        ItemManager::get().Spawn(ItemType::MUSHROOM, starPos);
+        ItemManager::get().Spawn(ItemType::STAR, starPos);
         //spawn items
     }
 
@@ -114,7 +114,7 @@ void QuestionTileBehavior::update(float dt, int tileRow, int tileCol, Map* map, 
         if (tileState->bounceTimer.isFinished()) {
             tileState->isBouncing = false;
             map->updateTileInstancePosition(tileRow, tileCol, { 0, 0 }); // reset vị trí
-            int id =  map->getTileIDFromCoords(1, 24);
+            int id =  map->getTileIDFromCoords(1, 22);
             map->setTile(tileRow, tileCol, id);
            // cout << 1;
         }

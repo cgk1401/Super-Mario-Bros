@@ -110,7 +110,9 @@ void SuperState::SetAnimation(Character* c) {
 
 void SuperState::Update(float deltatime) {
 	character->animations[character->currentAction].Update(deltatime);
-
+	// cập nhật Baseposition
+	Rectangle currentframe = character->animations[character->currentAction].getcurrentframe();
+	character->BasePosition = character->position.y + currentframe.height * character->scale;
 	HandleInput(deltatime);
 	if (!isGround) {
 		if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
@@ -151,6 +153,15 @@ void SuperState::HandleInput(float deltatime) {
 	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
 	float acc = config.ACCELERATION;
 
+	if (IsKeyDown(KEY_DOWN)) {
+		if (isGround) {
+			character->velocity.x = 0;
+			character->setActionState(ActionState::Sit);
+			 
+		}
+		return;
+	}
+
 	if (IsKeyDown(KEY_RIGHT)) {
 		if (character->velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
 		character->velocity.x = approach(character->velocity.x, targetspeed, acc * deltatime);
@@ -162,13 +173,6 @@ void SuperState::HandleInput(float deltatime) {
 		character->velocity.x = approach(character->velocity.x, -targetspeed, acc * deltatime);
 		character->setActionState(ActionState::Run);
 		character->setDirection(Direction::Left);
-	}
-	else if (IsKeyDown(KEY_DOWN)) {
-		if (isGround) {
-			character->setActionState(ActionState::Sit);
-			character->velocity.x = 0;
-		}
-
 	}
 
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {

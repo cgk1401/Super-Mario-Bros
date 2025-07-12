@@ -74,7 +74,9 @@ void FireState::SetAnimation(Character* c) {
 
 void FireState::Update(float deltatime) {
 	character->animations[character->currentAction].Update(deltatime);
-
+	// cập nhật Baseposition
+	Rectangle currentframe = character->animations[character->currentAction].getcurrentframe();
+	character->BasePosition = character->position.y + currentframe.height * character->scale;
 	for (auto fireball : fireballs) {
 		fireball->Update(deltatime);
 	}
@@ -121,6 +123,15 @@ void FireState::HandleInput(float deltatime) {
 	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
 	float acc = config.ACCELERATION;
 
+	if (IsKeyDown(KEY_DOWN)) {
+		if (isGround) {
+			character->velocity.x = 0;
+			character->setActionState(ActionState::Sit);
+
+		}
+		return;
+	}
+
 	if (IsKeyDown(KEY_RIGHT)) {
 		if (character->velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
 		character->velocity.x = approach(character->velocity.x, targetspeed, acc * deltatime);
@@ -133,40 +144,11 @@ void FireState::HandleInput(float deltatime) {
 		character->setActionState(ActionState::Run);
 		character->setDirection(Direction::Left);
 	}
-	else if (IsKeyDown(KEY_DOWN)) {
-		if (isGround) {
-			character->setActionState(ActionState::Sit);
-			character->velocity.x = 0;
-		}
-
-	}
-
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {
 		if (isGround) {
-			if (IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL)) {
-				
-				if (fireballs.size() < maxFireBalls) {
-					FireBall* fireball;
-					if (character->currentdirection == Direction::Right) {
-						fireball = new FireBall({ character->position.x + character->animations[character->currentAction].getcurrentframe().width * character->scale + 20,
-						character->position.y + 30 }, character, character->position.y + character->animations[character->currentAction].getcurrentframe().height * character->scale);
-						fireball->SetVelocity({ fireball->FIREBALL_SPEEDX , 0 });
-					}
-					else if (character->currentdirection == Direction::Left) {
-						fireball = new FireBall({ character->position.x - character->animations[character->currentAction].getcurrentframe().width * character->scale + 20,
-						character->position.y + 30 }, character, character->BasePosition);
-						fireball->SetVelocity({ -fireball->FIREBALL_SPEEDX , 0 });
-					}
-
-					fireballs.push_back(fireball);
-				}
-			}
-			else if (IsKeyDown(KEY_P)) {
-				// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
+			// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
+			if (IsKeyDown(KEY_P)) {
 				character->setActionState(ActionState::FlagpoleHold);
-			}
-			else if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL) && fireballs.size() != 0) {
-				character->setActionState(ActionState::Fireball);
 			}
 			else {
 				// không bấm phím nào thì sẽ đặt trạng thái thành idle
@@ -175,6 +157,38 @@ void FireState::HandleInput(float deltatime) {
 			}
 		}
 	}
+	// if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {
+		if (IsKeyPressed(KEY_LEFT_CONTROL) || IsKeyPressed(KEY_RIGHT_CONTROL)) {
+			if (fireballs.size() < maxFireBalls) {
+				FireBall* fireball;
+				if (character->currentdirection == Direction::Right) {
+					fireball = new FireBall({ character->position.x + character->animations[character->currentAction].getcurrentframe().width * character->scale + 20,
+					character->position.y + 30 }, character, character->position.y + character->animations[character->currentAction].getcurrentframe().height * character->scale);
+					fireball->SetVelocity({ fireball->FIREBALL_SPEEDX , 0 });
+				}
+				else if (character->currentdirection == Direction::Left) {
+					fireball = new FireBall({ character->position.x - character->animations[character->currentAction].getcurrentframe().width * character->scale + 20,
+					character->position.y + 30 }, character, character->BasePosition);
+					fireball->SetVelocity({ -fireball->FIREBALL_SPEEDX , 0 });
+				}
+
+				fireballs.push_back(fireball);
+			}
+		}
+		// else if (IsKeyDown(KEY_P)) {
+		// 	// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
+		// 	character->setActionState(ActionState::FlagpoleHold);
+		// }
+		else if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL) && fireballs.size() != 0) {
+			character->setActionState(ActionState::Fireball);
+		}
+		// else {
+		// 	// không bấm phím nào thì sẽ đặt trạng thái thành idle
+		// 	character->velocity.x = 0.0f;
+		// 	character->setActionState(ActionState::Idle);
+		// }
+	
+	
 
 	// xử lý nhảy
 	// if (IsKeyPressed(KEY_SPACE) && isGround && character->currentAction != ActionState::Sit) {

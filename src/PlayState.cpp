@@ -31,7 +31,7 @@ PlayState::~PlayState() {
 }
 
 void PlayState::update(float dt){
-    SoundManager::get()->updateMusic();
+    //SoundManager::get()->updateMusic();
     if (gui.PauseButton_IsPressed()) {       
         Game::getInstance()->addState(new PauseState());
     }
@@ -41,7 +41,6 @@ void PlayState::update(float dt){
     gui.update(); 
     //bg.update( mario,camera.getCamera(), dt);
     //fg.update( mario,camera.getCamera(), dt);
-    //mario.Update(dt, map);
     map->update();
         
     mario->Update(dt);
@@ -65,6 +64,7 @@ void PlayState::update(float dt){
     }),
     enemies.end());
     
+
 }
 
 void PlayState::render() {
@@ -73,6 +73,7 @@ void PlayState::render() {
     ItemManager::get().Draw();
     map->draw();
     mario->Draw();
+    DrawRectangleLinesEx(mario->getBound(), 0.5, RED);
     for(auto& e: enemies){
         e->Draw();
     }

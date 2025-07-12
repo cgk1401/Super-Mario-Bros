@@ -116,6 +116,9 @@ void NormalState::SetAnimation(Character* c) {
 
 void NormalState::Update(float deltatime) {
 	character->animations[character->currentAction].Update(deltatime);
+	// cập nhật Baseposition
+	Rectangle currentframe = character->animations[character->currentAction].getcurrentframe();
+	character->BasePosition = character->position.y +  currentframe.height * character->scale;
 
 	HandleInput(deltatime);
 	if (!isGround) {
@@ -177,27 +180,27 @@ void NormalState::HandleInput(float deltatime) {
 	}
 	
 	// xử lý nhảy
-	// if (IsKeyPressed(KEY_SPACE) && isGround) {
-	// 	character->velocity.y = config.JUMPFORCE;
-	// 	isGround = false;
-	// 	isJumpingUp = true;
-	// 	jumpTimeElapsed = 0.0f;
-	// 	character->setActionState(ActionState::Jump);
-	// }
+	 /*if (IsKeyPressed(KEY_SPACE) && isGround) {
+	 	character->velocity.y = config.JUMPFORCE;
+	 	isGround = false;
+	 	isJumpingUp = true;
+	 	jumpTimeElapsed = 0.0f;
+	 	character->setActionState(ActionState::Jump);
+	 }
 
-	// if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
-	// 	jumpTimeElapsed += deltatime;
-	// }
-	// else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
-	// 	isJumpingUp = false;
-	// }
+	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
+	 	jumpTimeElapsed += deltatime;
+	 }
+	 else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
+	 	isJumpingUp = false;
+	 }*/
 
 	if (IsKeyDown(KEY_SPACE)) {
 	if (isGround) {
 		SoundManager::get()->play(SoundType::JUMP);
 		character->velocity.y = config.JUMPFORCE;
 		isGround = false;
-		isJumpingUp = true;
+		isJumpingUp = true; 
 		jumpTimeElapsed = 0.0f;
 	}
 	else if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
