@@ -13,5 +13,33 @@ const int screenWidth = 1200; //1024
 const int screenHeight = 800; //768
 Texture2D resizedImage(const char* imagePath, float width, float height);
 
+enum class CharacterStateType {
+	NormalState,
+	SuperState,
+	FireState,
+	StarmanState,
+	TransformState,
+};
+
+enum class ActionState {
+	Idle,
+	Run,
+	Jump,
+	Sit,
+	Die,
+	FlagpoleHold,
+	Fireball,
+};
+
+enum class CharacterType {
+	Mario,
+	Luigi,
+};
+
+enum class Direction {
+	Left,
+	Right
+};
+
 
 #endif 

@@ -4,6 +4,7 @@
 #include <map>
 #include "raylib.h"
 #include "NormalState.h"
+#include "Global.h"
 
 class Luigi : public Character {
 

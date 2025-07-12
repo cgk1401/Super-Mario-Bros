@@ -1,10 +1,4 @@
 ﻿#include "../Headers/NormalState.h"
-#include "../headers/Character.h"
-#include "../headers/SuperState.h"
-#include "../headers/TransformState.h"
-#include "../headers/TextureManager.h"
-#include "../headers/Collision.h"
-#include "../headers/SoundManager.h"
 #include <raylib.h>
 
 NormalState::NormalState(Character* character) : CharacterState(character){}
@@ -137,13 +131,13 @@ void NormalState::Update(float deltatime) {
 			if (IsKeyDown(KEY_P)) {
 				character->setActionState(ActionState::FlagpoleHold);
 			} 
-			// else {
-			// 	character->setActionState(ActionState::Idle);
-			// }
+			 //else {
+			 //	character->setActionState(ActionState::Idle);
+			 //}
 		} 
-		// else {
-		// 	character->setActionState(ActionState::Run);
-		// }
+		 //else {
+		 //	character->setActionState(ActionState::Run);
+		 //}
 	}
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
@@ -151,7 +145,7 @@ void NormalState::Update(float deltatime) {
 	
 	// Nhấn phím KEY_L chuyển trạng thái từ NormalState thành SuperState
 	if (IsKeyPressed(KEY_L)) {
-		character->ChangeState(new TransformState(character,CharacterTransformState::Super));
+		character->ChangeMiddleState(CharacterStateType::StarmanState);
 	}
 }
 
@@ -211,5 +205,9 @@ void NormalState::HandleInput(float deltatime) {
 		isJumpingUp = false;
 	}
 
+}
+
+CharacterStateType NormalState::getStateType() {
+	return CharacterStateType::NormalState;
 }
 

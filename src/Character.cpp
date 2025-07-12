@@ -1,5 +1,10 @@
 ﻿#include "../headers/Character.h"
 #include "../headers/Map.h"
+#include "../headers/NormalState.h"
+#include "../headers/SuperState.h"
+#include "../headers/StarmanState.h"
+#include "../headers/FireState.h"
+
 #include <iostream>
 using namespace std;
 
@@ -10,12 +15,40 @@ Character::~Character() {
 	}
 }
 
-void Character::ChangeState(CharacterState* newState) {
+void Character::ChangeState(CharacterStateType newState, CharacterStateType previosState) {
 	if (currentAction == ActionState::Idle) {
 		if (currentState) {
 			delete currentState;
 		}
-		currentState = newState;
+		switch (newState)
+		{
+		case CharacterStateType::NormalState:
+			currentState = new NormalState(this);
+			break;
+		case CharacterStateType::SuperState:
+			currentState = new SuperState(this);
+			break;
+		case CharacterStateType::FireState:
+			currentState = new FireState(this);
+			break;
+		case CharacterStateType::StarmanState:
+			currentState = new StarmanState(this, previosState);
+			break;
+		default:
+			break;
+		}
+		currentAction = ActionState::Idle;
+		currentState->SetAnimation(this);
+	}
+}
+
+void Character::ChangeMiddleState(CharacterStateType newState) {
+	CharacterStateType currentstatetype = currentState->getStateType();
+	if (currentAction == ActionState::Idle) {
+		if (currentState) {
+			delete currentState;
+		}
+		currentState = new TransformState(this, newState, currentstatetype);
 		currentAction = ActionState::Idle;
 		currentState->SetAnimation(this);
 	}
