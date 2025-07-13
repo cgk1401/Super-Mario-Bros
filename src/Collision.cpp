@@ -41,8 +41,12 @@ void Collision::handlePlayerCollision(Character* player, Map* map) {
                        if (overlapY < overlapX) { // trên dưới của tile
                            if (player->velocity.y > 0) { // is falling
                                player->position.y -= overlapY;
-                               player->velocity.y = 0;
-                               player->currentState->isGround = true;
+                               //player->velocity.y = 0;
+                               //player->currentState->isGround = true;
+                               if (player->position.y + player->animations[player->currentAction].getcurrentframe().height * player->scale >= player->BasePosition) {
+                                   player->velocity.y = 0;
+                                   player->currentState->isGround = true;
+                               }
                                player->currentState->isJumpingUp = false;
                                tile.behavior->onFootCollision(player, x, y, map, tileInstance);
                            }

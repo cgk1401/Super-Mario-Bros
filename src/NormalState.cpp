@@ -139,6 +139,7 @@ void NormalState::Update(float deltatime) {
 		 //	character->setActionState(ActionState::Run);
 		 //}
 	}
+
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
 

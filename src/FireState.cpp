@@ -115,6 +115,10 @@ void FireState::Update(float deltatime) {
 
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
+
+	if (IsKeyPressed(KEY_R)) {
+		character->ChangeMiddleState(CharacterStateType::StarmanState);
+	}
 }
 
 void FireState::HandleInput(float deltatime) {

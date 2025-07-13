@@ -19,7 +19,7 @@ Mario::Mario(Vector2 position) {
 	currentAction = ActionState::Idle;
 	this->position = position;
 	this->BasePosition = position.y;
-	currentState = new SuperState(this);
+	currentState = new FireState(this);
 	currentState->SetAnimation(this);
 	currentdirection = Direction::Right;
 }
