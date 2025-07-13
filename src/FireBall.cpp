@@ -1,4 +1,6 @@
 #include "../headers/FireBall.h"
+#include "../headers/Global.h"
+#include "../headers/Collision.h"
 
 FireBall::FireBall(Character* character, float positionGround) {
 	this->position = { 0,0 };
@@ -50,15 +52,14 @@ void FireBall::Update(float deltatime) {
 
 	velocity.y += FIREBALL_SPEEDY * deltatime;
 
-	if (position.y + animation->getcurrentframe().height * scale >= positionGround) {
-		position.y = positionGround - animation->getcurrentframe().height * scale;
-		velocity.y = BOUNCE_VELOCITY * 1.2;
-	}
-
+	// if (position.y + animation->getcurrentframe().height * scale >= positionGround) {
+	// 	position.y = positionGround - animation->getcurrentframe().height * scale;
+	// 	velocity.y = BOUNCE_VELOCITY * 1.2;
+	// }
+	ActiveStatus(deltatime);
+	
 	position.x += velocity.x * deltatime;
 	position.y += velocity.y * deltatime;
-
-	ActiveStatus(deltatime);
 }
 
 void FireBall::Draw(Character* character) {
@@ -77,9 +78,27 @@ void FireBall::Deactivate() {
 
 void FireBall::ActiveStatus(float deltatime) {
 	currentLifeTime += deltatime;
-	if (currentLifeTime >= FIREBALL_LIFETIME) {
+	// if (currentLifeTime >= FIREBALL_LIFETIME) {
+	// 	Deactivate();
+	// }
+	Vector2 _pos = GetWorldToScreen2D(position, Global::camera);
+	
+	if(_pos.x > screenWidth || _pos.x < -50 || _pos.y > screenHeight || _pos.y < -50)
 		Deactivate();
-	}
 
 	// checkcollision .....
+	if(Global::map)
+		Collision::handleFireBallCollisionMap(this, Global::map);
+}
+
+
+Rectangle FireBall::getBound() const {
+	Rectangle frame = animation->getcurrentframe();
+
+	return {
+		position.x,
+		position.y,
+		frame.width * scale,
+		frame.height * scale
+	};
 }

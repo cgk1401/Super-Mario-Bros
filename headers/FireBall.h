@@ -9,12 +9,14 @@ class FireState;
 
 class FireBall {
 	friend class FireState;
+	friend class Collision;
 private:
 	Vector2 position;
 	Vector2 velocity;
 
 	Animation* animation;
 	float scale;
+	bool onGround = false;
 
 	const float FIREBALL_SPEEDX = 350.0f;
 	const float FIREBALL_SPEEDY = 800.0f;
@@ -37,4 +39,6 @@ public:
 	void Deactivate();
 
 	void ActiveStatus(float deltatime);
+
+	Rectangle getBound() const;
 };

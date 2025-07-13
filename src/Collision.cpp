@@ -272,3 +272,72 @@ void Collision::handleStarCollision(Star* star, Map* map) {
         }
     }
 }
+
+
+void Collision::handleFireBallCollisionMap(FireBall* fireball , Map* map) {
+    
+    fireball->onGround = false;
+    Rectangle bound = fireball->getBound();
+
+    int left = (int)(bound.x / Map::TILE_SIZE);
+    int right = (int)((bound.x + bound.width) / Map::TILE_SIZE);
+    int top = (int)(bound.y / Map::TILE_SIZE);
+    int bottom = (int)((bound.y + bound.height) / Map::TILE_SIZE);
+
+    int fireballtCol = max(0, left - 1);
+    int endCol = min(map->columns - 1, right + 1);
+    int fireballtRow = max(0, top - 1);
+    int endRow = min(map->rows - 1, bottom + 1);
+
+    for (int x = fireballtRow; x <= endRow; x++) {
+        for (int y = fireballtCol; y <= endCol; y++) {
+            Tile tile = map->getTile(x, y);
+            if (!tile.behavior->isSolid()) continue;
+
+            Rectangle tileRect = {
+                (float)(y * Map::TILE_SIZE),
+                (float)(x * Map::TILE_SIZE),
+                (float)Map::TILE_SIZE,
+                (float)Map::TILE_SIZE
+            };
+
+            if (CheckCollisionRecs(bound, tileRect)) {
+                float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);
+                float overlapY = fmin(bound.y + bound.height, tileRect.y + tileRect.height) - fmax(bound.y, tileRect.y);
+
+                if (overlapX > 0 && overlapY > 0) {
+                    if (overlapY < overlapX) {
+                    
+                        if (fireball->velocity.y > 0) {
+                            fireball->position.y -= overlapY;
+                            fireball->velocity.y = fireball->BOUNCE_VELOCITY; // Bật lên
+                            fireball->onGround = true;
+                        }
+                        else if (fireball->velocity.y < 0) {
+                            fireball->position.y += overlapY;
+                            fireball->velocity.y = 0;
+                            fireball->Deactivate();
+                        }
+                    }
+                    else {
+                        if (fireball->velocity.x > 0) {
+                            fireball->position.x -= overlapX;
+                            fireball->Deactivate();
+                            
+                        }
+                        else {
+                            fireball->position.x += overlapX;
+                            fireball->Deactivate();
+                           
+                        }
+                        //fireball->velocity.x *= -1; 
+                    }
+
+                    bound = fireball->getBound();
+                }
+            }
+        }
+    }
+}
+
+

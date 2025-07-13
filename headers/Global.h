@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "../headers/Map.h"
 #include "../headers/Button.h"
 using namespace std;
 const int screenWidth = 1200; //1024
@@ -41,5 +42,10 @@ enum class Direction {
 	Right
 };
 
+class Global {
+public:
+    static Map* map;
+	static Camera2D camera;
+};
 
 #endif 
