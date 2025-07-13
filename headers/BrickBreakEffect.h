@@ -16,7 +16,7 @@ private:
     Timer time;
 public:
     BrickBreakEffect() {}
-    BrickBreakEffect(Vector2 position, const Animation& templateAnim);
+    BrickBreakEffect(Vector2 position);
     ~BrickBreakEffect();
     
     void update(float dt) override;

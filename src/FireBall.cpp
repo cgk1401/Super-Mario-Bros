@@ -78,18 +78,20 @@ void FireBall::Deactivate() {
 
 void FireBall::ActiveStatus(float deltatime) {
 	currentLifeTime += deltatime;
-	// if (currentLifeTime >= FIREBALL_LIFETIME) {
-	// 	Deactivate();
-	// }
-	Vector2 _pos = GetWorldToScreen2D(position, Global::camera);
-	
-	if(_pos.x > screenWidth || _pos.x < -50 || _pos.y > screenHeight || _pos.y < -50)
-		Deactivate();
 
-	// checkcollision .....
-	if(Global::map)
+	Vector2 screenPos = GetWorldToScreen2D(position, Global::camera);
+
+	if (screenPos.x > screenWidth || screenPos.x < -100 ||
+		screenPos.y > screenHeight || screenPos.y < -100)
+	{
+		Deactivate();
+	}
+
+	// check Collision
+	if (Global::map)
 		Collision::handleFireBallCollisionMap(this, Global::map);
 }
+
 
 
 Rectangle FireBall::getBound() const {

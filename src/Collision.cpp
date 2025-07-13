@@ -5,6 +5,7 @@
 #include "../headers/Map.h"
 #include "../headers/Mushroom.h"
 #include "../headers/Star.h"
+#include "../headers/EffectManager.h"
 #include <cmath>
 void Collision::handlePlayerCollision(Character* player, Map* map) {
     player->currentState->isGround = false;
@@ -317,18 +318,19 @@ void Collision::handleFireBallCollisionMap(FireBall* fireball , Map* map) {
                             fireball->position.y += overlapY;
                             fireball->velocity.y = 0;
                             fireball->Deactivate();
+                            EffectManager::get().explosionEffect(fireball->position);
                         }
                     }
                     else {
                         if (fireball->velocity.x > 0) {
                             fireball->position.x -= overlapX;
                             fireball->Deactivate();
-                            
+                            EffectManager::get().explosionEffect(fireball->position);
                         }
                         else {
                             fireball->position.x += overlapX;
                             fireball->Deactivate();
-                           
+                            EffectManager::get().explosionEffect(fireball->position);
                         }
                         //fireball->velocity.x *= -1; 
                     }

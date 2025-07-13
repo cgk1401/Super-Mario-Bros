@@ -3,6 +3,7 @@
 #include <algorithm>
 #include "../headers/Map.h"
 #include "../headers/TextureManager.h"
+#include "../headers/FireBallExplosionEffect.h"
 
 EffectManager* EffectManager::instance = nullptr;
 
@@ -10,22 +11,9 @@ EffectManager::EffectManager(){
     texture = TextureManager::get().load(TextureType::ITEM);
 
     //BRICK BREAK
-    vector<Rectangle> brickFrames;
-    for(int i = 0; i < 2; i++){
-        brickFrames.push_back(Rectangle{(float)(180 + i * 10), 26, 8, 8});
-    }
-
-    brickExplosionAnim.frame = brickFrames;
-    brickExplosionAnim.durationtime = 0.08f;
    
-   //COIN COLLECT
-    vector<Rectangle> coinFrames;
-    for(int i = 0; i < 4; i++){
-        coinFrames.push_back(Rectangle{(float)(180 + i * 10), 36, 8, 16});
-    }
-
-    coinCollectAnim.frame = coinFrames;
-    coinCollectAnim.durationtime = 0.07;
+   
+   
 }
 
 void EffectManager::spawnBrickBreak(int row, int col){
@@ -34,7 +22,7 @@ void EffectManager::spawnBrickBreak(int row, int col){
 
     Vector2 spawnPos = { x + Map::TILE_SIZE / 2 - 8, y + Map::TILE_SIZE / 2 - 8 }; // căn giữa tile
     
-    effects.emplace_back(new BrickBreakEffect(spawnPos, brickExplosionAnim));
+    effects.emplace_back(new BrickBreakEffect(spawnPos));
     
 }
 
@@ -44,7 +32,12 @@ void EffectManager::spawnCoin(int row, int col){
 
     Vector2 spawnPos = { x + Map::TILE_SIZE / 2 - 8, y};
     
-    effects.emplace_back(new CoinCollectEffect(spawnPos, coinCollectAnim));
+    effects.emplace_back(new CoinCollectEffect(spawnPos));
+}
+
+void EffectManager::explosionEffect(Vector2 pos){
+    
+    effects.emplace_back(new FireBallExplosionEffect(pos));
 }
 
 void EffectManager::update(float dt){
@@ -52,9 +45,14 @@ void EffectManager::update(float dt){
         b->update(dt);
     }
     //xoa nhung effect da hoan thanh
-    erase_if(effects, [](BaseEffect* e) {
-        return e->isFinished();
-        });
+    effects.erase(
+        remove_if(effects.begin(), effects.end(),
+            [](BaseEffect* e) {
+                return e->isFinished();
+            }),
+        effects.end()
+    );
+
 }
 
 void EffectManager::draw(){

@@ -1,7 +1,15 @@
 #include "../headers/BrickBreakEffect.h"
 
-BrickBreakEffect::BrickBreakEffect(Vector2 position, const Animation& templateAnim)
-        : pos(position), anim(templateAnim) {
+BrickBreakEffect::BrickBreakEffect(Vector2 position)
+        : pos(position){
+    
+    vector<Rectangle> brickFrames;
+    for(int i = 0; i < 2; i++){
+        brickFrames.push_back(Rectangle{(float)(180 + i * 10), 26, 8, 8});
+    }
+
+    anim.frame = brickFrames;
+    anim.durationtime = 0.08f;
 
     anim.reset();
     time.start(0.2f);

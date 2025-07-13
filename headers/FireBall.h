@@ -18,10 +18,10 @@ private:
 	float scale;
 	bool onGround = false;
 
-	const float FIREBALL_SPEEDX = 350.0f;
-	const float FIREBALL_SPEEDY = 800.0f;
+	const float FIREBALL_SPEEDX = 850.0f; //350
+	const float FIREBALL_SPEEDY = 3800.0f; //800
 	const float FIREBALL_LIFETIME = 2.0f;
-	const float BOUNCE_VELOCITY = -200.f;
+	const float BOUNCE_VELOCITY = -500.f; //-200
 
 	//bool isActive;
 	float positionGround;

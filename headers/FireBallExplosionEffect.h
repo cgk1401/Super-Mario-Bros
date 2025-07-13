@@ -7,24 +7,17 @@
 #include "../headers/BaseEffect.h"
 using namespace std;
 
-
-
-class CoinCollectEffect : public BaseEffect {
+class FireBallExplosionEffect : public BaseEffect {
 private:
     Vector2 pos;
-    float height;
-    Vector2 coinPos;
-    float coinHeight;
     Animation anim;
-    Timer time;
-
 public:
-    CoinCollectEffect() {}
-    CoinCollectEffect(Vector2 position);
+    FireBallExplosionEffect() {}
+    FireBallExplosionEffect(Vector2 position);
+    ~FireBallExplosionEffect() {}
     
     void update(float dt) override;
     void draw(const Texture2D& texture) override;
     bool isFinished() const override;
-   
 };
 

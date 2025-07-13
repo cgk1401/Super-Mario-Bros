@@ -55,6 +55,9 @@
     <Filter Include="Source Files\Effect">
       <UniqueIdentifier>{d78df01e-0648-4f30-8c1e-413a9a8ae0f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entity\Enemy">
+      <UniqueIdentifier>{907f051b-27ec-45ba-bda6-8a476dcbb304}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\Entity\Character">
       <UniqueIdentifier>{29b1c5d5-faf3-46ad-940e-c4825f39fb8b}</UniqueIdentifier>
     </Filter>
@@ -75,9 +78,6 @@
     </Filter>
     <Filter Include="Source Files\Entity\Item">
       <UniqueIdentifier>{55a6198f-c489-4597-a9b1-f13352f9ffca}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Entity\Enemy">
-      <UniqueIdentifier>{907f051b-27ec-45ba-bda6-8a476dcbb304}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +183,9 @@
     <ClCompile Include="..\src\StarmanState.cpp">
       <Filter>Source Files\Entity\CharacterState</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\FireBallExplosionEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -235,6 +238,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\Collision.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\EffectManager.h">
+      <Filter>Header Files\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Timer.h">
       <Filter>Header Files\Core</Filter>
@@ -314,7 +320,7 @@
     <ClInclude Include="..\headers\StarmanState.h">
       <Filter>Header Files\Entity\CharacterState</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\EffectManager.h">
+    <ClInclude Include="..\headers\FireBallExplosionEffect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
   </ItemGroup>

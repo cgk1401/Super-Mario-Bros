@@ -16,8 +16,6 @@ private:
 
     //EFFECTs
     vector<BaseEffect*> effects;
-    Animation brickExplosionAnim;
-    Animation coinCollectAnim;
 
     EffectManager();
     ~EffectManager(){delete instance;}
@@ -26,6 +24,7 @@ public:
     //EFFECT METHODs
     void spawnBrickBreak(int row, int col);
     void spawnCoin(int row, int col);
+    void explosionEffect(Vector2 pos);
 
     void update(float dt);
     void draw();

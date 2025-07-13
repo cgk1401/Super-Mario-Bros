@@ -14,7 +14,7 @@ PlayState::PlayState() {
     map->loadFromFile("map1.txt");
     Global::map = map;
     camera.init({0,0});
-    Global::camera = camera.getCamera();
+   
     bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.05, 7.2);
     bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 7.2);
     bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 7.2);
@@ -66,7 +66,7 @@ void PlayState::update(float dt){
     }),
     enemies.end());
     
-
+     Global::camera = camera.getCamera();
 }
 
 void PlayState::render() {

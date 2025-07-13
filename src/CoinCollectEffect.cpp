@@ -1,7 +1,17 @@
 #include "../headers/CoinCollectEffect.h"
 #include "../headers/Map.h"
 
-CoinCollectEffect::CoinCollectEffect(Vector2 position, const Animation& templateAnim): pos(position), anim(templateAnim){
+CoinCollectEffect::CoinCollectEffect(Vector2 position): pos(position){
+    //COIN COLLECT
+    vector<Rectangle> coinFrames;
+    for(int i = 0; i < 4; i++){
+        coinFrames.push_back(Rectangle{(float)(180 + i * 10), 36, 8, 16});
+    }
+
+    anim.frame = coinFrames;
+    anim.durationtime = 0.07;
+
+    anim.reset();
     coinPos = position; //spawn position
     height = 15;
     time.start(1);
