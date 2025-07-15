@@ -2,12 +2,7 @@
 #include "../headers/GoomBa.h"
 #include "../headers/PiranhaPlant.h"
 #include "../headers/KoopaTroopa.h"
-
-enum class EnemyType{
-    GOOMBA,
-    KOOPA,
-    PIRANT_PLANT
-};
+#include  "../headers/Global.h"
 
 class EnemyFactory {
 public:

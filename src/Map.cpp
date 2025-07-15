@@ -1,8 +1,10 @@
-#include "../headers/Map.h"
+﻿#include "../headers/Map.h"
 #include "../headers/ConcreteTileBehavior.h"
+#include "../headers/Global.h"
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <functional>
 using namespace std;
 
 Map::Map(const char* texturePath, int r, int c) {
@@ -40,13 +42,13 @@ Map::Map(const char* texturePath, int r, int c) {
     }
 	//this prevents some invisible tiles
 
-      for (int r = 0; r < tileRows; r++) {
+      /*for (int r = 0; r < tileRows; r++) {
         cout << r <<": ";
         for (int c = 0; c < tileSetSourceRects[r].size(); c++) {
             cout << c <<" " ;
         }
         cout << endl;
-        }
+        }*/
 
 
     createTileCatalog();
@@ -131,7 +133,7 @@ void Map::createTileCatalog() {
             if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], ITEM, new ItemBehavior()));
             if (i % 2 == 1) {
                 tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior()));
-                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], USED_QUESTION_BLOCK, new SolidTileBehavior()));
+                tileCatalog.emplace(getTileIDFromCoords(i, j + 1), Tile(1, tileSetSourceRects[i - 1][j + 1 - 1], USED_QUESTION_BLOCK, new SolidTileBehavior()));
             }
         }
         //Items
@@ -218,7 +220,7 @@ void Map::createTileCatalog() {
 
     for (int i = 21; i <= tileRows; i++) {
         for (int j = 1; j < 16; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior()));
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], ENEMY, new DecorationTileBehavior()));
         }
     }
     //temporary enemies to add to map
@@ -262,6 +264,8 @@ void Map::draw(bool isEditing) {
 
             auto it = tileCatalog.find(id);
             if (id && it != tileCatalog.end()) {
+                if (it->second.type == ENEMY && isEditing == false) continue;
+
                 Vector2 drawPos = {
                    mapRects[x][y].x + mapData[x][y].offsetPos.x,
                     mapRects[x][y].y + mapData[x][y].offsetPos.y
@@ -315,20 +319,49 @@ MapTileInstance* Map::getMapTileInstance(int row, int col) {
     return &mapData[row][col];
 }
 
+void Map::setEnemySpawnCallback(function<void(EnemyType, Vector2)> callback) {
+    spawnEnemyCallback = callback;
+}
+
+EnemyType Map::getEnemyType(int tileID) {
+    switch (tileID)
+    {
+    case 541:
+        return EnemyType::GOOMBA; break;
+    case 543:
+        return EnemyType::KOOPA; break;
+    case 544:
+        return EnemyType::PIRANT_PLANT; break;
+
+    default:
+        return EnemyType::GOOMBA;
+    }
+}
 void Map::setTile(int row, int col, int tileID) {
     if (row < 0 || row >= rows || col < 0 || col >= columns) {
         return;
     }
 
-    if ( mapData[row][col].tileID == tileID) return;
+    //if ( mapData[row][col].tileID == tileID) return;
 
-    cout << tileID << endl;
+    //cout << tileID << endl;
     auto it = tileCatalog.find(tileID);
     if (it == tileCatalog.end()) {
         TraceLog(LOG_ERROR, "INVALID ID");
         return;
     }
+    if (it->second.type == ENEMY) {
+        //mapData[row][col].tileID = 0;
 
+        if (spawnEnemyCallback) {
+            EnemyType enemyType = getEnemyType(tileID);
+            Vector2 spawnPos = {
+                static_cast<float>(col * TILE_SIZE),
+                static_cast<float>(row * TILE_SIZE)
+            };
+            spawnEnemyCallback(enemyType, spawnPos);
+        }
+    }
     mapData[row][col].tileID = tileID;
     mapData[row][col].hasItem = false;
     if (it->second.type == QUESTION_BLOCK || it->second.type == COINS_BLOCK) {

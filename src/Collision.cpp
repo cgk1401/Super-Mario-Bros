@@ -35,7 +35,7 @@ void Collision::handlePlayerCollision(Character* player, Map* map) {
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
-                player->position.y = tileRect.y - bound.height;
+                player->position.y = tileRect.y - bound.height - 0.5f;
                 player->velocity.y = 0;
 
                 player->currentState->isGround = true;
@@ -44,7 +44,7 @@ void Collision::handlePlayerCollision(Character* player, Map* map) {
             }
         }
     }
-
+      endRow = endRow - 1 < startRow ? startRow : endRow - 1;
     for (int x = startRow; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
             Tile tile = map->getTile(x, y);

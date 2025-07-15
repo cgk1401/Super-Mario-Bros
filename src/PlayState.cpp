@@ -11,6 +11,13 @@ PlayState::PlayState() {
     gui = GUI();
  
     map = new Map("../assets/Map/tileset_gutter64x64.png");
+
+    map->setEnemySpawnCallback(
+        [this](EnemyType type, Vector2 pos) {
+            enemies.push_back(EnemyFactory::createEnemy(type, pos));
+        }
+    );
+
     map->loadFromFile("map1.txt");
     Global::map = map;
     camera.init({0,0});
@@ -19,9 +26,6 @@ PlayState::PlayState() {
     bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 7.2);
     bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 7.2);
     
-    enemies.push_back(EnemyFactory::createEnemy(EnemyType::GOOMBA, {500, 100}));
-    enemies.push_back(EnemyFactory::createEnemy(EnemyType::KOOPA, {600, 100}));
-    enemies.push_back(EnemyFactory::createEnemy(EnemyType::PIRANT_PLANT, {300, 100}));
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
 }

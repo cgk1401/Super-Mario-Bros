@@ -165,13 +165,13 @@ void FireState::HandleInput(float deltatime) {
 				FireBall* fireball;
 				if (character->currentdirection == Direction::Right) {
 					fireball = new FireBall({ character->position.x + character->animations[character->currentAction].getcurrentframe().width * character->scale + 20,
-					character->position.y + 30 }, character, character->position.y + character->animations[character->currentAction].getcurrentframe().height * character->scale);
-					fireball->SetVelocity({ fireball->FIREBALL_SPEEDX , 0 });
+					character->position.y + 30 }, character, character->BasePosition);
+					fireball->SetVelocity({ fireball->FIREBALL_SPEEDX , 500 });
 				}
 				else if (character->currentdirection == Direction::Left) {
 					fireball = new FireBall({ character->position.x - character->animations[character->currentAction].getcurrentframe().width * character->scale + 20,
 					character->position.y + 30 }, character, character->BasePosition);
-					fireball->SetVelocity({ -fireball->FIREBALL_SPEEDX , 0 });
+					fireball->SetVelocity({ -fireball->FIREBALL_SPEEDX , 500 });
 				}
 
 				fireballs.push_back(fireball);

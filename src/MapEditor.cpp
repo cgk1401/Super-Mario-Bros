@@ -234,7 +234,7 @@ void MapEditor::update(float deltatime) {
                                 int coor_y = brushBuffer[i][j].x / TILE_SIZE;
                                 //cout << "update: " << endl;
                                 int tileID = getTileIDFromCoords(coor_x + 1, coor_y  + 1);
-                                //cout << "ID: " << tileID << endl;
+                                cout << "ID: " << tileID << endl;
                                 int pasteY = (pickedTile.x + i * TILE_SIZE) / TILE_SIZE;
                                 int pasteX = (pickedTile.y + j * TILE_SIZE) / TILE_SIZE;
                                 

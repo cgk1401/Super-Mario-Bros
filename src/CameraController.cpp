@@ -1,6 +1,7 @@
 // CameraController.cpp
 #include "../headers/CameraController.h"
 #include "cmath"
+#include <raymath.h>
 void CameraController::init(Vector2 startPos) {
     camera = { 0 };
     camera.target = startPos;
@@ -27,5 +28,21 @@ void CameraController::update(Rectangle playerBound, float screenWidth) {
         camera.target.x = playerBound.x + playerWidth / 2 - screenWidth / 2 ;
     else camera.target.x = 0;
     camera.target.y = 0;
+
+    float wheel = GetMouseWheelMove();
+    
+    if (wheel != 0) {
+        // cameraEditor.target = GetMousePosition();
+        camera.zoom += wheel * 0.1f;
+        if (camera.zoom < 0.2f) camera.zoom = 0.2f;
+        if (camera.zoom > 5.0f) camera.zoom = 5.0f;
+    }
+    if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+
+        Vector2 delta = GetMouseDelta();
+        delta = Vector2Scale(delta, -1.0f / camera.zoom);
+        camera.target = Vector2Add(camera.target, delta);
+
+    }
     
 }

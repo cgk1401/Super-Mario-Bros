@@ -1,9 +1,11 @@
 ﻿#pragma once
 #include "../headers/Tile.h"
+#include "../headers/Global.h"
 #include "raylib.h"
 #include <map>
 #include <vector>
 #include <memory>
+#include <functional>
 using namespace std;
 
 struct TileState;
@@ -27,6 +29,7 @@ protected:
 	vector<vector<MapTileInstance>> mapData;		                //data của từng ô: 0 0 1 0 -> 0: empty tile, 1: brick tile,...
 	vector<vector<Rectangle>> tileSetSourceRects;	                //Lưu srcRect của từng tile trong tileSet
     void createTileCatalog();
+    function<void(EnemyType, Vector2)> spawnEnemyCallback;
 public:
     int rows = 12, columns = 16;
     int tileRows, tileColumns; 
@@ -44,7 +47,11 @@ public:
     int getTileIDFromCoords(int fileRow, int fileCol) const;
     MapTileInstance* getMapTileInstance(int row, int col);          //Để sau có thể thay đổi trực tiếp từng tile nếu có collision(vd: khi mario nhảy chạm đầu vào block -> block bị nảy lên 1 tí,...)
     void updateTileInstancePosition(int tileRow, int tileCol, Vector2 offset);
- 
+
+    
+    void setEnemySpawnCallback(std::function<void(EnemyType, Vector2)> callback);
+    EnemyType getEnemyType(int tileID);
+
     void setTile(int row, int col, int tileID);
     void removeTile(int row, int col);
 };

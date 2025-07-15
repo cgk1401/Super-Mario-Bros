@@ -2,6 +2,7 @@
 #include "Animation.h"
 #include "../headers/Map.h"
 #include "../headers/Global.h"
+
 class Enemy {
 protected:
 	Vector2 position;
@@ -29,5 +30,16 @@ public:
 	virtual void changeDirection(Direction newDirection) {
 		if (direction != newDirection) 
 			direction = newDirection;
+	}
+
+	virtual bool isActive() const {
+		Vector2 screenPos = GetWorldToScreen2D(this->position, Global::camera);
+		float tolerance = Map::TILE_SIZE;
+		return (
+			screenPos.x >= -tolerance &&
+			screenPos.x <= screenWidth + tolerance &&
+			screenPos.y >= -tolerance &&
+			screenPos.y <= screenHeight + tolerance
+			);
 	}
 };

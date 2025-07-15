@@ -6,13 +6,12 @@
 #include <cmath>
 #include <string>
 #include <vector>
-
-#include "../headers/Map.h"
 #include "../headers/Button.h"
 using namespace std;
 const int screenWidth = 1200; //1024
 const int screenHeight = 800; //768
 Texture2D resizedImage(const char* imagePath, float width, float height);
+class Map;
 
 enum class CharacterStateType {
 	NormalState,
@@ -42,6 +41,11 @@ enum class Direction {
 	Right
 };
 
+enum class EnemyType {
+	GOOMBA,
+	KOOPA,
+	PIRANT_PLANT
+};
 class Global {
 public:
     static Map* map;
