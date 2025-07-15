@@ -186,6 +186,12 @@
     <ClCompile Include="..\src\FireBallExplosionEffect.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\GoombaDeadEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MarioDeadEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -321,6 +327,12 @@
       <Filter>Header Files\Entity\CharacterState</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\FireBallExplosionEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\GoombaDeadEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\MarioDeadEffect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
   </ItemGroup>

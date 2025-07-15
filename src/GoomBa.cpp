@@ -2,21 +2,24 @@
 #include <iostream>
 #include "../headers/Collision.h"
 #include "../headers/TextureManager.h"
+#include "../headers/EffectManager.h"
 
 GoomBa::GoomBa() : Enemy(){
+	currentState = GoomBaState::Run;
 	this->position = { 150, 500 };
 	LoadSource();
 }
 
 GoomBa::GoomBa(Vector2 position) : Enemy() {
+	currentState = GoomBaState::Run;
 	this->position = position;
 	LoadSource();
 }
 
 GoomBa::~GoomBa() {
-	if (texture.id != 0) {
-		UnloadTexture(texture);
-	}
+	//if (texture.id != 0) {
+	//	UnloadTexture(texture);
+	//}
 }
 
 void GoomBa::LoadSource() {
@@ -35,7 +38,11 @@ void GoomBa::LoadSource() {
 	die.currenttime = 0;
 	die.durationtime = 0.3f;
 	die.frame.push_back({ 36, 24, 16, 8 });
-	animation[GoomBaState::Die] = die;
+	animation[GoomBaState::DIE_STOMP] = die;
+
+	animation[GoomBaState::DIE_FALLING].frame = {};
+
+	
 }
 
 void GoomBa::Draw() {
@@ -46,6 +53,7 @@ void GoomBa::Draw() {
 
 void GoomBa::Update(float deltatime, Map* map) {
 	animation[currentState].Update(deltatime);
+	stomp_dead_timer.update(deltatime);
 
 	if (!onGround) {
 		velocity.y += gravity * deltatime;
@@ -71,11 +79,17 @@ void GoomBa::Update(float deltatime, Map* map) {
 	Rectangle currentFrame = animation[currentState].getcurrentframe();
     bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
 
-	Collision::handleEnemyCollision(this, map);
+	if (map) Collision::handleEnemyCollision(this, map);
 
 }
 bool GoomBa::isDead() {
-	return currentState == GoomBaState::Die;
+	if (currentState == GoomBaState::DIE_STOMP)
+		return stomp_dead_timer.isFinished();
+
+	if (currentState == GoomBaState::DIE_FALLING)
+		return true;
+
+	return false;
 }
 void GoomBa::moveLeft() {
 	velocity.x = -speed * GetFrameTime();
@@ -100,8 +114,15 @@ void GoomBa::ChangeState(GoomBaState newState) {
 	currentState = newState;
 	animation[currentState].currentframe = 0;
 	animation[currentState].currenttime = 0;
-	if (newState == GoomBaState::Die) {
+	if (newState == GoomBaState::DIE_FALLING) {
 		// tăng position.y
-		
+		EffectManager::get().goombaDead(this->position);
 	}
+	else if (newState == GoomBaState::DIE_STOMP) {
+		stomp_dead_timer.start(0.2f);
+	}
+}
+
+void GoomBa::DIE(Character* player) {
+	ChangeState(GoomBaState::DIE_STOMP);
 }

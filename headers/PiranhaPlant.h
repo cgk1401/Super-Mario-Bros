@@ -31,6 +31,6 @@ public:
 	void Update(float deltatime, Map* map) override;
 	void Draw() override;
 	bool isDead() {return false;}
-
+	void DIE(Character* player) override{}
 	void ChangeState(PlantState newState);
 };

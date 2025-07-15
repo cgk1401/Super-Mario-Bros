@@ -55,7 +55,8 @@ public:
 	Rectangle getFootSensor() const;
 	ActionState getCurrentAction() const;
 	CharacterStateType getCharacterStateType() const;
-	
+	void DIE();
+
 	void Draw();
 	void Update(float deltatime);
 };

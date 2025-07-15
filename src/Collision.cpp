@@ -6,6 +6,9 @@
 #include "../headers/Mushroom.h"
 #include "../headers/Star.h"
 #include "../headers/EffectManager.h"
+#include "../headers/GoomBa.h"
+#include "../headers/KoopaTroopa.h"
+
 #include <cmath>
 
 void Collision::handlePlayerCollision(Character* player, Map* map) {
@@ -397,3 +400,101 @@ void Collision::handleFireBallCollisionMap(FireBall* fireball , Map* map) {
 }
 
 
+void Collision::handleEnemy_EnemyCollison(vector<Enemy*>& enemies) {
+    for (auto& e : enemies) {
+        if (!e || e->isDead()) continue;
+
+        Rectangle e_bound = e->bound;
+
+        for (auto& other : enemies) {
+            if (other == e || !other || other->isDead()) continue;
+            Rectangle o_bound = other->bound;
+            // Special case: Koopa in Shell hitting Goomba
+            if (auto* k = dynamic_cast<KoopTroopa*>(other)) {
+                if (k->currentState == KoopaState::Shell) {
+                    if (auto* g = dynamic_cast<GoomBa*>(e)) {
+                        if (CheckCollisionRecs(e_bound, o_bound)) {
+                            g->ChangeState(GoomBaState::DIE_FALLING);
+                            break;
+                        }
+                    }
+                    
+                }
+                
+            }
+            if (auto* g = dynamic_cast<KoopTroopa*>(e)) {
+                if (g->currentState == KoopaState::Shell) break;
+            }
+            
+
+            if (CheckCollisionRecs(e_bound, o_bound)) {
+                float overlapX = fmin(e_bound.x + e_bound.width, o_bound.x + o_bound.width) -
+                    fmax(e_bound.x, o_bound.x);
+
+                if (e->velocity.x > 0) {
+                    e->position.x -= overlapX;
+                    e->changeDirection(Direction::Left);
+                }
+                else {
+                    e->position.x += overlapX;
+                    e->changeDirection(Direction::Right);
+                }
+
+                break; 
+            }
+        }
+    }
+}
+
+
+
+void Collision::handlePlayer_EnemyCollision(Character* player, vector<Enemy*> enemies) {
+    for (auto& e : enemies) {
+        Rectangle player_bound = player->getBound();
+        Rectangle enemy_bound = e->bound;
+
+        if (CheckCollisionRecs(player_bound, enemy_bound)) {
+            float overlapX = fmin(player_bound.x + player_bound.width, enemy_bound.x + enemy_bound.width) - fmax(player_bound.x, enemy_bound.x);
+            float overlapY = fmin(player_bound.y + player_bound.height, enemy_bound.y + enemy_bound.height) - fmax(player_bound.y, enemy_bound.y);
+
+
+            if (overlapX > 0 && overlapY > 0) {
+                if (overlapY < overlapX) {
+
+                    if (player->velocity.y > 0) {
+                        player->position.y -= overlapY;
+                        player->velocity.y = -100; //bounce a bit
+
+                        //enemy->die
+                        e->DIE(player);
+                        
+                    }
+                    else if (player->velocity.y < 0) {
+                        //player->die
+                        player->DIE();
+                    }
+                }
+                else {
+                    if (player->velocity.x > 0) {
+                        //player->die
+                        player->DIE();
+                    }
+                    else {
+                        //player->die
+                        player->DIE();
+                    }
+                }
+
+                player_bound = player->getBound();
+
+
+            }
+
+
+        }
+    }
+}
+
+void Collision::handleFireball_EnemyCollision(FireBall* fireball, vector<Enemy*> enemies) {
+
+}

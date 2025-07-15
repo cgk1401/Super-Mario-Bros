@@ -152,7 +152,9 @@
     <ClCompile Include="..\src\Map.cpp" />
     <ClCompile Include="..\src\MapEditor.cpp" />
     <ClCompile Include="..\src\Mario.cpp" />
+    <ClCompile Include="..\src\MarioDeadEffect.cpp" />
     <ClCompile Include="..\src\MenuState.cpp" />
+    <ClCompile Include="..\src\GoombaDeadEffect.cpp" />
     <ClCompile Include="..\src\NormalState.cpp" />
     <ClCompile Include="..\src\ParallaxManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
@@ -193,8 +195,10 @@
     <ClInclude Include="..\headers\Map.h" />
     <ClInclude Include="..\headers\MapEditor.h" />
     <ClInclude Include="..\headers\Mario.h" />
+    <ClInclude Include="..\headers\MarioDeadEffect.h" />
     <ClInclude Include="..\headers\MenuState.h" />
     <ClInclude Include="..\headers\Mushroom.h" />
+    <ClInclude Include="..\headers\GoombaDeadEffect.h" />
     <ClInclude Include="..\headers\NormalState.h" />
     <ClInclude Include="..\headers\ParallaxManager.h" />
     <ClInclude Include="..\headers\PauseState.h" />

@@ -1,4 +1,4 @@
-#include "../headers/KoopaTroopa.h"
+﻿#include "../headers/KoopaTroopa.h"
 #include "../headers/Collision.h"
 #include "../headers/TextureManager.h"
 
@@ -12,6 +12,8 @@ KoopTroopa::KoopTroopa() : Enemy() {
 KoopTroopa::KoopTroopa(Vector2 position) {
 	this->position = position;
 	LoadSource();
+
+	currentState = KoopaState::Walk;
 }
 
 KoopTroopa::~KoopTroopa() {
@@ -35,6 +37,11 @@ void KoopTroopa::LoadSource() {
 	shell.frame.push_back({ 72, 120, 16, 16 });
 	animation[KoopaState::Shell] = shell;
 
+	Animation die;
+	die.frame.push_back({ 72, 120, 16, 16 });
+	die.durationtime = 0.2;
+	animation[KoopaState::Die] = die;
+	
 }
 
 void KoopTroopa::Draw() {
@@ -66,7 +73,8 @@ void KoopTroopa::Update(float deltatime, Map* map) {
 	else if (direction == Direction::Left){
 		moveLeft();
 	}
-	position.y += velocity.y;
+
+	position.y += velocity.y * deltatime;
 
 	Rectangle currentFrame = animation[currentState].getcurrentframe();
 	bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
@@ -80,7 +88,7 @@ void KoopTroopa::moveLeft() {
 		velocity.x = -walkSpeed * GetFrameTime();
 	}
 	else if (currentState == KoopaState::Shell) {
-		velocity.x = -shellSpeed * GetFrameTime();
+		if (!isStationary) velocity.x = -shellSpeed * GetFrameTime();
 	}
 	position.x += velocity.x;
 }
@@ -90,17 +98,37 @@ void KoopTroopa::moveRight() {
 		velocity.x = walkSpeed * GetFrameTime();
 	}
 	else if (currentState == KoopaState::Shell) {
-		velocity.x = shellSpeed * GetFrameTime();
+		if(!isStationary) velocity.x = shellSpeed * GetFrameTime();
 	}
 	position.x += velocity.x;
 }
 
 bool KoopTroopa::isDead(){
-	return position.y >= GetScreenHeight() + 50;
+	return position.y >= GetScreenHeight() + 50 || currentState == KoopaState::Die;
 }
 
 void KoopTroopa::Fall() {
 	currentState = KoopaState::Shell;
 	velocity.y += gravity * GetFrameTime();
 	position.y += velocity.y;
+}
+
+void KoopTroopa::DIE(Character* player){
+	if(currentState == KoopaState::Walk){
+		currentState = KoopaState::Shell;
+		isStationary = true;
+		animation[currentState].reset();
+	}
+	else if(currentState == KoopaState::Shell){
+		isStationary = false;
+		Rectangle player_bound = player->getBound();
+		float player_mid = player_bound.x + player_bound.width / 2;
+		float enemy_mid = this->bound.x + this->bound.width / 2;
+
+		cout << player_mid << " - " << enemy_mid << endl;
+		if(player_mid >= enemy_mid) //stomp on left
+			changeDirection(Direction::Left);
+		else //on right
+			changeDirection(Direction::Right);
+	}
 }

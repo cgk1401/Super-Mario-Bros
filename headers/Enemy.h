@@ -3,6 +3,8 @@
 #include "../headers/Map.h"
 #include "../headers/Global.h"
 
+class Character;
+
 class Enemy {
 protected:
 	Vector2 position;
@@ -26,11 +28,13 @@ public:
 	virtual void Update(float deltatime, Map* map) = 0;
 	virtual void Draw() = 0;
 	virtual void LoadSource() = 0;
+	virtual void DIE(Character* player) = 0;
 	virtual bool isDead() = 0; 
 	virtual void changeDirection(Direction newDirection) {
 		if (direction != newDirection) 
 			direction = newDirection;
 	}
+	
 
 	virtual bool isActive() const {
 		Vector2 screenPos = GetWorldToScreen2D(this->position, Global::camera);

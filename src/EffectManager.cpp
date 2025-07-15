@@ -4,6 +4,8 @@
 #include "../headers/Map.h"
 #include "../headers/TextureManager.h"
 #include "../headers/FireBallExplosionEffect.h"
+#include "../headers/GoombaDeadEffect.h"
+#include "../headers/MarioDeadEffect.h"
 
 EffectManager* EffectManager::instance = nullptr;
 
@@ -40,6 +42,12 @@ void EffectManager::explosionEffect(Vector2 pos){
     effects.emplace_back(new FireBallExplosionEffect(pos));
 }
 
+void EffectManager::goombaDead(Vector2 pos){
+    effects.emplace_back(new GoombaDeadEffect(pos));
+}
+ void EffectManager::marioDead(Vector2 position, const Texture2D& texture, Rectangle frame){
+    effects.emplace_back(new MarioDeadEffect(position, texture, frame));
+ }
 void EffectManager::update(float dt){
     for(auto& b : effects){
         b->update(dt);

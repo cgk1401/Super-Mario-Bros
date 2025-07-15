@@ -25,7 +25,9 @@ public:
     void spawnBrickBreak(int row, int col);
     void spawnCoin(int row, int col);
     void explosionEffect(Vector2 pos);
-
+    void goombaDead(Vector2 pos);
+    void marioDead(Vector2 position, const Texture2D& texture, Rectangle frame);
+    
     void update(float dt);
     void draw();
 

@@ -7,18 +7,21 @@ using namespace std;
 
 enum class KoopaState {
 	Walk,
-	Shell
+	Shell,
+	Die, //falling off (die by fireball)
 };
 
 class KoopTroopa : public Enemy {
+	friend class Collision;
 private :
 	map <KoopaState, Animation> animation;
-	KoopaState currentState = KoopaState::Walk;
+	KoopaState currentState;
 
 	const float walkSpeed = 100.0f;
 	const float shellSpeed = 500.0f;
 
-	float gravity = 35; // vận tốc rơi
+	bool isStationary = false;
+	float gravity = 1000; // vận tốc rơi
 	const float scale = 3.0f;
 
 public :
@@ -29,8 +32,9 @@ public :
 	void LoadSource() override;
 	void Draw() override;
 	void Update(float deltatime, Map* map) override;
+	void DIE(Character* player) override;
 	bool isDead() override;
-	
+
 	void moveLeft();
 	void moveRight();
 	void Fall();

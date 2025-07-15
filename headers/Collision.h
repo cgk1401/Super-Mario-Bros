@@ -14,4 +14,8 @@ public:
     static void handleMushroomCollisionMap(Mushroom* mushroom, Map* map);
     static void handleStarCollision(Star* star, Map* map);
     static void handleFireBallCollisionMap(FireBall* fire, Map* map);
+    
+    static void handleEnemy_EnemyCollison(vector<Enemy*>& enemies);
+    static void handlePlayer_EnemyCollision(Character* player, vector<Enemy*> enemies);
+    static void handleFireball_EnemyCollision(FireBall* fireball, vector<Enemy*> enemies);
 };

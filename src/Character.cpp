@@ -4,6 +4,7 @@
 #include "../headers/SuperState.h"
 #include "../headers/StarmanState.h"
 #include "../headers/FireState.h"
+#include "../headers/EffectManager.h"
 
 #include <iostream>
 using namespace std;
@@ -139,3 +140,14 @@ void Character::Update(float deltatime) {
 	currentState->Update(deltatime);
 }
 
+void Character::DIE(){
+	if(currentAction == ActionState::Die) return;
+	
+	if(getCharacterStateType() == CharacterStateType::NormalState){
+		currentAction = ActionState::Die;
+		EffectManager::get().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
+	}
+	else if(getCharacterStateType() == CharacterStateType::SuperState || getCharacterStateType() == CharacterStateType::FireState){
+		//TRANSFORM GRADUALLY TO NORMAL STATE
+	}
+}

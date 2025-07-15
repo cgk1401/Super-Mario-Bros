@@ -43,18 +43,23 @@ void PlayState::update(float dt){
     }
 
 
-    camera.update(mario->getBound(), screenWidth);
+    
     gui.update(); 
     //bg.update( mario,camera.getCamera(), dt);
     //fg.update( mario,camera.getCamera(), dt);
     map->update();
+
     Collision::handlePlayerCollision(mario, map);
-    mario->Update(dt);
-   
+
+    if (mario->getCurrentAction() != ActionState::Die) mario->Update(dt);
+    Collision::handlePlayer_EnemyCollision(mario, enemies);
+
     EffectManager::get().update(dt);
     ItemManager::get().Update(dt, mario, map);
 
+    Collision::handleEnemy_EnemyCollison(enemies);
     for(auto& e: enemies){
+        Collision::handleEnemyCollision(e, map);
         e->Update(dt, map);
     }
     
@@ -69,8 +74,8 @@ void PlayState::update(float dt){
     return false;
     }),
     enemies.end());
-    
-     Global::camera = camera.getCamera();
+    camera.update(mario->getBound(), screenWidth);
+    Global::camera = camera.getCamera();
 }
 
 void PlayState::render() {
@@ -78,7 +83,8 @@ void PlayState::render() {
     //bg.draw();
     ItemManager::get().Draw();
     map->draw();
-    mario->Draw();
+
+    if (mario->getCurrentAction() != ActionState::Die) mario->Draw();
     DrawRectangleLinesEx(mario->getBound(), 0.5, RED);
     for(auto& e: enemies){
         e->Draw();
