@@ -10,15 +10,10 @@ enum class KoopaState {
 	Shell
 };
 
-enum class DirectionKoopa {
-	Left,
-	Right
-};
 class KoopTroopa : public Enemy {
 private :
 	map <KoopaState, Animation> animation;
 	KoopaState currentState = KoopaState::Walk;
-	DirectionKoopa currentDirection = DirectionKoopa::Left;
 
 	const float walkSpeed = 100.0f;
 	const float shellSpeed = 500.0f;
@@ -38,8 +33,6 @@ public :
 	
 	void moveLeft();
 	void moveRight();
-
-	void ChangeDirection(DirectionKoopa direction);
 	void Fall();
 	
 };

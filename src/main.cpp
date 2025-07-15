@@ -6,7 +6,7 @@
 int main() {
 
     InitWindow(screenWidth, screenHeight, "My Mario Game - Group 10");
-    SetTargetFPS(120);
+    SetTargetFPS(60);
     //Access the Game instance
     Game::getInstance()->clear();
     Game::getInstance()->addState(new MenuState()); //Begin with main menu

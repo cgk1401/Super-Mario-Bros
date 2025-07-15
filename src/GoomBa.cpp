@@ -57,6 +57,15 @@ void GoomBa::Update(float deltatime, Map* map) {
 	if (onGround && velocity.y > 0) {
 		velocity.y = 0;
 	}
+
+	 
+	if(direction == Direction::Right){
+		moveRight();
+	}
+	else if (direction == Direction::Left){
+		moveLeft();
+	}
+
 	position.y += velocity.y;
 
 	Rectangle currentFrame = animation[currentState].getcurrentframe();

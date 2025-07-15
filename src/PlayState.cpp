@@ -19,8 +19,8 @@ PlayState::PlayState() {
     bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 7.2);
     bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 7.2);
     
-    enemies.push_back(EnemyFactory::createEnemy(EnemyType::GOOMBA, {100, 100}));
-    enemies.push_back(EnemyFactory::createEnemy(EnemyType::KOOPA, {200, 100}));
+    enemies.push_back(EnemyFactory::createEnemy(EnemyType::GOOMBA, {500, 100}));
+    enemies.push_back(EnemyFactory::createEnemy(EnemyType::KOOPA, {600, 100}));
     enemies.push_back(EnemyFactory::createEnemy(EnemyType::PIRANT_PLANT, {300, 100}));
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
@@ -44,9 +44,9 @@ void PlayState::update(float dt){
     //bg.update( mario,camera.getCamera(), dt);
     //fg.update( mario,camera.getCamera(), dt);
     map->update();
-        
-    mario->Update(dt);
     Collision::handlePlayerCollision(mario, map);
+    mario->Update(dt);
+   
     EffectManager::get().update(dt);
     ItemManager::get().Update(dt, mario, map);
 

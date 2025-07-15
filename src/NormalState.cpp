@@ -1,7 +1,9 @@
 ﻿#include "../Headers/NormalState.h"
 #include <raylib.h>
 
-NormalState::NormalState(Character* character) : CharacterState(character){}
+NormalState::NormalState(Character* character) : CharacterState(character){
+	character->velocity = { 0, 0 };
+}
 
 void NormalState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
@@ -118,13 +120,16 @@ void NormalState::Update(float deltatime) {
 	if (!isGround) {
 		if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
 			character->velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
+			//cout << "not on ground 1\n";
 		}
 		else {
 			character->velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
+			//cout << "not on ground 2\n";
 		}
 		if(isJumpingUp) character->setActionState(ActionState::Jump);
 	}
 	else {
+		//cout << "on ground\n";
 		character->velocity.y = 0; 
 		isJumpingUp = false;
 		if (fabs(character->velocity.x) < 0.1f) {
@@ -142,7 +147,7 @@ void NormalState::Update(float deltatime) {
 
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
-
+	//cout << "vY: " << character->velocity.y << ", isGround: " << isGround << endl;
 	
 	// Nhấn phím KEY_L chuyển trạng thái từ NormalState thành SuperState
 	if (IsKeyPressed(KEY_L)) {
@@ -191,20 +196,21 @@ void NormalState::HandleInput(float deltatime) {
 	 }*/
 
 	if (IsKeyDown(KEY_SPACE)) {
-	if (isGround) {
-		SoundManager::get()->play(SoundType::JUMP);
-		character->velocity.y = config.JUMPFORCE;
-		isGround = false;
-		isJumpingUp = true; 
-		jumpTimeElapsed = 0.0f;
-	}
-	else if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
-		jumpTimeElapsed += deltatime;
-		character->velocity.y = config.JUMPFORCE;  // hoặc scale theo thời gian
-	}
-	} else {
+		if (isGround) {
+			SoundManager::get()->play(SoundType::JUMP);
+			character->velocity.y = config.JUMPFORCE;
+			isGround = false;
+			isJumpingUp = true; 
+			jumpTimeElapsed = 0.0f;
+		}
+		else if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !isGround) {
+			jumpTimeElapsed += deltatime;
+			character->velocity.y = config.JUMPFORCE;  // hoặc scale theo thời gian
+			//cout << "is jumpin\n";
+		}
+	} /*else {
 		isJumpingUp = false;
-	}
+	}*/
 
 }
 

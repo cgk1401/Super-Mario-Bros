@@ -17,9 +17,10 @@ Mario::Mario() {
 Mario::Mario(Vector2 position) {
 	type = CharacterType::Mario;
 	currentAction = ActionState::Idle;
+	this->velocity = { 0, 0 };
 	this->position = position;
 	this->BasePosition = position.y;
-	currentState = new FireState(this);
+	currentState = new NormalState(this);
 	currentState->SetAnimation(this);
 	currentdirection = Direction::Right;
 }

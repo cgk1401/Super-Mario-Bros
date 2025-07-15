@@ -24,7 +24,7 @@ public:
 private:
     GUI gui;
     Map* map;
-    Character* mario = new Mario({100, 500});
+    Character* mario = new Mario({100, 200});
     vector<Enemy*> enemies;
 
     CameraController camera;

@@ -1,4 +1,4 @@
-#include "../Headers/KoopaTroopa.h"
+#include "../headers/KoopaTroopa.h"
 #include "../headers/Collision.h"
 #include "../headers/TextureManager.h"
 
@@ -39,7 +39,7 @@ void KoopTroopa::LoadSource() {
 
 void KoopTroopa::Draw() {
 	Rectangle currentframe = animation[currentState].getcurrentframe();
-	currentframe.width = currentDirection == DirectionKoopa::Left ? abs(currentframe.width) : -abs(currentframe.width);
+	currentframe.width = direction == Direction::Left ? abs(currentframe.width) : -abs(currentframe.width);
 
 	bound = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
 	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
@@ -57,6 +57,14 @@ void KoopTroopa::Update(float deltatime, Map* map) {
 
 	if (onGround && velocity.y > 0) {
 		velocity.y = 0;
+	}
+
+	 
+	if(direction == Direction::Right){
+		moveRight();
+	}
+	else if (direction == Direction::Left){
+		moveLeft();
 	}
 	position.y += velocity.y;
 
@@ -89,10 +97,6 @@ void KoopTroopa::moveRight() {
 
 bool KoopTroopa::isDead(){
 	return position.y >= GetScreenHeight() + 50;
-}
-
-void KoopTroopa::ChangeDirection(DirectionKoopa direction) {
-	currentDirection = direction;
 }
 
 void KoopTroopa::Fall() {

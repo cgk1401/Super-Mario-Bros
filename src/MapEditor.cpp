@@ -167,7 +167,7 @@ void MapEditor::render() {
                 
                 DrawTexturePro(texture,  brushBuffer[x][y], { (float)uiStartX + 110 + x * 40, (float)screenHeight * 0.2f - 60 + y * 40, 40, 40 }, { 0,0 }, 0, WHITE);
 
-                if (CheckCollisionPointRec(GetMousePosition(), mapDrawingArea)) {
+                if (CheckCollisionPointRec(GetMousePosition(), mapDrawingArea) && !IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
                     BeginMode2D(camera);
                     Vector2 mouseOnTilePos = { (int)mouseWorld.x / TILE_SIZE,(int)mouseWorld.y / TILE_SIZE };
                     Rectangle dest = { (mouseOnTilePos.x + x) * TILE_SIZE, (mouseOnTilePos.y  + y) * TILE_SIZE, TILE_SIZE, TILE_SIZE };
@@ -253,8 +253,9 @@ void MapEditor::update(float deltatime) {
             
      }
 
+    if (CheckCollisionPointRec(mousePos, mapDrawingArea)) {
         if (wheel != 0) {
-    // cameraEditor.target = GetMousePosition();
+            // cameraEditor.target = GetMousePosition();
             camera.zoom += wheel * 0.1f;
             if (camera.zoom < 0.7f) camera.zoom = 0.7f;
             if (camera.zoom > 1.0f) camera.zoom = 1.0f;
@@ -264,6 +265,7 @@ void MapEditor::update(float deltatime) {
             delta = Vector2Scale(delta, -1.0f / camera.zoom);
             camera.target = Vector2Add(camera.target, delta);
     }*/
+    }
 
 
     

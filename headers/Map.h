@@ -19,6 +19,7 @@ struct MapTileInstance {
 
 
 class Map {
+    friend class Collision;
 protected:
 	Texture2D texture;								                //Tileset texture
 	map<int, Tile> tileCatalog;					                    //Kho luu tru cac tile (1 dạng của Flyweight pattern)

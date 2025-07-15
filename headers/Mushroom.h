@@ -66,8 +66,8 @@ public:
     }
     void OnCollected(Character* player) override {
         // Chuyển Mario sang SuperState
-        player->ChangeMiddleState(CharacterStateType::SuperState);
-        cout << "tranform" << endl;
+        if(player->getCharacterStateType() == CharacterStateType::NormalState)
+            player->ChangeMiddleState(CharacterStateType::SuperState);
         collected = true;
     }
 

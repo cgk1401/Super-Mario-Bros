@@ -22,8 +22,8 @@ void SuperState::SetAnimation(Character* c) {
 		run.currentframe = 0;
 		run.currenttime = 0;
 		run.durationtime = 0.1f;
-		run.frame.push_back({ 97, 3, 16, 30 });
-		run.frame.push_back({ 115, 2, 14, 31 });
+		run.frame.push_back({ 97, 1, 16, 32 });
+		run.frame.push_back({ 114, 1, 16, 32 });
 		run.frame.push_back({ 131, 1, 16, 32 });
 
 		character->animations[ActionState::Run] = run;

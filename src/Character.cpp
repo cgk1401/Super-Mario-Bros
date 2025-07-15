@@ -89,8 +89,25 @@ Rectangle Character::getBound() const {
     };
 }
 
+
+Rectangle Character::getFootSensor() const {
+	Rectangle bound = getBound();
+	float width = bound.width - 10;
+	float height = 4;
+
+	return{
+		bound.x + 5,
+		bound.y + bound.height - height / 2,
+		width,
+		height
+	};
+}
 ActionState Character::getCurrentAction() const{
 	return currentAction;
+}
+
+CharacterStateType Character::getCharacterStateType() const{
+	return currentState->getStateType();
 }
 void Character::Draw() {
 	Rectangle currentframe = animations[currentAction].getcurrentframe();
@@ -115,6 +132,7 @@ void Character::Draw() {
 		}
 	}
 
+	DrawRectangleRec(getFootSensor(), RED);
 }
 
 void Character::Update(float deltatime) {

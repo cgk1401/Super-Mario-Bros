@@ -32,7 +32,7 @@ protected:
 	Texture texture;
 	map <ActionState, Animation> animations;
 	Vector2 position;
-	Vector2 velocity;
+	Vector2 velocity = { 0,0 };
 
 	CharacterType type;
 	CharacterState* currentState;
@@ -52,7 +52,9 @@ public:
 	void setActionState(ActionState newActionState);
 	void setDirection(Direction newDirection);
 	Rectangle getBound() const;
+	Rectangle getFootSensor() const;
 	ActionState getCurrentAction() const;
+	CharacterStateType getCharacterStateType() const;
 	
 	void Draw();
 	void Update(float deltatime);

@@ -86,11 +86,10 @@ void QuestionTileBehavior::onHeadCollision(Character* character, int tileRow, in
     if(!tileState->isBouncing){
         tileState->isBouncing = true;
         tileState->bounceTimer.start(0.2f);
-        cout << tileRow << " - " << tileCol << endl;
-        Vector2 starPos = {(tileRow - 2 < 0 ? 0 :(tileRow - 2)) * Map::TILE_SIZE, tileRow * Map::TILE_SIZE};
-                //starPos = {(float) tileRow * Map::TILE_SIZE, (float) tileRow * Map::TILE_SIZE};
+        cout << tileRow << " - " << tileCol << endl;\
+        Vector2 startPos = {(float) tileCol * Map::TILE_SIZE, (float) tileRow * Map::TILE_SIZE};
 
-        ItemManager::get().Spawn(ItemType::STAR, starPos);
+        ItemManager::get().Spawn(ItemType::MUSHROOM, startPos);
         //spawn items
     }
 
