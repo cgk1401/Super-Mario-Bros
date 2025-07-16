@@ -10,7 +10,7 @@ void StarmanState::SetAnimation(Character* c) {
 	float width;
 	float height;
 	if (previousState == CharacterStateType::NormalState) {
-		character->texture = TextureManager::get().load(TextureType::MARIOINVINCIBILITY);
+		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
 
 		Animation idle;
 		idle.currentframe = 0;
@@ -115,7 +115,7 @@ void StarmanState::SetAnimation(Character* c) {
 
 	else if (previousState == CharacterStateType::SuperState || previousState == CharacterStateType::FireState) {
 		// Frame Mario lớn hơn
-		character->texture = TextureManager::get().load(TextureType::MARIOINVINCIBILITY);
+		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
 
 		Animation idle;
 		idle.currentframe = 0;

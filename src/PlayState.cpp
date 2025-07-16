@@ -7,7 +7,7 @@
 #include "../headers/ItemManager.h"
 #include "../headers/SoundManager.h"
 PlayState::PlayState() {
-    SoundManager::get()->playMusic(MusicType::MAIN_THEME_OVERWORLD);
+    Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD);
     gui = GUI();
  
     map = new Map("../assets/Map/tileset_gutter64x64.png");
@@ -32,14 +32,14 @@ PlayState::PlayState() {
 PlayState::~PlayState() {
     delete map;
     bg.unload();
-    ItemManager::get().clearItems();
-    SoundManager::get()->stopMusic();
+    Singleton<ItemManager>::getInstance().clearItems();
+    Singleton<SoundManager>::getInstance().stopMusic();
 }
 
 void PlayState::update(float dt){
     //SoundManager::get()->updateMusic();
     if (gui.PauseButton_IsPressed()) {       
-        Game::getInstance()->addState(new PauseState());
+        Singleton<Game>::getInstance().addState(new PauseState());
     }
 
 
@@ -51,8 +51,8 @@ void PlayState::update(float dt){
     Collision::handlePlayerCollision(mario, map);
     mario->Update(dt);
    
-    EffectManager::get().update(dt);
-    ItemManager::get().Update(dt, mario, map);
+    Singleton<EffectManager>::getInstance().update(dt);
+    Singleton<ItemManager>::getInstance().Update(dt, mario, map);
 
     for(auto& e: enemies){
         e->Update(dt, map);
@@ -76,14 +76,14 @@ void PlayState::update(float dt){
 void PlayState::render() {
     BeginMode2D(camera.getCamera());
     //bg.draw();
-    ItemManager::get().Draw();
+    Singleton<ItemManager>::getInstance().Draw();
     map->draw();
     mario->Draw();
     DrawRectangleLinesEx(mario->getBound(), 0.5, RED);
     for(auto& e: enemies){
         e->Draw();
     }
-    EffectManager::get().draw();
+    Singleton<EffectManager>::getInstance().draw();
     //fg.draw();
     EndMode2D();
 

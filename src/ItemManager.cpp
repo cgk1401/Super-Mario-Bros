@@ -2,10 +2,8 @@
 #include "../headers/TextureManager.h"
 #include "../headers/Collision.h"
 
-ItemManager* ItemManager::instance = nullptr;
-
 ItemManager::ItemManager(){
-    texture = TextureManager::get().load(TextureType::ITEM);
+    texture = Singleton<TextureManager>::getInstance().load(TextureType::ITEM);
 
     mushroomAni.durationtime = 0.1;
     mushroomAni.frame.push_back({0, 8 , 16, 16});

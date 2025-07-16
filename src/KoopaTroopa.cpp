@@ -18,7 +18,7 @@ KoopTroopa::~KoopTroopa() {
 }
 
 void KoopTroopa::LoadSource() {
-	texture = TextureManager::get().load(TextureType::ENEMY);
+	texture = Singleton<TextureManager>::getInstance().load(TextureType::ENEMY);
 
 	Animation walk;
 	walk.currentframe = 0;

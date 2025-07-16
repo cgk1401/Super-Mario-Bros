@@ -7,7 +7,7 @@ NormalState::NormalState(Character* character) : CharacterState(character){
 
 void NormalState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
-		character->texture = TextureManager::get().load(TextureType::MARIO);
+		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIO);
 
 		const float texW = 16;
 		const float texH = 16;
@@ -57,7 +57,7 @@ void NormalState::SetAnimation(Character* c) {
 		
 	}
 	else if (c->getCharacterType() == CharacterType::Luigi) {
-		character->texture = TextureManager::get().load(TextureType::MARIO);
+		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIO);
 
 		const float texW = 16;
 		const float texH = 16;
@@ -197,7 +197,7 @@ void NormalState::HandleInput(float deltatime) {
 
 	if (IsKeyDown(KEY_SPACE)) {
 		if (isGround) {
-			SoundManager::get()->play(SoundType::JUMP);
+			Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 			character->velocity.y = config.JUMPFORCE;
 			isGround = false;
 			isJumpingUp = true; 

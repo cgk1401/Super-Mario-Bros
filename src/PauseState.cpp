@@ -27,15 +27,15 @@ void PauseState::update(float deltatime){
 
     //Button Clicking
     if(buttons[3]->IsClicked()){ //Menu 
-        Game::getInstance()->clear();
-        Game::getInstance()->addState(new MenuState);
+        Singleton<Game>::getInstance().clear();
+        Singleton<Game>::getInstance().addState(new MenuState);
     }
     else if (buttons[1]->IsClicked()) { //Restart
-        Game::getInstance()->clear();
-        Game::getInstance()->addState(new PlayState);
+        Singleton<Game>::getInstance().clear();
+        Singleton<Game>::getInstance().addState(new PlayState);
     }
     else if (buttons[0]->IsClicked()) {
-         Game::getInstance()->pop();
+        Singleton<Game>::getInstance().pop();
     }
 
 

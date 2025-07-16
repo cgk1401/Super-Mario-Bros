@@ -5,13 +5,10 @@
 #include "../headers/TextureManager.h"
 #include "../headers/FireBallExplosionEffect.h"
 
-EffectManager* EffectManager::instance = nullptr;
-
 EffectManager::EffectManager(){
-    texture = TextureManager::get().load(TextureType::ITEM);
+    texture = Singleton<TextureManager>::getInstance().load(TextureType::ITEM);
 
     //BRICK BREAK
-   
    
    
 }

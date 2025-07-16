@@ -8,6 +8,7 @@
 #include "../headers/SuperState.h"
 #include "../headers/ItemManager.h"
 #include "../headers/SoundManager.h"
+#include "../headers/Singleton.h"
 
 void BrickTileBehavior::onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) {
     //if(mario is small ) -> ko the bi vo  
@@ -25,7 +26,7 @@ void BrickTileBehavior::onHeadCollision(Character* character, int tileRow, int t
     ////bounce
     if(currentState == dynamic_cast<NormalState*>(currentState)){
         if (!brickState->isBouncing) {
-            SoundManager::get()->play(SoundType::BUMP);
+            Singleton<SoundManager>::getInstance().play(SoundType::BUMP);
             brickState->isBouncing = true;
             brickState->bounceTimer.start(0.2);
         }
@@ -33,7 +34,7 @@ void BrickTileBehavior::onHeadCollision(Character* character, int tileRow, int t
     }
     else if(currentState == dynamic_cast<SuperState*>(currentState) || currentState == dynamic_cast<FireState*>(currentState)){
         if (!brickState->hasBroken) {
-            SoundManager::get()->play(SoundType::BRICK_BREAK);
+            Singleton<SoundManager>::getInstance().play(SoundType::BRICK_BREAK);
             brickState->hasBroken = true;
         }
 
@@ -68,7 +69,7 @@ void BrickTileBehavior::update(float dt, int tileRow, int tileCol, Map* map, Map
 
     if (brickState->hasBroken) {
         //EffectManager::get().spawnCoin(tileRow, tileCol);
-        EffectManager::get().spawnBrickBreak(tileRow, tileCol);
+        Singleton<EffectManager>::getInstance().spawnBrickBreak(tileRow, tileCol);
         brickState->hasBroken = false;
         map->removeTile(tileRow, tileCol);
     }
@@ -89,7 +90,7 @@ void QuestionTileBehavior::onHeadCollision(Character* character, int tileRow, in
         cout << tileRow << " - " << tileCol << endl;\
         Vector2 startPos = {(float) tileCol * Map::TILE_SIZE, (float) tileRow * Map::TILE_SIZE};
 
-        ItemManager::get().Spawn(ItemType::MUSHROOM, startPos);
+        Singleton<ItemManager>::getInstance().Spawn(ItemType::MUSHROOM, startPos);
         //spawn items
     }
 

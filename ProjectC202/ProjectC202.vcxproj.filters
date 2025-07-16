@@ -323,5 +323,8 @@
     <ClInclude Include="..\headers\FireBallExplosionEffect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
+    <ClInclude Include="..\headers\Singleton.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

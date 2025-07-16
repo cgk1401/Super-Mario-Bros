@@ -372,19 +372,19 @@ void Collision::handleFireBallCollisionMap(FireBall* fireball , Map* map) {
                             fireball->position.y += overlapY;
                             fireball->velocity.y = 0;
                             fireball->Deactivate();
-                            EffectManager::get().explosionEffect(fireball->position);
+                            Singleton<EffectManager>::getInstance().explosionEffect(fireball->position);
                         }
                     }
                     else {
                         if (fireball->velocity.x > 0) {
                             fireball->position.x -= overlapX;
                             fireball->Deactivate();
-                            EffectManager::get().explosionEffect(fireball->position);
+                            Singleton<EffectManager>::getInstance().explosionEffect(fireball->position);
                         }
                         else {
                             fireball->position.x += overlapX;
                             fireball->Deactivate();
-                            EffectManager::get().explosionEffect(fireball->position);
+                            Singleton<EffectManager>::getInstance().explosionEffect(fireball->position);
                         }
                         //fireball->velocity.x *= -1; 
                     }

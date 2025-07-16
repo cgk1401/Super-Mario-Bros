@@ -31,12 +31,12 @@ void MenuState::update(float deltatime){
     }
 
     if(buttons[0]->IsClicked()){
-        Game::getInstance()->clear();
-        Game::getInstance()->addState(new PlayState());
+        Singleton<Game>::getInstance().clear();
+        Singleton<Game>::getInstance().addState(new PlayState());
     }
     else if (buttons[1]->IsClicked()) {
-        Game::getInstance()->clear();
-        Game::getInstance()->addState(new MapEditor("../assets/Map/tileset_gutter64x64.png"));
+        Singleton<Game>::getInstance().clear();
+        Singleton<Game>::getInstance().addState(new MapEditor("../assets/Map/tileset_gutter64x64.png"));
     }
     else if(buttons[2]->IsClicked()){
         exit(0);

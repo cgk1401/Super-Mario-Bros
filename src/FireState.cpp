@@ -12,7 +12,7 @@ FireState::~FireState() {
 
 void FireState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
-		character->texture = TextureManager::get().load(TextureType::MARIO);
+		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIO);
 
 		Animation idle;
 		idle.currentframe = 0;
