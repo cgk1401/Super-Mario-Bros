@@ -17,42 +17,37 @@ Character::~Character() {
 }
 
 void Character::ChangeState(CharacterStateType newState, CharacterStateType previosState) {
-	if (currentAction == ActionState::Idle) {
-		if (currentState) {
-			delete currentState;
-		}
-		switch (newState)
-		{
-		case CharacterStateType::NormalState:
-			currentState = new NormalState(this);
-			break;
-		case CharacterStateType::SuperState:
-			currentState = new SuperState(this);
-			break;
-		case CharacterStateType::FireState:
-			currentState = new FireState(this);
-			break;
-		case CharacterStateType::StarmanState:
-			currentState = new StarmanState(this, previosState);
-			break;
-		default:
-			break;
-		}
-		currentAction = ActionState::Idle;
-		currentState->SetAnimation(this);
+	if (currentState) {
+		delete currentState;
 	}
+	switch (newState)
+	{
+	case CharacterStateType::NormalState:
+		currentState = new NormalState(this);
+		break;
+	case CharacterStateType::SuperState:
+		currentState = new SuperState(this);
+		break;
+	case CharacterStateType::FireState:
+		currentState = new FireState(this);
+		break;
+	case CharacterStateType::StarmanState:
+		currentState = new StarmanState(this, previosState);
+		break;
+	default:
+		break;
+	}
+	currentState->SetAnimation(this);
 }
 
 void Character::ChangeMiddleState(CharacterStateType newState) {
 	CharacterStateType currentstatetype = currentState->getStateType();
-	if (currentAction == ActionState::Idle) {
-		if (currentState) {
-			delete currentState;
-		}
-		currentState = new TransformState(this, newState, currentstatetype);
-		currentAction = ActionState::Idle;
-		currentState->SetAnimation(this);
+	if (currentState) {
+		delete currentState;
 	}
+	currentState = new TransformState(this, newState, currentstatetype);
+	currentAction = ActionState::Idle;
+	currentState->SetAnimation(this);
 }
 
 CharacterState* Character::GetCurrentState() const {

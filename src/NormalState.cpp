@@ -208,9 +208,9 @@ void NormalState::HandleInput(float deltatime) {
 			character->velocity.y = config.JUMPFORCE;  // hoặc scale theo thời gian
 			//cout << "is jumpin\n";
 		}
-	} /*else {
+	} else {
 		isJumpingUp = false;
-	}*/
+	}
 
 }
 

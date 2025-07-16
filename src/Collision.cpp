@@ -448,7 +448,7 @@ void Collision::handleEnemy_EnemyCollison(vector<Enemy*>& enemies) {
 
 
 
-void Collision::handlePlayer_EnemyCollision(Character* player, vector<Enemy*> enemies) {
+void Collision::handlePlayer_EnemyCollision(Character* player, vector<Enemy*>& enemies) {
     for (auto& e : enemies) {
         Rectangle player_bound = player->getBound();
         Rectangle enemy_bound = e->bound;
