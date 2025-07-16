@@ -37,6 +37,7 @@ public:
 	void Update(float deltatime);
 	void Draw(Character* character);
 	void Deactivate();
+	void explode();
 
 	void ActiveStatus(float deltatime);
 

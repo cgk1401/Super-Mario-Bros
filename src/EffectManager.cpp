@@ -6,6 +6,7 @@
 #include "../headers/FireBallExplosionEffect.h"
 #include "../headers/GoombaDeadEffect.h"
 #include "../headers/MarioDeadEffect.h"
+#include "../headers/KoopaDeathEffect.h"
 
 EffectManager* EffectManager::instance = nullptr;
 
@@ -45,9 +46,12 @@ void EffectManager::explosionEffect(Vector2 pos){
 void EffectManager::goombaDead(Vector2 pos){
     effects.emplace_back(new GoombaDeadEffect(pos));
 }
- void EffectManager::marioDead(Vector2 position, const Texture2D& texture, Rectangle frame){
+void EffectManager::marioDead(Vector2 position, const Texture2D& texture, Rectangle frame){
     effects.emplace_back(new MarioDeadEffect(position, texture, frame));
- }
+}
+void EffectManager::koopaDeath(Vector2 position, const Texture2D& texture, Rectangle frame){
+    effects.emplace_back(new KoopaDeathEffect(position, texture, frame));
+}
 void EffectManager::update(float dt){
     for(auto& b : effects){
         b->update(dt);

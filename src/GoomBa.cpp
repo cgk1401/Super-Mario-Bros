@@ -123,6 +123,14 @@ void GoomBa::ChangeState(GoomBaState newState) {
 	}
 }
 
-void GoomBa::DIE(Character* player) {
-	ChangeState(GoomBaState::DIE_STOMP);
+void GoomBa::onDeath(DeathType type, Character* player) {
+	  switch (type) {
+        case DeathType::STOMP:
+            ChangeState(GoomBaState::DIE_STOMP);
+            break;
+        case DeathType::FALLING:
+        case DeathType::SHELL_HIT:
+            ChangeState(GoomBaState::DIE_FALLING);
+            break;
+    }
 }

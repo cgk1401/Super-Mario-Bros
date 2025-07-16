@@ -32,7 +32,7 @@ public :
 	void LoadSource() override;
 	void Draw() override;
 	void Update(float deltatime, Map* map) override;
-	void DIE(Character* player) override;
+	void onDeath(DeathType type, Character* player = nullptr) override;
 	bool isDead() override;
 
 	void moveLeft();

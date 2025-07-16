@@ -192,6 +192,9 @@
     <ClCompile Include="..\src\MarioDeadEffect.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\KoopaDeathEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -333,6 +336,9 @@
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\MarioDeadEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\KoopaDeathEffect.h">
       <Filter>Header Files\Effect</Filter>
     </ClInclude>
   </ItemGroup>

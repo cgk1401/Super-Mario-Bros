@@ -27,7 +27,8 @@ public:
     void explosionEffect(Vector2 pos);
     void goombaDead(Vector2 pos);
     void marioDead(Vector2 position, const Texture2D& texture, Rectangle frame);
-    
+    void koopaDeath(Vector2 position, const Texture2D& texture, Rectangle frame);
+
     void update(float dt);
     void draw();
 

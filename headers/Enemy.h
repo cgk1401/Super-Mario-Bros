@@ -28,7 +28,7 @@ public:
 	virtual void Update(float deltatime, Map* map) = 0;
 	virtual void Draw() = 0;
 	virtual void LoadSource() = 0;
-	virtual void DIE(Character* player) = 0;
+	virtual void onDeath(DeathType type, Character* player = nullptr) = 0;
 	virtual bool isDead() = 0; 
 	virtual void changeDirection(Direction newDirection) {
 		if (direction != newDirection) 

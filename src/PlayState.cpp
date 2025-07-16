@@ -63,6 +63,10 @@ void PlayState::update(float dt){
         e->Update(dt, map);
     }
     
+    auto fireballs = dynamic_cast<FireState*>(mario->GetCurrentState())->getFireBall();
+    for (auto& f : fireballs) {
+        Collision::handleFireball_EnemyCollision(f, enemies);
+    }
 
     //remove if any enemies die
     enemies.erase(remove_if(enemies.begin(), enemies.end(),

@@ -1,7 +1,7 @@
 ﻿#include "../headers/KoopaTroopa.h"
 #include "../headers/Collision.h"
 #include "../headers/TextureManager.h"
-
+#include "../headers/EffectManager.h"
 class Map;
 
 KoopTroopa::KoopTroopa() : Enemy() {
@@ -113,22 +113,25 @@ void KoopTroopa::Fall() {
 	position.y += velocity.y;
 }
 
-void KoopTroopa::DIE(Character* player){
-	if(currentState == KoopaState::Walk){
-		currentState = KoopaState::Shell;
-		isStationary = true;
-		animation[currentState].reset();
-	}
-	else if(currentState == KoopaState::Shell){
-		isStationary = false;
-		Rectangle player_bound = player->getBound();
-		float player_mid = player_bound.x + player_bound.width / 2;
-		float enemy_mid = this->bound.x + this->bound.width / 2;
-
-		cout << player_mid << " - " << enemy_mid << endl;
-		if(player_mid >= enemy_mid) //stomp on left
-			changeDirection(Direction::Left);
-		else //on right
-			changeDirection(Direction::Right);
+void KoopTroopa::onDeath(DeathType type, Character* source) {
+	switch (type) {
+	case DeathType::STOMP:
+		if (currentState == KoopaState::Walk) {
+			currentState = KoopaState::Shell;
+			isStationary = true;
+			animation[currentState].reset();
+		}
+		else if (currentState == KoopaState::Shell) {
+			isStationary = false;
+			float player_mid = source->getBound().x + source->getBound().width / 2;
+			float enemy_mid = this->bound.x + this->bound.width / 2;
+			changeDirection(player_mid >= enemy_mid ? Direction::Left : Direction::Right);
+		}
+		break;
+	case DeathType::FALLING:
+	case DeathType::SHELL_HIT:
+		currentState = KoopaState::Die;
+		EffectManager::get().koopaDeath(this->position, texture, animation[KoopaState::Die].getcurrentframe());
+		break;
 	}
 }

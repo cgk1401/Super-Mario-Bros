@@ -12,7 +12,7 @@ const int screenWidth = 1200; //1024
 const int screenHeight = 800; //768
 Texture2D resizedImage(const char* imagePath, float width, float height);
 class Map;
-
+class Enemy;
 enum class CharacterStateType {
 	NormalState,
 	SuperState,
@@ -45,6 +45,13 @@ enum class EnemyType {
 	GOOMBA,
 	KOOPA,
 	PIRANT_PLANT
+};
+
+enum class DeathType
+{
+	STOMP,
+	FALLING,
+	SHELL_HIT,
 };
 class Global {
 public:

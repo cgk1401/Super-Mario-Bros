@@ -374,20 +374,18 @@ void Collision::handleFireBallCollisionMap(FireBall* fireball , Map* map) {
                         else if (fireball->velocity.y < 0) {
                             fireball->position.y += overlapY;
                             fireball->velocity.y = 0;
-                            fireball->Deactivate();
-                            EffectManager::get().explosionEffect(fireball->position);
+                            fireball->explode();
+                            
                         }
                     }
                     else {
                         if (fireball->velocity.x > 0) {
                             fireball->position.x -= overlapX;
-                            fireball->Deactivate();
-                            EffectManager::get().explosionEffect(fireball->position);
+                            fireball->explode();
                         }
                         else {
                             fireball->position.x += overlapX;
-                            fireball->Deactivate();
-                            EffectManager::get().explosionEffect(fireball->position);
+                            fireball->explode();
                         }
                         //fireball->velocity.x *= -1; 
                     }
@@ -404,27 +402,26 @@ void Collision::handleEnemy_EnemyCollison(vector<Enemy*>& enemies) {
     for (auto& e : enemies) {
         if (!e || e->isDead()) continue;
 
-        Rectangle e_bound = e->bound;
+        
 
         for (auto& other : enemies) {
             if (other == e || !other || other->isDead()) continue;
+            Rectangle e_bound = e->bound;
             Rectangle o_bound = other->bound;
             // Special case: Koopa in Shell hitting Goomba
             if (auto* k = dynamic_cast<KoopTroopa*>(other)) {
                 if (k->currentState == KoopaState::Shell) {
-                    if (auto* g = dynamic_cast<GoomBa*>(e)) {
-                        if (CheckCollisionRecs(e_bound, o_bound)) {
-                            g->ChangeState(GoomBaState::DIE_FALLING);
-                            break;
-                        }
+                    if (CheckCollisionRecs(e_bound, o_bound)) {
+                        e->onDeath(DeathType::SHELL_HIT);
+                        break;
                     }
                     
                 }
                 
             }
-            if (auto* g = dynamic_cast<KoopTroopa*>(e)) {
+            /*if (auto* g = dynamic_cast<KoopTroopa*>(e)) {
                 if (g->currentState == KoopaState::Shell) break;
-            }
+            }*/
             
 
             if (CheckCollisionRecs(e_bound, o_bound)) {
@@ -466,23 +463,15 @@ void Collision::handlePlayer_EnemyCollision(Character* player, vector<Enemy*>& e
                         player->velocity.y = -100; //bounce a bit
 
                         //enemy->die
-                        e->DIE(player);
+                        e->onDeath(DeathType::STOMP, player);
                         
                     }
-                    else if (player->velocity.y < 0) {
-                        //player->die
+                    else  {
                         player->DIE();
                     }
                 }
                 else {
-                    if (player->velocity.x > 0) {
-                        //player->die
-                        player->DIE();
-                    }
-                    else {
-                        //player->die
-                        player->DIE();
-                    }
+                      player->DIE();
                 }
 
                 player_bound = player->getBound();
@@ -496,5 +485,12 @@ void Collision::handlePlayer_EnemyCollision(Character* player, vector<Enemy*>& e
 }
 
 void Collision::handleFireball_EnemyCollision(FireBall* fireball, vector<Enemy*> enemies) {
+    Rectangle firebound = fireball->getBound();
 
+    for (auto& e : enemies) {
+        if (CheckCollisionRecs(firebound, e->bound)) {
+            e->onDeath(DeathType::FALLING);
+            fireball->explode();
+        }
+    }
 }
