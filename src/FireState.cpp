@@ -119,6 +119,10 @@ void FireState::Update(float deltatime) {
 	if (IsKeyPressed(KEY_R)) {
 		character->ChangeMiddleState(CharacterStateType::StarmanState);
 	}
+
+	if (IsKeyPressed(KEY_Y)) {
+		character->ChangeMiddleState(CharacterStateType::NormalState);
+	}
 }
 
 void FireState::HandleInput(float deltatime) {

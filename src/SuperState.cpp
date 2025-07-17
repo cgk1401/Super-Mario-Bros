@@ -22,9 +22,9 @@ void SuperState::SetAnimation(Character* c) {
 		run.currentframe = 0;
 		run.currenttime = 0;
 		run.durationtime = 0.1f;
-		run.frame.push_back({ 97, 1, 16, 32 });
-		run.frame.push_back({ 114, 1, 16, 32 });
-		run.frame.push_back({ 131, 1, 16, 32 });
+		for (int i = 0; i < 3; i++) {
+			run.frame.push_back(Rectangle{ float(97 + i * 17), 1, texW, texH });
+		}
 
 		character->animations[ActionState::Run] = run;
 
@@ -48,20 +48,24 @@ void SuperState::SetAnimation(Character* c) {
 		flagpolehold.currentframe = 0;
 		flagpolehold.currenttime = 0;
 		flagpolehold.durationtime = 0.1f;
-		flagpolehold.frame.push_back({ 201, 3, 14, 30 });
-		flagpolehold.frame.push_back({ 218, 3, 14, 27 });
+		for (int i = 0; i < 2; i++) {
+			flagpolehold.frame.push_back(Rectangle{ float(199 + i * 17), 1, 16, 32 });
+		}
 
 		character->animations[ActionState::FlagpoleHold] = flagpolehold;
 		
 	}
 	else if (c->getCharacterType() == CharacterType::Luigi) {
-		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIO);
+		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
+
+		const float texW = 16;
+		const float texH = 32;
 
 		Animation idle;
 		idle.currentframe = 0;
 		idle.currenttime = 0;
 		idle.durationtime = 0.1f;
-		idle.frame.push_back({ 288, 32, 16, 32 });
+		idle.frame.push_back({ 80, 66, 16, 32 });
 
 		character->animations[ActionState::Idle] = idle;
 
@@ -69,8 +73,9 @@ void SuperState::SetAnimation(Character* c) {
 		run.currentframe = 0;
 		run.currenttime = 0;
 		run.durationtime = 0.1f;
-		run.frame.push_back({ 308, 32, 16, 32 });
-		run.frame.push_back({ 344, 32, 16, 32 });
+		for (int i = 0; i < 3; i++) {
+			run.frame.push_back(Rectangle{ float(97 + i * 17), 66, texW, texH });
+		}
 
 		character->animations[ActionState::Run] = run;
 
@@ -78,7 +83,7 @@ void SuperState::SetAnimation(Character* c) {
 		jump.currentframe = 0;
 		jump.currenttime = 0;
 		jump.durationtime = 0.1f;
-		jump.frame.push_back({ 384, 32, 16, 32 });
+		jump.frame.push_back({ 165, 66, texW, texH });
 
 		character->animations[ActionState::Jump] = jump;
 
@@ -86,7 +91,7 @@ void SuperState::SetAnimation(Character* c) {
 		sit.currentframe = 0;
 		sit.currenttime = 0;
 		sit.durationtime = 0.1f;
-		sit.frame.push_back({ 404, 42, 16, 22 });
+		sit.frame.push_back({ 182, 76, 16, 22 });
 
 		character->animations[ActionState::Sit] = sit;
 
@@ -94,8 +99,9 @@ void SuperState::SetAnimation(Character* c) {
 		flagpolehold.currentframe = 0;
 		flagpolehold.currenttime = 0;
 		flagpolehold.durationtime = 0.1f;
-		flagpolehold.frame.push_back({ 424, 33, 16, 32 });
-		flagpolehold.frame.push_back({ 442, 33, 16, 32 });
+		for (int i = 0; i < 2; i++) {
+			flagpolehold.frame.push_back(Rectangle{ float(199 + i * 17), 66, 16, 32 });
+		}
 
 		character->animations[ActionState::FlagpoleHold] = flagpolehold;
 	}
@@ -138,12 +144,7 @@ void SuperState::Update(float deltatime) {
 	character->position.y += character->velocity.y * deltatime;
 
 	// trạng thái đang rơi xuống
-	
 
-	// nhấn phím KEY_I để chuyển trạng thái từ Superstate sang FireState
-	if (IsKeyPressed(KEY_I)) {
-		character->ChangeMiddleState(CharacterStateType::StarmanState);
-	}
 }
 
 void SuperState::HandleInput(float deltatime) {
