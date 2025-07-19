@@ -8,13 +8,10 @@
 #include "../headers/MarioDeadEffect.h"
 #include "../headers/KoopaDeathEffect.h"
 
-EffectManager* EffectManager::instance = nullptr;
-
 EffectManager::EffectManager(){
-    texture = TextureManager::get().load(TextureType::ITEM);
+    texture = Singleton<TextureManager>::getInstance().load(TextureType::ITEM);
 
     //BRICK BREAK
-   
    
    
 }

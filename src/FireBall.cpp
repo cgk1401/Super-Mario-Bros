@@ -2,6 +2,8 @@
 #include "../headers/Global.h"
 #include "../headers/Collision.h"
 #include "../headers/EffectManager.h"
+#include "../headers/Singleton.h"
+
 FireBall::FireBall(Character* character, float positionGround) {
 	this->position = { 0,0 };
 	this->velocity = { FIREBALL_SPEEDX ,0 };
@@ -77,7 +79,7 @@ void FireBall::Deactivate() {
 }
 void FireBall::explode() {
 	Deactivate();
-	EffectManager::get().explosionEffect(this->position);
+	Singleton<EffectManager>::getInstance().explosionEffect(this->position);
 }
 void FireBall::ActiveStatus(float deltatime) {
 	currentLifeTime += deltatime;

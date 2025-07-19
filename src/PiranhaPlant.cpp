@@ -33,7 +33,7 @@ PiranhaPlant::~PiranhaPlant() {
 }
 
 void PiranhaPlant::LoadSource() {
-	texture = TextureManager::get().load(TextureType::ENEMY);
+	texture = Singleton<TextureManager>::getInstance().load(TextureType::ENEMY);
 
 	animation.currentframe = 0;
 	animation.currenttime = 0;

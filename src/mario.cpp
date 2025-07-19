@@ -20,8 +20,11 @@ Mario::Mario(Vector2 position) {
 	this->velocity = { 0, 0 };
 	this->position = position;
 	this->BasePosition = position.y;
+	cout << 111111;
 	currentState = new FireState(this);
+	cout << 2222222;
 	currentState->SetAnimation(this);
+	cout << 33333;
 	currentdirection = Direction::Right;
 }
 

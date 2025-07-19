@@ -140,7 +140,7 @@ void Character::DIE(){
 	
 	if(getCharacterStateType() == CharacterStateType::NormalState){
 		currentAction = ActionState::Die;
-		EffectManager::get().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
+		Singleton<EffectManager>::getInstance().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
 	}
 	else if(getCharacterStateType() == CharacterStateType::SuperState || getCharacterStateType() == CharacterStateType::FireState){
 		//TRANSFORM GRADUALLY TO NORMAL STATE

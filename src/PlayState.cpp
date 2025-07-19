@@ -7,7 +7,7 @@
 #include "../headers/ItemManager.h"
 #include "../headers/SoundManager.h"
 PlayState::PlayState() {
-    SoundManager::get()->playMusic(MusicType::MAIN_THEME_OVERWORLD);
+    Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD);
     gui = GUI();
  
     map = new Map("../assets/Map/tileset_gutter64x64.png");
@@ -32,14 +32,14 @@ PlayState::PlayState() {
 PlayState::~PlayState() {
     delete map;
     bg.unload();
-    ItemManager::get().clearItems();
-    SoundManager::get()->stopMusic();
+    Singleton<ItemManager>::getInstance().clearItems();
+    Singleton<SoundManager>::getInstance().stopMusic();
 }
 
 void PlayState::update(float dt){
     //SoundManager::get()->updateMusic();
     if (gui.PauseButton_IsPressed()) {       
-        Game::getInstance()->addState(new PauseState());
+        Singleton<Game>::getInstance().addState(new PauseState());
     }
 
 
@@ -54,8 +54,9 @@ void PlayState::update(float dt){
     if (mario->getCurrentAction() != ActionState::Die) mario->Update(dt);
     Collision::handlePlayer_EnemyCollision(mario, enemies);
 
-    EffectManager::get().update(dt);
-    ItemManager::get().Update(dt, mario, map);
+   
+    Singleton<EffectManager>::getInstance().update(dt);
+    Singleton<ItemManager>::getInstance().Update(dt, mario, map);
 
     Collision::handleEnemy_EnemyCollison(enemies);
     for(auto& e: enemies){
@@ -63,10 +64,14 @@ void PlayState::update(float dt){
         e->Update(dt, map);
     }
     
-    auto fireballs = dynamic_cast<FireState*>(mario->GetCurrentState())->getFireBall();
-    for (auto& f : fireballs) {
-        Collision::handleFireball_EnemyCollision(f, enemies);
+    FireState* fireState = dynamic_cast<FireState*>(mario->GetCurrentState());
+    if (fireState) {
+        auto& fireballs = fireState->getFireBall(); // hoặc auto fireballs = fireState->getFireBall() nếu ông đã sửa trả về bản sao
+        for (auto& f : fireballs) {
+            if (f) Collision::handleFireball_EnemyCollision(f, enemies);
+        }
     }
+
 
     //remove if any enemies die
     enemies.erase(remove_if(enemies.begin(), enemies.end(),
@@ -85,7 +90,7 @@ void PlayState::update(float dt){
 void PlayState::render() {
     BeginMode2D(camera.getCamera());
     //bg.draw();
-    ItemManager::get().Draw();
+    Singleton<ItemManager>::getInstance().Draw();
     map->draw();
 
     if (mario->getCurrentAction() != ActionState::Die) mario->Draw();
@@ -93,7 +98,7 @@ void PlayState::render() {
     for(auto& e: enemies){
         e->Draw();
     }
-    EffectManager::get().draw();
+    Singleton<EffectManager>::getInstance().draw();
     //fg.draw();
     EndMode2D();
 

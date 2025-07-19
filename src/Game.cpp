@@ -3,19 +3,10 @@
 #include <iostream>
 using namespace std;
 
-Game* Game::instance = nullptr;
-
-Game* Game::getInstance(){
-     if (!instance) {
-         instance = new Game();
-     }
-    return instance;
-}
-
 //Constructor
 Game::Game(){
     // cout << "Game: Constructor is called" << endl;
-    init();    
+    init();   
     
 }
 

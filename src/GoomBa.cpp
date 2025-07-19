@@ -23,7 +23,7 @@ GoomBa::~GoomBa() {
 }
 
 void GoomBa::LoadSource() {
-	texture = TextureManager::get().load(TextureType::ENEMY);
+	texture = Singleton<TextureManager>::getInstance().load(TextureType::ENEMY);
 
 	Animation run;
 	run.currentframe = 0;
@@ -116,7 +116,7 @@ void GoomBa::ChangeState(GoomBaState newState) {
 	animation[currentState].currenttime = 0;
 	if (newState == GoomBaState::DIE_FALLING) {
 		// tăng position.y
-		EffectManager::get().goombaDead(this->position);
+		Singleton<EffectManager>::getInstance().goombaDead(this->position);
 	}
 	else if (newState == GoomBaState::DIE_STOMP) {
 		stomp_dead_timer.start(0.2f);

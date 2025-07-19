@@ -2,7 +2,7 @@
 #include "../headers/TextureManager.h"
 
 GoombaDeadEffect::GoombaDeadEffect(Vector2 pos) : pos(pos) {
-    texture = TextureManager::get().load(TextureType::ENEMY);
+    texture = Singleton<TextureManager>::getInstance().load(TextureType::ENEMY);
 
     vector<Rectangle> frames;
     frames.push_back({ 0, 16, 16, -16 });

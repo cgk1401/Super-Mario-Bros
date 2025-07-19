@@ -12,7 +12,7 @@ FireState::~FireState() {
 
 void FireState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
-		character->texture = TextureManager::get().load(TextureType::MARIO);
+		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIO);
 
 		Animation idle;
 		idle.currentframe = 0;
@@ -118,6 +118,10 @@ void FireState::Update(float deltatime) {
 
 	if (IsKeyPressed(KEY_R)) {
 		character->ChangeMiddleState(CharacterStateType::StarmanState);
+	}
+
+	if (IsKeyPressed(KEY_Y)) {
+		character->ChangeMiddleState(CharacterStateType::NormalState);
 	}
 }
 
@@ -228,6 +232,6 @@ CharacterStateType FireState::getStateType() {
 	return CharacterStateType::FireState;
 }
 
-vector<FireBall*> FireState::getFireBall() {
+vector<FireBall*>& FireState::getFireBall() {
 	return fireballs;
 }

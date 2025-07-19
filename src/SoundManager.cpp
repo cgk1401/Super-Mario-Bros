@@ -1,13 +1,5 @@
 #include "../headers/SoundManager.h"
 
-SoundManager* SoundManager::instance = nullptr;
-
-SoundManager* SoundManager::get() {
-    if (!instance)
-        instance = new SoundManager();
-    return instance;
-}
-
 SoundManager::SoundManager() {
     load();
 }

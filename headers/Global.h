@@ -6,7 +6,11 @@
 #include <cmath>
 #include <string>
 #include <vector>
+#include "Singleton.h"
 #include "../headers/Button.h"
+#include "SoundManager.h"
+#include "TextureManager.h"
+#include "Game.h"
 using namespace std;
 const int screenWidth = 1200; //1024
 const int screenHeight = 800; //768

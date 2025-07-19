@@ -1,7 +1,6 @@
 #include "../headers/TextureManager.h"
 #include <string>
 
-TextureManager* TextureManager::instance = nullptr;
 
 TextureManager::TextureManager(){
     texture.emplace(TextureType::MARIO, LoadTexture("../assets/Mario/Mario & Luigi.png"));

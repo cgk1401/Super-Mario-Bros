@@ -289,8 +289,8 @@ void MapEditor::update(float deltatime) {
         loadFromFile("map1.txt");
     //Back to menu
     if (backButton->IsClicked()) {
-        Game::getInstance()->clear();
-       Game::getInstance()->addState(new MenuState());
+        Singleton<Game>::getInstance().clear();
+        Singleton<Game>::getInstance().addState(new MenuState());
     }
 
     //CameraEditor update

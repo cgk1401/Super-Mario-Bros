@@ -3,6 +3,9 @@
 #include <unordered_map>
 using namespace std;
 
+template <typename T>
+class Singleton;
+
 enum class SoundType {
     JUMP,
     COIN,
@@ -44,8 +47,9 @@ enum class MusicType {
 };
 
 class SoundManager {
+    template <typename T>
+    friend class Singleton;
 private:
-    static SoundManager* instance;
     unordered_map<SoundType, Sound> sounds;
     unordered_map<MusicType, Music> musics;
     MusicType currentMusicType;
@@ -55,7 +59,6 @@ private:
     ~SoundManager();
 
 public:
-    static SoundManager* get();
 
     void load();     // load tất cả sound/music
     void unload();   // cleanup tất cả

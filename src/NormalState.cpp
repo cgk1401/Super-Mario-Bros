@@ -7,7 +7,7 @@ NormalState::NormalState(Character* character) : CharacterState(character){
 
 void NormalState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
-		character->texture = TextureManager::get().load(TextureType::MARIO);
+		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
 
 		const float texW = 16;
 		const float texH = 16;
@@ -16,13 +16,13 @@ void NormalState::SetAnimation(Character* c) {
 		idle.currentframe = 0;
 		idle.currenttime = 0;
 		idle.durationtime = 0.1f;
-		idle.frame.push_back({ 0, 8, texW, texH });
+		idle.frame.push_back({ 80, 34, texW, texH });
 
 		character->animations[ActionState::Idle] = idle;
 
 		Animation run;
 		for (int i = 0; i < 3; i++) {
-			run.frame.push_back(Rectangle{ (float)(20 + i * 18), 8, (float)texW, (float)texH });
+			run.frame.push_back(Rectangle{ (float)(80 + i * 17), 34, (float)texW, (float)texH });
 		}
 		run.currentframe = 0;
 		run.durationtime = 0.07f;
@@ -31,9 +31,9 @@ void NormalState::SetAnimation(Character* c) {
 		character->animations[ActionState::Run] = run;
 
 		Animation jump;
-		jump.frame.push_back(Rectangle{ 96, 8, (float)texW, (float)texH});
+		jump.frame.push_back(Rectangle{ 165, 34, (float)texW, (float)texH});
 		jump.currentframe = 0;
-		jump.durationtime = 0.08;
+		jump.durationtime = 0.08f;
 		jump.currenttime = 0;
 
 		character->animations[ActionState::Jump] = jump;
@@ -42,7 +42,7 @@ void NormalState::SetAnimation(Character* c) {
 		die.currentframe = 0;
 		die.currenttime = 0;
 		die.durationtime = 0.1f;
-		die.frame.push_back({ 116, 8, texW, texH });
+		die.frame.push_back({ 182, 34, texW, texH });
 
 		character->animations[ActionState::Die] = die;
 
@@ -50,14 +50,15 @@ void NormalState::SetAnimation(Character* c) {
 		flagpolehold.currentframe = 0;
 		flagpolehold.currenttime = 0;
 		flagpolehold.durationtime = 0.1f;
-		flagpolehold.frame.push_back({ 136, 8, texW, texH });
-		flagpolehold.frame.push_back({ 154, 8, texW, texH });
+		for (int i = 0; i < 2; i++) {
+			flagpolehold.frame.push_back(Rectangle{ float(199 + i * 17), 334, texW, texH });
+		}
 
 		character->animations[ActionState::FlagpoleHold] = flagpolehold;
 		
 	}
 	else if (c->getCharacterType() == CharacterType::Luigi) {
-		character->texture = TextureManager::get().load(TextureType::MARIO);
+		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIO);
 
 		const float texW = 16;
 		const float texH = 16;
@@ -66,7 +67,7 @@ void NormalState::SetAnimation(Character* c) {
 		idle.currentframe = 0;
 		idle.currenttime = 0;
 		idle.durationtime = 0.1f;
-		idle.frame.push_back({ 288, 8, texW, texH });
+		idle.frame.push_back({ 80, 99, texW, texH });
 
 		character->animations[ActionState::Idle] = idle;
 
@@ -74,9 +75,9 @@ void NormalState::SetAnimation(Character* c) {
 		run.currentframe = 0;
 		run.currenttime = 0;
 		run.durationtime = 0.1f;
-		run.frame.push_back({308, 8, texW, texH});
-		run.frame.push_back({326, 8, texW, texH});
-		run.frame.push_back({344, 8, texW,texH});
+		for (int i = 0; i < 3; i++) {
+			run.frame.push_back(Rectangle{float(80 * 17 + 1), 99, texW, texH});
+		}
 
 		character->animations[ActionState::Run] = run;
 
@@ -84,7 +85,7 @@ void NormalState::SetAnimation(Character* c) {
 		jump.currentframe = 0;
 		jump.currenttime = 0;
 		jump.durationtime = 0.1f;
-		jump.frame.push_back({ 384, 8, 16, 16 });
+		jump.frame.push_back({ 165, 99, texW, texH });
 
 		character->animations[ActionState::Jump] = jump;
 
@@ -92,7 +93,7 @@ void NormalState::SetAnimation(Character* c) {
 		die.currentframe = 0;
 		die.currenttime = 0;
 		die.durationtime = 0.1f;
-		die.frame.push_back({ 404, 8, texW, texH });
+		die.frame.push_back({ 182, 99, texW, texH });
 
 		character->animations[ActionState::Die] = die;
 
@@ -100,8 +101,9 @@ void NormalState::SetAnimation(Character* c) {
 		flagpolehold.currentframe = 0;
 		flagpolehold.currenttime = 0;
 		flagpolehold.durationtime = 0.1f;
-		flagpolehold.frame.push_back({ 424, 8, texW, texH });
-		flagpolehold.frame.push_back({ 442, 8, texW, texH });
+		for (int i = 0; i < 2; i++) {
+			flagpolehold.frame.push_back(Rectangle{ float(199 + i * 17), 99, texW, texH });
+		}
 
 		character->animations[ActionState::FlagpoleHold] = flagpolehold;
 	}
@@ -148,11 +150,11 @@ void NormalState::Update(float deltatime) {
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
 	//cout << "vY: " << character->velocity.y << ", isGround: " << isGround << endl;
-	
-	// Nhấn phím KEY_L chuyển trạng thái từ NormalState thành SuperState
-	if (IsKeyPressed(KEY_L)) {
-		character->ChangeMiddleState(CharacterStateType::StarmanState);
+
+	if (IsKeyPressed(KEY_Q)) {
+		character->ChangeMiddleState(CharacterStateType::SuperState);
 	}
+	
 }
 
 void NormalState::HandleInput(float deltatime) {
@@ -179,7 +181,10 @@ void NormalState::HandleInput(float deltatime) {
 		}
 	}
 	
-	// xử lý nhảy
+	//if (IsKeyDown(KEY_SPACE)) {
+	//	if (isGround) Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
+	//}
+	 //xử lý nhảy
 	 /*if (IsKeyPressed(KEY_SPACE) && isGround) {
 	 	character->velocity.y = config.JUMPFORCE;
 	 	isGround = false;
@@ -189,6 +194,7 @@ void NormalState::HandleInput(float deltatime) {
 	 }
 
 	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
+		 Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 	 	jumpTimeElapsed += deltatime;
 	 }
 	 else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
@@ -197,7 +203,7 @@ void NormalState::HandleInput(float deltatime) {
 
 	if (IsKeyDown(KEY_SPACE)) {
 		if (isGround) {
-			SoundManager::get()->play(SoundType::JUMP);
+			Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 			character->velocity.y = config.JUMPFORCE;
 			isGround = false;
 			isJumpingUp = true; 

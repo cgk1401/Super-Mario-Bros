@@ -25,5 +25,5 @@ public:
 	void HandleInput(float deltatime) override;
 	CharacterStateType getStateType() override;
 
-	std::vector <FireBall*> getFireBall();
+	std::vector <FireBall*>& getFireBall();
 };

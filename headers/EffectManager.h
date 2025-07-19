@@ -8,17 +8,20 @@
 #include "../headers/BaseEffect.h"
 using namespace std;
 
+template <typename T>
+class Singleton;
 
 class EffectManager {
+    template <typename T>
+    friend class Singleton;
 private:
     Texture texture;
-    static EffectManager* instance;
 
     //EFFECTs
     vector<BaseEffect*> effects;
 
     EffectManager();
-    ~EffectManager(){delete instance;}
+    ~EffectManager() {};
 public:
 
     //EFFECT METHODs
@@ -31,11 +34,5 @@ public:
 
     void update(float dt);
     void draw();
-
-    static EffectManager& get(){
-        if(!instance)
-            instance = new EffectManager;
-            return *instance;
-    } // singleton
 };
 
