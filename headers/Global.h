@@ -64,4 +64,5 @@ public:
 	static Camera2D camera;
 };
 
+
 #endif 
