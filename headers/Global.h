@@ -39,6 +39,7 @@ enum class CharacterType {
 	Mario,
 	Luigi,
 };
+inline CharacterType selectedCharacter = CharacterType::Mario;
 
 enum class Direction {
 	Left,
@@ -50,6 +51,7 @@ enum class EnemyType {
 	KOOPA,
 	PIRANT_PLANT
 };
+
 class Global {
 public:
     static Map* map;

@@ -6,8 +6,18 @@
 #include "../headers/Collision.h"
 #include "../headers/ItemManager.h"
 #include "../headers/SoundManager.h"
+#include "../headers/Luigi.h"
+
 PlayState::PlayState() {
     Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD);
+    
+    if (selectedCharacter == CharacterType::Mario) {
+        character = new Mario({ 100, 200 });
+    }
+    else if (selectedCharacter == CharacterType::Luigi) {
+        character = new Luigi({ 100, 200 });
+    }
+
     gui = GUI();
  
     map = new Map("../assets/Map/tileset_gutter64x64.png");
@@ -43,16 +53,16 @@ void PlayState::update(float dt){
     }
 
 
-    camera.update(mario->getBound(), screenWidth);
+    camera.update(character->getBound(), screenWidth);
     gui.update(); 
     //bg.update( mario,camera.getCamera(), dt);
     //fg.update( mario,camera.getCamera(), dt);
     map->update();
-    Collision::handlePlayerCollision(mario, map);
-    mario->Update(dt);
+    Collision::handlePlayerCollision(character, map);
+    character->Update(dt);
    
     Singleton<EffectManager>::getInstance().update(dt);
-    Singleton<ItemManager>::getInstance().Update(dt, mario, map);
+    Singleton<ItemManager>::getInstance().Update(dt, character, map);
 
     for(auto& e: enemies){
         e->Update(dt, map);
@@ -78,8 +88,8 @@ void PlayState::render() {
     //bg.draw();
     Singleton<ItemManager>::getInstance().Draw();
     map->draw();
-    mario->Draw();
-    DrawRectangleLinesEx(mario->getBound(), 0.5, RED);
+    character->Draw();
+    DrawRectangleLinesEx(character->getBound(), 0.5, RED);
     for(auto& e: enemies){
         e->Draw();
     }
@@ -89,4 +99,12 @@ void PlayState::render() {
 
     gui.draw();
     
+}
+
+void PlayState::ChangeCharacter(CharacterType newtype) {
+    if (character->getCharacterType() != newtype) {
+        delete character;
+        if (newtype == CharacterType::Mario) character = new Mario({ 100, 200 });
+        else if (newtype == CharacterType::Luigi) character = new Luigi({ 100, 200 });
+    }
 }

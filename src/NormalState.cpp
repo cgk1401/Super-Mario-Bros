@@ -58,7 +58,7 @@ void NormalState::SetAnimation(Character* c) {
 		
 	}
 	else if (c->getCharacterType() == CharacterType::Luigi) {
-		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIO);
+		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
 
 		const float texW = 16;
 		const float texH = 16;
@@ -76,7 +76,7 @@ void NormalState::SetAnimation(Character* c) {
 		run.currenttime = 0;
 		run.durationtime = 0.1f;
 		for (int i = 0; i < 3; i++) {
-			run.frame.push_back(Rectangle{float(80 * 17 + 1), 99, texW, texH});
+			run.frame.push_back(Rectangle{float(80 + 17 * i), 99, texW, texH});
 		}
 
 		character->animations[ActionState::Run] = run;

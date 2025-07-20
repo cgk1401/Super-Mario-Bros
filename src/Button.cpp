@@ -67,7 +67,9 @@ void Button::draw() {
         float scaleX = bounds.width / texture.width;
         float scaleY = bounds.height / texture.height;
        /* DrawTextureEx(texture, { bounds.x, bounds.y }, 0.0f, scaleX, WHITE);*/
-        DrawTexture(texture, bounds.x, bounds.y, WHITE);
+        Color drawColor = isHovered ? Color{ 180, 180, 180, 255 } : WHITE; // Hover thì tối lại
+        DrawTexture(texture, bounds.x, bounds.y, drawColor);
+        //DrawTexture(texture, bounds.x, bounds.y, WHITE);
     }
     else {
         DrawRectangleRec(bounds, isHovered ? hoverColor : color);

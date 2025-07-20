@@ -186,6 +186,9 @@
     <ClCompile Include="..\src\FireBallExplosionEffect.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CharacterSelection.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -325,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\Singleton.h">
       <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CharacterSelection.h">
+      <Filter>Header Files\States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
