@@ -42,6 +42,10 @@ protected:
 	float scale = 4.0f;
 	float BasePosition;
 
+	PhysicsConfig config;
+	bool isJumpingUp = false;
+	bool isGround = false;
+	float jumpTimeElapsed = 0;
 public:
 	virtual ~Character();
 
@@ -55,8 +59,9 @@ public:
 	Rectangle getFootSensor() const;
 	ActionState getCurrentAction() const;
 	CharacterStateType getCharacterStateType() const;
-	void DIE();
+	void DIE(Enemy* e);
 
 	void Draw();
 	void Update(float deltatime);
+	void HandleInput(float dt);
 };

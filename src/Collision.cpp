@@ -13,7 +13,7 @@
 
 void Collision::handlePlayerCollision(Character* player, Map* map) {
  
-    player->currentState->isGround = false;
+    player->isGround = false;
 
     Rectangle bound      = player->getBound();
     Rectangle footSensor = player->getFootSensor();
@@ -41,8 +41,8 @@ void Collision::handlePlayerCollision(Character* player, Map* map) {
                 player->position.y = tileRect.y - bound.height - 0.5f;
                 player->velocity.y = 0;
 
-                player->currentState->isGround = true;
-                player->currentState->isJumpingUp = false;
+                player->isGround = true;
+                player->isJumpingUp = false;
                 tile.behavior->onFootCollision(player, x, y, map, tileInstance);
             }
         }
@@ -65,7 +65,7 @@ void Collision::handlePlayerCollision(Character* player, Map* map) {
                             if (player->velocity.y < 0) { // chạm đầu
                                 player->position.y = tileRect.y + tileRect.height;
                                 player->velocity.y = 0;
-                                player->currentState->isJumpingUp = false;
+                                player->isJumpingUp = false;
                                 tile.behavior->onHeadCollision(player, x, y, map, tileInstance);
                             }
 
@@ -419,9 +419,9 @@ void Collision::handleEnemy_EnemyCollison(vector<Enemy*>& enemies) {
                 }
                 
             }
-            /*if (auto* g = dynamic_cast<KoopTroopa*>(e)) {
+            if (auto* g = dynamic_cast<KoopTroopa*>(e)) {
                 if (g->currentState == KoopaState::Shell) break;
-            }*/
+            }
             
 
             if (CheckCollisionRecs(e_bound, o_bound)) {
@@ -451,6 +451,10 @@ void Collision::handlePlayer_EnemyCollision(Character* player, vector<Enemy*>& e
         Rectangle enemy_bound = e->bound;
 
         if (CheckCollisionRecs(player_bound, enemy_bound)) {
+            if (player->getCharacterStateType() == CharacterStateType::StarmanState) {
+                e->onDeath(DeathType::FALLING);
+                continue;
+            }
             float overlapX = fmin(player_bound.x + player_bound.width, enemy_bound.x + enemy_bound.width) - fmax(player_bound.x, enemy_bound.x);
             float overlapY = fmin(player_bound.y + player_bound.height, enemy_bound.y + enemy_bound.height) - fmax(player_bound.y, enemy_bound.y);
 
@@ -467,11 +471,11 @@ void Collision::handlePlayer_EnemyCollision(Character* player, vector<Enemy*>& e
                         
                     }
                     else  {
-                        player->DIE();
+                        player->DIE(e);
                     }
                 }
                 else {
-                      player->DIE();
+                      player->DIE(e);
                 }
 
                 player_bound = player->getBound();

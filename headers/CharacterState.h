@@ -18,9 +18,6 @@ class CharacterState {
 protected :
 	Character* character;
 
-	bool isGround;
-	bool isJumpingUp;
-	float jumpTimeElapsed;
 public :
 	CharacterState(Character* character);
 	virtual ~CharacterState() = default;

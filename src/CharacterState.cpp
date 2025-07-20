@@ -3,9 +3,7 @@
 #include <iostream>
 
 CharacterState::CharacterState(Character* character) : character(character) {
-	isGround = true;
-	isJumpingUp = false;
-	jumpTimeElapsed = 0.0f;
+
 }
 
 float CharacterState::approach(float current, float target, float increase) {
@@ -20,7 +18,7 @@ Character* CharacterState::getCharacter() {
 }
 
 bool CharacterState::getIsGround() {
-	return this->isGround;
+	return this->character->isGround;
 }
 
 void CharacterState::SetBasePosition(float newposition) {

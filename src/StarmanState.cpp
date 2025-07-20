@@ -16,9 +16,9 @@ void StarmanState::SetAnimation(Character* c) {
 		idle.currentframe = 0;
 		idle.currenttime = 0;
 		idle.durationtime = 0.1f;
-		posX = 82;
+		posX = 80;
 		posY = 225;
-		width = 12;
+		width = 16;
 		height = 16;
 
 		for (int Color = 0; Color < 8; Color++) {
@@ -35,21 +35,21 @@ void StarmanState::SetAnimation(Character* c) {
 		for (int Color = 0; Color < 8; Color++) {
 			for (int i = 0; i < 3; i++) {
 				if (i == 0) {
-					posX = 98;
-					posY = 226;
-					width = 13;
-					height = 15;
+					posX = 97;
+					posY = 225;
+					width = 16;
+					height = 16;
 				}
 				else if (i == 1) {
-					posX = 117;
+					posX = 114;
 					posY = 225;
-					width = 11;
+					width = 16;
 					height = 16;
 				}
 				else if (i == 2) {
 					posX = 131;
 					posY = 225;
-					width = 15;
+					width = 16;
 					height = 16;
 				}
 				run.frame.push_back({ posX, float(posY + Color * 63), width, height});
@@ -79,8 +79,8 @@ void StarmanState::SetAnimation(Character* c) {
 		die.durationtime = 0.1f;
 		posX = 183;
 		posY = 225;
-		width = 14;
-		height = 14;
+		width = 16;
+		height = 16;
 
 		for (int Color = 0; Color < 8; Color++) {
 			die.frame.push_back(Rectangle{ posX, float(posY + Color * 63), width, height });
@@ -104,7 +104,7 @@ void StarmanState::SetAnimation(Character* c) {
 				else if (i == 1) {
 					posX = 218;
 					posY = 226;
-					height = 15;
+					height = 16;
 				}
 				flagpolehold.frame.push_back(Rectangle{ posX, float(posY + Color * 63), width, height });
 			}
@@ -141,15 +141,15 @@ void StarmanState::SetAnimation(Character* c) {
 			for (int i = 0; i < 3; i++) {
 				if (i == 0) {
 					posX = 97;
-					posY = 194;
+					posY = 192;
 					width = 16;
-					height = 30;
+					height = 32;
 				}
 				else if (i == 1) {
 					posX = 115;
-					posY = 193;
-					width = 14;
-					height = 31;
+					posY = 192;
+					width = 16;
+					height = 32;
 				}
 				else if (i == 2) {
 					posX = 131;
@@ -224,74 +224,31 @@ void StarmanState::SetAnimation(Character* c) {
 
 void StarmanState::Update(float deltatime) {
 	currentTime += deltatime;
-	character->animations[character->currentAction].Update(deltatime);
-
-	Rectangle currentframe = character->animations[character->currentAction].getcurrentframe();
-	character->BasePosition = character->position.y + currentframe.height * character->scale;
-
+	
 	HandleInput(deltatime);
-	if (!isGround) {
-		if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
-			character->velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
-		}
-		else {
-			character->velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
-		}
-		if (isJumpingUp) character->setActionState(ActionState::Jump);
-		//character->setActionState(ActionState::Jump);
-	}
-	else {
-		if (fabs(character->velocity.x) < 0.1f) {
-			if (IsKeyDown(KEY_P)) {
-				character->setActionState(ActionState::FlagpoleHold);
-			}
-			// else {
-			// 	character->setActionState(ActionState::Idle);
-			// }
-		}
-		// else {
-		// 	character->setActionState(ActionState::Run);
-		// }
-	}
-
-	character->position.x += character->velocity.x * deltatime;
-	character->position.y += character->velocity.y * deltatime;
-
+	
 	// trạng thái đang rơi xuống
 
 	if (currentTime >= duration) {
-		character->setActionState(ActionState::Idle);
+		//character->setActionState(ActionState::Idle);
+		cout << "BEGIN CHANGING\n";
 		character->ChangeMiddleState(previousState);
+		
 	}
+	cout << 1;
 }
 
 void StarmanState::HandleInput(float deltatime) {
-	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
-	float acc = config.ACCELERATION;
-
-	if (IsKeyDown(KEY_RIGHT)) {
-		if (character->velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
-		character->velocity.x = approach(character->velocity.x, targetspeed, acc * deltatime);
-		character->setActionState(ActionState::Run);
-		character->setDirection(Direction::Right);
-	}
-	else if (IsKeyDown(KEY_LEFT)) {
-		if (character->velocity.x > 0) acc *= 3.0f;
-		character->velocity.x = approach(character->velocity.x, -targetspeed, acc * deltatime);
-		character->setActionState(ActionState::Run);
-		character->setDirection(Direction::Left);
-	}
 
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {
-		if (isGround) {
+		if (character->isGround) {
 			// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
 			if (IsKeyDown(KEY_P)) {
 				character->setActionState(ActionState::FlagpoleHold);
 			}
 			else {
 				// không bấm phím nào thì sẽ đặt trạng thái thành idle
-				character->velocity.x = 0.0f;
-				character->setActionState(ActionState::Idle);
+				
 			}
 		}
 	}
@@ -312,21 +269,7 @@ void StarmanState::HandleInput(float deltatime) {
 	 //	isJumpingUp = false;
 	 //}
 
-	if (IsKeyDown(KEY_SPACE)) {
-		if (isGround) {
-			character->velocity.y = config.JUMPFORCE;
-			isGround = false;
-			isJumpingUp = true;
-			jumpTimeElapsed = 0.0f;
-		}
-		else if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
-			jumpTimeElapsed += deltatime;
-			character->velocity.y = config.JUMPFORCE;  // hoặc scale theo thời gian
-		}
-	}
-	else {
-		isJumpingUp = false;
-	}
+	
 }
 
 CharacterStateType StarmanState::getStateType() {
