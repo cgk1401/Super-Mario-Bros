@@ -27,6 +27,7 @@ public:
     void pop();
     void clear();
     int getStateCount();
+    vector <GameState*>& getstateStack();
 };
 
 #endif

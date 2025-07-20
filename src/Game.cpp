@@ -24,7 +24,7 @@ void Game::run(){
     while(!WindowShouldClose()){
         //Xử lí event
         float deltatime = GetFrameTime();
-
+        cout << stateStack.size() << endl;
         for (int i = stateStack.size() - 1; i >= 0; i--) {
             
              stateStack[i]->update(deltatime);
@@ -75,4 +75,8 @@ void Game::clear() {
 
 int Game::getStateCount() {
     return stateStack.size();
+}
+
+vector<GameState*>& Game::getstateStack(){
+    return this->stateStack;
 }

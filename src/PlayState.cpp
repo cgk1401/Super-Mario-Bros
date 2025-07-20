@@ -6,8 +6,18 @@
 #include "../headers/Collision.h"
 #include "../headers/ItemManager.h"
 #include "../headers/SoundManager.h"
+#include "../headers/Luigi.h"
+
 PlayState::PlayState() {
     Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD);
+    
+    if (selectedCharacter == CharacterType::Mario) {
+        character = new Mario({ 100, 200 });
+    }
+    else if (selectedCharacter == CharacterType::Luigi) {
+        character = new Luigi({ 100, 200 });
+    }
+
     gui = GUI();
  
     map = new Map("../assets/Map/tileset_gutter64x64.png");
@@ -44,19 +54,20 @@ void PlayState::update(float dt){
 
 
     
+    camera.update(character->getBound(), screenWidth);
     gui.update(); 
     //bg.update( mario,camera.getCamera(), dt);
     //fg.update( mario,camera.getCamera(), dt);
     map->update();
 
-    Collision::handlePlayerCollision(mario, map);
+    Collision::handlePlayerCollision(character, map);
 
-    if (mario->getCurrentAction() != ActionState::Die) mario->Update(dt);
-    Collision::handlePlayer_EnemyCollision(mario, enemies);
+    if (character->getCurrentAction() != ActionState::Die) character->Update(dt);
+    Collision::handlePlayer_EnemyCollision(character, enemies);
 
    
     Singleton<EffectManager>::getInstance().update(dt);
-    Singleton<ItemManager>::getInstance().Update(dt, mario, map);
+    Singleton<ItemManager>::getInstance().Update(dt, character, map);
 
     Collision::handleEnemy_EnemyCollison(enemies);
     for(auto& e: enemies){
@@ -64,7 +75,7 @@ void PlayState::update(float dt){
         e->Update(dt, map);
     }
     
-    FireState* fireState = dynamic_cast<FireState*>(mario->GetCurrentState());
+    FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
     if (fireState) {
         auto& fireballs = fireState->getFireBall(); // hoặc auto fireballs = fireState->getFireBall() nếu ông đã sửa trả về bản sao
         for (auto& f : fireballs) {
@@ -83,7 +94,6 @@ void PlayState::update(float dt){
     return false;
     }),
     enemies.end());
-    camera.update(mario->getBound(), screenWidth);
     Global::camera = camera.getCamera();
 }
 
@@ -93,8 +103,8 @@ void PlayState::render() {
     Singleton<ItemManager>::getInstance().Draw();
     map->draw();
 
-    if (mario->getCurrentAction() != ActionState::Die) mario->Draw();
-    DrawRectangleLinesEx(mario->getBound(), 0.5, RED);
+    if (character->getCurrentAction() != ActionState::Die) character->Draw();
+    DrawRectangleLinesEx(character->getBound(), 0.5, RED);
     for(auto& e: enemies){
         e->Draw();
     }
@@ -104,4 +114,12 @@ void PlayState::render() {
 
     gui.draw();
     
+}
+
+void PlayState::ChangeCharacter(CharacterType newtype) {
+    if (character->getCharacterType() != newtype) {
+        delete character;
+        if (newtype == CharacterType::Mario) character = new Mario({ 100, 200 });
+        else if (newtype == CharacterType::Luigi) character = new Luigi({ 100, 200 });
+    }
 }

@@ -133,6 +133,7 @@
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CameraController.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
+    <ClCompile Include="..\src\CharacterSelection.cpp" />
     <ClCompile Include="..\src\CoinCollectEffect.cpp" />
     <ClCompile Include="..\src\CharacterState.cpp" />
     <ClCompile Include="..\src\Collision.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="..\headers\Button.h" />
     <ClInclude Include="..\headers\CameraController.h" />
     <ClInclude Include="..\headers\Character.h" />
+    <ClInclude Include="..\headers\CharacterSelection.h" />
     <ClInclude Include="..\headers\CoinCollectEffect.h" />
     <ClInclude Include="..\headers\CharacterState.h" />
     <ClInclude Include="..\headers\Collision.h" />

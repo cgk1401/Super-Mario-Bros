@@ -13,18 +13,19 @@
 #include "../headers/PiranhaPlant.h"
 #include "../headers/Enemy.h"
 
-
 class PlayState : public GameState{
 public:
     PlayState();
     ~PlayState();
     void update(float deltatime) override;
     void render() override;
+    void ChangeCharacter(CharacterType newtype);
 
 private:
     GUI gui;
     Map* map;
-    Character* mario = new Mario({100, 200});
+    //Character* mario = new Mario({100, 200});
+    Character* character;
     vector<Enemy*> enemies;
 
     CameraController camera;

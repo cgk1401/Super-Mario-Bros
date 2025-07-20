@@ -39,6 +39,7 @@ enum class CharacterType {
 	Mario,
 	Luigi,
 };
+inline CharacterType selectedCharacter = CharacterType::Mario;
 
 enum class Direction {
 	Left,
