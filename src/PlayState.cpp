@@ -48,7 +48,8 @@ PlayState::~PlayState() {
 
 void PlayState::update(float dt){
     //SoundManager::get()->updateMusic();
-    if (gui.PauseButton_IsPressed()) {       
+    if (gui.PauseButton_IsPressed()) {    
+        Singleton<SoundManager>::getInstance().play(SoundType::PAUSE);
         Singleton<Game>::getInstance().addState(new PauseState());
     }
 

@@ -2,9 +2,15 @@
 
 StarmanState::StarmanState(Character* character, CharacterStateType previousState) : CharacterState(character) {
 	this->previousState = previousState;
+	Singleton<SoundManager>::getInstance().playMusic(MusicType::STARMAN, true);
+}
+
+StarmanState::~StarmanState() {
+	Singleton<SoundManager>::getInstance().stopMusic();
 }
 
 void StarmanState::SetAnimation(Character* c) {
+	//Singleton<SoundManager>::getInstance().playMusic(MusicType::STARMAN, true);
 	float posX;
 	float posY;
 	float width;
@@ -225,6 +231,7 @@ void StarmanState::SetAnimation(Character* c) {
 void StarmanState::Update(float deltatime) {
 	currentTime += deltatime;
 	character->animations[character->currentAction].Update(deltatime);
+	Singleton<SoundManager>::getInstance().updateMusic();
 
 	Rectangle currentframe = character->animations[character->currentAction].getcurrentframe();
 	character->BasePosition = character->position.y + currentframe.height * character->scale;
@@ -269,13 +276,13 @@ void StarmanState::HandleInput(float deltatime) {
 	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
 	float acc = config.ACCELERATION;
 
-	if (IsKeyDown(KEY_RIGHT)) {
+	if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT)) {
 		if (character->velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
 		character->velocity.x = approach(character->velocity.x, targetspeed, acc * deltatime);
 		character->setActionState(ActionState::Run);
 		character->setDirection(Direction::Right);
 	}
-	else if (IsKeyDown(KEY_LEFT)) {
+	else if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
 		if (character->velocity.x > 0) acc *= 3.0f;
 		character->velocity.x = approach(character->velocity.x, -targetspeed, acc * deltatime);
 		character->setActionState(ActionState::Run);
@@ -314,6 +321,7 @@ void StarmanState::HandleInput(float deltatime) {
 
 	if (IsKeyDown(KEY_SPACE)) {
 		if (isGround) {
+			Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 			character->velocity.y = config.JUMPFORCE;
 			isGround = false;
 			isJumpingUp = true;

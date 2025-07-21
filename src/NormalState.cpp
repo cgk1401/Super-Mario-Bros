@@ -161,13 +161,13 @@ void NormalState::HandleInput(float deltatime) {
 	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
 	float acc = config.ACCELERATION;
 
-	if (IsKeyDown(KEY_RIGHT)) {
+	if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT)) {
 		if (character->velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
 		character->velocity.x = approach(character->velocity.x, targetspeed, acc * deltatime);
 		character->setActionState(ActionState::Run);
 		character->setDirection(Direction::Right);
 	}
-	else if (IsKeyDown(KEY_LEFT)) {
+	else if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
 		if (character->velocity.x > 0) acc *= 3.0f;
 		character->velocity.x = approach(character->velocity.x, -targetspeed, acc * deltatime);
 		character->setActionState(ActionState::Run);
@@ -181,29 +181,26 @@ void NormalState::HandleInput(float deltatime) {
 		}
 	}
 	
-	//if (IsKeyDown(KEY_SPACE)) {
-	//	if (isGround) Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
-	//}
 	 //xử lý nhảy
-	 if (IsKeyPressed(KEY_SPACE) && isGround) {
-	 	character->velocity.y = config.JUMPFORCE;
-	 	isGround = false;
-	 	isJumpingUp = true;
-	 	jumpTimeElapsed = 0.0f;
-	 	character->setActionState(ActionState::Jump);
-	 }
+	 //if (IsKeyPressed(KEY_SPACE) && isGround) {
+	 //	character->velocity.y = config.JUMPFORCE;
+	 //	isGround = false;
+	 //	isJumpingUp = true;
+	 //	jumpTimeElapsed = 0.0f;
+	 //	character->setActionState(ActionState::Jump);
+	 //}
 
-	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
-		 Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
-	 	jumpTimeElapsed += deltatime;
-	 }
-	 else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
-	 	isJumpingUp = false;
-	 }
+	 //if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
+		// //Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
+	 //	jumpTimeElapsed += deltatime;
+	 //}
+	 //else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
+	 //	isJumpingUp = false;
+	 //}
 
 	if (IsKeyDown(KEY_SPACE)) {
 		if (isGround) {
-			Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
+			Singleton<SoundManager>::getInstance().play(SoundType::JUMP_SMALL);
 			character->velocity.y = config.JUMPFORCE;
 			isGround = false;
 			isJumpingUp = true; 

@@ -138,13 +138,13 @@ void FireState::HandleInput(float deltatime) {
 		return;
 	}
 
-	if (IsKeyDown(KEY_RIGHT)) {
+	if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT)) {
 		if (character->velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
 		character->velocity.x = approach(character->velocity.x, targetspeed, acc * deltatime);
 		character->setActionState(ActionState::Run);
 		character->setDirection(Direction::Right);
 	}
-	else if (IsKeyDown(KEY_LEFT)) {
+	else if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
 		if (character->velocity.x > 0) acc *= 3.0f;
 		character->velocity.x = approach(character->velocity.x, -targetspeed, acc * deltatime);
 		character->setActionState(ActionState::Run);

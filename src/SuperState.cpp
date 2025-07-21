@@ -145,6 +145,7 @@ void SuperState::Update(float deltatime) {
 
 	// trạng thái đang rơi xuống
 
+
 }
 
 void SuperState::HandleInput(float deltatime) {
@@ -160,13 +161,13 @@ void SuperState::HandleInput(float deltatime) {
 		return;
 	}
 
-	if (IsKeyDown(KEY_RIGHT)) {
+	if (IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_LEFT)) {
 		if (character->velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
 		character->velocity.x = approach(character->velocity.x, targetspeed, acc * deltatime);
 		character->setActionState(ActionState::Run);
 		character->setDirection(Direction::Right);
 	}
-	else if (IsKeyDown(KEY_LEFT)) {
+	else if (IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
 		if (character->velocity.x > 0) acc *= 3.0f;
 		character->velocity.x = approach(character->velocity.x, -targetspeed, acc * deltatime);
 		character->setActionState(ActionState::Run);
@@ -205,6 +206,7 @@ void SuperState::HandleInput(float deltatime) {
 
 	if (IsKeyDown(KEY_SPACE)) {
 	if (isGround) {
+		Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 		character->velocity.y = config.JUMPFORCE;
 		isGround = false;
 		isJumpingUp = true;
