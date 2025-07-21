@@ -231,7 +231,6 @@ void StarmanState::Update(float deltatime) {
 
 	if (currentTime >= duration) {
 		//character->setActionState(ActionState::Idle);
-		cout << "BEGIN CHANGING\n";
 		character->ChangeMiddleState(previousState);
 		
 	}

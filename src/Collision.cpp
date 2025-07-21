@@ -59,7 +59,6 @@ void Collision::handlePlayerCollision(Character* player, Map* map) {
                 if (tile.behavior->isSolid()) {
                     float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);
                     float overlapY = fmin(bound.y + bound.height, tileRect.y + tileRect.height) - fmax(bound.y, tileRect.y);
-                    //cout<< overlapX << " - " << overlapY << endl;
                     if (overlapX > 0 && overlapY > 0) {
                         if (overlapY < overlapX) { // trên dưới của tile
                             if (player->velocity.y < 0) { // chạm đầu
@@ -140,7 +139,6 @@ void Collision::handleEnemyCollision(Enemy* e, Map* map){
                 if (tile.behavior->isSolid()) {
                     float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);
                     float overlapY = fmin(bound.y + bound.height, tileRect.y + tileRect.height) - fmax(bound.y, tileRect.y);
-                    //cout<< overlapX << " - " << overlapY << endl;
                     if (overlapX > 0 && overlapY > 0) {
                         if (overlapY < overlapX) { // trên dưới của tile
                             if (e->velocity.y < 0) { // chạm đầu
@@ -221,7 +219,6 @@ void Collision::handleMushroomCollisionMap(Mushroom* mushroom, Map* map){
                 if (tile.behavior->isSolid()) {
                     float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);
                     float overlapY = fmin(bound.y + bound.height, tileRect.y + tileRect.height) - fmax(bound.y, tileRect.y);
-                    //cout<< overlapX << " - " << overlapY << endl;
                     if (overlapX > 0 && overlapY > 0) {
                         if (overlapY < overlapX) { // trên dưới của tile
                             if (mushroom->velocity.y < 0) { // chạm đầu
@@ -231,7 +228,6 @@ void Collision::handleMushroomCollisionMap(Mushroom* mushroom, Map* map){
 
                         }
                         else { // 2 bên của tile 
-                            cout << x << " - " << y << endl;
                             if (mushroom->velocity.x > 0) { // đang đi sang phải,  đụng bên trái tile
                                 mushroom->position.x -= overlapX;
                                 mushroom->changeDirection(Direction::Left);
@@ -301,7 +297,6 @@ void Collision::handleStarCollision(Star* star, Map* map) {
                 if (tile.behavior->isSolid()) {
                     float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);
                     float overlapY = fmin(bound.y + bound.height, tileRect.y + tileRect.height) - fmax(bound.y, tileRect.y);
-                    //cout<< overlapX << " - " << overlapY << endl;
                     if (overlapX > 0 && overlapY > 0) {
                         if (overlapY < overlapX) { // trên dưới của tile
                             if (star->velocity.y < 0) { // chạm đầu
@@ -311,7 +306,6 @@ void Collision::handleStarCollision(Star* star, Map* map) {
 
                         }
                         else { // 2 bên của tile 
-                            cout << x << " - " << y << endl;
                             if (star->velocity.x > 0) { // đang đi sang phải,  đụng bên trái tile
                                 star->position.x -= overlapX;
                                 star->direction = Direction::Left;

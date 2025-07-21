@@ -6,6 +6,7 @@
 #include <string>
 #include <functional>
 using namespace std;
+#define MAX_COLUMN 100
 
 Map::Map(const char* texturePath, int r, int c) {
     texture = LoadTexture(texturePath);
@@ -274,7 +275,13 @@ void Map::draw(bool isEditing) {
                 Rectangle destRect = { drawPos.x, drawPos.y, TILE_SIZE, TILE_SIZE };
                 DrawTexturePro(texture, it->second.srcRect, destRect, { 0,0 }, 0, WHITE);
             }
-            if (isEditing) DrawRectangleLinesEx(mapRects[x][y], 0.5f, DARKGRAY);
+            if (isEditing)
+                //Draw grid 
+                DrawRectangleLines(mapRects[x][y].x,
+                    mapRects[x][y].y,
+                    TILE_SIZE,
+                    TILE_SIZE, 
+                    BLACK);
         }
     }
 }
@@ -390,7 +397,7 @@ void Map::updateTileInstancePosition(int row, int col, Vector2 offset){
 }
 
 
-void Map::loadFromFile(const char* filename) {
+void Map::loadFromFile(const char* filename, bool isEditing) {
     ifstream MyReadFile(filename);
 
     if (!MyReadFile.is_open()) {
@@ -401,47 +408,49 @@ void Map::loadFromFile(const char* filename) {
     int fileRows, fileCols;
     MyReadFile >> fileRows >> fileCols;
 
-    initMap(fileRows, fileCols); // Re-initialize map with new dimensions
+    int loadCols = isEditing ? MAX_COLUMN : fileCols;
+    initMap(fileRows, loadCols); // Re-initialize map with new dimensions
+    columns = loadCols;
 
     cout << "column in map: " << columns << endl;
+
     for (int x = 0; x < rows; x++) {
-        for (int y = 0; y < columns; y++) {
+        for (int y = 0; y < fileCols; y++) {
             string s;
             MyReadFile >> s;
             int commaPos = s.find(',');
-            if (commaPos == string::npos) { // No comma, treat as single TileID
+
+            if (commaPos == string::npos) {
                 try {
                     int tileID = stoi(s);
                     setTile(x, y, tileID);
                 }
-                catch (const invalid_argument& ia) {
+                catch (...) {
                     cerr << "Invalid TileID in map file: " << s << " at (" << x << "," << y << ")" << endl;
-                    setTile(x, y, 0); // Default to empty
-                }
-                catch (const out_of_range& oor) {
-                    cerr << "TileID out of range in map file: " << s << " at (" << x << "," << y << ")" << endl;
-                    setTile(x, y, 0); // Default to empty
+                    setTile(x, y, 0);
                 }
             }
             else {
                 try {
                     int tileX = stoi(s.substr(0, commaPos));
                     int tileY = stoi(s.substr(commaPos + 1));
-                    // Convert (tileX, tileY) from file (1-based) to our TileID
                     int tileID = getTileIDFromCoords(tileX, tileY);
                     setTile(x, y, tileID);
                 }
-                catch (const invalid_argument& ia) {
+                catch (...) {
                     cerr << "Invalid texture coordinates in map file: " << s << " at (" << x << "," << y << ")" << endl;
-                    setTile(x, y, 0); // Default to empty
-                }
-                catch (const out_of_range& oor) {
-                    cerr << "Texture coordinates out of range in map file: " << s << " at (" << x << "," << y << ")" << endl;
-                    setTile(x, y, 0); // Default to empty
+                    setTile(x, y, 0);
                 }
             }
         }
+
+        if (isEditing) {
+            for (int y = fileCols; y < MAX_COLUMN; y++) {
+                setTile(x, y, 0);
+            }
+        }
     }
+
     cout << "Loaded file successfully: " << filename << endl;
     MyReadFile.close();
 }

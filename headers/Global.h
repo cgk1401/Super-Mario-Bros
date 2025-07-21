@@ -17,6 +17,10 @@ const int screenHeight = 800; //768
 Texture2D resizedImage(const char* imagePath, float width, float height);
 class Map;
 class Enemy;
+
+constexpr Color DARK_BLUE = { 22, 72, 159, 255 };
+
+
 enum class CharacterStateType {
 	NormalState,
 	SuperState,

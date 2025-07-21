@@ -87,7 +87,7 @@ void QuestionTileBehavior::onHeadCollision(Character* character, int tileRow, in
     if(!tileState->isBouncing){
         tileState->isBouncing = true;
         tileState->bounceTimer.start(0.2f);
-        cout << tileRow << " - " << tileCol << endl;\
+        //cout << tileRow << " - " << tileCol << endl;
         Vector2 startPos = {(float) tileCol * Map::TILE_SIZE, (float) tileRow * Map::TILE_SIZE};
 
         Singleton<ItemManager>::getInstance().Spawn(ItemType::MUSHROOM, startPos);
