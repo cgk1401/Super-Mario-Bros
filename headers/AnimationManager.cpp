@@ -8,16 +8,13 @@ void AnimationManager::LoadAnimation(const string& filename, CharacterStateType 
 	//	return;
 	//}
 
-	cout << "Cuong";
 	nlohmann::json json;
 	input >> json;
-	cout << "Cuong11111";
+
 	for (auto& chartype : json.items()) {
-		cout << "Cuong2222";
 		CharacterType type = (chartype.key() == "Mario") ? CharacterType::Mario : CharacterType::Luigi;
 
 		for (auto& action : chartype.value().items()) {
-			cout << "cuong44444";
 			ActionState actionType;
 			if (action.key() == "Idle") actionType = ActionState::Idle;
 			else if (action.key() == "Run") actionType = ActionState::Run;
@@ -31,9 +28,8 @@ void AnimationManager::LoadAnimation(const string& filename, CharacterStateType 
 			anim.currenttime = 0;
 			anim.durationtime = action.value()["duration"];
 			for (auto& frame : action.value()["frames"]) {
-				//cout << "Cuong3333";
 				anim.frame.push_back({ frame["x"], frame["y"], frame["width"], frame["height"] });
-			}cout << "Cuong3333";
+			}
 			animations[type][statetype][actionType] = anim;;
 		}
 	}
