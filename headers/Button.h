@@ -21,6 +21,8 @@ public:
     Button();
     Button(float x, float y, float width, float height, const char* labelText, Color buttonColor, Color hoverCol, Color textCol, int fontSize = 20);
     Button(const char* imagePath, float x, float y, float width, float height, const char* labelText, Color textColor, int fontSize = 20);
+    Button(const Texture2D& texture, float x, float y, float width, float height, const char* labelText, Color textColor, int fontSize = 20);
+
     ~Button();
 
     void operator=(const Button& b);

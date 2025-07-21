@@ -63,6 +63,11 @@ void Game::pop() {
         stateStack.pop_back();
     }
 }
+
+void Game::changeState(GameState* newState) {
+    clear();
+    addState(newState);
+}
 void Game::replaceState(GameState* newState) {
     pop();
     addState(newState);

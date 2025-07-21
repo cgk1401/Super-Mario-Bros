@@ -14,8 +14,8 @@ CharacterSelection::CharacterSelection() {
 
     background = resizedImage("../assets/GUI/Menu Background.png", screenWidth, screenHeight);
     characters.resize(2);
-    characters[0] = resizedImage("../assets/GUI/Menu Mario.png", 400, 400);
-    characters[1] = resizedImage("../assets/GUI/Luigi.png", 400, 400);
+    characters[0] = resizedImage("../assets/GUI/menu_mario.png", 300, 450);
+    characters[1] = resizedImage("../assets/GUI/menu_luigi.png", 300, 450);
     selectCharacter = &characters[0];
 }
 

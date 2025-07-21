@@ -8,9 +8,12 @@ using namespace std;
 class MenuState : public GameState {
 private:
     vector<Button*> buttons;
+    vector<Button*> setting_buttons;
     Font font;
     Texture2D background;
     Texture2D mario_character;
+    Texture2D luigi_character;
+    int selectedButton = 0;
 public:
     MenuState();
     ~MenuState();

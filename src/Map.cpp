@@ -72,7 +72,7 @@ void Map::initMap(int r, int c) {
     rows = r;
     columns = c;
 
-    //cout << "column: " << c << endl;;
+    cout << "column in init map: " << c << endl;;
     mapRects.resize(rows, vector<Rectangle>(columns));
     mapData.resize(rows, vector<MapTileInstance>(columns));
 
@@ -403,6 +403,7 @@ void Map::loadFromFile(const char* filename) {
 
     initMap(fileRows, fileCols); // Re-initialize map with new dimensions
 
+    cout << "column in map: " << columns << endl;
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
             string s;

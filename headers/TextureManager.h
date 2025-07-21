@@ -12,7 +12,8 @@ enum class TextureType{
     ENEMY,
     TILESET,
     ITEM,
-    BUTTON
+    BUTTON,
+    LUIGI,
 };
 
 class TextureManager{

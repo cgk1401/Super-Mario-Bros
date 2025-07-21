@@ -8,6 +8,7 @@ TextureManager::TextureManager(){
     texture.emplace(TextureType::ENEMY, LoadTexture("../assets/Enemy/Enemies_Bosses.png"));
     texture.emplace(TextureType::BUTTON, LoadTexture("../assets/GUI/Button.png"));
     texture.emplace(TextureType::ITEM, LoadTexture("../assets/Item/Items Objects and NPCs.png"));
+    texture.emplace(TextureType::LUIGI, LoadTexture("../assets/GUI/Luigi.png"));
 }
 
  TextureManager::~TextureManager(){

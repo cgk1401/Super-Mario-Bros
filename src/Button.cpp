@@ -32,7 +32,17 @@ Button::Button(const char* imagePath, float x, float y, float width, float heigh
     isHovered = false;
     useTexture = true;
 
-    texture = resizedImage(imagePath, width, height);
+    texture = LoadTexture(imagePath);
+}
+Button::Button(const Texture2D& texture, float x, float y, float width, float height, const char* labelText, Color textCol, int fontSize){
+    bounds = { x, y, width, height };
+    label = labelText;
+    textColor = textCol;
+    this->fontSize = fontSize;
+    isHovered = false;
+    useTexture = true;
+
+    this->texture = texture;
 }
 
 Button::~Button() {
@@ -68,8 +78,10 @@ void Button::draw() {
         float scaleY = bounds.height / texture.height;
        /* DrawTextureEx(texture, { bounds.x, bounds.y }, 0.0f, scaleX, WHITE);*/
         Color drawColor = isHovered ? Color{ 180, 180, 180, 255 } : WHITE; // Hover thì tối lại
-        DrawTexture(texture, bounds.x, bounds.y, drawColor);
-        //DrawTexture(texture, bounds.x, bounds.y, WHITE);
+        DrawTexturePro(texture, {0,0, 
+                    (float) texture.width,(float) texture.height}, 
+                    bounds, 
+                    {0,0},0, drawColor);         //DrawTexture(texture, bounds.x, bounds.y, WHITE);
     }
     else {
         DrawRectangleRec(bounds, isHovered ? hoverColor : color);

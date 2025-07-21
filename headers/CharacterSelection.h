@@ -17,4 +17,6 @@ public:
 
     void update(float deltatime) override;
     void render() override;
+
+    Texture2D* getSelectedCharacter(){return  selectCharacter;}
 };

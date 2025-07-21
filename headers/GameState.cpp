@@ -18,7 +18,7 @@ ButtonLayoutConfig::ButtonLayoutConfig(int amount_button) {
 std::vector<Button*> CreateButtons(const char* buttonLabels[], const ButtonLayoutConfig& other) {
     vector <Button*> buttons(other.amount_button);
     for (int i = 0; i < other.amount_button; i++) {
-        buttons[i] = new Button("../assets/GUI/Button.png", 
+        buttons[i] = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), 
             other.BUTTON_MARGIN_X, 
             other.FIRST_POSITION_Y_BUTTON + i * (other.BUTTON_HEIGHT + other.BUTTON_SPACING),
             other.BUTTON_WIDTH, 

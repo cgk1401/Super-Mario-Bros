@@ -129,7 +129,6 @@ void Character::Draw() {
 		}
 	}
 
-	DrawRectangleRec(getFootSensor(), RED);
 }
 float approach(float current, float target, float increase) {
 	if (current < target) {

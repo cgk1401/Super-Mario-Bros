@@ -42,7 +42,11 @@ bool GUI::PauseButton_IsPressed(){
     return PauseButton->IsClicked();
 }
 void GUI::update(){
+
     PauseButton->update();
+    if (PauseButton->IsClicked()) {       
+        Singleton<Game>::getInstance().addState(new PauseState());
+    }
     if(time > 0) time -= 2 * GetFrameTime();
     else {
         time = 0;

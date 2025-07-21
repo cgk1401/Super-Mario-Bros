@@ -48,13 +48,7 @@ PlayState::~PlayState() {
 
 void PlayState::update(float dt){
     //SoundManager::get()->updateMusic();
-    if (gui.PauseButton_IsPressed()) {       
-        Singleton<Game>::getInstance().addState(new PauseState());
-    }
-
-
-    
-    camera.update(character->getBound(), screenWidth);
+    camera.update(character->getBound(), map->columns * Map::TILE_SIZE);
     gui.update(); 
     //bg.update( mario,camera.getCamera(), dt);
     //fg.update( mario,camera.getCamera(), dt);
@@ -77,7 +71,7 @@ void PlayState::update(float dt){
     
     FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
     if (fireState) {
-        auto& fireballs = fireState->getFireBall(); // hoặc auto fireballs = fireState->getFireBall() nếu ông đã sửa trả về bản sao
+        auto& fireballs = fireState->getFireBall(); 
         for (auto& f : fireballs) {
             if (f) Collision::handleFireball_EnemyCollision(f, enemies);
         }
@@ -104,7 +98,7 @@ void PlayState::render() {
     map->draw();
 
     if (character->getCurrentAction() != ActionState::Die) character->Draw();
-    DrawRectangleLinesEx(character->getBound(), 0.5, RED);
+    //DrawRectangleLinesEx(character->getBound(), 0.5, RED);
     for(auto& e: enemies){
         e->Draw();
     }

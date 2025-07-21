@@ -235,7 +235,6 @@ void StarmanState::Update(float deltatime) {
 		character->ChangeMiddleState(previousState);
 		
 	}
-	cout << 1;
 }
 
 void StarmanState::HandleInput(float deltatime) {

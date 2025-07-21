@@ -48,9 +48,9 @@ void MapEditor::saveToFile(const char* filename) {
 
     cout << "Limit column: "<< limitCol <<endl;
 
-    MyFile << rows << " " << columns << "\n";
+    MyFile << rows << " " << limitCol << "\n";
     for (int x = 0; x < rows; x++) {
-        for (int y = 0; y < columns; y++) {
+        for (int y = 0; y <= limitCol; y++) {
             // Save TileID directly
             MyFile << mapData[x][y].tileID; // Access tileID from MapTileInstance
             if (y < columns - 1) MyFile << " ";
