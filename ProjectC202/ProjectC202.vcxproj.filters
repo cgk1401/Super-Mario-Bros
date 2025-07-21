@@ -192,6 +192,9 @@
     <ClCompile Include="..\headers\GameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\headers\AnimationManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -334,6 +337,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\CharacterSelection.h">
       <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\AnimationManager.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,0 +1,16 @@
+{
+  "Mario": {
+    "Idle": {
+      "frames": [{ "x": 80, "y": 34, "width": 16, "height": 16 }],
+      "duration": 0.1
+    },
+    "Run":{
+      "frames":[
+        { "x": 97, "y": 34, "width": 16, "height": 16 },
+        { "x": 114, "y": 34, "width": 16, "height": 16 },
+        { "x": 131, "y": 34, "width": 16, "height": 16 }
+      ],
+      "duration":0.07
+    }
+  }
+}

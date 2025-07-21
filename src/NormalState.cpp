@@ -3,32 +3,27 @@
 
 NormalState::NormalState(Character* character) : CharacterState(character){
 	character->velocity = { 0, 0 };
+	Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/NormalState.json", CharacterStateType::NormalState);
 }
 
 void NormalState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
 		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
-
+		
 		const float texW = 16;
 		const float texH = 16;
 
-		Animation idle;
-		idle.currentframe = 0;
-		idle.currenttime = 0;
-		idle.durationtime = 0.1f;
-		idle.frame.push_back({ 80, 34, texW, texH });
+		character->animations[ActionState::Idle] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::NormalState,
+			ActionState::Idle
+		);
 
-		character->animations[ActionState::Idle] = idle;
-
-		Animation run;
-		for (int i = 0; i < 3; i++) {
-			run.frame.push_back(Rectangle{ (float)(80 + i * 17), 34, (float)texW, (float)texH });
-		}
-		run.currentframe = 0;
-		run.durationtime = 0.07f;
-		run.currenttime = 0;
-
-		character->animations[ActionState::Run] = run;
+		character->animations[ActionState::Run] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::NormalState,
+			ActionState::Run
+		);
 
 		Animation jump;
 		jump.frame.push_back(Rectangle{ 165, 34, (float)texW, (float)texH});
