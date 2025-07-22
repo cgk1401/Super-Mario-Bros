@@ -1,109 +1,76 @@
 ﻿#include "../headers/SuperState.h"
 #include <raylib.h>
 
-SuperState::SuperState(Character* character) : CharacterState(character){}
+SuperState::SuperState(Character* character) : CharacterState(character){
+	Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/SuperState.json", CharacterStateType::SuperState);
+}
 
 void SuperState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
 		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
-		
-		const float texW = 16;
-		const float texH = 32;
 
-		Animation idle;
-		idle.currentframe = 0;
-		idle.currenttime = 0;
-		idle.durationtime = 0.1f;
-		idle.frame.push_back({ 80, 1, 16, 32 });
+		character->animations[ActionState::Idle] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::SuperState,
+			ActionState::Idle
+		);
 
-		character->animations[ActionState::Idle] = idle;
+		character->animations[ActionState::Run] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::SuperState,
+			ActionState::Run
+		);
 
-		Animation run;
-		run.currentframe = 0;
-		run.currenttime = 0;
-		run.durationtime = 0.1f;
-		for (int i = 0; i < 3; i++) {
-			run.frame.push_back(Rectangle{ float(97 + i * 17), 1, texW, texH });
-		}
+		character->animations[ActionState::Jump] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::SuperState,
+			ActionState::Jump
+		);
 
-		character->animations[ActionState::Run] = run;
+		character->animations[ActionState::Sit] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::SuperState,
+			ActionState::Sit
+		);
 
-		Animation jump;
-		jump.currentframe = 0;
-		jump.currenttime = 0;
-		jump.durationtime = 0.1f;
-		jump.frame.push_back({ 165, 1, 16, 32 });
-
-		character->animations[ActionState::Jump] = jump;
-
-		Animation sit;
-		sit.currentframe = 0;
-		sit.currenttime = 0;
-		sit.durationtime = 0.1f;
-		sit.frame.push_back({ 182, 11, 16, 22 });
-
-		character->animations[ActionState::Sit] = sit; 
-
-		Animation flagpolehold;
-		flagpolehold.currentframe = 0;
-		flagpolehold.currenttime = 0;
-		flagpolehold.durationtime = 0.1f;
-		for (int i = 0; i < 2; i++) {
-			flagpolehold.frame.push_back(Rectangle{ float(199 + i * 17), 1, 16, 32 });
-		}
-
-		character->animations[ActionState::FlagpoleHold] = flagpolehold;
-		
+		character->animations[ActionState::FlagpoleHold] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::SuperState,
+			ActionState::FlagpoleHold
+		);
 	}
 	else if (c->getCharacterType() == CharacterType::Luigi) {
 		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
 
-		const float texW = 16;
-		const float texH = 32;
+		character->animations[ActionState::Idle] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Luigi,
+			CharacterStateType::SuperState,
+			ActionState::Idle
+		);
 
-		Animation idle;
-		idle.currentframe = 0;
-		idle.currenttime = 0;
-		idle.durationtime = 0.1f;
-		idle.frame.push_back({ 80, 66, 16, 32 });
+		character->animations[ActionState::Run] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Luigi,
+			CharacterStateType::SuperState,
+			ActionState::Run
+		);
 
-		character->animations[ActionState::Idle] = idle;
+		character->animations[ActionState::Jump] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Luigi,
+			CharacterStateType::SuperState,
+			ActionState::Jump
+		);
 
-		Animation run;
-		run.currentframe = 0;
-		run.currenttime = 0;
-		run.durationtime = 0.1f;
-		for (int i = 0; i < 3; i++) {
-			run.frame.push_back(Rectangle{ float(97 + i * 17), 66, texW, texH });
-		}
+		character->animations[ActionState::Sit] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Luigi,
+			CharacterStateType::SuperState,
+			ActionState::Sit
+		);
 
-		character->animations[ActionState::Run] = run;
-
-		Animation jump;
-		jump.currentframe = 0;
-		jump.currenttime = 0;
-		jump.durationtime = 0.1f;
-		jump.frame.push_back({ 165, 66, texW, texH });
-
-		character->animations[ActionState::Jump] = jump;
-
-		Animation sit;
-		sit.currentframe = 0;
-		sit.currenttime = 0;
-		sit.durationtime = 0.1f;
-		sit.frame.push_back({ 182, 76, 16, 22 });
-
-		character->animations[ActionState::Sit] = sit;
-
-		Animation flagpolehold;
-		flagpolehold.currentframe = 0;
-		flagpolehold.currenttime = 0;
-		flagpolehold.durationtime = 0.1f;
-		for (int i = 0; i < 2; i++) {
-			flagpolehold.frame.push_back(Rectangle{ float(199 + i * 17), 66, 16, 32 });
-		}
-
-		character->animations[ActionState::FlagpoleHold] = flagpolehold;
+		character->animations[ActionState::FlagpoleHold] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Luigi,
+			CharacterStateType::SuperState,
+			ActionState::FlagpoleHold
+		);
 	}
 
 	// cập nhật position cho SuperState;
@@ -131,21 +98,13 @@ void SuperState::Update(float deltatime) {
 			if (IsKeyDown(KEY_P)) {
 				character->setActionState(ActionState::FlagpoleHold);
 			 }
-			// else {
-			// 	character->setActionState(ActionState::Idle);
-			// }
 		} 
-		// else {
-		// 	character->setActionState(ActionState::Run);
-		// }
 	}
 
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
 
 	// trạng thái đang rơi xuống
-
-
 }
 
 void SuperState::HandleInput(float deltatime) {
@@ -187,22 +146,6 @@ void SuperState::HandleInput(float deltatime) {
 			}
 		}
 	}
-
-	// xử lý nhảy
-	// if (IsKeyPressed(KEY_SPACE) && isGround && character->currentAction != ActionState::Sit) {
-	// 	character->velocity.y = config.JUMPFORCE;
-	// 	isGround = false;
-	// 	isJumpingUp = true;
-	// 	jumpTimeElapsed = 0.0f;
-	// 	character->setActionState(ActionState::Jump);
-	// }
-
-	// if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
-	// 	jumpTimeElapsed += deltatime;
-	// }
-	// else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
-	// 	isJumpingUp = false;
-	// }
 
 	if (IsKeyDown(KEY_SPACE)) {
 	if (isGround) {
