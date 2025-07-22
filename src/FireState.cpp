@@ -2,7 +2,7 @@
 #include <raylib.h>
 
 FireState::FireState(Character* character) : CharacterState(character) {
-	Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/FireState.json", CharacterStateType::FireState);
+	Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/Animation/FireState.json", CharacterStateType::FireState);
 }
 
 FireState::~FireState() {
@@ -98,14 +98,6 @@ void FireState::Update(float deltatime) {
 
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
-
-	if (IsKeyPressed(KEY_R)) {
-		character->ChangeMiddleState(CharacterStateType::StarmanState);
-	}
-
-	if (IsKeyPressed(KEY_Y)) {
-		character->ChangeMiddleState(CharacterStateType::NormalState);
-	}
 }
 
 void FireState::HandleInput(float deltatime) {

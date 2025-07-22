@@ -2,7 +2,7 @@
 #include <raylib.h>
 
 SuperState::SuperState(Character* character) : CharacterState(character){
-	Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/SuperState.json", CharacterStateType::SuperState);
+	Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/Animation/SuperState.json", CharacterStateType::SuperState);
 }
 
 void SuperState::SetAnimation(Character* c) {
@@ -103,8 +103,6 @@ void SuperState::Update(float deltatime) {
 
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
-
-	// trạng thái đang rơi xuống
 }
 
 void SuperState::HandleInput(float deltatime) {

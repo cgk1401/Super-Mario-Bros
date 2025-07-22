@@ -3,7 +3,7 @@
 
 NormalState::NormalState(Character* character) : CharacterState(character){
 	character->velocity = { 0, 0 };
-	Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/NormalState.json", CharacterStateType::NormalState);
+	Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/Animation/NormalState.json", CharacterStateType::NormalState);
 }
 
 void NormalState::SetAnimation(Character* c) {
@@ -111,11 +111,6 @@ void NormalState::Update(float deltatime) {
 
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
-
-	if (IsKeyPressed(KEY_Q)) {
-		character->ChangeMiddleState(CharacterStateType::SuperState);
-	}
-	
 }
 
 void NormalState::HandleInput(float deltatime) {

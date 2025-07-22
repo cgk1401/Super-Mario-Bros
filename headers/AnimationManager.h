@@ -15,9 +15,7 @@ class AnimationManager {
 private :
 	map <CharacterType, map <CharacterStateType, map <ActionState, Animation>>> animations;
 
-	AnimationManager() {
-		//Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/NormalState.json", CharacterStateType::NormalState);
-	};
+	AnimationManager() {};
 	~AnimationManager() {};
 public:
 	void LoadAnimation(const string& filename, CharacterStateType statetype);

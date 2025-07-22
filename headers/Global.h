@@ -42,6 +42,8 @@ enum class ActionState {
 enum class CharacterType {
 	Mario,
 	Luigi,
+	SmallCharacter,
+	BigCharacter,
 };
 inline CharacterType selectedCharacter = CharacterType::Mario;
 

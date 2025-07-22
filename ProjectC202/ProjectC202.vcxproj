@@ -129,9 +129,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\headers\AnimationManager.cpp" />
-    <ClCompile Include="..\headers\GameState.cpp" />
     <ClCompile Include="..\src\Animation.cpp" />
+    <ClCompile Include="..\src\AnimationManager.cpp" />
     <ClCompile Include="..\src\BrickBreakEffect.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CameraController.cpp" />
@@ -146,6 +145,7 @@
     <ClCompile Include="..\src\FireBallExplosionEffect.cpp" />
     <ClCompile Include="..\src\FireState.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\GameState.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GoomBa.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />

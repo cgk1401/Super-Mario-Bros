@@ -1,18 +1,17 @@
-#include "AnimationManager.h"
+#include "../headers/AnimationManager.h"
 
 void AnimationManager::LoadAnimation(const string& filename, CharacterStateType statetype) {
 	ifstream input(filename);
-	
-	//if (!input.is_open()) {
-	//	TraceLog(LOG_ERROR, ("Fail to open animation file : " + filename).c_str());
-	//	return;
-	//}
 
 	nlohmann::json json;
 	input >> json;
 
 	for (auto& chartype : json.items()) {
-		CharacterType type = (chartype.key() == "Mario") ? CharacterType::Mario : CharacterType::Luigi;
+		CharacterType type;
+		if (chartype.key() == "Mario") type = CharacterType::Mario;
+		else if (chartype.key() == "Luigi") type = CharacterType::Luigi;
+		else if (chartype.key() == "SmallCharacter") type = CharacterType::SmallCharacter;
+		else if (chartype.key() == "BigCharacter") type = CharacterType::BigCharacter;
 
 		for (auto& action : chartype.value().items()) {
 			ActionState actionType;
