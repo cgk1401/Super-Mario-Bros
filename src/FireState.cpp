@@ -1,7 +1,9 @@
 ﻿#include "../headers/FireState.h"
 #include <raylib.h>
 
-FireState::FireState(Character* character) : CharacterState(character) {}
+FireState::FireState(Character* character) : CharacterState(character) {
+	Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/FireState.json", CharacterStateType::FireState);
+}
 
 FireState::~FireState() {
 	for (auto fireball : fireballs) {
@@ -14,48 +16,35 @@ void FireState::SetAnimation(Character* c) {
 	if (c->getCharacterType() == CharacterType::Mario) {
 		character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIO);
 
-		Animation idle;
-		idle.currentframe = 0;
-		idle.currenttime = 0;
-		idle.durationtime = 0.1f;
-		idle.frame.push_back({ 0, 140, 16, 32 });
+		character->animations[ActionState::Idle] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::FireState,
+			ActionState::Idle
+		);
 
-		character->animations[ActionState::Idle] = idle;
+		character->animations[ActionState::Run] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::FireState,
+			ActionState::Run
+		);
 
-		Animation run;
-		run.currentframe = 0;
-		run.currenttime = 0;
-		run.durationtime = 0.1f;
-		run.frame.push_back({ 20, 140, 16, 32 });
-		run.frame.push_back({ 38, 140, 16, 32});
-		run.frame.push_back({ 56, 140, 16, 32 });
+		character->animations[ActionState::Jump] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::FireState,
+			ActionState::Jump
+		);
 
-		character->animations[ActionState::Run] = run;
+		character->animations[ActionState::Sit] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::FireState,
+			ActionState::Sit
+		);
 
-		Animation jump;
-		jump.currentframe = 0;
-		jump.currenttime = 0;
-		jump.durationtime = 0.1f;
-		jump.frame.push_back({ 96, 140, 16, 32 });
-
-		character->animations[ActionState::Jump] = jump;
-
-		Animation sit;
-		sit.currentframe = 0;
-		sit.currenttime = 0;
-		sit.durationtime = 0.1f;
-		sit.frame.push_back({ 116, 150, 16, 22 });
-
-		character->animations[ActionState::Sit] = sit;
-
-		Animation flagpolehold;
-		flagpolehold.currentframe = 0;
-		flagpolehold.currenttime = 0;
-		flagpolehold.durationtime = 0.1f;
-		flagpolehold.frame.push_back({ 136, 139, 16, 32 });
-		flagpolehold.frame.push_back({ 154, 139, 16, 32 });
-
-		character->animations[ActionState::FlagpoleHold] = flagpolehold;
+		character->animations[ActionState::FlagpoleHold] = Singleton<AnimationManager>::getInstance().getAnimation(
+			CharacterType::Mario,
+			CharacterStateType::FireState,
+			ActionState::FlagpoleHold
+		);
 
 		Animation fireball;
 		fireball.currentframe = 0;
@@ -104,13 +93,7 @@ void FireState::Update(float deltatime) {
 			if (IsKeyDown(KEY_P)) {
 				character->setActionState(ActionState::FlagpoleHold);
 			 }
-			// else {
-			// 	character->setActionState(ActionState::Idle);
-			// }
 		} 
-		// else {
-		// 	character->setActionState(ActionState::Run);
-		// }
 	}
 
 	character->position.x += character->velocity.x * deltatime;
@@ -188,31 +171,10 @@ void FireState::HandleInput(float deltatime) {
 		else if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL) && fireballs.size() != 0) {
 			character->setActionState(ActionState::Fireball);
 		}
-		// else {
-		// 	// không bấm phím nào thì sẽ đặt trạng thái thành idle
-		// 	character->velocity.x = 0.0f;
-		// 	character->setActionState(ActionState::Idle);
-		// }
-	
-	
 
-	// xử lý nhảy
-	// if (IsKeyPressed(KEY_SPACE) && isGround && character->currentAction != ActionState::Sit) {
-	// 	character->velocity.y = config.JUMPFORCE;
-	// 	isGround = false;
-	// 	isJumpingUp = true;
-	// 	jumpTimeElapsed = 0.0f;
-	// 	character->setActionState(ActionState::Jump);
-	// }
-
-	// if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
-	// 	jumpTimeElapsed += deltatime;
-	// }
-	// else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
-	// 	isJumpingUp = false;
-	// }
 	if (IsKeyDown(KEY_SPACE)) {
 	if (isGround) {
+		Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 		character->velocity.y = config.JUMPFORCE;
 		isGround = false;
 		isJumpingUp = true;
@@ -225,7 +187,6 @@ void FireState::HandleInput(float deltatime) {
 	} else {
 		isJumpingUp = false;
 	}
-
 }
 
 CharacterStateType FireState::getStateType() {
