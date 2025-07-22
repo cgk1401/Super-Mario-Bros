@@ -22,16 +22,21 @@ MapEditor::MapEditor(const char* path, int r, int c) : Map(path, r, c) {
     mapWidth = screenWidth * 0.7f;
     uiWidth = screenWidth - (int)mapWidth;
 
-    backButton = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), 10, 10 , screenWidth / 3 * 0.5f, screenHeight * 0.15f * 0.5f, "HOME", WHITE);
-    tilePickingButton = new Button("../assets/GUI/mapeditor_tile_picking_tool.png", screenWidth * 0.63, 10, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE);
-    eraserToolButton = new Button("../assets/GUI/mapeditor_eraser_tool.png", screenWidth * 0.57, 10, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE);
+    back_button = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), 10, 10 , screenWidth / 3 * 0.5f, screenHeight * 0.15f * 0.5f, "HOME", WHITE);
+
+    tilePicking_button = new Button("../assets/GUI/mapeditor_tile_picking_tool.png", screenWidth * 0.63f, 10.0, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Paint");
+    eraserTool_button = new Button("../assets/GUI/mapeditor_eraser_tool.png", screenWidth * 0.57, 10, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Eraser Tool");
+    save_button = new Button("../assets/GUI/mapeditor_save_button.png",  screenWidth * 0.19f, 14, screenHeight * 0.14f * 0.5f, screenHeight * 0.14f * 0.5f, "", WHITE, 0, "Save to file");
     editType = EditorMode::DRAW;
 
-    const int amount_button = 3;
+    const int amount_button = 2;
     ButtonLayoutConfig cfg(amount_button);
-    const char* buttonLabels[amount_button] = { "SAVE", "LOAD", "QUIT" };
+    const char* buttonLabels[amount_button] = {"LOAD", "QUIT" };
 
-    optionButtons = CreateButtons(buttonLabels, cfg);
+    option_buttons = CreateButtons(buttonLabels, cfg);
+
+
+    world_1_1_test = LoadTexture("../assets/Map/World 1-1.png");
 }
 
 
@@ -87,7 +92,7 @@ void MapEditor::handleInput() {
         }
         camera.target.x -= speed * dt;
     }
-
+ 
     //MULTI-TILE brush
     int uiStartX = mapWidth;
      int currentY = 40; 
@@ -133,6 +138,7 @@ void MapEditor::handleInput() {
 }
 
 void MapEditor::render() {
+   
     //Tile map
     Rectangle mapDrawingArea = { 0, 0, (float)mapWidth, (float)screenHeight };
     DrawText("Selected:", 20, screenHeight * 0.2f - 60, 20, BLACK);
@@ -141,6 +147,11 @@ void MapEditor::render() {
 
     BeginScissorMode(0, camera.offset.y - 1, screenWidth * 0.75f, screenHeight - camera.offset.y + 1);
     BeginMode2D(camera);
+     DrawTexturePro(world_1_1_test,
+                   { 0,0, (float) world_1_1_test.width, (float) world_1_1_test.height},
+                   {0 * Map::TILE_SIZE, -2 * Map::TILE_SIZE,  (float) world_1_1_test.width * 4, (float) world_1_1_test.height * 4},
+                   {0,0}, 0,
+                   Fade(WHITE, 0.4f));
     Map::draw(true); // Draw map with grid lines
     EndMode2D();
 
@@ -149,12 +160,11 @@ void MapEditor::render() {
             for (int y = 0; y < brushBuffer[x].size(); y++) {
                 DrawTexturePro(texture, brushBuffer[x][y], { (float)10 + 110 + x * 40, (float)screenHeight * 0.2f - 60 + y * 40, 40, 40 }, { 0,0 }, 0, WHITE);
 
-                if (CheckCollisionPointRec(GetMousePosition(), mapDrawingArea) && !IsMouseButtonDown(MOUSE_RIGHT_BUTTON)) {
+                if (CheckCollisionPointRec(GetMousePosition(), mapDrawingArea)) {
                     BeginMode2D(camera);
                     Vector2 mouseOnTilePos = { (int)mouseWorld.x / TILE_SIZE,(int)mouseWorld.y / TILE_SIZE };
                     Rectangle dest = { (mouseOnTilePos.x + x) * TILE_SIZE, (mouseOnTilePos.y + y) * TILE_SIZE, TILE_SIZE, TILE_SIZE };
-                    DrawTexturePro(texture, brushBuffer[x][y], dest, { 0,0 }, 0, WHITE);
-                    DrawRectangleRec(dest, Fade(BLUE, 0.3));
+                    DrawTexturePro(texture, brushBuffer[x][y], dest, { 0,0 }, 0, Fade(WHITE, 0.5f));
                     EndMode2D();
                 }
             }
@@ -171,13 +181,15 @@ void MapEditor::render() {
 
     Vector2 mouseEditorWorld = GetScreenToWorld2D(GetMousePosition(), cameraEditor);
     BeginScissorMode(uiStartX + 10, currentY,screenWidth - uiStartX - 10, screenHeight - currentY);
+    
     BeginMode2D(cameraEditor);
     for (int r = 0; r < tileRows; r++) {
         for (int c = 0; c < tileSetSourceRects[r].size(); c++) {
             Rectangle tileSrc = tileSetSourceRects[r][c];
             Rectangle tileDest = { (float)uiStartX + 10 + (float)c * (TILE_SIZE), (float)currentY + (float)r * (TILE_SIZE), (float)TILE_SIZE, (float)TILE_SIZE };
-
-            DrawTexturePro(texture, tileSrc, tileDest, { 0,0 }, 0, WHITE);
+            
+            DrawTexturePro(texture, tileSrc, tileDest, { 0,0 }, 0, CheckCollisionPointRec(mouseEditorWorld, tileDest) ? Fade(WHITE, 0.8f):WHITE);
+            
         }
     }
     EndMode2D();
@@ -196,7 +208,12 @@ void MapEditor::render() {
         int maxY = max(dragStartTile.x, dragEndTile.x);
 
         Color c = isDragging ? GREEN : RED; 
-
+        if(isDragging){
+            DrawRectangle((float)mapWidth + 10 + minX * TILE_SIZE,
+                                (float)currentY + minY * TILE_SIZE,
+                                (float) (maxX - minX + 1) * TILE_SIZE,
+                                (float)(maxY - minY + 1) * TILE_SIZE, Fade(WHITE, 0.4f));
+        }
         DrawRectangleLines((float)mapWidth + 10 + minX * TILE_SIZE,
                                 (float)currentY + minY * TILE_SIZE,
                                 (float) (maxX - minX + 1) * TILE_SIZE,
@@ -205,25 +222,25 @@ void MapEditor::render() {
     EndMode2D();
     EndScissorMode();
 
-    tilePickingButton->draw();
-    eraserToolButton->draw();
-
+    tilePicking_button->draw();
+    eraserTool_button->draw();
+    save_button->draw();
     if (editType == EditorMode::DRAW) {
-        DrawRectangleLinesEx(tilePickingButton->getBounds(), 1, YELLOW);
+        DrawRectangleLinesEx(tilePicking_button->getBounds(), 1, YELLOW);
     }
     else if (editType == EditorMode::ERASE) {
-        DrawRectangleLinesEx(eraserToolButton->getBounds(), 1, YELLOW);
+        DrawRectangleLinesEx(eraserTool_button->getBounds(), 1, YELLOW);
     }
 
 
-    if (_optionButtons) {
+    if (_option_buttons) {
         DrawRectangle(0, 0, screenWidth, screenHeight, Fade(BLACK, 0.6f));
-        for (auto& button : optionButtons) {
+        for (auto& button : option_buttons) {
             button->draw();
         }
     }
-    backButton->draw();
-    if (timer.isRunning()) {
+    back_button->draw();
+    if (saveFileNoti_timer.isRunning()) {
         const float rectW = screenWidth * 0.6;
         const float rectH = 60;
         float startX = screenWidth / 2 - rectW / 2;
@@ -231,27 +248,22 @@ void MapEditor::render() {
         DrawRectangle(startX, startY, rectW, rectH, BLACK);
         DrawText("SAVED FILE SUCCESSFULLY", startX + 50, startY + 10, 40, WHITE);
     }
-}
+} 
 
 void MapEditor::update(float deltatime) {
-    backButton->update();
-    if (backButton->IsClicked()) _optionButtons = !_optionButtons;
-    if (_optionButtons) {
-        for (auto& button : optionButtons) {
-            button->update();
+    back_button->update(deltatime);
+    if (back_button->IsClicked()) _option_buttons = !_option_buttons;
+    if (_option_buttons) {
+        for (auto& button : option_buttons) {
+            button->update(deltatime);
         }
 
 
-        if (optionButtons[0]->IsClicked()) { //SAVE
-            saveToFile("map1.txt");
-            timer.start(1);
-            _optionButtons = false;
-        }
-        else if (optionButtons[1]->IsClicked()) { //LOAD
+         if (option_buttons[0]->IsClicked()) { //LOAD
             loadFromFile("map1.txt", true);
-            _optionButtons = false;
+            _option_buttons = false;
         }
-        else if (optionButtons[2]->IsClicked()) {
+        else if (option_buttons[1]->IsClicked()) {
             Singleton<Game>::getInstance().changeState(new MenuState());
         }
         return;
@@ -260,15 +272,22 @@ void MapEditor::update(float deltatime) {
 
     Map::update(true); // Update camera movement
     handleInput();
-    timer.update(deltatime);
-    tilePickingButton->update();
-    eraserToolButton->update();
+    saveFileNoti_timer.update(deltatime);
+    tilePicking_button->update(deltatime);
+    eraserTool_button->update(deltatime);
+    save_button->update(deltatime);
 
-    if (tilePickingButton->IsClicked()) {
+    if (tilePicking_button->IsClicked()) {
         editType = EditorMode::DRAW;
     }
-    else if (eraserToolButton->IsClicked()) {
+    else if (eraserTool_button->IsClicked()) {
         editType = EditorMode::ERASE;
+    }
+    else if(save_button->IsClicked()){
+        saveToFile("map1.txt");
+        saveFileNoti_timer.start(1);
+        _option_buttons = false;
+        
     }
     
     uiWidth = screenWidth - (int)mapWidth;

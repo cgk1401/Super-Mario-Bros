@@ -38,7 +38,7 @@ void Collision::handlePlayerCollision(Character* player, Map* map) {
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
-                player->position.y = tileRect.y - bound.height - 0.5f;
+                player->position.y = tileRect.y - bound.height;
                 player->velocity.y = 0;
 
                 player->isGround = true;
@@ -201,7 +201,7 @@ void Collision::handleMushroomCollisionMap(Mushroom* mushroom, Map* map){
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
-                mushroom->position.y = tileRect.y - bound.height - 1;
+                mushroom->position.y = tileRect.y - bound.height - 0.2;
                 mushroom->velocity.y = 0;
 
                 mushroom->onGround = true;

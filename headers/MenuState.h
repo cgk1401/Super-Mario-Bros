@@ -3,10 +3,12 @@
 #include "../headers/GameState.h"
 #include "../headers/Global.h"
 #include "../headers/Button.h"
+#include "../headers/Textbox.h"
 using namespace std;
 
 class MenuState : public GameState {
 private:
+    Button* backButton;
     vector<Button*> buttons;
     vector<Button*> setting_buttons;
     Font font;
@@ -17,7 +19,7 @@ private:
 public:
     MenuState();
     ~MenuState();
- 
+    TextBox textbox;
     void    update(float deltatime) override;
     void    render() override;
 };

@@ -16,22 +16,26 @@ MenuState::MenuState() {
     buttons = CreateButtons(buttonLabels, cfg);
 
 
-    const int amount_setting_button = 4;
-    const char* setting_buttonLabels[amount_setting_button] = { "CHARACTER", "LEVEL", "MAP EDITOR", "RETURN MENU"};
+    const int amount_setting_button = 3;
+    const char* setting_buttonLabels[amount_setting_button] = { "CHARACTER", "LEVEL", "MAP EDITOR"};
 
     ButtonLayoutConfig _cfg(amount_setting_button);
     setting_buttons = CreateButtons(setting_buttonLabels, amount_setting_button);
 
-   
+    backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
 
     font       = LoadFont("../assets/font/knightwarrior.otf");
 
     background      = resizedImage("../assets/GUI/Menu Background.png", screenWidth, screenHeight);
     mario_character = LoadTexture("../assets/GUI/menu_mario.png");
     luigi_character = LoadTexture("../assets/GUI/menu_luigi.png");
+
+    textbox = TextBox(0, 0, 200, 40, "", RED, GRAY, BLACK);
 }
 
 MenuState::~MenuState() {
+    delete backButton;
+
     for (auto& button : buttons) {
         delete button;
     }
@@ -47,9 +51,10 @@ MenuState::~MenuState() {
 }
 
 void MenuState::update(float deltatime){
+    //textbox.update();
     if (selectedButton == 0) {
         for (auto& button : buttons) {
-            button->update();
+            button->update(deltatime);
         }
 
         if (buttons[0]->IsClicked()) {
@@ -64,16 +69,18 @@ void MenuState::update(float deltatime){
         }
     }
     else if (selectedButton == 1) {
-        for (auto& button : setting_buttons) button->update();
+        for (auto& button : setting_buttons) button->update(deltatime);
+        backButton->update(deltatime);
+
         if (setting_buttons[0]->IsClicked()) //CHARACTER
-            Singleton<Game>::getInstance().changeState(new CharacterSelection);
+            Singleton<Game>::getInstance().addState(new CharacterSelection);
         else if (setting_buttons[1]->IsClicked()) { //LEVEL
 
         }
         else if (setting_buttons[2]->IsClicked()) {
             Singleton<Game>::getInstance().changeState(new MapEditor("../assets/Map/tileset_gutter64x64.png"));
         }
-        else if (setting_buttons[3]->IsClicked()) {
+        else if (backButton->IsClicked()) {
             selectedButton = 0;
         }
     }
@@ -82,14 +89,17 @@ void MenuState::update(float deltatime){
 }
 
 void MenuState::render(){
+    
     DrawTexture(background, 0, 0, WHITE);
     if (selectedButton == 0)
         for (auto& button : buttons) {
             button->draw();
         }
     else if (selectedButton == 1)
-        for (auto& button : setting_buttons)
-            button->draw();
+        {   for (auto& button : setting_buttons)
+                button->draw();
+            backButton->draw();
+        }
     //HEADER TITLE
     DrawTextEx(font, "MARIO MARIO", {screenWidth * 0.33f, screenHeight * 0.1f}, 100, 5, DARKBROWN);
    
@@ -100,4 +110,6 @@ void MenuState::render(){
         { 0,0 }, 0,
         WHITE
     );
+    //textbox.Draw();
+    
 }

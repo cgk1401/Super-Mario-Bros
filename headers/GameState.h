@@ -18,7 +18,8 @@ struct ButtonLayoutConfig {
     float BUTTON_HEIGHT;
     float BUTTON_WIDTH;
 
-    ButtonLayoutConfig(int amount_button);
+    int FONT_SIZE;
+    ButtonLayoutConfig(int amount_button, int fontSize = 30);
 };
 
 std::vector <Button*> CreateButtons(const char* buttonLabels[], const ButtonLayoutConfig& other);

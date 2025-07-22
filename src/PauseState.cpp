@@ -21,7 +21,7 @@ PauseState::~PauseState() {
 
 void PauseState::update(float deltatime){
     for(auto& button: buttons){
-        button->update();
+        button->update(deltatime);
     }
 
     //Button Clicking

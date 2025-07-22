@@ -1,7 +1,7 @@
 #include "GameState.h"
 #include "../headers/Global.h"
 
-ButtonLayoutConfig::ButtonLayoutConfig(int amount_button) {
+ButtonLayoutConfig::ButtonLayoutConfig(int amount_button, int fontSize) {
     this->amount_button = amount_button;
    
     MARGIN_ON = screenHeight * 0.1f;
@@ -13,6 +13,8 @@ ButtonLayoutConfig::ButtonLayoutConfig(int amount_button) {
 
     BUTTON_HEIGHT = float(MENU_BUTTON_HEIGHT - BUTTON_SPACING * 2) / amount_button;
     BUTTON_WIDTH = screenWidth / 3;
+
+    FONT_SIZE = fontSize;
 }
 
 std::vector<Button*> CreateButtons(const char* buttonLabels[], const ButtonLayoutConfig& other) {
@@ -23,7 +25,7 @@ std::vector<Button*> CreateButtons(const char* buttonLabels[], const ButtonLayou
             other.FIRST_POSITION_Y_BUTTON + i * (other.BUTTON_HEIGHT + other.BUTTON_SPACING),
             other.BUTTON_WIDTH, 
             other.BUTTON_HEIGHT, 
-            buttonLabels[i], WHITE, 30);
+            buttonLabels[i], WHITE, other.FONT_SIZE);
     }
     return buttons;
 }

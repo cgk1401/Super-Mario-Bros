@@ -6,7 +6,7 @@
 #include <string>
 #include <functional>
 using namespace std;
-#define MAX_COLUMN 100
+#define MAX_COLUMN 220
 
 Map::Map(const char* texturePath, int r, int c) {
     texture = LoadTexture(texturePath);
@@ -265,15 +265,18 @@ void Map::draw(bool isEditing) {
 
             auto it = tileCatalog.find(id);
             if (id && it != tileCatalog.end()) {
+                Rectangle src = it->second.srcRect;
                 if (it->second.type == ENEMY && isEditing == false) continue;
-
+                else if(it->second.type ==  TileType::QUESTION_BLOCK){
+                    // src = QUESTION_BLOCK;
+                }
                 Vector2 drawPos = {
                    mapRects[x][y].x + mapData[x][y].offsetPos.x,
                     mapRects[x][y].y + mapData[x][y].offsetPos.y
                 };
 
                 Rectangle destRect = { drawPos.x, drawPos.y, TILE_SIZE, TILE_SIZE };
-                DrawTexturePro(texture, it->second.srcRect, destRect, { 0,0 }, 0, WHITE);
+                DrawTexturePro(texture, src, destRect, { 0,0 }, 0, WHITE);
             }
             if (isEditing)
                 //Draw grid 

@@ -2,6 +2,8 @@
 #include "../headers/Global.h"
 #include <iostream>
 
+#define MULTI_SCALE 1.1f
+
 Button::Button() {
     bounds = { 0, 0, 0, 0 };
     label = "";
@@ -11,9 +13,10 @@ Button::Button() {
     isHovered = false;
     fontSize = 20;
     useTexture = false;
+    Tooltip = "";
 }
 
-Button::Button(float x, float y, float width, float height, const char* labelText, Color buttonColor, Color hoverCol, Color textCol, int fontSize) {
+Button::Button(float x, float y, float width, float height, const char* labelText, Color buttonColor, Color hoverCol, Color textCol, int fontSize, const char* tooltip) {
     bounds = { x, y, width, height };
     label = labelText;
     color = buttonColor;
@@ -22,9 +25,11 @@ Button::Button(float x, float y, float width, float height, const char* labelTex
     this->fontSize = fontSize;
     isHovered = false;
     useTexture = false; 
+    Tooltip = tooltip;
+    
 }
 
-Button::Button(const char* imagePath, float x, float y, float width, float height, const char* labelText, Color textCol, int fontSize) {
+Button::Button(const char* imagePath, float x, float y, float width, float height, const char* labelText, Color textCol, int fontSize, const char* tooltip) {
     bounds = { x, y, width, height };
     label = labelText;
     textColor = textCol;
@@ -32,9 +37,10 @@ Button::Button(const char* imagePath, float x, float y, float width, float heigh
     isHovered = false;
     useTexture = true;
 
+    Tooltip = tooltip;
     texture = LoadTexture(imagePath);
 }
-Button::Button(const Texture2D& texture, float x, float y, float width, float height, const char* labelText, Color textCol, int fontSize){
+Button::Button(const Texture2D& texture, float x, float y, float width, float height, const char* labelText, Color textCol, int fontSize, const char* tooltip){
     bounds = { x, y, width, height };
     label = labelText;
     textColor = textCol;
@@ -42,6 +48,7 @@ Button::Button(const Texture2D& texture, float x, float y, float width, float he
     isHovered = false;
     useTexture = true;
 
+    Tooltip = tooltip;
     this->texture = texture;
 }
 
@@ -65,33 +72,62 @@ void Button::operator=(const Button& b) {
     texture = b.texture;
    
 }
-void Button::update() {
+
+float approach_(float current, float target, float increase) {
+	if (current < target) {
+		return fmin(current + increase, target);
+	}
+	return fmax(current - increase, target);
+}
+void Button::update(float deltatime) {
+    expansion_time.update(deltatime);
     Vector2 mouse = GetMousePosition();
     isHovered = CheckCollisionPointRec(mouse, bounds);
-    
-}
 
+    if (isHovered) {
+        scale = approach_(scale, MULTI_SCALE, deltatime / 2);
+    } else {
+        scale = approach_(scale, 1.0f, deltatime / 2); 
+    }
+
+
+}
 void Button::draw() {
+    Rectangle dest;
+    dest.width = bounds.width * scale;
+    dest.height = bounds.height * scale;
+    dest.x = bounds.x + (bounds.width - dest.width) / 2.0f;
+    dest.y = bounds.y + (bounds.height - dest.height) / 2.0f;
 
     if (useTexture) {
-        float scaleX = bounds.width / texture.width;
-        float scaleY = bounds.height / texture.height;
-       /* DrawTextureEx(texture, { bounds.x, bounds.y }, 0.0f, scaleX, WHITE);*/
-        Color drawColor = isHovered ? Color{ 180, 180, 180, 255 } : WHITE; // Hover thì tối lại
-        DrawTexturePro(texture, {0,0, 
-                    (float) texture.width,(float) texture.height}, 
-                    bounds, 
-                    {0,0},0, drawColor);         //DrawTexture(texture, bounds.x, bounds.y, WHITE);
-    }
-    else {
-        DrawRectangleRec(bounds, isHovered ? hoverColor : color);
-    }
+        Rectangle src = {0, 0, (float)texture.width, (float)texture.height};
+        Color drawColor = isHovered ? Color{180, 180, 180, 255} : WHITE;
 
-    int textWidth = MeasureText(label.c_str(), fontSize);
-    float textX = bounds.x + (bounds.width - textWidth) / 2;
-    float textY = bounds.y + (bounds.height - fontSize) / 2;
-    DrawText(label.c_str(), (int)textX, (int)textY, fontSize, textColor);
+        DrawTexturePro(texture, src, dest, {0, 0}, 0.0f, drawColor);
+    } else {
+        DrawRectangleRec(dest, isHovered ? hoverColor : color);
+    }
+    float textFontSize = fontSize * scale;
+    int textWidth = MeasureText(label.c_str(), textFontSize);
+    float textX = dest.x + (dest.width - textWidth) / 2;
+    float textY = dest.y + (dest.height - textFontSize) / 2;
+    DrawText(label.c_str(), (int)textX, (int)textY, textFontSize, textColor);
+
+    if (isHovered && Tooltip != "") {
+        float textFontSize = 20;
+        int textWidth = MeasureText(Tooltip.c_str(), textFontSize);
+        Rectangle tooltipDest;
+        tooltipDest.x = bounds.x + bounds.width / 2;
+        tooltipDest.y = bounds.y + bounds.height + 1;
+        tooltipDest.width = textWidth + 10;
+        tooltipDest.height = 30;
+        float textX = tooltipDest.x + 5;
+        float textY = tooltipDest.y + 5;  
+        DrawRectangleRec(tooltipDest, DARKGRAY);
+        DrawText(Tooltip.c_str(), textX, textY, textFontSize, WHITE);
+    }
 }
+
 
 bool Button::IsClicked() {
     return isHovered && IsMouseButtonPressed(MOUSE_LEFT_BUTTON);

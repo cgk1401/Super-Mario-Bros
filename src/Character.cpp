@@ -89,11 +89,11 @@ Rectangle Character::getBound() const {
 
 Rectangle Character::getFootSensor() const {
 	Rectangle bound = getBound();
-	float width = bound.width - 10;
+	float width = bound.width;
 	float height = 4;
 
 	return{
-		bound.x + 5,
+		bound.x,
 		bound.y + bound.height - height / 2,
 		width,
 		height

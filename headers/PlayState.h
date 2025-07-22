@@ -24,6 +24,7 @@ public:
 private:
     GUI gui;
     Map* map;
+    Texture2D world_1_1;
     //Character* mario = new Mario({100, 200});
     Character* character;
     vector<Enemy*> enemies;

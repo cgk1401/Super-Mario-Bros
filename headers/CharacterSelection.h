@@ -6,6 +6,7 @@ using namespace std;
 
 class CharacterSelection : public GameState {
 private:
+    Button* backButton;
     vector<Button*> buttons;
     Font font;
     Texture2D background;
@@ -17,6 +18,6 @@ public:
 
     void update(float deltatime) override;
     void render() override;
-
+    bool allowUpdateBelow() override { return false; }
     Texture2D* getSelectedCharacter(){return  selectCharacter;}
 };

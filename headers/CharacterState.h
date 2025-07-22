@@ -8,9 +8,9 @@ struct PhysicsConfig {
 	float MAX_SPEED = 350.0f;
 	float ACCELERATION = 500.0f;
 	float FRICTION = 700.0f;
-	float JUMPFORCE = -400.0f;
-	float GRAVITY = 1300.0f;
-	float MAXJUMPTIME = 0.32f;
+	float JUMPFORCE = -450.0f;
+	float GRAVITY = 2000.0f;
+	float MAXJUMPTIME = 0.5f;
 };
 
 class CharacterState {

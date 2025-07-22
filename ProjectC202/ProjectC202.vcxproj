@@ -165,6 +165,7 @@
     <ClCompile Include="..\src\PlayState.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
     <ClCompile Include="..\src\StarmanState.cpp" />
+    <ClCompile Include="..\src\Textbox.cpp" />
     <ClCompile Include="..\src\TextureManager.cpp" />
     <ClCompile Include="..\src\SuperState.cpp" />
     <ClCompile Include="..\src\TransformState.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="..\headers\SoundManager.h" />
     <ClInclude Include="..\headers\Star.h" />
     <ClInclude Include="..\headers\StarmanState.h" />
+    <ClInclude Include="..\headers\Textbox.h" />
     <ClInclude Include="..\headers\TextureManager.h" />
     <ClInclude Include="..\headers\SuperState.h" />
     <ClInclude Include="..\headers\Tile.h" />

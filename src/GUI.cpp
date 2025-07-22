@@ -43,7 +43,7 @@ bool GUI::PauseButton_IsPressed(){
 }
 void GUI::update(){
 
-    PauseButton->update();
+    PauseButton->update(GetFrameTime());
     if (PauseButton->IsClicked()) {       
         Singleton<Game>::getInstance().addState(new PauseState());
     }

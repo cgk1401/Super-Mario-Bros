@@ -38,6 +38,10 @@ PlayState::PlayState() {
     
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
+   world_1_1 = LoadTexture("../assets/Map/World 1-1.png");
+   
+    cout << "done Constructor\n";
+   
 }
 PlayState::~PlayState() {
     delete map;
@@ -92,8 +96,14 @@ void PlayState::update(float dt){
 }
 
 void PlayState::render() {
+    
     BeginMode2D(camera.getCamera());
     //bg.draw();
+    DrawTexturePro(world_1_1,
+                   { 0,0, (float) world_1_1.width, (float) world_1_1.height},
+                   {0 * Map::TILE_SIZE, -2 * Map::TILE_SIZE,  (float) world_1_1.width * 4, (float) world_1_1.height * 4},
+                   {0,0}, 0,
+                   Fade(WHITE, 0.4f));
     Singleton<ItemManager>::getInstance().Draw();
     map->draw();
 
