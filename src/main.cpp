@@ -12,6 +12,7 @@ int main() {
     Singleton<Game>::getInstance().clear();
     Singleton<Game>::getInstance().addState(new MenuState()); //Begin with main menu
     Singleton<Game>::getInstance().run();
+   
 
     return 0;
 }

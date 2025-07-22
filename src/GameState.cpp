@@ -1,4 +1,4 @@
-#include "GameState.h"
+#include "../headers/GameState.h"
 #include "../headers/Global.h"
 
 ButtonLayoutConfig::ButtonLayoutConfig(int amount_button) {

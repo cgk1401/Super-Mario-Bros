@@ -11,6 +11,10 @@
 #include "SoundManager.h"
 #include "TextureManager.h"
 #include "Game.h"
+#include "nlohmann/json.hpp"
+
+//using json = nlohmann::json;
+
 using namespace std;
 const int screenWidth = 1200; //1024
 const int screenHeight = 800; //768
@@ -38,6 +42,8 @@ enum class ActionState {
 enum class CharacterType {
 	Mario,
 	Luigi,
+	SmallCharacter,
+	BigCharacter,
 };
 inline CharacterType selectedCharacter = CharacterType::Mario;
 

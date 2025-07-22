@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,8 +129,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\headers\GameState.cpp" />
     <ClCompile Include="..\src\Animation.cpp" />
+    <ClCompile Include="..\src\AnimationManager.cpp" />
     <ClCompile Include="..\src\BrickBreakEffect.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CameraController.cpp" />
@@ -144,6 +145,7 @@
     <ClCompile Include="..\src\FireBallExplosionEffect.cpp" />
     <ClCompile Include="..\src\FireState.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\GameState.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GoomBa.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
@@ -171,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Animation.h" />
+    <ClInclude Include="..\headers\AnimationManager.h" />
     <ClInclude Include="..\headers\BaseEffect.h" />
     <ClInclude Include="..\headers\BrickBreakEffect.h" />
     <ClInclude Include="..\headers\Button.h" />

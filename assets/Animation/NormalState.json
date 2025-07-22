@@ -1,0 +1,63 @@
+{
+  "Mario": {
+    "Idle": {
+      "frames": [{ "x": 80, "y": 34, "width": 16, "height": 16 }],
+      "duration": 0.1
+    },
+    "Run":{
+      "frames":[
+        { "x": 97, "y": 34, "width": 16, "height": 16 },
+        { "x": 114, "y": 34, "width": 16, "height": 16 },
+        { "x": 131, "y": 34, "width": 16, "height": 16 }
+      ],
+      "duration":0.07
+    },
+    "Jump":{
+      "frames":[{ "x": 165, "y": 34, "width": 16, "height": 16}],
+      "duration": 0.1
+    },
+    "Die":{
+      "frames":[{ "x": 182, "y": 34, "width": 16, "height": 16}],
+      "duration": 0.1
+    },
+    "FlagpoleHold":{
+      "frames":[
+        { "x": 199, "y": 34, "width": 16, "height": 16 },
+        { "x": 216, "y": 34, "width": 16, "height": 16 },
+        { "x": 233, "y": 34, "width": 16, "height": 16 }
+      ],
+      "duration":0.1
+    }
+  },
+
+  "Luigi": {
+    "Idle": {
+      "frames": [{ "x": 80, "y": 99, "width": 16, "height": 16 }],
+      "duration": 0.1
+    },
+    "Run":{
+      "frames":[
+        { "x": 97, "y": 99, "width": 16, "height": 16 },
+        { "x": 114, "y": 99, "width": 16, "height": 16 },
+        { "x": 131, "y": 99, "width": 16, "height": 16 }
+      ],
+      "duration": 0.1
+    },
+    "Jump":{
+      "frames":[{ "x": 165, "y": 99, "width": 16, "height": 16}],
+      "duration": 0.1
+    },
+    "Die":{
+      "frames":[{ "x": 182, "y": 99, "width": 16, "height": 16}],
+      "duration": 0.1
+    },
+    "FlagpoleHold":{
+      "frames":[
+        { "x": 199, "y": 99, "width": 16, "height": 16 },
+        { "x": 216, "y": 99, "width": 16, "height": 16 },
+        { "x": 233, "y": 99, "width": 16, "height": 16 }
+      ],
+      "duration":0.1
+    }
+  }
+}
