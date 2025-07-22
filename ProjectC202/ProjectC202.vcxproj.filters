@@ -198,8 +198,11 @@
     <ClCompile Include="..\src\CharacterSelection.cpp">
       <Filter>Source Files\States</Filter>
     </ClCompile>
-    <ClCompile Include="..\headers\GameState.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\AnimationManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameState.cpp">
+      <Filter>Source Files\States</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Textbox.cpp">
       <Filter>Source Files\GUI</Filter>
@@ -358,6 +361,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\Textbox.h">
       <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\AnimationManager.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

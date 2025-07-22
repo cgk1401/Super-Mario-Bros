@@ -2,6 +2,7 @@
 
 class Character;
 #include "Global.h"
+#include "AnimationManager.h"
 
 struct PhysicsConfig {
 	float SPEED = 250.0f;

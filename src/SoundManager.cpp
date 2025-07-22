@@ -47,6 +47,7 @@ void SoundManager::load() {
 	 musics[MusicType::HURRY_OVERWORLD] = LoadMusicStream("../assets/music/HURRY_OVERWORLD.mp3");
 	 musics[MusicType::HURRY_CASTLE] = LoadMusicStream("../assets/music/HURRY_CASTLE.mp3");
 	 musics[MusicType::HURRY_UNDERWATER] = LoadMusicStream("../assets/music/HURRY_UNDERWATER.mp3");
+     musics[MusicType::STARMAN] = LoadMusicStream("../assets/music/Starman.mp3");
 
 }
 

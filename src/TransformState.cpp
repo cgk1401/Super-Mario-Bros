@@ -4,6 +4,7 @@
 TransformState::TransformState(Character* character, CharacterStateType statetype, CharacterStateType previoustype) : CharacterState(character), statetype(statetype), previoustype(previoustype) {
 	transformduration = 0.0f;
 	elapsedTime = 0.0f;
+	Singleton<AnimationManager>::getInstance().LoadAnimation("../Assets/Animation/TransformState.json", CharacterStateType::TransformState);
 }
 
 void TransformState::SetAnimation(Character* c) {
@@ -11,54 +12,34 @@ void TransformState::SetAnimation(Character* c) {
 		if (statetype == CharacterStateType::SuperState) {
 			character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIO);
 
-			Animation idle;
-
-			idle.durationtime = 0.3f;
-			idle.currenttime = 0.0f;
-			idle.currentframe = 0;
-			idle.frame.push_back({ 2, 88, 12, 16 });
-			idle.frame.push_back({ 18, 80, 16, 24 });
-			idle.frame.push_back({ 36, 72, 16, 32 });
-
-			character->animations[ActionState::Idle] = idle;
-
+			character->animations[ActionState::Idle] = Singleton<AnimationManager>::getInstance().getAnimation(
+				CharacterType::Mario,
+				CharacterStateType::TransformState,
+				ActionState::Idle
+			);
 		}
 		else if (statetype == CharacterStateType::NormalState) {
 			character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
 			if (previoustype == CharacterStateType::SuperState || previoustype == CharacterStateType::FireState) {
-				Animation idle;
 
-				idle.durationtime = 0.1f;
-				idle.currenttime = 0.0f;
-				idle.currentframe = 0;
-				bool addframeabsent = false;
-				for (int i = 0; i < 6; i++) {
-					idle.frame.push_back(Rectangle{ float(233 + i * 17), 1, 16, 32 });
-					idle.frame.push_back({ 318 ,34, 16, 16 });
-				}
-
-				for (int i = 0; i < 6; i++) {
-					idle.frame.push_back(Rectangle{ float(233 + i * 17), 34, 16, 16 });
-					idle.frame.push_back({ 318,34, 16, 16 });
-				}
-
-				character->animations[ActionState::Idle] = idle;
+				character->animations[ActionState::Idle] = Singleton<AnimationManager>::getInstance().getAnimation(
+					CharacterType::SmallCharacter,
+					CharacterStateType::TransformState,
+					ActionState::Idle
+				);
 			}
 		}
 
 	}
 	else if (character->getCharacterType() == CharacterType::Luigi) {
 		if (statetype == CharacterStateType::SuperState) {
-			Animation idle;
+			character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIO);
 
-			idle.durationtime = 0.3f;
-			idle.currenttime = 0.0f;
-			idle.currentframe = 0;
-			idle.frame.push_back({ 290, 88, 12, 16 });
-			idle.frame.push_back({ 306, 80, 16, 24 });
-			idle.frame.push_back({ 324, 72, 16, 32 });
-
-			character->animations[ActionState::Idle] = idle;
+			character->animations[ActionState::Idle] = Singleton<AnimationManager>::getInstance().getAnimation(
+				CharacterType::Luigi,
+				CharacterStateType::TransformState,
+				ActionState::Idle
+			);
 		}
 	}
 

@@ -15,7 +15,7 @@ private:
 
 public:
 	StarmanState(Character* character, CharacterStateType previousState);
-	~StarmanState() override = default;
+	~StarmanState() override;
 
 	void SetAnimation(Character* c) override;
 	void Update(float deltatime) override;
