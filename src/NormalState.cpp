@@ -103,14 +103,15 @@ void NormalState::Update(float deltatime) {
 		character->velocity.y = 0; 
 		isJumpingUp = false;
 		if (fabs(character->velocity.x) < 0.1f) {
-			if (IsKeyDown(KEY_P)) {
-				character->setActionState(ActionState::FlagpoleHold);
-			}
+			//if (IsKeyDown(KEY_P)) {
+			//	character->setActionState(ActionState::FlagpoleHold);
+			//}
 		} 
 	}
 
 	character->position.x += character->velocity.x * deltatime;
 	character->position.y += character->velocity.y * deltatime;
+	
 }
 
 void NormalState::HandleInput(float deltatime) {

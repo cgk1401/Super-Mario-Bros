@@ -15,7 +15,7 @@ Luigi::Luigi(Vector2 position) {
 	currentAction = ActionState::Idle;
 	this->position = position;
 	this->BasePosition = position.y;
-	currentState = new SuperState(this);
+	currentState = new NormalState(this);
 	currentState->SetAnimation(this);
 	currentdirection = Direction::Right;
 }

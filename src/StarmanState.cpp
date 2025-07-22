@@ -136,32 +136,16 @@ void StarmanState::HandleInput(float deltatime) {
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {
 		if (isGround) {
 			// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
-			if (IsKeyDown(KEY_P)) {
-				character->setActionState(ActionState::FlagpoleHold);
-			}
-			else {
+			//if (IsKeyDown(KEY_P)) {
+			//	character->setActionState(ActionState::FlagpoleHold);
+			//}
+			//else {
 				// không bấm phím nào thì sẽ đặt trạng thái thành idle
 				character->velocity.x = 0.0f;
 				character->setActionState(ActionState::Idle);
-			}
+			//}
 		}
 	}
-
-	// xử lý nhảy
-	 //if (IsKeyPressed(KEY_SPACE) && isGround && character->currentAction != ActionState::Sit) {
-	 //	character->velocity.y = config.JUMPFORCE;
-	 //	isGround = false;
-	 //	isJumpingUp = true;
-	 //	jumpTimeElapsed = 0.0f;
-	 //	character->setActionState(ActionState::Jump);
-	 //}
-
-	 //if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
-	 //	jumpTimeElapsed += deltatime;
-	 //}
-	 //else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
-	 //	isJumpingUp = false;
-	 //}
 
 	if (IsKeyDown(KEY_SPACE)) {
 		if (isGround) {

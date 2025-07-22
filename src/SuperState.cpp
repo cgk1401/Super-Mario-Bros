@@ -95,9 +95,9 @@ void SuperState::Update(float deltatime) {
 	}
 	else {
 		if (fabs(character->velocity.x) < 0.1f) {
-			if (IsKeyDown(KEY_P)) {
-				character->setActionState(ActionState::FlagpoleHold);
-			 }
+			//if (IsKeyDown(KEY_P)) {
+			//	character->setActionState(ActionState::FlagpoleHold);
+			//}
 		} 
 	}
 
@@ -113,7 +113,6 @@ void SuperState::HandleInput(float deltatime) {
 		if (isGround) {
 			character->velocity.x = 0;
 			character->setActionState(ActionState::Sit);
-			 
 		}
 		return;
 	}
@@ -134,14 +133,14 @@ void SuperState::HandleInput(float deltatime) {
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {
 		if (isGround) {
 			// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
-			if (IsKeyDown(KEY_P)) {
-				character->setActionState(ActionState::FlagpoleHold);
-			}
-			else {
+			//if (IsKeyDown(KEY_P)) {
+				//haracter->setActionState(ActionState::FlagpoleHold);
+			//}
+			//else {
 				// không bấm phím nào thì sẽ đặt trạng thái thành idle
 				character->velocity.x = 0.0f;
 				character->setActionState(ActionState::Idle);
-			}
+			//}
 		}
 	}
 
