@@ -7,10 +7,11 @@ using namespace std;
 class CharacterSelection : public GameState {
 private:
     Button* backButton;
-    vector<Button*> buttons;
+  
     Font font;
     Texture2D background;
     vector <Texture2D> characters;
+    vector<Button*> characterChoices;
     Texture2D* selectCharacter;
 public:
     CharacterSelection();

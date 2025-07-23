@@ -39,6 +39,7 @@ public:
     Camera2D cameraEditor{};
     bool IsInsideMap(int row, int col);
     void saveToFile(const char* filename);
+    void saveMapToJSON(const char* filename);
 
     //Inherit GameState
     void update(float deltatime) override;

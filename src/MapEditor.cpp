@@ -6,6 +6,7 @@
 #include "../headers/TileBehavior.h"
 #include "../headers/Global.h"
 #include "raymath.h"
+#include  "../headers/nlohmann/json.hpp"
 using namespace std;
 
 MapEditor::MapEditor(const char* path, int r, int c) : Map(path, r, c) {
@@ -75,10 +76,29 @@ void MapEditor::saveToFile(const char* filename) {
     MyFile.close();
 }
 
+void MapEditor::saveMapToJSON(const char* filename){
+    nlohmann::json j;
+
+    j["width"] = 5;
+    j["height"] = 3;
+    j["tiles"] = {
+        {0, 0, 1, 0, 0},
+        {0, 1, 1, 1, 0},
+        {2, 0, 0, 0, 2}
+    };
+
+    std::ofstream file(filename);
+    file << j.dump(); 
+    file.close();
+}
 void MapEditor::handleInput() {
      float dt = GetFrameTime();
     float speed = 200;
 
+    if(IsKeyPressed(KEY_O)){
+        saveMapToJSON("testJSON");
+        cout << "SAVED TO JSON FILE\n";
+    }
     if (IsKeyDown(KEY_RIGHT)) {
         if (IsKeyDown(KEY_LEFT_CONTROL)) {
             speed = 1000;
