@@ -35,11 +35,11 @@ public:
     int tileRows, tileColumns; 
     static constexpr int TILE_SIZE = 64;
 
-    Map(const char* path, int r = 12, int c = 32);
+    Map(int r = 12, int c = 32);
     ~Map();
     void initMap(int r, int c);
     void update(bool isEditing = false);
-    void loadFromFile(const char* filenam, bool isEditing = false);
+    void loadFromFile(pair<int, int> level = {1,1}, bool isEditing = false);
     void draw(bool isEditing = false);
 
     Tile getTile(int tileID) const; 

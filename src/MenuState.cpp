@@ -78,7 +78,7 @@ void MenuState::update(float deltatime){
 
         }
         else if (setting_buttons[2]->IsClicked()) {
-            Singleton<Game>::getInstance().changeState(new MapEditor("../assets/Map/tileset_gutter64x64.png"));
+            Singleton<Game>::getInstance().changeState(new MapEditor());
         }
         else if (backButton->IsClicked()) {
             selectedButton = 0;

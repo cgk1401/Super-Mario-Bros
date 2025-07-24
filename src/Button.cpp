@@ -3,6 +3,7 @@
 #include <iostream>
 
 #define MULTI_SCALE 1.1f
+#define PRESS_SCALE 0.8f
 
 Button::Button() {
     bounds = { 0, 0, 0, 0 };
@@ -79,19 +80,40 @@ float approach_(float current, float target, float increase) {
 	}
 	return fmax(current - increase, target);
 }
+
 void Button::update(float deltatime) {
-    expansion_time.update(deltatime);
     Vector2 mouse = GetMousePosition();
     isHovered = CheckCollisionPointRec(mouse, bounds);
 
     if (isHovered) {
-        scale = approach_(scale, MULTI_SCALE, deltatime / 2);
-    } else {
-        scale = approach_(scale, 1.0f, deltatime / 2); 
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            isPressing = true;
+        }
+
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && isPressing) {
+            if(scale == PRESS_SCALE) {
+                isPressing = false;
+                goto go_here;
+            }
+            scale = approach_(scale, PRESS_SCALE, deltatime / 2);
+            
+        }
+        else if (isPressing) {
+            isPressing = false;
+            scale = approach_(scale, MULTI_SCALE, deltatime / 2);
+        }
+        else {
+            go_here:
+            scale = approach_(scale, MULTI_SCALE, deltatime / 2);
+        }
     }
-
-
+    else {
+        scale = approach_(scale, 1.0f, deltatime / 2 );
+        isPressing = false;
+    }
 }
+
+
 void Button::draw() {
     Rectangle dest;
     dest.width = bounds.width * scale;

@@ -54,14 +54,20 @@ void CharacterSelection::render() {
                 {0,0, (float) background.width,(float) background.height},
                 {0,0, screenWidth, screenHeight},
                  {0, 0}, 0, WHITE);
+    DrawTexturePro(*selectCharacter,
+        { 0,0,(float)selectCharacter->width, (float)selectCharacter->height },
+        { screenWidth * 0.55f, screenHeight * 0.15f, 450 , 675 },
+        { 0,0 }, 0, Fade(BLUE, 0.2f));
     backButton->draw();
     for (auto& choice : characterChoices) {
         choice->draw();
     }
     //HEADER TITLE
     //DrawTextEx(font, "MARIO MARIO", { screenWidth * 0.33f, screenHeight * 0.1f }, 100, 5, DARKBROWN);
+   
     DrawTexturePro(*selectCharacter,
             {0,0,(float) selectCharacter->width, (float) selectCharacter->height} ,
             {screenWidth * 0.5f, screenHeight * 0.3f, 350 , 525},
             {0,0}, 0, WHITE);
+    
 }

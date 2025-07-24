@@ -8,8 +8,8 @@
 using namespace std;
 #define MAX_COLUMN 220
 
-Map::Map(const char* texturePath, int r, int c) {
-    texture = LoadTexture(texturePath);
+Map::Map(int r, int c) {
+    texture = LoadTexture("../assets/Map/tileset_gutter64x64.png");
     initMap(r, c);
 
     tileRows = texture.height / TILE_SIZE;
@@ -400,7 +400,10 @@ void Map::updateTileInstancePosition(int row, int col, Vector2 offset){
 }
 
 
-void Map::loadFromFile(const char* filename, bool isEditing) {
+void Map::loadFromFile(pair<int, int> level, bool isEditing) {
+    string filename;
+    if(level == pair{1,1}) filename = "map1.txt";
+
     ifstream MyReadFile(filename);
 
     if (!MyReadFile.is_open()) {

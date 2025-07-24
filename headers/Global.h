@@ -74,5 +74,6 @@ public:
 	static Camera2D camera;
 };
 
+bool operator==(pair<int, int> a, pair<int,int>b);
 
 #endif 

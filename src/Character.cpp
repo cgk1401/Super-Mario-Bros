@@ -89,16 +89,17 @@ Rectangle Character::getBound() const {
 
 Rectangle Character::getFootSensor() const {
 	Rectangle bound = getBound();
-	float width = bound.width;
+	float width = bound.width - 6.0f;
 	float height = 4;
 
 	return{
-		bound.x,
+		bound.x + 3.0f,
 		bound.y + bound.height - height / 2,
 		width,
 		height
 	};
 }
+
 ActionState Character::getCurrentAction() const{
 	return currentAction;
 }

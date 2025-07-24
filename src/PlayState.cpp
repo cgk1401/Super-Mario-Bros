@@ -8,7 +8,7 @@
 #include "../headers/SoundManager.h"
 #include "../headers/Luigi.h"
 
-PlayState::PlayState() {
+PlayState::PlayState(pair<int, int> _level) {
     Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD);
     
     if (selectedCharacter == CharacterType::Mario) {
@@ -19,17 +19,18 @@ PlayState::PlayState() {
     }
 
     gui = GUI();
- 
-    map = new Map("../assets/Map/tileset_gutter64x64.png");
-
-    map->setEnemySpawnCallback(
+    level = _level;
+    //map = new Map();
+    world[level] = new Map;
+    
+    world[level]->setEnemySpawnCallback(
         [this](EnemyType type, Vector2 pos) {
             enemies.push_back(EnemyFactory::createEnemy(type, pos));
         }
     );
 
-    map->loadFromFile("map1.txt");
-    Global::map = map;
+    world[level]->loadFromFile(level);
+    Global::map = world[level];
     camera.init({0,0});
    
     bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.05, 7.2);
@@ -44,7 +45,12 @@ PlayState::PlayState() {
    
 }
 PlayState::~PlayState() {
-    delete map;
+    for (auto& [level, mapPtr] : world) {  
+            delete mapPtr;
+            mapPtr = nullptr;
+    }
+    world.clear();
+
     bg.unload();
     Singleton<ItemManager>::getInstance().clearItems();
     Singleton<SoundManager>::getInstance().stopMusic();
@@ -52,25 +58,25 @@ PlayState::~PlayState() {
 
 void PlayState::update(float dt){
     //SoundManager::get()->updateMusic();
-    camera.update(character->getBound(), map->columns * Map::TILE_SIZE);
+    camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
     gui.update(); 
     //bg.update( mario,camera.getCamera(), dt);
     //fg.update( mario,camera.getCamera(), dt);
-    map->update();
+    world[level]->update();
 
-    Collision::handlePlayerCollision(character, map);
+    Collision::handlePlayerCollision(character, world[level]);
 
     if (character->getCurrentAction() != ActionState::Die) character->Update(dt);
     Collision::handlePlayer_EnemyCollision(character, enemies);
 
    
     Singleton<EffectManager>::getInstance().update(dt);
-    Singleton<ItemManager>::getInstance().Update(dt, character, map);
+    Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
 
     Collision::handleEnemy_EnemyCollison(enemies);
     for(auto& e: enemies){
-        Collision::handleEnemyCollision(e, map);
-        e->Update(dt, map);
+        Collision::handleEnemyCollision(e, world[level]);
+        if(e->isActive()) e->Update(dt, world[level]);
     }
     
     FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
@@ -105,7 +111,7 @@ void PlayState::render() {
                    {0,0}, 0,
                    Fade(WHITE, 0.4f));
     Singleton<ItemManager>::getInstance().Draw();
-    map->draw();
+    world[level]->draw();
 
     if (character->getCurrentAction() != ActionState::Die) character->Draw();
     //DrawRectangleLinesEx(character->getBound(), 0.5, RED);

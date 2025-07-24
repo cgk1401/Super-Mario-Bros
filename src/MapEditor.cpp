@@ -9,7 +9,7 @@
 #include  "../headers/nlohmann/json.hpp"
 using namespace std;
 
-MapEditor::MapEditor(const char* path, int r, int c) : Map(path, r, c) {
+MapEditor::MapEditor(int r, int c) : Map(r, c) {
     camera.offset = { 0, screenHeight * 0.1f };
     camera.target = { 0, 0 };
     camera.rotation = 0;
@@ -25,8 +25,8 @@ MapEditor::MapEditor(const char* path, int r, int c) : Map(path, r, c) {
 
     back_button = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), 10, 10 , screenWidth / 3 * 0.5f, screenHeight * 0.15f * 0.5f, "HOME", WHITE);
 
-    tilePicking_button = new Button("../assets/GUI/mapeditor_tile_picking_tool.png", screenWidth * 0.63f, 10.0, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Paint");
-    eraserTool_button = new Button("../assets/GUI/mapeditor_eraser_tool.png", screenWidth * 0.57, 10, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Eraser Tool");
+    tilePicking_button = new Button("../assets/GUI/mapeditor_tile_picking_tool.png", screenWidth * 0.63f, 10.0, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Tile brush");
+    eraserTool_button = new Button("../assets/GUI/mapeditor_eraser_tool.png", screenWidth * 0.57, 10, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Eraser");
     save_button = new Button("../assets/GUI/mapeditor_save_button.png",  screenWidth * 0.19f, 14, screenHeight * 0.14f * 0.5f, screenHeight * 0.14f * 0.5f, "", WHITE, 0, "Save to file");
     editType = EditorMode::DRAW;
 
@@ -41,7 +41,10 @@ MapEditor::MapEditor(const char* path, int r, int c) : Map(path, r, c) {
 }
 
 
-void MapEditor::saveToFile(const char* filename) {
+void MapEditor::saveToFile(pair<int, int> level) {
+    string filename;
+    if(level == pair{1, 1}) filename = "map1.txt";
+
     ofstream MyFile(filename);
 
     if (!MyFile.is_open()) {
@@ -280,7 +283,7 @@ void MapEditor::update(float deltatime) {
 
 
          if (option_buttons[0]->IsClicked()) { //LOAD
-            loadFromFile("map1.txt", true);
+            loadFromFile({1,1}, true);
             _option_buttons = false;
         }
         else if (option_buttons[1]->IsClicked()) {
@@ -288,9 +291,7 @@ void MapEditor::update(float deltatime) {
         }
         return;
     }
-
-
-    Map::update(true); // Update camera movement
+    //Map::update(true); // Update camera movement
     handleInput();
     saveFileNoti_timer.update(deltatime);
     tilePicking_button->update(deltatime);
@@ -304,7 +305,7 @@ void MapEditor::update(float deltatime) {
         editType = EditorMode::ERASE;
     }
     else if(save_button->IsClicked()){
-        saveToFile("map1.txt");
+        saveToFile({1,1});
         saveFileNoti_timer.start(1);
         _option_buttons = false;
         
