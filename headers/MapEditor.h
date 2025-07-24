@@ -4,6 +4,7 @@
 #include "../headers/GameState.h"
 #include "../headers/Button.h"
 #include "../headers/Timer.h"
+#include "SaveConfirmationDialog.h"
 
 enum class EditorMode {
     DRAW,
@@ -45,4 +46,7 @@ public:
     void render() override;
 
     void handleInput();
+
+    SaveConfirmationDialog save;
+
 };

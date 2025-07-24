@@ -248,6 +248,7 @@ void MapEditor::render() {
         DrawRectangle(startX, startY, rectW, rectH, BLACK);
         DrawText("SAVED FILE SUCCESSFULLY", startX + 50, startY + 10, 40, WHITE);
     }
+    save.render();
 } 
 
 void MapEditor::update(float deltatime) {
@@ -377,6 +378,8 @@ void MapEditor::update(float deltatime) {
     else if(camera.target.x > TILE_SIZE * columns){
         camera.target.x = TILE_SIZE * columns;
     }*/
+
+    save.update(deltatime);
 }
 
 bool MapEditor::IsInsideMap(int row, int col){

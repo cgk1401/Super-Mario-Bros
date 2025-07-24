@@ -207,6 +207,9 @@
     <ClCompile Include="..\src\Textbox.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\headers\SaveConfirmationDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -364,6 +367,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\AnimationManager.h">
       <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\SaveConfirmationDialog.h">
+      <Filter>Header Files\States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

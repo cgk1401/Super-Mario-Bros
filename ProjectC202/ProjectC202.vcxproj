@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\headers\SaveConfirmationDialog.cpp" />
     <ClCompile Include="..\src\Animation.cpp" />
     <ClCompile Include="..\src\AnimationManager.cpp" />
     <ClCompile Include="..\src\BrickBreakEffect.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="..\headers\PauseState.h" />
     <ClInclude Include="..\headers\PiranhaPlant.h" />
     <ClInclude Include="..\headers\PlayState.h" />
+    <ClInclude Include="..\headers\SaveConfirmationDialog.h" />
     <ClInclude Include="..\headers\Singleton.h" />
     <ClInclude Include="..\headers\SoundManager.h" />
     <ClInclude Include="..\headers\Star.h" />

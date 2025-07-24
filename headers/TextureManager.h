@@ -14,6 +14,7 @@ enum class TextureType{
     ITEM,
     BUTTON,
     LUIGI,
+    buttonPanel,
 };
 
 class TextureManager{
