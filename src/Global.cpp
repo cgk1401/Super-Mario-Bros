@@ -1,5 +1,9 @@
 #include "../headers/Global.h"
 
+Map* Global::map = nullptr;
+Camera2D Global::camera = {};
+
+
 Texture2D resizedImage(const char* imagePath, float width, float height){
     Image img = LoadImage(imagePath);
     if (img.data == NULL) {

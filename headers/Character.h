@@ -1,42 +1,67 @@
 #pragma once
 
-#include "Animation.h"
+#include <iostream>
 #include <map>
+#include "Animation.h"
+#include "CharacterState.h"
+#include "Global.h"
+
+using namespace std;
+
+class CharacterState;
+class NormalState;
+class SuperState;
+class TransformState;
+class FireState;
+class FireBall;
+class StarmanState;
+
 class Map;
 
-enum Actionstate {
-	IDLE,
-	Run,
-	Jump,
-	Fall,
-	DIE,
-};
-
-class Character : public Animation{
-protected:
-	Texture2D texture{};
-	std::map <Actionstate, Animation> animation;
-	Actionstate currentstate = Actionstate::IDLE;
-	Vector2 position = { 0,0 };
-	float speed = 0.0f;
-
-	const float gravity;
-	Vector2 velocity;
-	float scale;
-	Rectangle bound;
-
-	bool onGround;
-	bool isJumpingUp;
-public:
-	Character();
-	//virtual ~Character();
+class Character {
 	friend class Collision;
+	friend class CharacterState;
+	friend class NormalState;
+	friend class SuperState;
+	friend class TransformState;
+	friend class FireState;
+	friend class FireBall;
+	friend class StarmanState;
 
-	virtual void Update(float deltatime, Map* map) = 0;
-	virtual void Draw() = 0;
-	virtual void LoadSource() = 0;
-	virtual void MoveLeft() = 0;
-	virtual void MoveRight() = 0;
-	virtual void handleCollision(Map* map);
-	virtual Vector2 getPos();
+protected:
+	Texture texture;
+	map <ActionState, Animation> animations;
+	Vector2 position;
+	Vector2 velocity = { 0,0 };
+
+	CharacterType type;
+	CharacterState* currentState;
+	ActionState currentAction;
+	Direction currentdirection;
+
+	float scale = 4.0f;
+	float BasePosition;
+
+	PhysicsConfig config;
+	bool isJumpingUp = false;
+	bool isGround = false;
+	float jumpTimeElapsed = 0;
+public:
+	virtual ~Character();
+
+	void ChangeState(CharacterStateType newState, CharacterStateType previousState);
+	void ChangeMiddleState(CharacterStateType newState);
+	CharacterState* GetCurrentState() const;
+	virtual CharacterType getCharacterType() = 0;
+	void setActionState(ActionState newActionState);
+	void setDirection(Direction newDirection);
+	Rectangle getBound() const;
+	Rectangle getFootSensor() const;
+	ActionState getCurrentAction() const;
+	CharacterStateType getCharacterStateType() const;
+	void DIE(Enemy* e);
+
+	void Draw();
+	void Update(float deltatime);
+	void HandleInput(float dt);
 };

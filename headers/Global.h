@@ -1,11 +1,78 @@
 #ifndef GLOBAL_H
 #define GLOBAL_H
 #include <raylib.h>
+#include <iostream>
+#include <fstream>
+#include <cmath>
+#include <string>
+#include <vector>
+#include "Singleton.h"
 #include "../headers/Button.h"
-#include "../headers/Map.h"
+#include "SoundManager.h"
+#include "TextureManager.h"
+#include "Game.h"
+#include "nlohmann/json.hpp"
 
-const int screenWidth = 1024;
-const int screenHeight = 768;
+//using json = nlohmann::json;
+
+using namespace std;
+const int screenWidth = 1200; //1024
+const int screenHeight = 800; //768
 Texture2D resizedImage(const char* imagePath, float width, float height);
+class Map;
+class Enemy;
+
+constexpr Color DARK_BLUE = { 22, 72, 159, 255 };
+
+
+enum class CharacterStateType {
+	NormalState,
+	SuperState,
+	FireState,
+	StarmanState,
+	TransformState,
+};
+
+enum class ActionState {
+	Idle,
+	Run,
+	Jump,
+	Sit,
+	Die,
+	FlagpoleHold,
+	Fireball,
+};
+
+enum class CharacterType {
+	Mario,
+	Luigi,
+	SmallCharacter,
+	BigCharacter,
+};
+inline CharacterType selectedCharacter = CharacterType::Mario;
+
+enum class Direction {
+	Left,
+	Right
+};
+
+enum class EnemyType {
+	GOOMBA,
+	KOOPA,
+	PIRANT_PLANT
+};
+
+enum class DeathType
+{
+	STOMP,
+	FALLING,
+	SHELL_HIT,
+};
+class Global {
+public:
+    static Map* map;
+	static Camera2D camera;
+};
+
 
 #endif 

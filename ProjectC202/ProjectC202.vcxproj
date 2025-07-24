@@ -105,6 +105,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir)headers;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -128,49 +129,101 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\headers\InputHandler.cpp" />
     <ClCompile Include="..\src\Animation.cpp" />
+    <ClCompile Include="..\src\AnimationManager.cpp" />
+    <ClCompile Include="..\src\BrickBreakEffect.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
+    <ClCompile Include="..\src\CameraController.cpp" />
     <ClCompile Include="..\src\Character.cpp" />
+    <ClCompile Include="..\src\CharacterSelection.cpp" />
+    <ClCompile Include="..\src\CoinCollectEffect.cpp" />
+    <ClCompile Include="..\src\CharacterState.cpp" />
+    <ClCompile Include="..\src\Collision.cpp" />
     <ClCompile Include="..\src\ConcreteTileBehavior.cpp" />
-    <ClCompile Include="..\src\Flower.cpp" />
+    <ClCompile Include="..\src\EffectManager.cpp" />
+    <ClCompile Include="..\src\FireBall.cpp" />
+    <ClCompile Include="..\src\FireBallExplosionEffect.cpp" />
+    <ClCompile Include="..\src\FireState.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\GameState.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
+    <ClCompile Include="..\src\GoomBa.cpp" />
     <ClCompile Include="..\src\GUI.cpp" />
-    <ClCompile Include="..\src\Item.cpp" />
+    <ClCompile Include="..\src\ItemManager.cpp" />
+    <ClCompile Include="..\src\KoopaDeathEffect.cpp" />
+    <ClCompile Include="..\src\KoopaTroopa.cpp" />
+    <ClCompile Include="..\src\Luigi.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Map.cpp" />
     <ClCompile Include="..\src\MapEditor.cpp" />
     <ClCompile Include="..\src\Mario.cpp" />
+    <ClCompile Include="..\src\MarioDeadEffect.cpp" />
     <ClCompile Include="..\src\MenuState.cpp" />
-    <ClCompile Include="..\src\Mushroom.cpp" />
+    <ClCompile Include="..\src\GoombaDeadEffect.cpp" />
+    <ClCompile Include="..\src\NormalState.cpp" />
+    <ClCompile Include="..\src\ParallaxManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
+    <ClCompile Include="..\src\PiranhaPlant.cpp" />
     <ClCompile Include="..\src\PlayState.cpp" />
-    <ClCompile Include="..\src\Star.cpp" />
+    <ClCompile Include="..\src\SoundManager.cpp" />
+    <ClCompile Include="..\src\StarmanState.cpp" />
+    <ClCompile Include="..\src\Textbox.cpp" />
+    <ClCompile Include="..\src\TextureManager.cpp" />
+    <ClCompile Include="..\src\SuperState.cpp" />
+    <ClCompile Include="..\src\TransformState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Animation.h" />
+    <ClInclude Include="..\headers\AnimationManager.h" />
+    <ClInclude Include="..\headers\BaseEffect.h" />
+    <ClInclude Include="..\headers\BrickBreakEffect.h" />
     <ClInclude Include="..\headers\Button.h" />
+    <ClInclude Include="..\headers\CameraController.h" />
     <ClInclude Include="..\headers\Character.h" />
-    <ClInclude Include="..\headers\Command.h" />
+    <ClInclude Include="..\headers\CharacterSelection.h" />
+    <ClInclude Include="..\headers\CoinCollectEffect.h" />
+    <ClInclude Include="..\headers\CharacterState.h" />
+    <ClInclude Include="..\headers\Collision.h" />
     <ClInclude Include="..\headers\ConcreteTileBehavior.h" />
+    <ClInclude Include="..\headers\EffectManager.h" />
+    <ClInclude Include="..\headers\Enemy.h" />
+    <ClInclude Include="..\headers\FireBall.h" />
+    <ClInclude Include="..\headers\FireBallExplosionEffect.h" />
+    <ClInclude Include="..\headers\FireState.h" />
     <ClInclude Include="..\headers\Flower.h" />
     <ClInclude Include="..\headers\Game.h" />
     <ClInclude Include="..\headers\GameState.h" />
     <ClInclude Include="..\headers\Global.h" />
+    <ClInclude Include="..\headers\GoomBa.h" />
     <ClInclude Include="..\headers\GUI.h" />
-    <ClInclude Include="..\headers\InputHandler.h" />
     <ClInclude Include="..\headers\Item.h" />
+    <ClInclude Include="..\headers\ItemManager.h" />
+    <ClInclude Include="..\headers\KoopaDeathEffect.h" />
+    <ClInclude Include="..\headers\KoopaTroopa.h" />
+    <ClInclude Include="..\headers\Luigi.h" />
     <ClInclude Include="..\headers\Map.h" />
     <ClInclude Include="..\headers\MapEditor.h" />
     <ClInclude Include="..\headers\Mario.h" />
+    <ClInclude Include="..\headers\MarioDeadEffect.h" />
     <ClInclude Include="..\headers\MenuState.h" />
-    <ClInclude Include="..\headers\Mushrooom.h" />
+    <ClInclude Include="..\headers\Mushroom.h" />
+    <ClInclude Include="..\headers\GoombaDeadEffect.h" />
+    <ClInclude Include="..\headers\NormalState.h" />
+    <ClInclude Include="..\headers\ParallaxManager.h" />
     <ClInclude Include="..\headers\PauseState.h" />
+    <ClInclude Include="..\headers\PiranhaPlant.h" />
     <ClInclude Include="..\headers\PlayState.h" />
+    <ClInclude Include="..\headers\Singleton.h" />
+    <ClInclude Include="..\headers\SoundManager.h" />
     <ClInclude Include="..\headers\Star.h" />
+    <ClInclude Include="..\headers\StarmanState.h" />
+    <ClInclude Include="..\headers\Textbox.h" />
+    <ClInclude Include="..\headers\TextureManager.h" />
+    <ClInclude Include="..\headers\SuperState.h" />
     <ClInclude Include="..\headers\Tile.h" />
     <ClInclude Include="..\headers\TileBehavior.h" />
+    <ClInclude Include="..\headers\Timer.h" />
+    <ClInclude Include="..\headers\TransformState.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

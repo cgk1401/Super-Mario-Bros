@@ -10,9 +10,10 @@ public :
 	float currenttime;
 	int currentframe;
 
-public :
 	Animation();
 	void Update(float deltatime);
 
-	Rectangle getcurrentframe();
+	Rectangle getcurrentframe() const;
+	void reset();
+	
 };

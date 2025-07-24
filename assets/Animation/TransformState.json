@@ -1,0 +1,53 @@
+{
+  "Mario": {
+    "Idle": {
+      "frames": [
+        { "x": 2, "y": 88, "width" : 12, "height": 16},
+        { "x": 18, "y": 80, "width" : 16, "height": 24},
+        { "x": 36, "y": 72, "width" : 16, "height": 32}
+      ],
+      "duration": 0.3
+    }
+  },
+  "SmallCharacter": {
+    "Idle": {
+      "frames": [
+        { "x": 233, "y": 1, "width": 16, "height": 32 },
+        { "x": 318, "y": 34, "width": 16, "height": 16 },
+
+        { "x": 250, "y": 1, "width": 16, "height": 32 },
+        { "x": 318, "y": 34, "width": 16, "height": 16 },
+
+        { "x": 267, "y": 1, "width": 16, "height": 32 },
+        { "x": 318, "y": 34, "width": 16, "height": 16 },
+
+        { "x": 284, "y": 1, "width": 16, "height": 32 },
+        { "x": 318, "y": 34, "width": 16, "height": 16 },
+
+        { "x": 301, "y": 1, "width": 16, "height": 32 },
+        { "x": 318, "y": 34, "width": 16, "height": 16 },
+
+        { "x": 318, "y": 1, "width": 16, "height": 32 },
+        { "x": 318, "y": 34, "width": 16, "height": 16 },
+
+        { "x": 233, "y": 34, "width": 16, "height": 16 },
+        { "x": 250, "y": 34, "width": 16, "height": 16 },
+        { "x": 267, "y": 34, "width": 16, "height": 16 },
+        { "x": 284, "y": 34, "width": 16, "height": 16 },
+        { "x": 301, "y": 34, "width": 16, "height": 16 },
+        { "x": 318, "y": 34, "width": 16, "height": 16 }
+      ],
+      "duration": 0.1
+    }
+  },
+  "Luigi": {
+    "Idle":{
+        "frames":[
+        { "x": 290, "y": 88, "width": 12, "height": 16 },
+        { "x": 306, "y": 80, "width": 16, "height": 24 },
+        { "x": 324, "y": 72, "width": 16, "height": 32 }
+        ],
+        "duration": 0.3
+    }
+  }
+}

@@ -1,58 +1,129 @@
-#include "../headers/PlayState.h"
+﻿#include "../headers/PlayState.h"
 #include "../headers/Game.h"
 #include "../headers/MenuState.h"
+#include "../headers/EffectManager.h"
+#include "../headers/EnemyFactory.h"
+#include "../headers/Collision.h"
+#include "../headers/ItemManager.h"
+#include "../headers/SoundManager.h"
+#include "../headers/Luigi.h"
 
 PlayState::PlayState() {
-    gui = GUI();
-    isPlaying = true;
-    map = new Map("../assets/Map/tileset_gutter64x64.png");
-    map->loadFromFile("map1.txt");
-    camera.offset = { 0,0 };
-    camera.target = { 0,0 };
-    camera.rotation = 0;
-    camera.zoom = 1.0;
+    Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD);
+    
+    if (selectedCharacter == CharacterType::Mario) {
+        character = new Mario({ 100, 200 });
+    }
+    else if (selectedCharacter == CharacterType::Luigi) {
+        character = new Luigi({ 100, 200 });
+    }
 
+    gui = GUI();
+ 
+    map = new Map("../assets/Map/tileset_gutter64x64.png");
+
+    map->setEnemySpawnCallback(
+        [this](EnemyType type, Vector2 pos) {
+            enemies.push_back(EnemyFactory::createEnemy(type, pos));
+        }
+    );
+
+    map->loadFromFile("map1.txt");
+    Global::map = map;
+    camera.init({0,0});
+   
+    bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.05, 7.2);
+    bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 7.2);
+    bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 7.2);
+    
+    //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
+   world_1_1 = LoadTexture("../assets/Map/World 1-1.png");
+   
+    cout << "done Constructor\n";
+   
 }
 PlayState::~PlayState() {
     delete map;
+    bg.unload();
+    Singleton<ItemManager>::getInstance().clearItems();
+    Singleton<SoundManager>::getInstance().stopMusic();
 }
-void PlayState::handleInput(Game& game){
 
-}
-void PlayState::update(Game& game){
-    if (gui.PauseButton_IsPressed() && isPlaying) {
-        isPlaying = false;
-    }
-    else {
-        if (pauseMenu.resume_IsCLicked()) {
-            isPlaying = true;
-        }
-        else if (pauseMenu.save_IsCLicked()) {
-            //save map
-        }
-    }
-    if (isPlaying) {
-        gui.update(game); 
-        mario.Update(GetFrameTime(), map);
-        map->update(camera);
-    }
-    else {
-        pauseMenu.update(game);  
-    }
+void PlayState::update(float dt){
+    //SoundManager::get()->updateMusic();
+    camera.update(character->getBound(), map->columns * Map::TILE_SIZE);
+    gui.update(); 
+    //bg.update( mario,camera.getCamera(), dt);
+    //fg.update( mario,camera.getCamera(), dt);
+    map->update();
 
+    Collision::handlePlayerCollision(character, map);
+
+    if (character->getCurrentAction() != ActionState::Die) character->Update(dt);
+    Collision::handlePlayer_EnemyCollision(character, enemies);
+
+   
+    Singleton<EffectManager>::getInstance().update(dt);
+    Singleton<ItemManager>::getInstance().Update(dt, character, map);
+
+    Collision::handleEnemy_EnemyCollison(enemies);
+    for(auto& e: enemies){
+        Collision::handleEnemyCollision(e, map);
+        e->Update(dt, map);
+    }
     
+    FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
+    if (fireState) {
+        auto& fireballs = fireState->getFireBall(); 
+        for (auto& f : fireballs) {
+            if (f) Collision::handleFireball_EnemyCollision(f, enemies);
+        }
+    }
+
+
+    //remove if any enemies die
+    enemies.erase(remove_if(enemies.begin(), enemies.end(),
+        [](Enemy* e) {
+            if (e->isDead()) {
+                delete e;
+                return true;
+            }
+    return false;
+    }),
+    enemies.end());
+    Global::camera = camera.getCamera();
 }
 
-void PlayState::render(){
-   // camera.target = mario.getPos();
-    map->draw(camera); // add camera 
+void PlayState::render() {
+    
+    BeginMode2D(camera.getCamera());
+    //bg.draw();
+    DrawTexturePro(world_1_1,
+                   { 0,0, (float) world_1_1.width, (float) world_1_1.height},
+                   {0 * Map::TILE_SIZE, -2 * Map::TILE_SIZE,  (float) world_1_1.width * 4, (float) world_1_1.height * 4},
+                   {0,0}, 0,
+                   Fade(WHITE, 0.4f));
+    Singleton<ItemManager>::getInstance().Draw();
+    map->draw();
+
+    if (character->getCurrentAction() != ActionState::Die) character->Draw();
+    //DrawRectangleLinesEx(character->getBound(), 0.5, RED);
+    for(auto& e: enemies){
+        e->Draw();
+    }
+    Singleton<EffectManager>::getInstance().draw();
+    //fg.draw();
+    EndMode2D();
+
     gui.draw();
-    mario.Draw();
     
+}
 
-    if(isPlaying == false) {
-        pauseMenu.render();
+void PlayState::ChangeCharacter(CharacterType newtype) {
+    if (character->getCharacterType() != newtype) {
+        delete character;
+        if (newtype == CharacterType::Mario) character = new Mario({ 100, 200 });
+        else if (newtype == CharacterType::Luigi) character = new Luigi({ 100, 200 });
     }
-    
 }

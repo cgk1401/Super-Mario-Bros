@@ -28,7 +28,7 @@ public:
     void setTime(int t);
     bool PauseButton_IsPressed();
 
-    void update(Game& game);
+    void update();
     void draw();
 };
 #endif

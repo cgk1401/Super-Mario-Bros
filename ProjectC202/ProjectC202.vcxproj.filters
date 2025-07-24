@@ -37,12 +37,6 @@
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{adbb5846-8c31-4d8f-8ec9-12c99da87b7e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Input">
-      <UniqueIdentifier>{285bef3f-3da5-41cd-bc96-a94ee4ed5361}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Input">
-      <UniqueIdentifier>{a571650c-0c62-4ec2-b221-4de0265a8162}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Map">
       <UniqueIdentifier>{7432a302-5bc0-4711-9610-b8c490f6b569}</UniqueIdentifier>
     </Filter>
@@ -53,7 +47,37 @@
       <UniqueIdentifier>{5af8d7d6-1519-4e8d-af16-9120859d585b}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Map\Tile">
-      <UniqueIdentifier>{d2bb5825-f8f0-4c8d-80bd-2618ed9a0d88}</UniqueIdentifier>
+      <UniqueIdentifier>{029596d5-65cd-4be0-83f0-6c6a6261b888}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Effect">
+      <UniqueIdentifier>{5a18827e-55b5-4c97-93d7-98e2511a2ab0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Effect">
+      <UniqueIdentifier>{d78df01e-0648-4f30-8c1e-413a9a8ae0f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\Enemy">
+      <UniqueIdentifier>{907f051b-27ec-45ba-bda6-8a476dcbb304}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\Character">
+      <UniqueIdentifier>{29b1c5d5-faf3-46ad-940e-c4825f39fb8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity\Character">
+      <UniqueIdentifier>{0bba9594-e98d-4ec0-9e9c-2fd8539d17b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity\Enemy">
+      <UniqueIdentifier>{64792c18-ef9f-4bc6-914f-d0b1704d6f23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\CharacterState">
+      <UniqueIdentifier>{1f5b8ce6-12eb-47a4-9659-d64abc9fac7e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity\CharacterState">
+      <UniqueIdentifier>{1171ea3a-e3a0-407f-8998-b7e0ced36552}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entity\Item">
+      <UniqueIdentifier>{b190ea6e-c1ce-40f2-9639-2f6a4deabb17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity\Item">
+      <UniqueIdentifier>{55a6198f-c489-4597-a9b1-f13352f9ffca}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -84,35 +108,104 @@
     <ClCompile Include="..\src\Animation.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Character.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Mario.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\headers\InputHandler.cpp">
-      <Filter>Source Files\Input</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Map.cpp">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
     <ClCompile Include="..\src\MapEditor.cpp">
       <Filter>Source Files\Map</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\CameraController.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ParallaxManager.cpp">
+      <Filter>Source Files\Map</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\ConcreteTileBehavior.cpp">
       <Filter>Source Files\Map\Tile</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Item.cpp">
-      <Filter>Source Files\Map\Tile</Filter>
+    <ClCompile Include="..\src\EffectManager.cpp">
+      <Filter>Source Files\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Mushroom.cpp">
-      <Filter>Source Files\Map\Tile</Filter>
+    <ClCompile Include="..\src\BrickBreakEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Star.cpp">
-      <Filter>Source Files\Map\Tile</Filter>
+    <ClCompile Include="..\src\CoinCollectEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Flower.cpp">
-      <Filter>Source Files\Map\Tile</Filter>
+    <ClCompile Include="..\src\Character.cpp">
+      <Filter>Source Files\Entity\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Mario.cpp">
+      <Filter>Source Files\Entity\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GoomBa.cpp">
+      <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\KoopaTroopa.cpp">
+      <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PiranhaPlant.cpp">
+      <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TextureManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Luigi.cpp">
+      <Filter>Source Files\Entity\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CharacterState.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\NormalState.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SuperState.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\TransformState.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FireState.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FireBall.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Collision.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\ItemManager.cpp">
+      <Filter>Source Files\Entity\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SoundManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\StarmanState.cpp">
+      <Filter>Source Files\Entity\CharacterState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\FireBallExplosionEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GoombaDeadEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MarioDeadEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\KoopaDeathEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CharacterSelection.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AnimationManager.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\GameState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Textbox.cpp">
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -143,18 +236,6 @@
     <ClInclude Include="..\headers\Animation.h">
       <Filter>Header Files\Entity</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Character.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\Mario.h">
-      <Filter>Header Files\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\Command.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\InputHandler.h">
-      <Filter>Header Files\Input</Filter>
-    </ClInclude>
     <ClInclude Include="..\headers\Map.h">
       <Filter>Header Files\Map</Filter>
     </ClInclude>
@@ -170,17 +251,119 @@
     <ClInclude Include="..\headers\TileBehavior.h">
       <Filter>Header Files\Map\Tile</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Item.h">
-      <Filter>Header Files\Map\Tile</Filter>
+    <ClInclude Include="..\headers\CameraController.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\Mushrooom.h">
-      <Filter>Header Files\Map\Tile</Filter>
+    <ClInclude Include="..\headers\ParallaxManager.h">
+      <Filter>Header Files\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Collision.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\EffectManager.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Timer.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\BaseEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\BrickBreakEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CoinCollectEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Character.h">
+      <Filter>Header Files\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Enemy.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\GoomBa.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\KoopaTroopa.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\PiranhaPlant.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\TextureManager.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Luigi.h">
+      <Filter>Header Files\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CharacterState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\NormalState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\SuperState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\TransformState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\FireState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\FireBall.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Item.h">
+      <Filter>Header Files\Entity\Item</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Flower.h">
-      <Filter>Header Files\Map\Tile</Filter>
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Mushroom.h">
+      <Filter>Header Files\Entity\Item</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Star.h">
-      <Filter>Header Files\Map\Tile</Filter>
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\ItemManager.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\SoundManager.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Character.h">
+      <Filter>Header Files\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Mario.h">
+      <Filter>Header Files\Entity\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\StarmanState.h">
+      <Filter>Header Files\Entity\CharacterState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\FireBallExplosionEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\GoombaDeadEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\MarioDeadEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\KoopaDeathEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Singleton.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CharacterSelection.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Textbox.h">
+      <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\AnimationManager.h">
+      <Filter>Header Files\Core</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

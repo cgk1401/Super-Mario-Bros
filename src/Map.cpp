@@ -1,40 +1,87 @@
-#include "../headers/Map.h"
+﻿#include "../headers/Map.h"
 #include "../headers/ConcreteTileBehavior.h"
+#include "../headers/Global.h"
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <functional>
 using namespace std;
+#define MAX_COLUMN 220
 
 Map::Map(const char* texturePath, int r, int c) {
     texture = LoadTexture(texturePath);
     initMap(r, c);
 
-    tileRows = texture.width / side;
-    tileColumns = texture.height / side;
+    tileRows = texture.height / TILE_SIZE;
+    tileColumns = texture.width / TILE_SIZE;
 
     tileSetSourceRects.resize(tileRows);
-    for (auto& t : tileSetSourceRects) {
+    //for (auto& t : tileSetSourceRects) {
 
-        t.resize(tileColumns);
+    //    t.resize(tileColumns);
+    //}
+    //this is the old method, result in some invisible tiles
+
+    for (int i = 0; i < 8; i += 2) {
+		tileSetSourceRects[i].resize(30);
     }
+    for (int i = 1; i < 8; i += 2) {
+        tileSetSourceRects[i].resize(27);
+	}
+    for (int i = 8; i < 20; i++) {
+        tileSetSourceRects[i].resize(24);
+    }
+
+    for (int i = 20; i < tileRows; i++) {
+        if (i == 22) tileSetSourceRects[i].resize(10);
+        else tileSetSourceRects[i].resize(13);
+    }
+
     for (int x = 0; x < tileRows; x++) {
-        for (int y = 0; y < tileColumns; y++) {
-            tileSetSourceRects[x][y] = { (float)y * side, (float)x * side, (float)side, (float)side };
+        for (int y = 0; y < tileSetSourceRects[x].size(); y++) {
+            tileSetSourceRects[x][y] = { (float)y * TILE_SIZE, (float)x * TILE_SIZE, (float)TILE_SIZE, (float)TILE_SIZE };
         }
     }
+	//this prevents some invisible tiles
+
+      /*for (int r = 0; r < tileRows; r++) {
+        cout << r <<": ";
+        for (int c = 0; c < tileSetSourceRects[r].size(); c++) {
+            cout << c <<" " ;
+        }
+        cout << endl;
+        }*/
+
+
     createTileCatalog();
 }
-
+Map::~Map(){
+    for (int x = 0; x < rows; x++) {
+        for (int y = 0; y < columns; y++) {
+            delete mapData[x][y].state;
+            mapData[x][y].state = nullptr;
+        }
+    }
+    tileCatalog.clear();
+    mapRects.clear();
+    mapData.clear();
+    UnloadTexture(texture);
+}
 void Map::initMap(int r, int c) {
+    mapRects.clear();
+    mapData.clear();
+
     rows = r;
     columns = c;
 
+    cout << "column in init map: " << c << endl;;
     mapRects.resize(rows, vector<Rectangle>(columns));
     mapData.resize(rows, vector<MapTileInstance>(columns));
 
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
-            mapRects[x][y] = { (float)(y * side), (float)(x * side), (float)side, (float)side };
+            // << x << " - " << y << endl;
+            mapRects[x][y] = { (float)(y * TILE_SIZE), (float)(x * TILE_SIZE), (float)TILE_SIZE, (float)TILE_SIZE };
             mapData[x][y] = { 0, false };
         }
     }
@@ -43,64 +90,178 @@ void Map::initMap(int r, int c) {
 void Map::createTileCatalog() {
     tileCatalog.clear();
     tileCatalog.emplace(0, Tile(0, tileSetSourceRects[0][0], EMPTY, new EmptyTileBehavior())); //EMPTY tile
-    tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
-    tileCatalog.emplace(getTileIDFromCoords(1, 2), Tile(1, tileSetSourceRects[1 - 1][2 - 1], BRICK, new BrickTileBehavior())); //Ground tile
-    //tileCatalog.emplace(1, Tile(1, tile, )));
-    
-    //....
+    for (int i = 1; i < 9; i++) {
+        for (int j = 1; j < 7; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tile
+        }
+
+        for (int j = 7; j < 9; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], BRICK, new BrickTileBehavior())); //Brick tile
+        }
+
+        for (int j = 9; j < 16; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+        }
+
+        tileCatalog.emplace(getTileIDFromCoords(i, 16), Tile(1, tileSetSourceRects[i - 1][16 - 1], PIPE, new SolidTileBehavior())); //Pipe tile
+
+        for (int j = 17; j < 20; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+        }
+
+        if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(1, tileSetSourceRects[i - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior())); //Question Block tile
+        else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(1, tileSetSourceRects[i - 1][20 - 1], BRICK, new BrickTileBehavior())); //Decoration tile
+        ///////// The brick which has the star
+
+        for (int j = 21; j < 23; j++) {
+            if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], ITEM, new ItemBehavior()));
+            if (i % 2 == 1) {
+                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior()));
+                tileCatalog.emplace(getTileIDFromCoords(i, j + 1), Tile(1, tileSetSourceRects[i - 1][j + 1 - 1], USED_QUESTION_BLOCK, new SolidTileBehavior()));
+            }
+        }
+
+        for (int j = 23; j < 26; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+        }
+
+        tileCatalog.emplace(getTileIDFromCoords(i, 26), Tile(1, tileSetSourceRects[i - 1][26 - 1], LAVA_FLOOR, new DecorationTileBehavior())); //Decoration tile
+
+        tileCatalog.emplace(getTileIDFromCoords(i, 27), Tile(1, tileSetSourceRects[i - 1][27 - 1], GROUND, new SolidTileBehavior())); //ground tile
+
+        if (i % 2 == 1) {
+            for (int j = 28; j < 31; j++) {
+                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground 
+            }
+        }
+    }
+	//catalog for first 8 rows, which follow the origin color palettes (overworld, underground, castle, underwater)
+
+
+
+    for (int i = 9; i < 21; i++) {
+        for (int j = 1; j < 6; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], PIPE, new SolidTileBehavior())); //Pipe tiles
+        }
+
+        for (int j = 6; j < 9; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tiles
+        }
+
+        for (int j = 9; j < 12; j++) {
+            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tiles
+            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+        }
+
+        tileCatalog.emplace(getTileIDFromCoords(i, 12), Tile(1, tileSetSourceRects[i - 1][12 - 1], FINISHING_POLE, new DecorationTileBehavior())); //Ground tiles
+
+        for (int j = 13; j < 19; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+        }
+
+        if ( i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(1, tileSetSourceRects[i - 1][19 - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+        else if ( i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(1, tileSetSourceRects[i - 1][19 - 1], GROUND, new SolidTileBehavior())); //Solid tiles
+
+        for (int j = 20; j < 25; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+        }
+        //Decoration
+    }
+    //catalog for the rest, which have 6 palettes instead of 4 (add snow and mushroom)
+
+    for (int i = 21; i <= tileRows; i++) {
+        for (int j = 1; j < 11; j++) {
+			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], ENEMY, new DecorationTileBehavior())); //Ground tiles
+        }
+        for (int j = 11; j < 14; j++) {
+            if (i != 23) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new DecorationTileBehavior())); //Ground tiles
+		}
+    }
+    //temporary enemies to add to map
+
+ 
+
+    //tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
+    //tileCatalog.emplace(1, Tile(1, tile, ));
 
 
 }
-void Map::update(Camera2D& camera,  bool isEditing) {
-    
-    if (isEditing) {
-        float dt = GetFrameTime();
-        float speed = 200;
+bool operator!=(Vector2 v1, Vector2 v2) {
+    return v1.x != v2.x || v1.y != v2.y;
+}
+void Map::update(bool isEditing) {
+    float dt = GetFrameTime();
+    for (int row = 0; row < rows; row++) {
+        for (int col = 0; col < columns; col++) {
+            int id = mapData[row][col].tileID;
+            if (id != 0) {
+                //tileCatalog[id].behavior->update(GetFrameTime(), row, col, this, &mapData[row][col]);
+               Tile tile = getTile(row, col);
 
-        if (IsKeyDown(KEY_RIGHT)) {
-            if (IsKeyDown(KEY_LEFT_CONTROL)) {
-                speed = 1000;
+                MapTileInstance* tileInstance = getMapTileInstance(row, col);
+                
+                //if (!tileInstance || tileInstance->tileID == 0) continue;
+                //tile.behavior->update(GetFrameTime(), x, y, map, tileInstance);
+                Vector2 ori = { 0, 0 };
+             
+                if(tile.behavior) tile.behavior->update(dt, row, col, this, tileInstance);
+                
             }
-            camera.target.x += speed * dt;
-
-        }
-        if (IsKeyDown(KEY_LEFT)) {
-            if (IsKeyDown(KEY_LEFT_CONTROL)) {
-                speed = 1000;
-            }
-            camera.target.x -= speed * dt;
-        }
-
-        if (camera.target.x < 0) {
-            camera.target.x = 0;
         }
     }
 }
 
-void Map::draw(Camera2D& camera, bool isEditing) {
-    BeginMode2D(camera);
+void Map::draw(bool isEditing) {
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
             int id = mapData[x][y].tileID;
-            
+
             auto it = tileCatalog.find(id);
-            if ( id && it != tileCatalog.end() ) {
-                DrawTexturePro(texture, it->second.srcRect, mapRects[x][y], { 0,0 }, 0, WHITE);
+            if (id && it != tileCatalog.end()) {
+                Rectangle src = it->second.srcRect;
+                if (it->second.type == ENEMY && isEditing == false) continue;
+                else if(it->second.type ==  TileType::QUESTION_BLOCK){
+                    // src = QUESTION_BLOCK;
+                }
+                Vector2 drawPos = {
+                   mapRects[x][y].x + mapData[x][y].offsetPos.x,
+                    mapRects[x][y].y + mapData[x][y].offsetPos.y
+                };
+
+                Rectangle destRect = { drawPos.x, drawPos.y, TILE_SIZE, TILE_SIZE };
+                DrawTexturePro(texture, src, destRect, { 0,0 }, 0, WHITE);
             }
-            if (isEditing) DrawRectangleLinesEx(mapRects[x][y], 0.5f, DARKGRAY);
+            if (isEditing)
+                //Draw grid 
+                DrawRectangleLines(mapRects[x][y].x,
+                    mapRects[x][y].y,
+                    TILE_SIZE,
+                    TILE_SIZE, 
+                    BLACK);
         }
     }
-    EndMode2D();
 }
 
 int Map::getTileIDFromCoords(int fileRow, int fileCol) const {
-    return (fileRow - 1) * tileColumns + fileCol;
+    fileRow--;
+    if (fileRow < 0 || fileRow >= tileRows ||
+        fileCol-1 < 0 || fileCol-1 >= tileSetSourceRects[fileRow].size()) {
+        TraceLog(LOG_ERROR, "OUT OF RANGE");
+        return 0;
+    }
+
+    int idOffset = 0;
+    for (int r = 0; r < fileRow; ++r) {
+        idOffset += tileSetSourceRects[r].size();
+    }
+    return idOffset + fileCol;
 }
 
 
 Tile Map::getTile(int tileID) const {
     auto it = tileCatalog.find(tileID);
     if (it == tileCatalog.end()) {
+        TraceLog(LOG_INFO, "inavailable in catalog");
         return Tile(0, tileSetSourceRects[0][0], EMPTY, tileCatalog.at(0).behavior);
     }
     return Tile(it->second.id, it->second.srcRect, it->second.type, it->second.behavior);
@@ -115,28 +276,84 @@ Tile Map::getTile(int row, int col) const {
 }
 
 MapTileInstance* Map::getMapTileInstance(int row, int col) {
-    if (row < 0 || row >= tileRows || col < 0 || col >= tileColumns) {
+    if (row < 0 || row >= rows || col < 0 || col >= columns) {
         return nullptr;
     }
     return &mapData[row][col];
 }
 
+void Map::setEnemySpawnCallback(function<void(EnemyType, Vector2)> callback) {
+    spawnEnemyCallback = callback;
+}
+
+EnemyType Map::getEnemyType(int tileID) {
+    switch (tileID)
+    {
+    case 541:
+        return EnemyType::GOOMBA; break;
+    case 543:
+        return EnemyType::KOOPA; break;
+    case 544:
+        return EnemyType::PIRANT_PLANT; break;
+
+    default:
+        return EnemyType::GOOMBA;
+    }
+}
 void Map::setTile(int row, int col, int tileID) {
     if (row < 0 || row >= rows || col < 0 || col >= columns) {
         return;
     }
-    auto it = tileCatalog.find(tileID);
-    if (it == tileCatalog.end()) return;
 
+    //if ( mapData[row][col].tileID == tileID) return;
+
+    //cout << tileID << endl;
+    auto it = tileCatalog.find(tileID);
+    if (it == tileCatalog.end()) {
+        TraceLog(LOG_ERROR, "INVALID ID");
+        return;
+    }
+    if (it->second.type == ENEMY) {
+        //mapData[row][col].tileID = 0;
+
+        if (spawnEnemyCallback) {
+            EnemyType enemyType = getEnemyType(tileID);
+            Vector2 spawnPos = {
+                static_cast<float>(col * TILE_SIZE),
+                static_cast<float>(row * TILE_SIZE)
+            };
+            spawnEnemyCallback(enemyType, spawnPos);
+        }
+    }
     mapData[row][col].tileID = tileID;
     mapData[row][col].hasItem = false;
     if (it->second.type == QUESTION_BLOCK || it->second.type == COINS_BLOCK) {
         mapData[row][col].hasItem = true;
     }
+
+}
+void Map::removeTile(int row, int col) {
+    if (row < 0 || row >= rows || col < 0 || col >= columns) return;
+
+    mapData[row][col].tileID = 0;
+    mapData[row][col].hasItem = false;
+    mapData[row][col].offsetPos = { 0, 0 };
     
+    if (mapData[row][col].state) {
+        delete mapData[row][col].state;
+        mapData[row][col].state = nullptr;
+    }
 }
 
-void Map::loadFromFile(const char* filename) {
+void Map::updateTileInstancePosition(int row, int col, Vector2 offset){
+    if (row >= 0 && row < rows && col >= 0 && col < columns) {
+        mapData[row][col].offsetPos = offset;
+        //cout << mapData[row][col].offsetPos.x << " - " << mapData[row][col].offsetPos.y << endl;
+    }
+}
+
+
+void Map::loadFromFile(const char* filename, bool isEditing) {
     ifstream MyReadFile(filename);
 
     if (!MyReadFile.is_open()) {
@@ -147,46 +364,49 @@ void Map::loadFromFile(const char* filename) {
     int fileRows, fileCols;
     MyReadFile >> fileRows >> fileCols;
 
-    initMap(fileRows, fileCols); // Re-initialize map with new dimensions
+    int loadCols = isEditing ? MAX_COLUMN : fileCols;
+    initMap(fileRows, loadCols); // Re-initialize map with new dimensions
+    columns = loadCols;
+
+    cout << "column in map: " << columns << endl;
 
     for (int x = 0; x < rows; x++) {
-        for (int y = 0; y < columns; y++) {
+        for (int y = 0; y < fileCols; y++) {
             string s;
             MyReadFile >> s;
             int commaPos = s.find(',');
-            if (commaPos == string::npos) { // No comma, treat as single TileID
+
+            if (commaPos == string::npos) {
                 try {
                     int tileID = stoi(s);
                     setTile(x, y, tileID);
                 }
-                catch (const invalid_argument& ia) {
+                catch (...) {
                     cerr << "Invalid TileID in map file: " << s << " at (" << x << "," << y << ")" << endl;
-                    setTile(x, y, 0); // Default to empty
-                }
-                catch (const out_of_range& oor) {
-                    cerr << "TileID out of range in map file: " << s << " at (" << x << "," << y << ")" << endl;
-                    setTile(x, y, 0); // Default to empty
+                    setTile(x, y, 0);
                 }
             }
             else {
                 try {
                     int tileX = stoi(s.substr(0, commaPos));
                     int tileY = stoi(s.substr(commaPos + 1));
-                    // Convert (tileX, tileY) from file (1-based) to our TileID
                     int tileID = getTileIDFromCoords(tileX, tileY);
                     setTile(x, y, tileID);
                 }
-                catch (const invalid_argument& ia) {
+                catch (...) {
                     cerr << "Invalid texture coordinates in map file: " << s << " at (" << x << "," << y << ")" << endl;
-                    setTile(x, y, 0); // Default to empty
-                }
-                catch (const out_of_range& oor) {
-                    cerr << "Texture coordinates out of range in map file: " << s << " at (" << x << "," << y << ")" << endl;
-                    setTile(x, y, 0); // Default to empty
+                    setTile(x, y, 0);
                 }
             }
         }
+
+        if (isEditing) {
+            for (int y = fileCols; y < MAX_COLUMN; y++) {
+                setTile(x, y, 0);
+            }
+        }
     }
+
     cout << "Loaded file successfully: " << filename << endl;
     MyReadFile.close();
 }

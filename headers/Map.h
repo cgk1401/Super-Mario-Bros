@@ -1,17 +1,27 @@
 ﻿#pragma once
-#include "Tile.h"
+#include "../headers/Tile.h"
+#include "../headers/Global.h"
 #include "raylib.h"
 #include <map>
 #include <vector>
+#include <memory>
+#include <functional>
 using namespace std;
+
+struct TileState;
 
 struct MapTileInstance {
 	int tileID;
+    Vector2 offsetPos = { 0, 0 };
 	bool hasItem;
+
+    TileState* state = nullptr;
+
 };
 
 
 class Map {
+    friend class Collision;
 protected:
 	Texture2D texture;								                //Tileset texture
 	map<int, Tile> tileCatalog;					                    //Kho luu tru cac tile (1 dạng của Flyweight pattern)
@@ -19,22 +29,29 @@ protected:
 	vector<vector<MapTileInstance>> mapData;		                //data của từng ô: 0 0 1 0 -> 0: empty tile, 1: brick tile,...
 	vector<vector<Rectangle>> tileSetSourceRects;	                //Lưu srcRect của từng tile trong tileSet
     void createTileCatalog();
+    function<void(EnemyType, Vector2)> spawnEnemyCallback;
 public:
-    static const int side = 64; 
     int rows = 12, columns = 16;
     int tileRows, tileColumns; 
+    static constexpr int TILE_SIZE = 64;
 
     Map(const char* path, int r = 12, int c = 32);
-
+    ~Map();
     void initMap(int r, int c);
-    void update(Camera2D& camera, bool isEditing = false);
-    void loadFromFile(const char* filename);
-    void draw(Camera2D& camera, bool isEditing = false);
+    void update(bool isEditing = false);
+    void loadFromFile(const char* filenam, bool isEditing = false);
+    void draw(bool isEditing = false);
 
     Tile getTile(int tileID) const; 
-    Tile getTile(int row, int col) const; 
+    Tile getTile(int row, int col) const;
     int getTileIDFromCoords(int fileRow, int fileCol) const;
-    MapTileInstance* getMapTileInstance(int row, int col);          //Để sau có thể thay đổi trực tiếp từng tile nếu có collision(vd: khi mario nhảy chạm đầu vào block -> block bị nảy lên 1 tí,...)
+    MapTileInstance* getMapTileInstance(int row, int col);    
+    void updateTileInstancePosition(int tileRow, int tileCol, Vector2 offset);
+
+    
+    void setEnemySpawnCallback(std::function<void(EnemyType, Vector2)> callback);
+    EnemyType getEnemyType(int tileID);
 
     void setTile(int row, int col, int tileID);
+    void removeTile(int row, int col);
 };

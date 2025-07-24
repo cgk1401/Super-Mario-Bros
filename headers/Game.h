@@ -2,21 +2,33 @@
 #define GAME_H
 #include "raylib.h"
 #include "GameState.h"
+#include <vector>
+#include "Global.h"
+using namespace std;
 
+template <typename T>
+class Singleton;
 //Áp dụng Singleton Pattern
 class Game{
+    template <typename T>
+    friend class Singleton;
 private: 
-    static Game* instance;
-    GameState* currentState;
+    vector<GameState*> stateStack;
     Game();
     ~Game();
 
 public:
-    static Game* getInstance();
 
     void run();
     void init();
-    void changeState(GameState* newGameState);
+
+    void changeState(GameState* newState);
+    void replaceState(GameState* newState);
+    void addState(GameState* newGameState);
+    void pop();
+    void clear();
+    int getStateCount();
+    vector <GameState*>& getstateStack();
 };
 
 #endif

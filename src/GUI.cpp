@@ -41,8 +41,12 @@ void GUI::setTime(int t){
 bool GUI::PauseButton_IsPressed(){
     return PauseButton->IsClicked();
 }
-void GUI::update(Game& game){
-    PauseButton->update();
+void GUI::update(){
+
+    PauseButton->update(GetFrameTime());
+    if (PauseButton->IsClicked()) {       
+        Singleton<Game>::getInstance().addState(new PauseState());
+    }
     if(time > 0) time -= 2 * GetFrameTime();
     else {
         time = 0;
@@ -51,11 +55,12 @@ void GUI::update(Game& game){
     
 }
 void GUI::draw(){
-    DrawTextEx(font, TextFormat("Score\n %d", score), { hudRect.x + hudRect.width * 0.22f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, BLACK);
-    DrawTextEx(font, TextFormat("Coins\n %d", coins), { hudRect.x + hudRect.width * 0.37f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, BLACK);
-    DrawTextEx(font, TextFormat("Map\n %d", map_level), { hudRect.x + hudRect.width * 0.54f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, BLACK);
-    DrawTextEx(font, TextFormat("Time\n %d", (int)time), { hudRect.x + hudRect.width * 0.67f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, BLACK);
-    DrawTextEx(font, TextFormat("Lives\n %d", lives), {hudRect.x + hudRect.width * 0.82f, hudRect.y + hudRect.height * 0.1f}, fontSize, 5, BLACK );
+    Color textColor = WHITE;
+    DrawTextEx(font, TextFormat("Score\n %d", score), { hudRect.x + hudRect.width * 0.22f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, textColor);
+    DrawTextEx(font, TextFormat("Coins\n %d", coins), { hudRect.x + hudRect.width * 0.37f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, textColor);
+    DrawTextEx(font, TextFormat("Map\n %d", map_level), { hudRect.x + hudRect.width * 0.54f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, textColor);
+    DrawTextEx(font, TextFormat("Time\n %d", (int)time), { hudRect.x + hudRect.width * 0.67f, hudRect.y + hudRect.height * 0.1f }, fontSize, 5, textColor);
+    DrawTextEx(font, TextFormat("Lives\n %d", lives), {hudRect.x + hudRect.width * 0.82f, hudRect.y + hudRect.height * 0.1f}, fontSize, 5, textColor );
 
     PauseButton->draw();
 }
