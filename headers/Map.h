@@ -35,13 +35,15 @@ protected:
     void createTileCatalog();
     void createTileAnimation();
     function<void(EnemyType, Vector2)> spawnEnemyCallback;
+
+    pair<int, int> level;
 public:
     int rows = 12, columns = 16;
     int tileRows, tileColumns; 
     static constexpr int TILE_SIZE = 64;
 
     Map(int r = 12, int c = 32);
-    ~Map();
+    virtual ~Map();
     void initMap(int r, int c);
     void update(bool isEditing = false);
     void loadFromFile(pair<int, int> level, bool isEditing = false);

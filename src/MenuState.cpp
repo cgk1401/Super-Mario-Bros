@@ -3,6 +3,7 @@
 #include "../headers/PlayState.h"
 #include "../headers/MapEditor.h"
 #include "../headers/CharacterSelection.h"
+#include "../headers/LevelState.h"
 
 MenuState::MenuState() {
     TraceLog(LOG_INFO, "Menu: Constructor");
@@ -75,7 +76,7 @@ void MenuState::update(float deltatime){
         if (setting_buttons[0]->IsClicked()) //CHARACTER
             Singleton<Game>::getInstance().addState(new CharacterSelection);
         else if (setting_buttons[1]->IsClicked()) { //LEVEL
-
+			Singleton<Game>::getInstance().addState(new LevelState);
         }
         else if (setting_buttons[2]->IsClicked()) {
             Singleton<Game>::getInstance().changeState(new MapEditor());

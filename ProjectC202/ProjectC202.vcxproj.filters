@@ -216,6 +216,9 @@
     <ClCompile Include="..\src\PọintEffect.cpp">
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\LevelState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -385,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\PointEffect.h">
       <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\LevelState.h">
+      <Filter>Header Files\States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
