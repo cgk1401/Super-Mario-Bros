@@ -31,8 +31,7 @@ void EffectManager::spawnCoin(int row, int col){
     float y =(float) row * Map::TILE_SIZE;
 
     Vector2 spawnPos = { x + Map::TILE_SIZE / 2 - 8, y};
-    
-    effects.emplace_back(new CoinCollectEffect(spawnPos));
+    hidden_effects.emplace_back(new CoinCollectEffect(spawnPos));
 }
 
 void EffectManager::explosionEffect(Vector2 pos){
@@ -50,8 +49,11 @@ void EffectManager::koopaDeath(Vector2 position, const Texture2D& texture, Recta
     effects.emplace_back(new KoopaDeathEffect(position, texture, frame));
 }
 void EffectManager::update(float dt){
-    for(auto& b : effects){
-        b->update(dt);
+    for(auto& e : effects){
+        e->update(dt);
+    }
+    for(auto& h_e : hidden_effects){
+        h_e->update(dt);
     }
     //xoa nhung effect da hoan thanh
     effects.erase(
@@ -62,10 +64,25 @@ void EffectManager::update(float dt){
         effects.end()
     );
 
+     hidden_effects.erase(
+        remove_if(hidden_effects.begin(), hidden_effects.end(),
+            [](BaseEffect* e) {
+                return e->isFinished();
+            }),
+        hidden_effects.end()
+    );
+
 }
 
 void EffectManager::draw(){
     for(auto& b : effects){
+        b->draw(texture);
+    }
+}
+
+
+void EffectManager::drawHiddenEffects(){
+    for(auto& b: hidden_effects){
         b->draw(texture);
     }
 }

@@ -148,7 +148,7 @@
     <ClCompile Include="..\src\GameState.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GoomBa.cpp" />
-    <ClCompile Include="..\src\GUI.cpp" />
+    <ClCompile Include="..\src\HUD.cpp" />
     <ClCompile Include="..\src\ItemManager.cpp" />
     <ClCompile Include="..\src\KoopaDeathEffect.cpp" />
     <ClCompile Include="..\src\KoopaTroopa.cpp" />
@@ -196,7 +196,7 @@
     <ClInclude Include="..\headers\GameState.h" />
     <ClInclude Include="..\headers\Global.h" />
     <ClInclude Include="..\headers\GoomBa.h" />
-    <ClInclude Include="..\headers\GUI.h" />
+    <ClInclude Include="..\headers\HUD.h" />
     <ClInclude Include="..\headers\Item.h" />
     <ClInclude Include="..\headers\ItemManager.h" />
     <ClInclude Include="..\headers\KoopaDeathEffect.h" />

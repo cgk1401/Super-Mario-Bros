@@ -108,13 +108,14 @@ void FireState::HandleInput(float deltatime) {
 				}
 
 				fireballs.push_back(fireball);
+				Singleton<SoundManager>::getInstance().play(SoundType::FIREBALL);
 			}
 		}
 		// else if (IsKeyDown(KEY_P)) {
 		// 	// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
 		// 	character->setActionState(ActionState::FlagpoleHold);
 		// }
-		else if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL) && fireballs.size() != 0) {
+		if (IsKeyDown(KEY_LEFT_CONTROL) || IsKeyDown(KEY_RIGHT_CONTROL) && fireballs.size() != 0) {
 			character->setActionState(ActionState::Fireball);
 		}
 		// else {

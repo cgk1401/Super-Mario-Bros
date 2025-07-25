@@ -3,27 +3,25 @@
 #include "../headers/MenuState.h"
 
 CharacterSelection::CharacterSelection() {
-    const int amount_button = 2;
-    buttons.resize(amount_button);
 
-    ButtonLayoutConfig cfg(amount_button, 50);
-    const char* buttonLabels[amount_button] = { "Mario", "Luigi"};
-   
-    buttons = CreateButtons(buttonLabels, cfg);
     font = LoadFont("../assets/font/knightwarrior.otf");
 
     backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
 
-    background = resizedImage("../assets/GUI/Menu Background.png", screenWidth, screenHeight);
+    background = LoadTexture("../assets/GUI/Character_Seletion.png");
     characters.resize(2);
     characters[0] = LoadTexture("../assets/GUI/menu_mario.png");
     characters[1] = LoadTexture("../assets/GUI/menu_luigi.png");
-    selectCharacter = &characters[0];
+    selectCharacter = selectedCharacter == CharacterType::Mario ? &characters[0] : &characters[1];
+
+    characterChoices.resize(2);
+    characterChoices[0] = new Button("../assets/GUI/characterselection_mario.png",  screenWidth * 0.13f, screenHeight * 0.15, 250,309, "", WHITE, 0, "MARIO");
+    characterChoices[1] = new Button("../assets/GUI/characterselection_luigi.png",  screenWidth * 0.13f, screenHeight * 0.15 + 309 + 12, 250,309, "", WHITE, 0, "LUIGI");
 }
 
 CharacterSelection::~CharacterSelection() {
-    for (auto& button : buttons) delete button;
     for (auto& character : characters) UnloadTexture(character);
+    for(auto& choice: characterChoices) delete choice;
     delete backButton;
 
     UnloadTexture(background);
@@ -31,16 +29,16 @@ CharacterSelection::~CharacterSelection() {
 }
 
 void CharacterSelection::update(float deltatime) {
-    for (auto& button : buttons) {
-        button->update(deltatime);
+    for (auto& choice : characterChoices) {
+        choice->update(deltatime);
     }
     backButton->update(deltatime);
 
-    if (buttons[0]->IsClicked()) {
+    if (characterChoices[0]->IsClicked()) {
         selectCharacter = &characters[0];
         selectedCharacter = CharacterType::Mario;
     }
-    else if (buttons[1]->IsClicked()) {
+    else if (characterChoices[1]->IsClicked()) {
         selectCharacter = &characters[1];
         selectedCharacter = CharacterType::Luigi;
         
@@ -52,15 +50,24 @@ void CharacterSelection::update(float deltatime) {
 }
 
 void CharacterSelection::render() {
-    DrawTexture(background, 0, 0, WHITE);
+    DrawTexturePro(background,
+                {0,0, (float) background.width,(float) background.height},
+                {0,0, screenWidth, screenHeight},
+                 {0, 0}, 0, WHITE);
+    DrawTexturePro(*selectCharacter,
+        { 0,0,(float)selectCharacter->width, (float)selectCharacter->height },
+        { screenWidth * 0.55f, screenHeight * 0.15f, 450 , 675 },
+        { 0,0 }, 0, Fade(BLUE, 0.2f));
     backButton->draw();
-    for (auto& button : buttons) {
-        button->draw();
+    for (auto& choice : characterChoices) {
+        choice->draw();
     }
     //HEADER TITLE
-    DrawTextEx(font, "MARIO MARIO", { screenWidth * 0.33f, screenHeight * 0.1f }, 100, 5, DARKBROWN);
+    //DrawTextEx(font, "MARIO MARIO", { screenWidth * 0.33f, screenHeight * 0.1f }, 100, 5, DARKBROWN);
+   
     DrawTexturePro(*selectCharacter,
             {0,0,(float) selectCharacter->width, (float) selectCharacter->height} ,
-            {screenWidth * 0.6f, screenHeight * 0.4f,  300, 450},
+            {screenWidth * 0.5f, screenHeight * 0.3f, 350 , 525},
             {0,0}, 0, WHITE);
+    
 }

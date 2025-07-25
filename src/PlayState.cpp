@@ -8,7 +8,7 @@
 #include "../headers/SoundManager.h"
 #include "../headers/Luigi.h"
 
-PlayState::PlayState() {
+PlayState::PlayState(pair<int, int> _level) {
     Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD);
     
     if (selectedCharacter == CharacterType::Mario) {
@@ -18,18 +18,18 @@ PlayState::PlayState() {
         character = new Luigi({ 100, 200 });
     }
 
-    gui = GUI();
- 
-    map = new Map("../assets/Map/tileset_gutter64x64.png");
-
-    map->setEnemySpawnCallback(
+    character->attachObserver(&hud);
+    level = _level;
+    world[level] = new Map;
+    
+    world[level]->setEnemySpawnCallback(
         [this](EnemyType type, Vector2 pos) {
             enemies.push_back(EnemyFactory::createEnemy(type, pos));
         }
     );
 
-    map->loadFromFile("map1.txt");
-    Global::map = map;
+    world[level]->loadFromFile(level);
+    Global::map = world[level];
     camera.init({0,0});
    
     bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.05, 7.2);
@@ -39,12 +39,16 @@ PlayState::PlayState() {
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
    world_1_1 = LoadTexture("../assets/Map/World 1-1.png");
-   
-    cout << "done Constructor\n";
-   
+   PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
+
 }
 PlayState::~PlayState() {
-    delete map;
+    for (auto& [level, mapPtr] : world) {  
+            delete mapPtr;
+            mapPtr = nullptr;
+    }
+    world.clear();
+
     bg.unload();
     Singleton<ItemManager>::getInstance().clearItems();
     Singleton<SoundManager>::getInstance().stopMusic();
@@ -52,25 +56,30 @@ PlayState::~PlayState() {
 
 void PlayState::update(float dt){
     //SoundManager::get()->updateMusic();
-    camera.update(character->getBound(), map->columns * Map::TILE_SIZE);
-    gui.update(); 
+    camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
+    hud.update(); 
+    PauseButton->update(dt);
+    if (PauseButton->IsClicked()) {       
+        Singleton<Game>::getInstance().addState(new PauseState());
+    }
+
     //bg.update( mario,camera.getCamera(), dt);
     //fg.update( mario,camera.getCamera(), dt);
-    map->update();
+    world[level]->update();
 
-    Collision::handlePlayerCollision(character, map);
+    Collision::handlePlayerCollision(character, world[level]);
 
     if (character->getCurrentAction() != ActionState::Die) character->Update(dt);
     Collision::handlePlayer_EnemyCollision(character, enemies);
 
    
     Singleton<EffectManager>::getInstance().update(dt);
-    Singleton<ItemManager>::getInstance().Update(dt, character, map);
+    Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
 
     Collision::handleEnemy_EnemyCollison(enemies);
     for(auto& e: enemies){
-        Collision::handleEnemyCollision(e, map);
-        e->Update(dt, map);
+        Collision::handleEnemyCollision(e, world[level]);
+        if(e->isActive()) e->Update(dt, world[level]);
     }
     
     FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
@@ -104,20 +113,22 @@ void PlayState::render() {
                    {0 * Map::TILE_SIZE, -2 * Map::TILE_SIZE,  (float) world_1_1.width * 4, (float) world_1_1.height * 4},
                    {0,0}, 0,
                    Fade(WHITE, 0.4f));
+    Singleton<EffectManager>::getInstance().drawHiddenEffects();
+
     Singleton<ItemManager>::getInstance().Draw();
-    map->draw();
+    world[level]->draw();
 
     if (character->getCurrentAction() != ActionState::Die) character->Draw();
     //DrawRectangleLinesEx(character->getBound(), 0.5, RED);
     for(auto& e: enemies){
         e->Draw();
     }
-    Singleton<EffectManager>::getInstance().draw();
+     Singleton<EffectManager>::getInstance().draw();
     //fg.draw();
     EndMode2D();
 
-    gui.draw();
-    
+    hud.draw();
+    PauseButton->draw();
 }
 
 void PlayState::ChangeCharacter(CharacterType newtype) {

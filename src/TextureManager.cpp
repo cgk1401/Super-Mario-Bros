@@ -9,6 +9,7 @@ TextureManager::TextureManager(){
     texture.emplace(TextureType::BUTTON, LoadTexture("../assets/GUI/Button.png"));
     texture.emplace(TextureType::ITEM, LoadTexture("../assets/Item/Items Objects and NPCs.png"));
     texture.emplace(TextureType::LUIGI, LoadTexture("../assets/GUI/Luigi.png"));
+    texture.emplace(TextureType::TILESET, LoadTexture("../assets/Map/tileset_gutter64x64.png"));
     texture.emplace(TextureType::buttonPanel, LoadTexture("../Assets/Gui/buttonPanel.png"));
 }
 

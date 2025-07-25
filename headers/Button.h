@@ -18,7 +18,7 @@ private:
     Texture2D texture;
     bool useTexture;
     float scale = 1;
-    Timer expansion_time;
+    bool isPressing = false;
     std::string Tooltip;
 public:
     Button();

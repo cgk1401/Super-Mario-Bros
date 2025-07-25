@@ -35,11 +35,12 @@ private:
     Texture2D world_1_1_test;
 
 public:
-    MapEditor(const char* path, int r = 13, int c = 220);
+    MapEditor(int r = 13, int c = 220);
     Camera2D camera{};
     Camera2D cameraEditor{};
     bool IsInsideMap(int row, int col);
-    void saveToFile(const char* filename);
+    void saveToFile(pair<int, int> level);
+    void saveMapToJSON(const char* filename);
 
     //Inherit GameState
     void update(float deltatime) override;

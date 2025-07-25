@@ -16,10 +16,9 @@ class EffectManager {
     friend class Singleton;
 private:
     Texture texture;
-
     //EFFECTs
     vector<BaseEffect*> effects;
-
+    vector<BaseEffect*> hidden_effects;
     EffectManager();
     ~EffectManager() {};
 public:
@@ -34,5 +33,6 @@ public:
 
     void update(float dt);
     void draw();
+    void drawHiddenEffects();
 };
 

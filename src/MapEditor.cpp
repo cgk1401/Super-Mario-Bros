@@ -6,9 +6,10 @@
 #include "../headers/TileBehavior.h"
 #include "../headers/Global.h"
 #include "raymath.h"
+#include  "../headers/nlohmann/json.hpp"
 using namespace std;
 
-MapEditor::MapEditor(const char* path, int r, int c) : Map(path, r, c) {
+MapEditor::MapEditor(int r, int c) : Map(r, c) {
     camera.offset = { 0, screenHeight * 0.1f };
     camera.target = { 0, 0 };
     camera.rotation = 0;
@@ -24,8 +25,8 @@ MapEditor::MapEditor(const char* path, int r, int c) : Map(path, r, c) {
 
     back_button = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), 10, 10 , screenWidth / 3 * 0.5f, screenHeight * 0.15f * 0.5f, "HOME", WHITE);
 
-    tilePicking_button = new Button("../assets/GUI/mapeditor_tile_picking_tool.png", screenWidth * 0.63f, 10.0, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Paint");
-    eraserTool_button = new Button("../assets/GUI/mapeditor_eraser_tool.png", screenWidth * 0.57, 10, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Eraser Tool");
+    tilePicking_button = new Button("../assets/GUI/mapeditor_tile_picking_tool.png", screenWidth * 0.63f, 10.0, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Tile brush");
+    eraserTool_button = new Button("../assets/GUI/mapeditor_eraser_tool.png", screenWidth * 0.57, 10, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Eraser");
     save_button = new Button("../assets/GUI/mapeditor_save_button.png",  screenWidth * 0.19f, 14, screenHeight * 0.14f * 0.5f, screenHeight * 0.14f * 0.5f, "", WHITE, 0, "Save to file");
     editType = EditorMode::DRAW;
 
@@ -40,7 +41,11 @@ MapEditor::MapEditor(const char* path, int r, int c) : Map(path, r, c) {
 }
 
 
-void MapEditor::saveToFile(const char* filename) {
+void MapEditor::saveToFile(pair<int, int> level) {
+    string filename;
+    filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+
+
     ofstream MyFile(filename);
 
     if (!MyFile.is_open()) {
@@ -75,10 +80,29 @@ void MapEditor::saveToFile(const char* filename) {
     MyFile.close();
 }
 
+void MapEditor::saveMapToJSON(const char* filename){
+    nlohmann::json j;
+
+    j["width"] = 5;
+    j["height"] = 3;
+    j["tiles"] = {
+        {0, 0, 1, 0, 0},
+        {0, 1, 1, 1, 0},
+        {2, 0, 0, 0, 2}
+    };
+
+    std::ofstream file(filename);
+    file << j.dump(); 
+    file.close();
+}
 void MapEditor::handleInput() {
      float dt = GetFrameTime();
     float speed = 200;
 
+    if(IsKeyPressed(KEY_O)){
+        saveMapToJSON("testJSON");
+        cout << "SAVED TO JSON FILE\n";
+    }
     if (IsKeyDown(KEY_RIGHT)) {
         if (IsKeyDown(KEY_LEFT_CONTROL)) {
             speed = 1000;
@@ -105,10 +129,12 @@ void MapEditor::handleInput() {
             Rectangle tileDest = { (float)uiStartX + 10 + (float)c * TILE_SIZE, (float)currentY + (float)r * TILE_SIZE, (float)TILE_SIZE, (float)TILE_SIZE };
 
             if (CheckCollisionPointRec(mousePos, workplace) && CheckCollisionPointRec(mouseWorldPos, tileDest) ) {
+    
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     isDragging = true;
                     dragStartTile = { (float) r, (float)c };
                     dragEndTile = dragStartTile;
+                   
                 }
                 if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
                     dragEndTile = { (float) r, (float) c };
@@ -159,7 +185,7 @@ void MapEditor::render() {
         for (int x = 0; x < brushBuffer.size(); x++) {
             for (int y = 0; y < brushBuffer[x].size(); y++) {
                 DrawTexturePro(texture, brushBuffer[x][y], { (float)10 + 110 + x * 40, (float)screenHeight * 0.2f - 60 + y * 40, 40, 40 }, { 0,0 }, 0, WHITE);
-
+                
                 if (CheckCollisionPointRec(GetMousePosition(), mapDrawingArea)) {
                     BeginMode2D(camera);
                     Vector2 mouseOnTilePos = { (int)mouseWorld.x / TILE_SIZE,(int)mouseWorld.y / TILE_SIZE };
@@ -181,7 +207,6 @@ void MapEditor::render() {
 
     Vector2 mouseEditorWorld = GetScreenToWorld2D(GetMousePosition(), cameraEditor);
     BeginScissorMode(uiStartX + 10, currentY,screenWidth - uiStartX - 10, screenHeight - currentY);
-    
     BeginMode2D(cameraEditor);
     for (int r = 0; r < tileRows; r++) {
         for (int c = 0; c < tileSetSourceRects[r].size(); c++) {
@@ -232,7 +257,6 @@ void MapEditor::render() {
         DrawRectangleLinesEx(eraserTool_button->getBounds(), 1, YELLOW);
     }
 
-
     if (_option_buttons) {
         DrawRectangle(0, 0, screenWidth, screenHeight, Fade(BLACK, 0.6f));
         for (auto& button : option_buttons) {
@@ -240,6 +264,7 @@ void MapEditor::render() {
         }
     }
     back_button->draw();
+
     if (saveFileNoti_timer.isRunning()) {
         const float rectW = screenWidth * 0.6;
         const float rectH = 60;
@@ -254,7 +279,7 @@ void MapEditor::render() {
         SaveConfirmationDialog* currentstate = dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState());
         currentstate->render();
         if (currentstate->buttonclick[0] == true) {
-            saveToFile("map1.txt");
+            saveToFile({1,1});
             saveFileNoti_timer.start(1);
             _option_buttons = false;
             currentstate->buttonclick[0] = false;
@@ -280,7 +305,7 @@ void MapEditor::update(float deltatime) {
 
 
          if (option_buttons[0]->IsClicked()) { //LOAD
-            loadFromFile("map1.txt", true);
+            loadFromFile({1,1}, true);
             _option_buttons = false;
         }
         else if (option_buttons[1]->IsClicked()) {
@@ -288,9 +313,7 @@ void MapEditor::update(float deltatime) {
         }
         return;
     }
-
-
-    Map::update(true); // Update camera movement
+    Map::update(true);
     handleInput();
     saveFileNoti_timer.update(deltatime);
     tilePicking_button->update(deltatime);
