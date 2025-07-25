@@ -87,3 +87,11 @@ void SoundManager::updateMusic() {
     if (musicPlaying)
         UpdateMusicStream(musics[currentMusicType]);
 }
+
+Sound SoundManager::getSound(SoundType type) {
+    return sounds[type];
+}
+
+Music SoundManager::getMusic(MusicType type) {
+    return musics[type];
+}

@@ -68,4 +68,6 @@ public:
     void playMusic(MusicType type, bool loop = true);
     void stopMusic();
     void updateMusic(); // gọi mỗi frame!
+    Sound getSound(SoundType type);
+    Music getMusic(MusicType type);
 };

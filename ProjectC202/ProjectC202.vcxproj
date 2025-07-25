@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\headers\AudioSettingsMenu.cpp" />
     <ClCompile Include="..\src\Animation.cpp" />
     <ClCompile Include="..\src\AnimationManager.cpp" />
     <ClCompile Include="..\src\BrickBreakEffect.cpp" />
@@ -176,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="..\headers\Animation.h" />
     <ClInclude Include="..\headers\AnimationManager.h" />
+    <ClInclude Include="..\headers\AudioSettingsMenu.h" />
     <ClInclude Include="..\headers\BaseEffect.h" />
     <ClInclude Include="..\headers\BrickBreakEffect.h" />
     <ClInclude Include="..\headers\Button.h" />

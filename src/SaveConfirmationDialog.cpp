@@ -46,7 +46,7 @@ vector<Button*> SaveConfirmationDialog::createButtons(Texture2D& buttonPanel, in
 }
 
 SaveConfirmationDialog::SaveConfirmationDialog() {
-	buttonPanel = Singleton<TextureManager>::getInstance().load(TextureType::buttonPanel);
+	buttonPanel = Singleton<TextureManager>::getInstance().load(TextureType::BUTTONPANEL);
 
 	int width_buttonPanel = buttonPanel.width;
 	int height_buttonPanel = buttonPanel.height;
