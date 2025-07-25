@@ -17,6 +17,7 @@ void TransformState::SetAnimation(Character* c) {
 				CharacterStateType::TransformState,
 				ActionState::Idle
 			);
+			Singleton<SoundManager>::getInstance().play(SoundType::POWERUP);
 		}
 		else if (statetype == CharacterStateType::NormalState) {
 			character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
@@ -28,6 +29,8 @@ void TransformState::SetAnimation(Character* c) {
 					ActionState::Idle
 				);
 			}
+			Singleton<SoundManager>::getInstance().play(SoundType::PIPEDOWN);
+
 		}
 
 	}
@@ -40,6 +43,7 @@ void TransformState::SetAnimation(Character* c) {
 				CharacterStateType::TransformState,
 				ActionState::Idle
 			);
+			Singleton<SoundManager>::getInstance().play(SoundType::POWERUP);
 		}
 	}
 

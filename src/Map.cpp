@@ -9,7 +9,9 @@ using namespace std;
 #define MAX_COLUMN 220
 
 Map::Map(int r, int c) {
-    texture = LoadTexture("../assets/Map/tileset_gutter64x64.png");
+    texture =  LoadTexture("../assets/Map/tileset_gutter64x64.png");
+    bricks_texture = LoadTexture("../assets/Map/bricks.png");
+
     initMap(r, c);
 
     tileRows = texture.height / TILE_SIZE;
@@ -43,17 +45,9 @@ Map::Map(int r, int c) {
         }
     }
 	//this prevents some invisible tiles
-
-      /*for (int r = 0; r < tileRows; r++) {
-        cout << r <<": ";
-        for (int c = 0; c < tileSetSourceRects[r].size(); c++) {
-            cout << c <<" " ;
-        }
-        cout << endl;
-        }*/
-
-
     createTileCatalog();
+    createTileAnimation();
+
 }
 Map::~Map(){
     for (int x = 0; x < rows; x++) {
@@ -74,7 +68,6 @@ void Map::initMap(int r, int c) {
     rows = r;
     columns = c;
 
-    cout << "column in init map: " << c << endl;;
     mapRects.resize(rows, vector<Rectangle>(columns));
     mapData.resize(rows, vector<MapTileInstance>(columns));
 
@@ -87,51 +80,58 @@ void Map::initMap(int r, int c) {
     }
 }
 
+void Map::createTileAnimation(){
+    Animation questionBlock_animation;
+    for(int i = 0; i < 3; i++)
+        questionBlock_animation.frame.push_back({80 + (float) i * 16, 112, 16, 16});
+    questionBlock_animation.durationtime = 0.2f;
+    tileAnimation.emplace(TileType::QUESTION_BLOCK, questionBlock_animation);
+}
 void Map::createTileCatalog() {
     tileCatalog.clear();
     tileCatalog.emplace(0, Tile(0, tileSetSourceRects[0][0], EMPTY, new EmptyTileBehavior())); //EMPTY tile
     for (int i = 1; i < 9; i++) {
         for (int j = 1; j < 7; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tile
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tile
         }
 
         for (int j = 7; j < 9; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], BRICK, new BrickTileBehavior())); //Brick tile
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], BRICK, new BrickTileBehavior())); //Brick tile
         }
 
         for (int j = 9; j < 16; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
         }
 
-        tileCatalog.emplace(getTileIDFromCoords(i, 16), Tile(1, tileSetSourceRects[i - 1][16 - 1], PIPE, new SolidTileBehavior())); //Pipe tile
+        tileCatalog.emplace(getTileIDFromCoords(i, 16), Tile(getTileIDFromCoords(i, 16), tileSetSourceRects[i - 1][16 - 1], PIPE, new SolidTileBehavior())); //Pipe tile
 
         for (int j = 17; j < 20; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
         }
 
-        if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(1, tileSetSourceRects[i - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior())); //Question Block tile
-        else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(1, tileSetSourceRects[i - 1][20 - 1], BRICK, new BrickTileBehavior())); //Decoration tile
+        if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(getTileIDFromCoords(i, 20), tileSetSourceRects[i - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior())); //Question Block tile
+        else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(getTileIDFromCoords(i, 20), tileSetSourceRects[i - 1][20 - 1], BRICK, new QuestionTileBehavior())); //Decoration tile
         ///////// The brick which has the star
 
-        for (int j = 21; j < 23; j++) {
-            if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], ITEM, new ItemBehavior()));
+        for (int j = 21; j < 22; j++) {
+            if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], ITEM, new ItemBehavior()));
             if (i % 2 == 1) {
-                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior()));
-                tileCatalog.emplace(getTileIDFromCoords(i, j + 1), Tile(1, tileSetSourceRects[i - 1][j + 1 - 1], USED_QUESTION_BLOCK, new SolidTileBehavior()));
+                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior()));
+                tileCatalog.emplace(getTileIDFromCoords(i, j + 1), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j + 1 - 1], USED_QUESTION_BLOCK, new SolidTileBehavior()));
             }
         }
 
         for (int j = 23; j < 26; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
         }
 
-        tileCatalog.emplace(getTileIDFromCoords(i, 26), Tile(1, tileSetSourceRects[i - 1][26 - 1], LAVA_FLOOR, new DecorationTileBehavior())); //Decoration tile
+        tileCatalog.emplace(getTileIDFromCoords(i, 26), Tile(getTileIDFromCoords(i, 26), tileSetSourceRects[i - 1][26 - 1], LAVA_FLOOR, new DecorationTileBehavior())); //Decoration tile
 
-        tileCatalog.emplace(getTileIDFromCoords(i, 27), Tile(1, tileSetSourceRects[i - 1][27 - 1], GROUND, new SolidTileBehavior())); //ground tile
+        tileCatalog.emplace(getTileIDFromCoords(i, 27), Tile(getTileIDFromCoords(i, 27), tileSetSourceRects[i - 1][27 - 1], GROUND, new SolidTileBehavior())); //ground tile
 
         if (i % 2 == 1) {
             for (int j = 28; j < 31; j++) {
-                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground 
+                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground 
             }
         }
     }
@@ -141,29 +141,29 @@ void Map::createTileCatalog() {
 
     for (int i = 9; i < 21; i++) {
         for (int j = 1; j < 6; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], PIPE, new SolidTileBehavior())); //Pipe tiles
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], PIPE, new SolidTileBehavior())); //Pipe tiles
         }
 
         for (int j = 6; j < 9; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tiles
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tiles
         }
 
         for (int j = 9; j < 12; j++) {
-            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tiles
-            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tiles
+            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
         }
 
-        tileCatalog.emplace(getTileIDFromCoords(i, 12), Tile(1, tileSetSourceRects[i - 1][12 - 1], FINISHING_POLE, new DecorationTileBehavior())); //Ground tiles
+        tileCatalog.emplace(getTileIDFromCoords(i, 12), Tile(getTileIDFromCoords(i, 12), tileSetSourceRects[i - 1][12 - 1], FINISHING_POLE, new DecorationTileBehavior())); //Ground tiles
 
         for (int j = 13; j < 19; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
         }
 
-        if ( i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(1, tileSetSourceRects[i - 1][19 - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
-        else if ( i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(1, tileSetSourceRects[i - 1][19 - 1], GROUND, new SolidTileBehavior())); //Solid tiles
+        if ( i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(getTileIDFromCoords(i, 19), tileSetSourceRects[i - 1][19 - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+        else if ( i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(getTileIDFromCoords(i, 19), tileSetSourceRects[i - 1][19 - 1], GROUND, new SolidTileBehavior())); //Solid tiles
 
         for (int j = 20; j < 25; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
         }
         //Decoration
     }
@@ -171,10 +171,10 @@ void Map::createTileCatalog() {
 
     for (int i = 21; i <= tileRows; i++) {
         for (int j = 1; j < 11; j++) {
-			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], ENEMY, new DecorationTileBehavior())); //Ground tiles
+			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], ENEMY, new DecorationTileBehavior())); //Ground tiles
         }
         for (int j = 11; j < 14; j++) {
-            if (i != 23) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(1, tileSetSourceRects[i - 1][j - 1], GROUND, new DecorationTileBehavior())); //Ground tiles
+            if (i != 23) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new DecorationTileBehavior())); //Ground tiles
 		}
     }
     //temporary enemies to add to map
@@ -191,6 +191,10 @@ bool operator!=(Vector2 v1, Vector2 v2) {
 }
 void Map::update(bool isEditing) {
     float dt = GetFrameTime();
+    for(auto& [type, animation] : tileAnimation){
+        animation.Update(dt);
+    }
+
     for (int row = 0; row < rows; row++) {
         for (int col = 0; col < columns; col++) {
             int id = mapData[row][col].tileID;
@@ -218,21 +222,29 @@ void Map::draw(bool isEditing) {
 
             auto it = tileCatalog.find(id);
             if (id && it != tileCatalog.end()) {
+                Texture2D tileTexture = texture;
                 Rectangle src = it->second.srcRect;
+
                 if (it->second.type == ENEMY && isEditing == false) continue;
                 else if(it->second.type ==  TileType::QUESTION_BLOCK){
-                    // src = QUESTION_BLOCK;
+                    src = tileAnimation.at(TileType::QUESTION_BLOCK).getcurrentframe();
+                    tileTexture = bricks_texture;
                 }
+                else if(it->second.type == TileType::BRICK){
+                    src = {272, 192, 16, 16};
+                    tileTexture = bricks_texture;
+                }
+
                 Vector2 drawPos = {
                    mapRects[x][y].x + mapData[x][y].offsetPos.x,
                     mapRects[x][y].y + mapData[x][y].offsetPos.y
                 };
 
                 Rectangle destRect = { drawPos.x, drawPos.y, TILE_SIZE, TILE_SIZE };
-                DrawTexturePro(texture, src, destRect, { 0,0 }, 0, WHITE);
+                DrawTexturePro(tileTexture, src, destRect, { 0,0 }, 0, WHITE);
             }
             if (isEditing)
-                //Draw grid 
+                //Draw grid lines
                 DrawRectangleLines(mapRects[x][y].x,
                     mapRects[x][y].y,
                     TILE_SIZE,
@@ -306,7 +318,6 @@ void Map::setTile(int row, int col, int tileID) {
     }
 
     //if ( mapData[row][col].tileID == tileID) return;
-
     //cout << tileID << endl;
     auto it = tileCatalog.find(tileID);
     if (it == tileCatalog.end()) {
@@ -355,7 +366,7 @@ void Map::updateTileInstancePosition(int row, int col, Vector2 offset){
 
 void Map::loadFromFile(pair<int, int> level, bool isEditing) {
     string filename;
-    if(level == pair{1,1}) filename = "map1.txt";
+    filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
 
     ifstream MyReadFile(filename);
 
@@ -370,8 +381,6 @@ void Map::loadFromFile(pair<int, int> level, bool isEditing) {
     int loadCols = isEditing ? MAX_COLUMN : fileCols;
     initMap(fileRows, loadCols); // Re-initialize map with new dimensions
     columns = loadCols;
-
-    cout << "column in map: " << columns << endl;
 
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < fileCols; y++) {

@@ -43,7 +43,8 @@ MapEditor::MapEditor(int r, int c) : Map(r, c) {
 
 void MapEditor::saveToFile(pair<int, int> level) {
     string filename;
-    if(level == pair{1, 1}) filename = "map1.txt";
+    filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+
 
     ofstream MyFile(filename);
 
@@ -128,10 +129,12 @@ void MapEditor::handleInput() {
             Rectangle tileDest = { (float)uiStartX + 10 + (float)c * TILE_SIZE, (float)currentY + (float)r * TILE_SIZE, (float)TILE_SIZE, (float)TILE_SIZE };
 
             if (CheckCollisionPointRec(mousePos, workplace) && CheckCollisionPointRec(mouseWorldPos, tileDest) ) {
+    
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     isDragging = true;
                     dragStartTile = { (float) r, (float)c };
                     dragEndTile = dragStartTile;
+                   
                 }
                 if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
                     dragEndTile = { (float) r, (float) c };
@@ -182,7 +185,7 @@ void MapEditor::render() {
         for (int x = 0; x < brushBuffer.size(); x++) {
             for (int y = 0; y < brushBuffer[x].size(); y++) {
                 DrawTexturePro(texture, brushBuffer[x][y], { (float)10 + 110 + x * 40, (float)screenHeight * 0.2f - 60 + y * 40, 40, 40 }, { 0,0 }, 0, WHITE);
-
+                
                 if (CheckCollisionPointRec(GetMousePosition(), mapDrawingArea)) {
                     BeginMode2D(camera);
                     Vector2 mouseOnTilePos = { (int)mouseWorld.x / TILE_SIZE,(int)mouseWorld.y / TILE_SIZE };
@@ -204,7 +207,6 @@ void MapEditor::render() {
 
     Vector2 mouseEditorWorld = GetScreenToWorld2D(GetMousePosition(), cameraEditor);
     BeginScissorMode(uiStartX + 10, currentY,screenWidth - uiStartX - 10, screenHeight - currentY);
-    
     BeginMode2D(cameraEditor);
     for (int r = 0; r < tileRows; r++) {
         for (int c = 0; c < tileSetSourceRects[r].size(); c++) {
@@ -255,14 +257,6 @@ void MapEditor::render() {
         DrawRectangleLinesEx(eraserTool_button->getBounds(), 1, YELLOW);
     }
 
-
-    if (_option_buttons) {
-        DrawRectangle(0, 0, screenWidth, screenHeight, Fade(BLACK, 0.6f));
-        for (auto& button : option_buttons) {
-            button->draw();
-        }
-    }
-    back_button->draw();
     if (saveFileNoti_timer.isRunning()) {
         const float rectW = screenWidth * 0.6;
         const float rectH = 60;
@@ -271,6 +265,15 @@ void MapEditor::render() {
         DrawRectangle(startX, startY, rectW, rectH, BLACK);
         DrawText("SAVED FILE SUCCESSFULLY", startX + 50, startY + 10, 40, WHITE);
     }
+
+    if (_option_buttons) {
+        DrawRectangle(0, 0, screenWidth, screenHeight, Fade(BLACK, 0.6f));
+        for (auto& button : option_buttons) {
+            button->draw();
+        }
+    }
+    back_button->draw();
+    
 } 
 
 void MapEditor::update(float deltatime) {
@@ -291,7 +294,7 @@ void MapEditor::update(float deltatime) {
         }
         return;
     }
-    //Map::update(true); // Update camera movement
+    Map::update(true);
     handleInput();
     saveFileNoti_timer.update(deltatime);
     tilePicking_button->update(deltatime);

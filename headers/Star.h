@@ -8,7 +8,7 @@
 class Star : public Item {
     private:
     Animation animation;
-    float bounce = 80.0f;
+    float bounce = 800.0f;
     bool startRunning;
     float height;
     float startPos;
@@ -51,7 +51,7 @@ public:
         
 
         position.x += velocity.x * dt;
-        position.y += ((startRunning ? sin(GetTime() * (-5.0f)) * bounce : 0) + velocity.y) * dt ;
+        position.y +=  velocity.y * dt ;
     }
 
     void Draw(const Texture& texture) override {
@@ -66,16 +66,17 @@ public:
 
     void OnCollected(Character* player) override {
         // become invincible
+        player->ChangeMiddleState(CharacterStateType::StarmanState);
         collected = true;
     }
 
     Rectangle getBound() const override {
         Rectangle frame = animation.getcurrentframe();
-	
+        float delta = 0.5f;
         return {
-            position.x,
+            position.x + delta,
             position.y,
-            frame.width * 4,
+            frame.width * 4 - delta * 2,
             frame.height * 4
         };
     }

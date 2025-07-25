@@ -90,7 +90,24 @@ void QuestionTileBehavior::onHeadCollision(Character* character, int tileRow, in
         //cout << tileRow << " - " << tileCol << endl;
         Vector2 startPos = {(float) tileCol * Map::TILE_SIZE, (float) tileRow * Map::TILE_SIZE};
 
-        Singleton<ItemManager>::getInstance().Spawn(ItemType::MUSHROOM, startPos);
+        if(tileInstance->tileID  == 20 || tileInstance->tileID == 77 || tileInstance->tileID == 134 || tileInstance->tileID == 191){
+           if(character->getCharacterStateType() == CharacterStateType::NormalState)
+                Singleton<ItemManager>::getInstance().Spawn(ItemType::MUSHROOM, startPos);
+            else {
+                Singleton<ItemManager>::getInstance().Spawn(ItemType::FLOWER, startPos);
+            }
+            Singleton<SoundManager>::getInstance().play(SoundType::ITEMCOLLECT);
+
+        }
+        else if (tileInstance->tileID == 21 || tileInstance->tileID == 21 + 57 || tileInstance->tileID == 21 + 57 * 2 || tileInstance->tileID == 21 + 57 * 3 ){
+            Singleton<EffectManager>::getInstance().spawnCoin(tileRow, tileCol);
+            Singleton<SoundManager>::getInstance().play(SoundType::COIN);
+            character->collectCoin();
+        }
+        else if(tileInstance->tileID == 50 || tileInstance->tileID == 50 + 57 || tileInstance->tileID == 50 + 57 * 2 || tileInstance->tileID == 50 + 57 * 3 ){
+            Singleton<ItemManager>::getInstance().Spawn(ItemType::STAR, startPos);
+            Singleton<SoundManager>::getInstance().play(SoundType::ITEMCOLLECT);
+        }
         //spawn items
     }
 

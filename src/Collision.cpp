@@ -279,8 +279,8 @@ void Collision::handleStarCollision(Star* star, Map* map) {
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
-                star->position.y = tileRect.y - bound.height - 1;
-                star->velocity.y = 0;
+                star->position.y = tileRect.y - bound.height - 0.2f;
+                star->velocity.y = star->BOUNCE_FORCE;
 
                 star->onGround = true;
             }
@@ -461,8 +461,9 @@ void Collision::handlePlayer_EnemyCollision(Character* player, vector<Enemy*>& e
                         player->velocity.y = -100; //bounce a bit
 
                         //enemy->die
+
                         e->onDeath(DeathType::STOMP, player);
-                        
+                        Singleton<SoundManager>::getInstance().play(SoundType::KICKKILL);
                     }
                     else  {
                         player->DIE(e);

@@ -18,9 +18,8 @@ PlayState::PlayState(pair<int, int> _level) {
         character = new Luigi({ 100, 200 });
     }
 
-    gui = GUI();
+    character->attachObserver(&hud);
     level = _level;
-    //map = new Map();
     world[level] = new Map;
     
     world[level]->setEnemySpawnCallback(
@@ -40,9 +39,8 @@ PlayState::PlayState(pair<int, int> _level) {
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
    world_1_1 = LoadTexture("../assets/Map/World 1-1.png");
-   
-    cout << "done Constructor\n";
-   
+   PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
+
 }
 PlayState::~PlayState() {
     for (auto& [level, mapPtr] : world) {  
@@ -59,7 +57,12 @@ PlayState::~PlayState() {
 void PlayState::update(float dt){
     //SoundManager::get()->updateMusic();
     camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
-    gui.update(); 
+    hud.update(); 
+    PauseButton->update(dt);
+    if (PauseButton->IsClicked()) {       
+        Singleton<Game>::getInstance().addState(new PauseState());
+    }
+
     //bg.update( mario,camera.getCamera(), dt);
     //fg.update( mario,camera.getCamera(), dt);
     world[level]->update();
@@ -110,6 +113,8 @@ void PlayState::render() {
                    {0 * Map::TILE_SIZE, -2 * Map::TILE_SIZE,  (float) world_1_1.width * 4, (float) world_1_1.height * 4},
                    {0,0}, 0,
                    Fade(WHITE, 0.4f));
+    Singleton<EffectManager>::getInstance().drawHiddenEffects();
+
     Singleton<ItemManager>::getInstance().Draw();
     world[level]->draw();
 
@@ -118,12 +123,12 @@ void PlayState::render() {
     for(auto& e: enemies){
         e->Draw();
     }
-    Singleton<EffectManager>::getInstance().draw();
+     Singleton<EffectManager>::getInstance().draw();
     //fg.draw();
     EndMode2D();
 
-    gui.draw();
-    
+    hud.draw();
+    PauseButton->draw();
 }
 
 void PlayState::ChangeCharacter(CharacterType newtype) {

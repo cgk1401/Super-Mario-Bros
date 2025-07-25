@@ -5,7 +5,7 @@
 #include "Animation.h"
 #include "CharacterState.h"
 #include "Global.h"
-
+#include "OBSERVER/Subject.h"
 using namespace std;
 
 class CharacterState;
@@ -18,7 +18,7 @@ class StarmanState;
 
 class Map;
 
-class Character {
+class Character : public Subject {
 	friend class Collision;
 	friend class CharacterState;
 	friend class NormalState;
@@ -64,4 +64,6 @@ public:
 	void Draw();
 	void Update(float deltatime);
 	void HandleInput(float dt);
+
+	void collectCoin();
 };

@@ -16,7 +16,9 @@ Character::~Character() {
 		currentState = nullptr;
 	}
 }
-
+void Character::collectCoin(){
+	notify(EventType::COIN_COLLECT);
+}
 void Character::ChangeState(CharacterStateType newState, CharacterStateType previosState) {
 	if (currentState) {
 		delete currentState;
@@ -77,11 +79,11 @@ void Character::setDirection(Direction newDirection) {
 }
 Rectangle Character::getBound() const {
     Rectangle frame = animations.at(currentAction).getcurrentframe();
-	
+	float delta = 1.0f; //narrow the width of player
     return {
-        position.x,
+        position.x + delta,
         position.y,
-        frame.width * scale,
+        frame.width * scale - delta * 2,
         frame.height * scale
     };
 }
@@ -129,6 +131,8 @@ void Character::Draw() {
 			}
 		}
 	}
+
+	DrawRectangleLinesEx(getBound(), 0.4f, RED);
 
 }
 float approach(float current, float target, float increase) {
@@ -183,7 +187,9 @@ void Character::HandleInput(float deltatime) {
 
 	if (IsKeyDown(KEY_SPACE)) {
 		if (isGround) {
-			Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
+			if(getCharacterStateType() == CharacterStateType::NormalState)
+				Singleton<SoundManager>::getInstance().play(SoundType::JUMP_SMALL);
+			else  Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 			velocity.y = config.JUMPFORCE;
 			isGround = false;
 			isJumpingUp = true;
@@ -241,6 +247,7 @@ void Character::DIE(Enemy* e){
 	if(getCharacterStateType() == CharacterStateType::NormalState){
 		currentAction = ActionState::Die;
 		Singleton<EffectManager>::getInstance().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
+		Singleton<SoundManager>::getInstance().play(SoundType::DIE);
 	}
 	else if(getCharacterStateType() == CharacterStateType::SuperState || getCharacterStateType() == CharacterStateType::FireState){
 		//TRANSFORM GRADUALLY TO NORMAL STATE

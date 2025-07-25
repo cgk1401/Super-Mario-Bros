@@ -4,7 +4,7 @@
 #include <map>
 
 #include "../headers/GameState.h"
-#include "../headers/GUI.h"
+#include "../headers/HUD.h"
 #include "../headers/PauseState.h"
 #include "../headers/Map.h"
 #include "../headers/CameraController.h"
@@ -26,7 +26,7 @@ public:
 
 
 private:
-    GUI gui;
+    HUD hud;
     //Map* map;
     //Manage the level for each world
     std::map<pair<int, int>, Map*> world; //world[1][1] -> level 1-1'
@@ -40,6 +40,8 @@ private:
     CameraController camera;
     ParallaxManager bg; //background
     ParallaxManager fg; //foreground
+
+    Button* PauseButton;
 };
 
 #endif
