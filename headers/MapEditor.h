@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "../headers/Map.h"
 #include "../headers/Global.h"
 #include "../headers/GameState.h"
@@ -14,7 +14,7 @@ enum class EditorMode {
 class MapEditor : public Map, public GameState {
 private:
     //int selectedTileID = 0;  
-    Button* back_button;
+    Button* back_button; //nút home
     vector<Button*> option_buttons;
     Button* tilePicking_button;
     Button* eraserTool_button;
@@ -46,7 +46,5 @@ public:
     void render() override;
 
     void handleInput();
-
-    SaveConfirmationDialog save;
 
 };

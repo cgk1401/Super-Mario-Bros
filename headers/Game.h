@@ -29,6 +29,8 @@ public:
     void clear();
     int getStateCount();
     vector <GameState*>& getstateStack();
+
+    GameState* getFirstState();
 };
 
 #endif

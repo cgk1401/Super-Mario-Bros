@@ -207,8 +207,8 @@
     <ClCompile Include="..\src\Textbox.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\headers\SaveConfirmationDialog.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\src\SaveConfirmationDialog.cpp">
+      <Filter>Source Files\States</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -248,7 +248,26 @@ void MapEditor::render() {
         DrawRectangle(startX, startY, rectW, rectH, BLACK);
         DrawText("SAVED FILE SUCCESSFULLY", startX + 50, startY + 10, 40, WHITE);
     }
-    save.render();
+    
+    // Đặt logic update SaveConfirmationDialog trong render mới có thể cập nhật các phím vì update của mapeditor = false 
+    if (dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState()) != nullptr) {
+        SaveConfirmationDialog* currentstate = dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState());
+        currentstate->render();
+        if (currentstate->buttonclick[0] == true) {
+            saveToFile("map1.txt");
+            saveFileNoti_timer.start(1);
+            _option_buttons = false;
+            currentstate->buttonclick[0] = false;
+            Singleton<Game>::getInstance().pop();
+        }
+        else {
+            if (currentstate->buttonclick[1] == true || currentstate->buttonclick[2] == true) {
+                _option_buttons = false;
+                Singleton<Game>::getInstance().pop();
+            }
+        }
+    }
+
 } 
 
 void MapEditor::update(float deltatime) {
@@ -284,10 +303,11 @@ void MapEditor::update(float deltatime) {
     else if (eraserTool_button->IsClicked()) {
         editType = EditorMode::ERASE;
     }
-    else if(save_button->IsClicked()){
-        saveToFile("map1.txt");
-        saveFileNoti_timer.start(1);
-        _option_buttons = false;
+    else if(save_button->IsClicked() && dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState()) == nullptr){
+        Singleton<Game>::getInstance().addState(new SaveConfirmationDialog());
+        //saveToFile("map1.txt");
+        //saveFileNoti_timer.start(1);
+        //_option_buttons = false;
         
     }
     
@@ -378,8 +398,6 @@ void MapEditor::update(float deltatime) {
     else if(camera.target.x > TILE_SIZE * columns){
         camera.target.x = TILE_SIZE * columns;
     }*/
-
-    save.update(deltatime);
 }
 
 bool MapEditor::IsInsideMap(int row, int col){

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "GameState.h"
+#include "MapEditor.h"
 #include <vector>
 using namespace std;
 
@@ -18,10 +19,14 @@ private :
         vector <Color> colorButton, 
         vector <Color> colorText,
         vector <Color> hoverButton);
+    const char* text = "DO YOU WANT TO SAVE YOUR WORK?";
+    Vector2 posistionText;
 
 public :
 	SaveConfirmationDialog();
 	~SaveConfirmationDialog();
+
+    vector <bool> buttonclick;
 
     void update(float deltatime) override;
     void render() override;
