@@ -59,7 +59,17 @@ enum class Direction {
 enum class EnemyType {
 	GOOMBA,
 	KOOPA,
+	KOOPA_SHELL,
 	PIRANT_PLANT
+};
+
+
+enum class ItemType {
+	NONE = 0,
+	COIN = 1,
+	MUSHROOM = 2,
+	FLOWER = 3,
+	STAR = 4
 };
 
 enum class DeathType

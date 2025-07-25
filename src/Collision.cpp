@@ -461,8 +461,9 @@ void Collision::handlePlayer_EnemyCollision(Character* player, vector<Enemy*>& e
                         player->velocity.y = -100; //bounce a bit
 
                         //enemy->die
-
+                        player->killEnemy(e->getType(), e->position);
                         e->onDeath(DeathType::STOMP, player);
+                        
                         Singleton<SoundManager>::getInstance().play(SoundType::KICKKILL);
                     }
                     else  {

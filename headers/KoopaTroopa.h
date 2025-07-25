@@ -39,4 +39,5 @@ public :
 	void moveRight();
 	void Fall();
 	
+	EnemyType getType() const;
 };

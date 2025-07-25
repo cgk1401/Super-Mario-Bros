@@ -88,3 +88,7 @@ void PiranhaPlant::Draw() {
 	bound = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
 	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
 }
+
+EnemyType PiranhaPlant::getType() const {
+	return EnemyType::PIRANT_PLANT;
+}

@@ -30,6 +30,8 @@ public:
 	virtual void LoadSource() = 0;
 	virtual void onDeath(DeathType type, Character* player = nullptr) = 0;
 	virtual bool isDead() = 0; 
+
+	virtual EnemyType getType() const = 0;
 	virtual void changeDirection(Direction newDirection) {
 		if (direction != newDirection) 
 			direction = newDirection;

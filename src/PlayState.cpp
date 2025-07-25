@@ -18,7 +18,10 @@ PlayState::PlayState(pair<int, int> _level) {
         character = new Luigi({ 100, 200 });
     }
 
+    EffectManager* effects = &Singleton<EffectManager>::getInstance();
     character->attachObserver(&hud);
+    character->attachObserver(effects);
+    
     level = _level;
     world[level] = new Map;
     
@@ -38,7 +41,6 @@ PlayState::PlayState(pair<int, int> _level) {
     
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
-   world_1_1 = LoadTexture("../assets/Map/World 1-1.png");
    PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
 
 }
@@ -108,11 +110,11 @@ void PlayState::render() {
     
     BeginMode2D(camera.getCamera());
     //bg.draw();
-    DrawTexturePro(world_1_1,
-                   { 0,0, (float) world_1_1.width, (float) world_1_1.height},
-                   {0 * Map::TILE_SIZE, -2 * Map::TILE_SIZE,  (float) world_1_1.width * 4, (float) world_1_1.height * 4},
-                   {0,0}, 0,
-                   Fade(WHITE, 0.4f));
+    // DrawTexturePro(world_1_1,
+    //                { 0,0, (float) world_1_1.width, (float) world_1_1.height},
+    //                {0 * Map::TILE_SIZE, -2 * Map::TILE_SIZE,  (float) world_1_1.width * 4, (float) world_1_1.height * 4},
+    //                {0,0}, 0,
+    //                Fade(WHITE, 0.4f));
     Singleton<EffectManager>::getInstance().drawHiddenEffects();
 
     Singleton<ItemManager>::getInstance().Draw();

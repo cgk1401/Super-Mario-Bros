@@ -79,7 +79,7 @@ void Character::setDirection(Direction newDirection) {
 }
 Rectangle Character::getBound() const {
     Rectangle frame = animations.at(currentAction).getcurrentframe();
-	float delta = 1.0f; //narrow the width of player
+	float delta = 4.0f; //narrow the width of player
     return {
         position.x + delta,
         position.y,
@@ -256,4 +256,20 @@ void Character::DIE(Enemy* e){
 	else if (getCharacterStateType() == CharacterStateType::StarmanState) {
 		e->onDeath(DeathType::FALLING);
 	}
+}
+
+void Character::breakBrick(){
+	notify(EventType::BRICK_BREAK);
+}
+
+void Character::killEnemy(EnemyType type, Vector2 enemyPosition){
+	if(type == EnemyType::GOOMBA) notify(EventType::ENEMY_KILL_GOOMBA, &enemyPosition);
+	else if(type == EnemyType::KOOPA) notify(EventType::ENEMY_KILL_KOOPA, &enemyPosition);
+}
+
+void Character::collectItem(ItemType type, Vector2 itemPosition)
+{
+	if (type == ItemType::MUSHROOM) notify(EventType::POWERUP_COLLECT_MUSHROOM, &itemPosition);
+	else if (type == ItemType::FLOWER) notify(EventType::POWERUP_COLLECT_FLOWER, &itemPosition);
+	else if (type == ItemType::STAR) notify(EventType::POWERUP_COLLECT_STAR, &itemPosition);
 }

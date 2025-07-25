@@ -32,7 +32,6 @@ private:
     std::map<pair<int, int>, Map*> world; //world[1][1] -> level 1-1'
     pair<int, int> level = {1, 1};
 
-    Texture2D world_1_1;
     //Character* mario = new Mario({100, 200});
     Character* character;
     vector<Enemy*> enemies;

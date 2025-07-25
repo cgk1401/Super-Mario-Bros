@@ -66,4 +66,7 @@ public:
 	void HandleInput(float dt);
 
 	void collectCoin();
+	void breakBrick();
+	void killEnemy(EnemyType type, Vector2 enemyPosition);
+	void collectItem(ItemType type, Vector2 itemPosition);
 };

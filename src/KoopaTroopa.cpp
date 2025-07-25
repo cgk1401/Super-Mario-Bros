@@ -135,3 +135,9 @@ void KoopTroopa::onDeath(DeathType type, Character* source) {
 		break;
 	}
 }
+
+EnemyType KoopTroopa::getType() const{
+	if(this->currentState == KoopaState::Shell)
+		return EnemyType::KOOPA_SHELL;
+	return EnemyType::KOOPA;
+}

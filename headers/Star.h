@@ -2,8 +2,6 @@
 #include "../headers/TransformState.h"
 #include "../headers/Map.h"
 
-#define GRAVITY 1000
-
 
 class Star : public Item {
     private:
@@ -16,7 +14,7 @@ class Star : public Item {
     Direction direction;
     bool onGround = false;
 
-    const float BOUNCE_FORCE = -sqrt(2 * GRAVITY * (Map::TILE_SIZE * 2));
+    const float BOUNCE_FORCE = -sqrt(2 * 1000 * (Map::TILE_SIZE * 2));
 public:
     friend class Collision;
     Star(Vector2 pos, const Animation& ani): animation(ani) { 
@@ -46,7 +44,7 @@ public:
             else if (direction == Direction::Left){
                 velocity.x = -100;
             }
-            velocity.y += GRAVITY * dt;
+            velocity.y += 1000 * dt;
         }
         
 
@@ -67,6 +65,7 @@ public:
     void OnCollected(Character* player) override {
         // become invincible
         player->ChangeMiddleState(CharacterStateType::StarmanState);
+        player->collectItem(ItemType::STAR, position);
         collected = true;
     }
 
