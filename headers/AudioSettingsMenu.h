@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "GameState.h"
 #include "../headers/Global.h"
@@ -13,6 +13,18 @@ private :
 
     float musicVolume;
     float soundVolume;
+
+    Rectangle musicSlider;
+    Rectangle soundSlider;
+    Rectangle musicSliderHandle;
+    Rectangle soundSliderHandle;
+
+    const char* musicText = "MUSIC";
+    const char* soundText = "SOUND";
+    Color darkYellow = { 204, 153, 0, 255 };
+    float LEFT_MARGIN = 30;
+    bool draggingMusicSlider;
+    bool draggingSoundSlider;
 public :
     AudioSettingsMenu();
     ~AudioSettingsMenu();
