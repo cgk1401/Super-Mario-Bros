@@ -29,6 +29,8 @@ enum class SoundType {
     GAMEOVER1,
     GAMEOVER2,
     BEEP,
+    HOVER_BUTTON,
+    CLICK_BUTTON,
 };
 
 enum class MusicType {
@@ -45,6 +47,7 @@ enum class MusicType {
     HURRY_CASTLE,
     HURRY_UNDERWATER,
     STARMAN,
+    MENU_,
 };
 
 class SoundManager {

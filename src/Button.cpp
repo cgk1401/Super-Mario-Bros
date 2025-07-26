@@ -88,6 +88,7 @@ void Button::update(float deltatime) {
     if (isHovered) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             isPressing = true;
+            Singleton<SoundManager>::getInstance().play(SoundType::CLICK_BUTTON);
         }
 
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) && isPressing) {

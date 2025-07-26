@@ -19,6 +19,7 @@ private:
     Button* eraserTool_button;
     Button* save_button;
     Button* uploadFile_button;
+    Button* play_button;
 
     Timer saveFileNoti_timer;
     EditorMode editType;
@@ -36,10 +37,8 @@ private:
               world_1_2, world_1_2_A, world_1_2_B,
               world_1_3,
               world_1_4;
-
-    pair<int, int> level = {1,1};
 public:
-    MapEditor(pair<int, int> level  = {1,1},int r = 13, int c = 220);
+    MapEditor(pair<int, int> level  = {1,1},int r = 15, int c = 220);
     ~MapEditor();
     Camera2D camera{};
     Camera2D cameraEditor{};

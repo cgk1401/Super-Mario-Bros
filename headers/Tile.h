@@ -14,7 +14,8 @@ enum TileType {
 	ITEM,					// item tile, can be mushroom, flower, star, coin, etc.
 	LAVA_FLOOR,				// lava tile, can be used for traps
 	FINISHING_POLE,			// finishing pole tile, used in some levels to mark the end. trigger some events when mario touches it
-	ENEMY
+	ENEMY,
+	STAR_BRICK,
 	//list ra hết mấy loại tile nha...
 };
 

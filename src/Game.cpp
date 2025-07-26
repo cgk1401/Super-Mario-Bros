@@ -32,7 +32,8 @@ void Game::run(){
         }
     
         BeginDrawing();
-            ClearBackground(Color{92, 148, 252});
+            Color bgColor = Color{92, 148, 252};
+            ClearBackground(bgColor);
             //Vẽ 
             
             for (int i = 0; i < stateStack.size(); i++) {

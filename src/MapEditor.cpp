@@ -7,9 +7,10 @@
 #include "../headers/Global.h"
 #include "raymath.h"
 #include  "../headers/nlohmann/json.hpp"
+#include "../headers/PlayState.h"
 using namespace std;
 
-MapEditor::MapEditor(pair<int, int> level ,int r, int c) : Map(r, c) {
+MapEditor::MapEditor(pair<int, int> level ,int r, int c) : Map(level, r, c) {
     camera.offset = { 0, screenHeight * 0.1f };
     camera.target = { 0, 0 };
     camera.rotation = 0;
@@ -29,7 +30,7 @@ MapEditor::MapEditor(pair<int, int> level ,int r, int c) : Map(r, c) {
     eraserTool_button = new Button("../assets/GUI/mapeditor_eraser_tool.png", screenWidth * 0.57, 10, screenHeight * 0.15f * 0.5f, screenHeight * 0.15f * 0.5f, "", WHITE, 0, "Eraser");
     save_button = new Button("../assets/GUI/mapeditor_save_button.png",  screenWidth * 0.19f, 14, screenHeight * 0.14f * 0.5f, screenHeight * 0.14f * 0.5f, "", WHITE, 0, "Save");
     uploadFile_button = new Button("../assets/GUI/mapeditor_uploadfile_button.png", screenWidth * 0.19f + screenHeight * 0.14f * 0.5f + 10, 14, screenHeight * 0.14f * 0.5f, screenHeight * 0.14f * 0.5f, "", WHITE, 0, "Load file");
-
+    play_button = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), screenWidth * 0.35f  , 14, screenWidth / 3 * 0.35f, screenHeight * 0.15f * 0.5f, "PLAY", WHITE, 20, "TEST MAP");
     editType = EditorMode::DRAW;
 
     const int amount_button = 1;
@@ -162,7 +163,7 @@ void MapEditor::handleInput() {
                 if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
                     dragEndTile = { (float) r, (float) c };
                 }
-                if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+                if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON) && isDragging) {
                     isDragging = false;
                     
                     // Tạo buffer vùng copy
@@ -175,7 +176,7 @@ void MapEditor::handleInput() {
                     for (int y = minY; y <= maxY; y++) {
                         vector<Rectangle> row;
                         for (int x = minX; x <= maxX; x++) {
-                            row.push_back(tileSetSourceRects[x][y]); // copy tile
+                                row.push_back(tileSetSourceRects[x][y]); // copy tile
                         }
                         brushBuffer.push_back(row);
                     }
@@ -198,7 +199,7 @@ void MapEditor::render() {
     BeginMode2D(camera);
      DrawTexturePro(getTextureByLevel(level),
                    { 0,0, (float) world_1_1.width, (float) world_1_1.height},
-                   {0 * Map::TILE_SIZE, -2 * Map::TILE_SIZE,  (float) world_1_1.width * 4, (float) world_1_1.height * 4},
+                   {0 * Map::TILE_SIZE, 0 * Map::TILE_SIZE,  (float) world_1_1.width * 4, (float) world_1_1.height * 4},
                    {0,0}, 0,
                    Fade(WHITE, 0.4f));
     Map::draw(true); // Draw map with grid lines
@@ -274,6 +275,8 @@ void MapEditor::render() {
     eraserTool_button->draw();
     save_button->draw();
     uploadFile_button->draw();
+    play_button->draw();
+
     if (editType == EditorMode::DRAW) {
         DrawRectangleLinesEx(tilePicking_button->getBounds(), 1, YELLOW);
     }
@@ -323,6 +326,7 @@ void MapEditor::update(float deltatime) {
     eraserTool_button->update(deltatime);
     save_button->update(deltatime);
     uploadFile_button->update(deltatime);
+    play_button->update(deltatime);
 
     if (tilePicking_button->IsClicked()) {
         editType = EditorMode::DRAW;
@@ -339,7 +343,9 @@ void MapEditor::update(float deltatime) {
     else if (uploadFile_button->IsClicked()) {
         loadFromFile(level, true);
     }
-    
+    else if (play_button->IsClicked()){
+        Singleton<Game>::getInstance().changeState(new PlayState(level));
+    }
     uiWidth = screenWidth - (int)mapWidth;
     int uiStartX = mapWidth;
     Vector2 mouseWorld = GetScreenToWorld2D(GetMousePosition(), camera);

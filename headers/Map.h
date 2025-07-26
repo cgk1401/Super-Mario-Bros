@@ -36,13 +36,13 @@ protected:
     void createTileAnimation();
     function<void(EnemyType, Vector2)> spawnEnemyCallback;
 
-    pair<int, int> level;
+    pair<int, int> level = {1,1};
 public:
     int rows = 12, columns = 16;
     int tileRows, tileColumns; 
     static constexpr int TILE_SIZE = 64;
 
-    Map(int r = 12, int c = 32);
+    Map(pair<int, int> level = {1,1},int r = 12, int c = 32);
     virtual ~Map();
     void initMap(int r, int c);
     void update(bool isEditing = false);

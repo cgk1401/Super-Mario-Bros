@@ -6,6 +6,7 @@
 #include "../headers/LevelState.h"
 
 MenuState::MenuState() {
+    Singleton<SoundManager>::getInstance().playMusic(MusicType::MENU_, true);
     TraceLog(LOG_INFO, "Menu: Constructor");
     // Mario Mario : fontsize = 100;
     const int amount_button = 3;
@@ -45,7 +46,6 @@ MenuState::~MenuState() {
         delete button;
     }
 
-
     UnloadTexture(background);
     UnloadTexture(mario_character);
     UnloadFont(font);
@@ -53,14 +53,14 @@ MenuState::~MenuState() {
 
 void MenuState::update(float deltatime){
     //textbox.update();
+    Singleton<SoundManager>::getInstance().updateMusic();
     if (selectedButton == 0) {
         for (auto& button : buttons) {
             button->update(deltatime);
         }
 
         if (buttons[0]->IsClicked()) {
-            Singleton<Game>::getInstance().clear();
-            Singleton<Game>::getInstance().addState(new PlayState());
+            Singleton<Game>::getInstance().changeState(new PlayState());
         }
         else if (buttons[1]->IsClicked()) {
             selectedButton = 1; //setting_buttons
@@ -107,7 +107,7 @@ void MenuState::render(){
     
     DrawTexturePro(selectedCharacter == CharacterType::Mario ? mario_character : luigi_character,
         { 0,0, 1024, 1536 },
-        { screenWidth * 0.6f, screenHeight * 0.4f, 300, 450 },
+        { screenWidth * 0.6f, screenHeight * 0.4f, screenHeight / (1.77f * 1.50f), screenHeight / 1.77f },
         { 0,0 }, 0,
         WHITE
     );

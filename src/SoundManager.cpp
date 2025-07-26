@@ -32,22 +32,24 @@ void SoundManager::load() {
 	sounds[SoundType::GAMEOVER1] = LoadSound("../assets/sfx/gameover.wav");
 	sounds[SoundType::GAMEOVER2] = LoadSound("../assets/sfx/gameover2.wav");
 	sounds[SoundType::BEEP] = LoadSound("../assets/sfx/beep.wav");
-
+    sounds[SoundType::HOVER_BUTTON] = LoadSound("../assets/GUI/sound/hover-button.mp3");
+    sounds[SoundType::CLICK_BUTTON] = LoadSound("../assets/GUI/sound/button-click.mp3");
 
     // Music
-     musics[MusicType::MAIN_THEME_OVERWORLD] = LoadMusicStream("../assets/music/DEFAULT_OVERWORLD_THEME.mp3");
-	 musics[MusicType::MAIN_THEME_UNDERGROUND] = LoadMusicStream("../assets/music/DEFAULT_UNDERGROUND_THEME.mp3");
-	 musics[MusicType::MAIN_THEME_CASTLE] = LoadMusicStream("../assets/music/DEFAULT_CASTLE_THEME.mp3");
-	 musics[MusicType::MAIN_THEME_UNDERWATER] = LoadMusicStream("../assets/music/DEFAULT_UNDERWATER_THEME.mp3");
-	 musics[MusicType::LEVEL_COMPLETE] = LoadMusicStream("../assets/music/LEVEL_COMPLETE.mp3");
-     musics[MusicType::WORLD_CLEAR] = LoadMusicStream("../assets/music/WORLD_CLEAR.mp3");
-     musics[MusicType::CASTLE_COMPLETE] = LoadMusicStream("../assets/music/CASTLE_COMPLETE.mp3");
-	 musics[MusicType::ENDING] = LoadMusicStream("../assets/music/ENDING.mp3");
-	 musics[MusicType::HURRY_UNDERGROUND] = LoadMusicStream("../assets/music/HURRY_UNDERGROUND.mp3");
-	 musics[MusicType::HURRY_OVERWORLD] = LoadMusicStream("../assets/music/HURRY_OVERWORLD.mp3");
-	 musics[MusicType::HURRY_CASTLE] = LoadMusicStream("../assets/music/HURRY_CASTLE.mp3");
-	 musics[MusicType::HURRY_UNDERWATER] = LoadMusicStream("../assets/music/HURRY_UNDERWATER.mp3");
-     musics[MusicType::STARMAN] = LoadMusicStream("../assets/music/Starman.mp3");
+     musics[MusicType::MAIN_THEME_OVERWORLD] = LoadMusicStream("../assets/music/Mario/DEFAULT_OVERWORLD_THEME.mp3");
+	 musics[MusicType::MAIN_THEME_UNDERGROUND] = LoadMusicStream("../assets/music/Mario/DEFAULT_UNDERGROUND_THEME.mp3");
+	 musics[MusicType::MAIN_THEME_CASTLE] = LoadMusicStream("../assets/music/Mario/DEFAULT_CASTLE_THEME.mp3");
+	 musics[MusicType::MAIN_THEME_UNDERWATER] = LoadMusicStream("../assets/music/Mario/DEFAULT_UNDERWATER_THEME.mp3");
+	 musics[MusicType::LEVEL_COMPLETE] = LoadMusicStream("../assets/music/Mario/LEVEL_COMPLETE.mp3");
+     musics[MusicType::WORLD_CLEAR] = LoadMusicStream("../assets/music/Mario/WORLD_CLEAR.mp3");
+     musics[MusicType::CASTLE_COMPLETE] = LoadMusicStream("../assets/music/Mario/CASTLE_COMPLETE.mp3");
+	 musics[MusicType::ENDING] = LoadMusicStream("../assets/music/Mario/ENDING.mp3");
+	 musics[MusicType::HURRY_UNDERGROUND] = LoadMusicStream("../assets/music/Mario/HURRY_UNDERGROUND.mp3");
+	 musics[MusicType::HURRY_OVERWORLD] = LoadMusicStream("../assets/music/Mario/HURRY_OVERWORLD.mp3");
+	 musics[MusicType::HURRY_CASTLE] = LoadMusicStream("../assets/music/Mario/HURRY_CASTLE.mp3");
+	 musics[MusicType::HURRY_UNDERWATER] = LoadMusicStream("../assets/music/Mario/HURRY_UNDERWATER.mp3");
+     musics[MusicType::STARMAN] = LoadMusicStream("../assets/music/Mario/Starman.mp3");
+     musics[MusicType::MENU_] = LoadMusicStream("../assets/music/childhood_theme_music.mp3");
 
 }
 

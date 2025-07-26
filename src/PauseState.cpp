@@ -8,7 +8,7 @@ PauseState::PauseState() {
     buttons.resize(amount_button);
 
     ButtonLayoutConfig cfg(amount_button);
-    const char* buttonLabels[4] = { "RESUME", "RESTART", "SAVE", "MENU" };
+    const char* buttonLabels[4] = { "RESUME", "RESTART", "SAVE", "QUIT" };
     buttons = CreateButtons(buttonLabels, cfg);
 }
 
@@ -26,12 +26,10 @@ void PauseState::update(float deltatime){
 
     //Button Clicking
     if(buttons[3]->IsClicked()){ //Menu 
-        Singleton<Game>::getInstance().clear();
-        Singleton<Game>::getInstance().addState(new MenuState);
+        Singleton<Game>::getInstance().changeState(new MenuState);
     }
     else if (buttons[1]->IsClicked()) { //Restart
-        Singleton<Game>::getInstance().clear();
-        Singleton<Game>::getInstance().addState(new PlayState);
+        Singleton<Game>::getInstance().changeState(new PlayState(Global::level));
     }
     else if (buttons[0]->IsClicked()) {
         Singleton<Game>::getInstance().pop();

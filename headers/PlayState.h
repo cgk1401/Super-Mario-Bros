@@ -22,6 +22,7 @@ public:
     ~PlayState();
     void update(float deltatime) override;
     void render() override;
+    bool allowUpdateBelow() override {return false;}
     void ChangeCharacter(CharacterType newtype);
 
 

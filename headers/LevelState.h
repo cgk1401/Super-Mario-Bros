@@ -15,7 +15,6 @@ private:
 	vector<Rectangle> levelSigns;
 	Font font;
 
-	vector<Map*> world;
 public: 
 	LevelState();
 	~LevelState();

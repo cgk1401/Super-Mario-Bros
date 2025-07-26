@@ -16,8 +16,8 @@
 //using json = nlohmann::json;
 
 using namespace std;
-const int screenWidth = 1200; //1024
-const int screenHeight = 800; //768
+const int screenWidth = 1320; //1200 
+const int screenHeight = 900; //800
 Texture2D resizedImage(const char* imagePath, float width, float height);
 class Map;
 class Enemy;
@@ -82,6 +82,7 @@ class Global {
 public:
     static Map* map;
 	static Camera2D camera;
+	static pair<int,int> level;
 };
 
 bool operator==(pair<int, int> a, pair<int,int>b);
