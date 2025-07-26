@@ -33,13 +33,6 @@ MapEditor::MapEditor(pair<int, int> level ,int r, int c) : Map(level, r, c) {
     play_button = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), screenWidth * 0.35f  , 14, screenWidth / 3 * 0.35f, screenHeight * 0.15f * 0.5f, "PLAY", WHITE, 20, "TEST MAP");
     editType = EditorMode::DRAW;
 
-    const int amount_button = 1;
-    ButtonLayoutConfig cfg(amount_button);
-    const char* buttonLabels[amount_button] = {"QUIT" };
-
-    option_buttons = CreateButtons(buttonLabels, cfg);
-
-
     world_1_1   = LoadTexture("../assets/Map/World 1-1.png");
     world_1_2_A = LoadTexture("../assets/Map/World 1-2_A.png");
     world_1_2_B = LoadTexture("../assets/Map/World 1-2_B.png");
@@ -50,8 +43,6 @@ MapEditor::MapEditor(pair<int, int> level ,int r, int c) : Map(level, r, c) {
 }
 MapEditor::~MapEditor() {
     delete back_button;
-    for (auto& button : option_buttons) delete button;
-    option_buttons.clear();
     delete tilePicking_button;
     delete eraserTool_button;
     delete save_button;
@@ -293,32 +284,14 @@ void MapEditor::render() {
         DrawText("SAVED FILE SUCCESSFULLY", startX + 50, startY + 10, 40, WHITE);
     }
 
-    if (_option_buttons) {
-        DrawRectangle(0, 0, screenWidth, screenHeight, Fade(BLACK, 0.6f));
-        for (auto& button : option_buttons) {
-            button->draw();
-        }
-    }
     back_button->draw();
     
 } 
 
 void MapEditor::update(float deltatime) {
     back_button->update(deltatime);
-    if (back_button->IsClicked()) _option_buttons = !_option_buttons;
-    if (_option_buttons) {
-        for (auto& button : option_buttons) {
-            button->update(deltatime);
-        }
-
-
-         if (option_buttons[0]->IsClicked()) { //LOAD
-           
-             Singleton<Game>::getInstance().changeState(new MenuState());
-        }
-        
-        return;
-    }
+    
+   
     Map::update(true);
     handleInput();
     saveFileNoti_timer.update(deltatime);
@@ -328,7 +301,9 @@ void MapEditor::update(float deltatime) {
     uploadFile_button->update(deltatime);
     play_button->update(deltatime);
 
-    if (tilePicking_button->IsClicked()) {
+    if (back_button->IsClicked()) 
+        Singleton<Game>::getInstance().changeState(new MenuState());
+    else if (tilePicking_button->IsClicked()) {
         editType = EditorMode::DRAW;
     }
     else if (eraserTool_button->IsClicked()) {
@@ -337,8 +312,6 @@ void MapEditor::update(float deltatime) {
     else if(save_button->IsClicked()){
         saveToFile();
         saveFileNoti_timer.start(1);
-        _option_buttons = false;
-        
     }
     else if (uploadFile_button->IsClicked()) {
         loadFromFile(level, true);

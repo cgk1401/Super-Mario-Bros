@@ -8,7 +8,7 @@
 #include "../headers/EffectManager.h"
 #include "../headers/GoomBa.h"
 #include "../headers/KoopaTroopa.h"
-
+#include "../headers/ConcreteTileBehavior.h"
 #include <cmath>
 
 void Collision::handlePlayerCollision(Character* player, Map* map) {
@@ -122,8 +122,18 @@ void Collision::handleEnemyCollision(Enemy* e, Map* map){
             if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
                 e->position.y = tileRect.y - bound.height;
                 e->velocity.y = 0;
-
                 e->onGround = true;
+
+                //DEAD if mario pushes the brick
+                
+                if(tileInstance->offsetPos.y != 0 ){
+                    
+                    e->onDeath(DeathType::FALLING);
+                }
+                else if (auto brickstate = dynamic_cast<BrickTileState*>(tileInstance->state)){
+                        if(brickstate->hasBroken == true)
+                            e->onDeath(DeathType::FALLING);
+                }
             }
         }
     }
@@ -199,12 +209,25 @@ void Collision::handleMushroomCollisionMap(Mushroom* mushroom, Map* map){
         for (int y = startCol; y <= endCol; y++) {
             Tile tile = map->getTile(x, y);
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
-
+            MapTileInstance* tileInstance = map->getMapTileInstance(x, y);
             if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
-                mushroom->position.y = tileRect.y - bound.height - 0.2;
-                mushroom->velocity.y = 0;
-
-                mushroom->onGround = true;
+                if (tileInstance->offsetPos.y < 0) {
+                    mushroom->position.y = tileRect.y - bound.height - 3;
+                    mushroom->velocity.y = -300;
+                    mushroom->onGround = false;
+                    if (mushroom->velocity.x > 0) { 
+                        mushroom->changeDirection(Direction::Left);
+                    }
+                    else if (mushroom->velocity.x < 0) { 
+                        mushroom->changeDirection(Direction::Right);
+                    }
+                }
+                else if (tileInstance->offsetPos.y == 0){
+                    // Bình thường đứng trên đất
+                    mushroom->position.y = tileRect.y - bound.height - 0.3f;
+                    mushroom->velocity.y = 0;
+                    mushroom->onGround = true;
+                }
             }
         }
     }
@@ -221,10 +244,10 @@ void Collision::handleMushroomCollisionMap(Mushroom* mushroom, Map* map){
                     float overlapY = fmin(bound.y + bound.height, tileRect.y + tileRect.height) - fmax(bound.y, tileRect.y);
                     if (overlapX > 0 && overlapY > 0) {
                         if (overlapY < overlapX) { // trên dưới của tile
-                            if (mushroom->velocity.y < 0) { // chạm đầu
-                                mushroom->position.y = tileRect.y + tileRect.height;
-                                mushroom->velocity.y = 0;
-                            }
+                            // if (mushroom->velocity.y < 0 && hasBounced == false) { // chạm đầu
+                            //     mushroom->position.y = tileRect.y + tileRect.height;
+                            //     mushroom->velocity.y = 0;
+                            // }
 
                         }
                         else { // 2 bên của tile 

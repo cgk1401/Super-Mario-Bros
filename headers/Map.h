@@ -9,6 +9,13 @@
 #include <functional>
 using namespace std;
 
+enum class MapTheme {
+    OVERWORLD,
+    UNDERGROUND,
+    CASTLE,
+    UNDERWATER,
+};
+
 struct TileState;
 
 struct MapTileInstance {
@@ -37,6 +44,7 @@ protected:
     function<void(EnemyType, Vector2)> spawnEnemyCallback;
 
     pair<int, int> level = {1,1};
+    MapTheme maptheme;
 public:
     int rows = 12, columns = 16;
     int tileRows, tileColumns; 
@@ -54,7 +62,7 @@ public:
     int getTileIDFromCoords(int fileRow, int fileCol) const;
     MapTileInstance* getMapTileInstance(int row, int col);    
     void updateTileInstancePosition(int tileRow, int tileCol, Vector2 offset);
-
+    MapTheme getMapTheme(pair<int, int> level);
     
     void setEnemySpawnCallback(std::function<void(EnemyType, Vector2)> callback);
     EnemyType getEnemyType(int tileID);

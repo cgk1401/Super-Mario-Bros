@@ -14,7 +14,6 @@ class MapEditor : public Map, public GameState {
 private:
     //int selectedTileID = 0;  
     Button* back_button;
-    vector<Button*> option_buttons;
     Button* tilePicking_button;
     Button* eraserTool_button;
     Button* save_button;
@@ -24,7 +23,6 @@ private:
     Timer saveFileNoti_timer;
     EditorMode editType;
 
-    bool _option_buttons = false;
     int mapWidth;
     int uiWidth;
     Vector2 dragStartTile = {-1, -1};

@@ -12,6 +12,7 @@ Map::Map(pair<int, int> _level, int r, int c) {
     texture =  LoadTexture("../assets/Map/tileset_gutter64x64.png");
     bricks_texture = LoadTexture("../assets/Map/bricks.png");
     level = _level;
+    
     initMap(r, c);
 
     tileRows = texture.height / TILE_SIZE;
@@ -217,7 +218,6 @@ void Map::update(bool isEditing) {
 
 void Map::draw(bool isEditing) {
      Color bgColor = Color{92, 148, 252};
-     cout << level.second << endl;
      if(isEditing == false)
         {
             if(level == pair{1,2} || level == pair{1,4}) bgColor = {0,0,0};
@@ -428,4 +428,10 @@ void Map::loadFromFile(pair<int, int> level, bool isEditing) {
 
     cout << "Loaded file successfully: " << filename << endl;
     MyReadFile.close();
+}
+
+
+MapTheme Map::getMapTheme(pair<int, int> level){
+    if(level == pair{1,2}) return MapTheme::UNDERGROUND;
+
 }
