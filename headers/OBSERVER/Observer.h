@@ -1,8 +1,6 @@
 #pragma once
-
-enum class EventType{
-    COIN_COLLECT,
-};
+#include "EventDataBase.h"
+using namespace std;
 
 class Observer{
 public:

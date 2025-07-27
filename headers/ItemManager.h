@@ -1,17 +1,9 @@
-#include "../headers/Item.h"
 #include "../headers/Mushroom.h"
 #include "../headers/Star.h"
 #include "../headers/Flower.h"
 
 template <typename T>
 class Singleton;
-enum class ItemType {
-    NONE = 0,
-    COIN = 1,
-    MUSHROOM = 2,
-    FLOWER = 3,
-    STAR = 4    
-};
 
 class ItemManager {
     template <typename T>

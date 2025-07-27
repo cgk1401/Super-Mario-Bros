@@ -68,6 +68,7 @@ public:
         // Chuyển Mario sang SuperState
         if(player->getCharacterStateType() == CharacterStateType::NormalState)
             player->ChangeMiddleState(CharacterStateType::SuperState);
+        player->collectItem(ItemType::MUSHROOM, position);
         collected = true;
     }
 

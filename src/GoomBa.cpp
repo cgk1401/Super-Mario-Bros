@@ -134,3 +134,7 @@ void GoomBa::onDeath(DeathType type, Character* player) {
             break;
     }
 }
+
+EnemyType GoomBa::getType() const {
+	return EnemyType::GOOMBA;
+}

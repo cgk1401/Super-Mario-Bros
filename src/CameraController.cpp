@@ -6,7 +6,7 @@
 void CameraController::init(Vector2 startPos) {
     camera = { 0 };
     camera.target = startPos;
-    camera.offset = { 0, 0 };
+    camera.offset = { 0, -32 };
     camera.rotation = 0.0f;
     camera.zoom = 1.0f;
 }

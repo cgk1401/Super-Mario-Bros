@@ -49,6 +49,7 @@ public:
             return;
         }
         player->ChangeMiddleState(CharacterStateType::FireState);
+        player->collectItem(ItemType::FLOWER, position);
         collected = true;
     }
 

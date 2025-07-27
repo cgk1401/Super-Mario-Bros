@@ -48,6 +48,17 @@ void EffectManager::marioDead(Vector2 position, const Texture2D& texture, Rectan
 void EffectManager::koopaDeath(Vector2 position, const Texture2D& texture, Rectangle frame){
     effects.emplace_back(new KoopaDeathEffect(position, texture, frame));
 }
+
+
+
+void EffectManager::onNotify(const EventType& event, void* data){
+    map<EventType, EventInfo> eventMap = Singleton<EventDataBase>::getInstance().getMap();
+    auto it = eventMap.find(event);
+    if(it == eventMap.end()) return;
+
+    Vector2* position = static_cast<Vector2*>(data);
+    if (position) effects.emplace_back(new PointEffect(*position, event));
+}
 void EffectManager::update(float dt){
     for(auto& e : effects){
         e->update(dt);

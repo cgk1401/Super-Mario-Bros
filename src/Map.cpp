@@ -8,10 +8,10 @@
 using namespace std;
 #define MAX_COLUMN 220
 
-Map::Map(int r, int c) {
+Map::Map(pair<int, int> _level, int r, int c) {
     texture =  LoadTexture("../assets/Map/tileset_gutter64x64.png");
     bricks_texture = LoadTexture("../assets/Map/bricks.png");
-
+    level = _level;
     initMap(r, c);
 
     tileRows = texture.height / TILE_SIZE;
@@ -110,7 +110,7 @@ void Map::createTileCatalog() {
         }
 
         if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(getTileIDFromCoords(i, 20), tileSetSourceRects[i - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior())); //Question Block tile
-        else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(getTileIDFromCoords(i, 20), tileSetSourceRects[i - 1][20 - 1], BRICK, new QuestionTileBehavior())); //Decoration tile
+        else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(getTileIDFromCoords(i, 20), tileSetSourceRects[i - 1][20 - 1], STAR_BRICK, new QuestionTileBehavior())); //Decoration tile
         ///////// The brick which has the star
 
         for (int j = 21; j < 22; j++) {
@@ -216,6 +216,13 @@ void Map::update(bool isEditing) {
 }
 
 void Map::draw(bool isEditing) {
+     Color bgColor = Color{92, 148, 252};
+     cout << level.second << endl;
+     if(isEditing == false)
+        {
+            if(level == pair{1,2} || level == pair{1,4}) bgColor = {0,0,0};
+        }
+    ClearBackground(bgColor);
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
             int id = mapData[x][y].tileID;
@@ -230,7 +237,7 @@ void Map::draw(bool isEditing) {
                     src = tileAnimation.at(TileType::QUESTION_BLOCK).getcurrentframe();
                     tileTexture = bricks_texture;
                 }
-                else if(it->second.type == TileType::BRICK){
+                else if(it->second.type == TileType::STAR_BRICK){
                     src = {272, 192, 16, 16};
                     tileTexture = bricks_texture;
                 }

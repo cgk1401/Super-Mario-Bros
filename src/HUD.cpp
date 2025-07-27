@@ -40,9 +40,13 @@ void HUD::setTime(int t){
 
 
 void HUD::onNotify(const EventType& event, void* data){
+   map<EventType, EventInfo> eventMap = Singleton<EventDataBase>::getInstance().getMap();
+    auto it = eventMap.find(event);
+    if(it == eventMap.end()) return;
+    score += it->second.score;
+    
     if(event == EventType::COIN_COLLECT){
         coins++;
-        cout << coins << endl;
     }
 }
 void HUD::update(){

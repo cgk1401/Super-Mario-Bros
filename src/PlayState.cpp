@@ -9,18 +9,23 @@
 #include "../headers/Luigi.h"
 
 PlayState::PlayState(pair<int, int> _level) {
-    Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD);
-    
+    if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
+    else Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
+
     if (selectedCharacter == CharacterType::Mario) {
-        character = new Mario({ 100, 200 });
+        character = new Mario({ 100, 300 });
     }
     else if (selectedCharacter == CharacterType::Luigi) {
-        character = new Luigi({ 100, 200 });
+        character = new Luigi({ 100, 300 });
     }
 
+    EffectManager* effects = &Singleton<EffectManager>::getInstance();
     character->attachObserver(&hud);
+    character->attachObserver(effects);
+    
     level = _level;
-    world[level] = new Map;
+    Global::level = _level;
+    world[level] = new Map(level);
     
     world[level]->setEnemySpawnCallback(
         [this](EnemyType type, Vector2 pos) {
@@ -38,7 +43,6 @@ PlayState::PlayState(pair<int, int> _level) {
     
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
-   world_1_1 = LoadTexture("../assets/Map/World 1-1.png");
    PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
 
 }
@@ -51,11 +55,11 @@ PlayState::~PlayState() {
 
     bg.unload();
     Singleton<ItemManager>::getInstance().clearItems();
-    Singleton<SoundManager>::getInstance().stopMusic();
 }
 
 void PlayState::update(float dt){
-    //SoundManager::get()->updateMusic();
+    
+
     camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
     hud.update(); 
     PauseButton->update(dt);
@@ -69,7 +73,10 @@ void PlayState::update(float dt){
 
     Collision::handlePlayerCollision(character, world[level]);
 
-    if (character->getCurrentAction() != ActionState::Die) character->Update(dt);
+    if (character->getCurrentAction() != ActionState::Die) {
+        Singleton<SoundManager>::getInstance().updateMusic();
+        character->Update(dt);
+    }
     Collision::handlePlayer_EnemyCollision(character, enemies);
 
    
@@ -105,19 +112,18 @@ void PlayState::update(float dt){
 }
 
 void PlayState::render() {
-    
     BeginMode2D(camera.getCamera());
     //bg.draw();
-    DrawTexturePro(world_1_1,
-                   { 0,0, (float) world_1_1.width, (float) world_1_1.height},
-                   {0 * Map::TILE_SIZE, -2 * Map::TILE_SIZE,  (float) world_1_1.width * 4, (float) world_1_1.height * 4},
-                   {0,0}, 0,
-                   Fade(WHITE, 0.4f));
+    // DrawTexturePro(world_1_1,
+    //                { 0,0, (float) world_1_1.width, (float) world_1_1.height},
+    //                {0 * Map::TILE_SIZE, -2 * Map::TILE_SIZE,  (float) world_1_1.width * 4, (float) world_1_1.height * 4},
+    //                {0,0}, 0,
+    //                Fade(WHITE, 0.4f));
     Singleton<EffectManager>::getInstance().drawHiddenEffects();
 
     Singleton<ItemManager>::getInstance().Draw();
     world[level]->draw();
-
+    
     if (character->getCurrentAction() != ActionState::Die) character->Draw();
     //DrawRectangleLinesEx(character->getBound(), 0.5, RED);
     for(auto& e: enemies){

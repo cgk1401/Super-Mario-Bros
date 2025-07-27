@@ -6,12 +6,14 @@
 #include "../headers/Timer.h"
 #include "../headers/BrickBreakEffect.h"
 #include "../headers/BaseEffect.h"
+#include "PointEffect.h"
+#include "OBSERVER/Observer.h"
 using namespace std;
 
 template <typename T>
 class Singleton;
 
-class EffectManager {
+class EffectManager : public Observer{
     template <typename T>
     friend class Singleton;
 private:
@@ -34,5 +36,7 @@ public:
     void update(float dt);
     void draw();
     void drawHiddenEffects();
+
+    void onNotify(const EventType& event, void* data = nullptr);
 };
 

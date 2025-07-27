@@ -33,4 +33,5 @@ public:
 	bool isDead() {return false;}
 	void onDeath(DeathType type, Character* player = nullptr) override{}
 	void ChangeState(PlantState newState);
+	EnemyType getType() const;
 };

@@ -35,4 +35,6 @@ public:
 	void moveUp(); // xảy ra khi goomba bị rùa tấn công, goomba sẽ nhảy lên sau đó die
 
 	void ChangeState(GoomBaState newState); // thay đổi trạng thái khi collision
+
+	EnemyType getType() const;
 };

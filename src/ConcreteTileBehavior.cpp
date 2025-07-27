@@ -36,6 +36,7 @@ void BrickTileBehavior::onHeadCollision(Character* character, int tileRow, int t
         if (!brickState->hasBroken) {
             Singleton<SoundManager>::getInstance().play(SoundType::BRICK_BREAK);
             brickState->hasBroken = true;
+            character->breakBrick();
         }
 
     }

@@ -19,7 +19,9 @@ private:
     Button* tilePicking_button;
     Button* eraserTool_button;
     Button* save_button;
-    
+    Button* uploadFile_button;
+    Button* play_button;
+
     Timer saveFileNoti_timer;
     EditorMode editType;
 
@@ -32,16 +34,19 @@ private:
 
     vector<vector<Rectangle>> brushBuffer;
 
-    Texture2D world_1_1_test;
-
+    Texture2D world_1_1, 
+              world_1_2, world_1_2_A, world_1_2_B,
+              world_1_3,
+              world_1_4;
 public:
-    MapEditor(int r = 13, int c = 220);
+    MapEditor(pair<int, int> level  = {1,1},int r = 15, int c = 220);
+    ~MapEditor();
     Camera2D camera{};
     Camera2D cameraEditor{};
     bool IsInsideMap(int row, int col);
-    void saveToFile(pair<int, int> level);
+    void saveToFile();
     void saveMapToJSON(const char* filename);
-
+    Texture2D getTextureByLevel(pair<int, int> _level) const;
     //Inherit GameState
     void update(float deltatime) override;
     void render() override;

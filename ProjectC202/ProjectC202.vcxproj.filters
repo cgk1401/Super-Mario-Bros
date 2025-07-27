@@ -210,6 +210,18 @@
     <ClCompile Include="..\src\HUD.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\OBSERVER\Subject.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\OBSERVER\EventDataBase.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PọintEffect.cpp">
+      <Filter>Source Files\Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LevelState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
     <ClCompile Include="..\headers\AudioSettingsMenu.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -375,6 +387,21 @@
       <Filter>Header Files\States</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\AudioSettingsMenu.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\OBSERVER\Observer.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\OBSERVER\Subject.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\OBSERVER\EventDataBase.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\PointEffect.h">
+      <Filter>Header Files\Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\LevelState.h">
       <Filter>Header Files\States</Filter>
     </ClInclude>
   </ItemGroup>
