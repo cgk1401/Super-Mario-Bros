@@ -1,7 +1,7 @@
 #include "../headers/ItemManager.h"
 #include "../headers/TextureManager.h"
 #include "../headers/Collision.h"
-
+#include "../headers/Coin.h"
 ItemManager::ItemManager(){
     texture = Singleton<TextureManager>::getInstance().load(TextureType::ITEM);
 
@@ -17,6 +17,10 @@ ItemManager::ItemManager(){
     for(int i = 0 ;i < 4; ++i){
         starAni.frame.push_back({(float)(106 + 18 * i), 8, 16, 16});
     }
+    for (int i = 0; i < 4; i++) {
+        coinAni.frame.push_back({180 + (float) i * 10 , 36, 8, 16});
+    }
+    coinAni.durationtime = 0.1f;
 }
 
 ItemManager::~ItemManager() {
@@ -33,6 +37,8 @@ void ItemManager::Spawn(ItemType type, Vector2 position) {
             item = new Flower(position, flowerAni); break;
         case ItemType::STAR:
             item = new Star(position, starAni); break;
+        case ItemType::COIN:
+            item = new Coin(position, coinAni); break;
     }
     if (item) items.push_back(item);
 }

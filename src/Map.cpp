@@ -1,6 +1,7 @@
 ﻿#include "../headers/Map.h"
 #include "../headers/ConcreteTileBehavior.h"
 #include "../headers/Global.h"
+#include "../headers/ItemManager.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -81,58 +82,73 @@ void Map::initMap(int r, int c) {
     }
 }
 
-void Map::createTileAnimation(){
+void Map::createTileAnimation() {
     Animation questionBlock_animation;
-    for(int i = 0; i < 3; i++)
-        questionBlock_animation.frame.push_back({80 + (float) i * 16, 112, 16, 16});
+    for (int i = 0; i < 3; i++)
+    {
+        questionBlock_animation.frame.push_back({ 80 + (float)i * 16, 112, 16, 16 });
+    }
     questionBlock_animation.durationtime = 0.2f;
     tileAnimation.emplace(TileType::QUESTION_BLOCK, questionBlock_animation);
+
 }
+
 void Map::createTileCatalog() {
     tileCatalog.clear();
     tileCatalog.emplace(0, Tile(0, tileSetSourceRects[0][0], EMPTY, new EmptyTileBehavior())); //EMPTY tile
-    for (int i = 1; i < 9; i++) {
-        for (int j = 1; j < 7; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tile
-        }
 
-        for (int j = 7; j < 9; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], BRICK, new BrickTileBehavior())); //Brick tile
-        }
+    array<MapTheme, 4> themes = {
+        MapTheme::OVERWORLD,
+        MapTheme::UNDERGROUND,
+        MapTheme::CASTLE,
+        MapTheme::UNDERWATER
+    };
+    for (int i = 1; i < 3; i++) {
+        for (MapTheme theme : themes) {
+            int themeOffset = static_cast<int>(theme) * 2;
 
-        for (int j = 9; j < 16; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
-        }
-
-        tileCatalog.emplace(getTileIDFromCoords(i, 16), Tile(getTileIDFromCoords(i, 16), tileSetSourceRects[i - 1][16 - 1], PIPE, new SolidTileBehavior())); //Pipe tile
-
-        for (int j = 17; j < 20; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
-        }
-
-        if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(getTileIDFromCoords(i, 20), tileSetSourceRects[i - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior())); //Question Block tile
-        else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 20), Tile(getTileIDFromCoords(i, 20), tileSetSourceRects[i - 1][20 - 1], STAR_BRICK, new QuestionTileBehavior())); //Decoration tile
-        ///////// The brick which has the star
-
-        for (int j = 21; j < 22; j++) {
-            if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], ITEM, new ItemBehavior()));
-            if (i % 2 == 1) {
-                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior()));
-                tileCatalog.emplace(getTileIDFromCoords(i, j + 1), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j + 1 - 1], USED_QUESTION_BLOCK, new SolidTileBehavior()));
+            for (int j = 1; j < 7; j++) {
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new SolidTileBehavior(), theme)); //Ground tile
             }
-        }
 
-        for (int j = 23; j < 26; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tile
-        }
+            for (int j = 7; j < 9; j++) {
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j - 1], BRICK, new BrickTileBehavior(), theme)); //Brick tile
+            }
 
-        tileCatalog.emplace(getTileIDFromCoords(i, 26), Tile(getTileIDFromCoords(i, 26), tileSetSourceRects[i - 1][26 - 1], LAVA_FLOOR, new DecorationTileBehavior())); //Decoration tile
+            for (int j = 9; j < 16; j++) {
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme)); //Decoration tile
+            }
 
-        tileCatalog.emplace(getTileIDFromCoords(i, 27), Tile(getTileIDFromCoords(i, 27), tileSetSourceRects[i - 1][27 - 1], GROUND, new SolidTileBehavior())); //ground tile
+            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 16), Tile(getTileIDFromCoords(i + themeOffset, 16), tileSetSourceRects[i + themeOffset - 1][16 - 1], PIPE, new SolidTileBehavior(), theme)); //Pipe tile
 
-        if (i % 2 == 1) {
-            for (int j = 28; j < 31; j++) {
-                tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground 
+            for (int j = 17; j < 20; j++) {
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme)); //Decoration tile
+            }
+
+            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme)); //Question Block tile
+            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], STAR_BRICK, new QuestionTileBehavior(), theme)); //Decoration tile
+            ///////// The brick which has the star
+
+            for (int j = 21; j < 22; j++) {
+                if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], COIN, new DecorationTileBehavior(), theme));
+                if (i % 2 == 1) {
+                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme));
+                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j + 1), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j + 1 - 1], USED_QUESTION_BLOCK, new SolidTileBehavior(), theme));
+                }
+            }
+
+            for (int j = 23; j < 26; j++) {
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme)); //Decoration tile
+            }
+
+            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 26), Tile(getTileIDFromCoords(i + themeOffset, 26), tileSetSourceRects[i + themeOffset - 1][26 - 1], LAVA_FLOOR, new DecorationTileBehavior(), theme)); //Decoration tile
+
+            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 27), Tile(getTileIDFromCoords(i + themeOffset, 27), tileSetSourceRects[i + themeOffset - 1][27 - 1], GROUND, new SolidTileBehavior(), theme)); //ground tile
+
+            if (i % 2 == 1) {
+                for (int j = 28; j < 31; j++) {
+                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new SolidTileBehavior(), theme)); //Ground 
+                }
             }
         }
     }
@@ -232,13 +248,14 @@ void Map::draw(bool isEditing) {
                 Texture2D tileTexture = texture;
                 Rectangle src = it->second.srcRect;
 
-                if (it->second.type == ENEMY && isEditing == false) continue;
+                if ((it->second.type == ENEMY || it->second.type == TileType::COIN) && isEditing == false) continue;
                 else if(it->second.type ==  TileType::QUESTION_BLOCK){
                     src = tileAnimation.at(TileType::QUESTION_BLOCK).getcurrentframe();
+                    src.y +=  (float) it->second.theme * 16.0f;
                     tileTexture = bricks_texture;
                 }
                 else if(it->second.type == TileType::STAR_BRICK){
-                    src = {272, 192, 16, 16};
+                    src = {272, 192  + (float) it->second.theme * 16.0f, 16, 16};
                     tileTexture = bricks_texture;
                 }
 
@@ -399,6 +416,14 @@ void Map::loadFromFile(pair<int, int> level, bool isEditing) {
                 try {
                     int tileID = stoi(s);
                     setTile(x, y, tileID);
+                    int id = mapData[x][y].tileID;
+                    auto it = tileCatalog.find(id);
+                    if (id && it != tileCatalog.end()) {
+                        if(it->second.type == TileType::COIN){
+                            cout << "spawn coin\n";
+                            Singleton<ItemManager>::getInstance().Spawn(ItemType::COIN, {(float) y * TILE_SIZE, (float) x * TILE_SIZE});
+                        }
+                    }
                 }
                 catch (...) {
                     cerr << "Invalid TileID in map file: " << s << " at (" << x << "," << y << ")" << endl;

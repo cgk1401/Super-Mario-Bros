@@ -9,13 +9,6 @@
 #include <functional>
 using namespace std;
 
-enum class MapTheme {
-    OVERWORLD,
-    UNDERGROUND,
-    CASTLE,
-    UNDERWATER,
-};
-
 struct TileState;
 
 struct MapTileInstance {
@@ -33,6 +26,7 @@ class Map {
 protected:
 	Texture2D texture;								                //Tileset texture
     Texture2D bricks_texture;
+
 	map<int, Tile> tileCatalog;					                    //Kho luu tru cac tile (1 dạng của Flyweight pattern)
 	vector<vector<Rectangle>> mapRects;				                //Tọa độ từng ô
 	vector<vector<MapTileInstance>> mapData;		                //data của từng ô: 0 0 1 0 -> 0: empty tile, 1: brick tile,...

@@ -32,19 +32,19 @@ PlayState::PlayState(pair<int, int> _level) {
             enemies.push_back(EnemyFactory::createEnemy(type, pos));
         }
     );
-
+    
+    Singleton<ItemManager>::getInstance().clearItems();
     world[level]->loadFromFile(level);
     Global::map = world[level];
     camera.init({0,0});
    
-    bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.05, 7.2);
-    bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 7.2);
-    bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 7.2);
+    bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.05, 9.2);
+    bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 9.2);
+    bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 9.2);
     
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
    /* mario = Mario({ 50, 50 });*/
    PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
-
 }
 PlayState::~PlayState() {
     for (auto& [level, mapPtr] : world) {  
@@ -54,7 +54,6 @@ PlayState::~PlayState() {
     world.clear();
 
     bg.unload();
-    Singleton<ItemManager>::getInstance().clearItems();
 }
 
 void PlayState::update(float dt){
@@ -67,7 +66,7 @@ void PlayState::update(float dt){
         Singleton<Game>::getInstance().addState(new PauseState());
     }
 
-    //bg.update( mario,camera.getCamera(), dt);
+    bg.update({character->getBound().x, character->getBound().y},camera.getCamera(), dt);
     //fg.update( mario,camera.getCamera(), dt);
     world[level]->update();
 

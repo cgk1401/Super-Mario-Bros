@@ -25,6 +25,13 @@ class Enemy;
 constexpr Color DARK_BLUE = { 22, 72, 159, 255 };
 
 
+enum class MapTheme {
+    OVERWORLD   = 0,
+    UNDERGROUND = 1,
+    CASTLE      = 2,
+    UNDERWATER  = 3,
+};
+
 enum class CharacterStateType {
 	NormalState,
 	SuperState,
@@ -86,5 +93,5 @@ public:
 };
 
 bool operator==(pair<int, int> a, pair<int,int>b);
-
+inline int operator+(int lhs, MapTheme rhs);
 #endif 

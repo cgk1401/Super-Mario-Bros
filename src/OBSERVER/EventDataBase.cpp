@@ -1,7 +1,7 @@
 #include "OBSERVER/EventDataBase.h"
 
 EventDataBase::EventDataBase(){
-    eventMap[EventType::COIN_COLLECT]             = {100, "100", true};
+    eventMap[EventType::COIN_COLLECT]             = {100, "", false};
     eventMap[EventType::BRICK_BREAK]              = {50,  "50",  true};
     eventMap[EventType::BRICK_COIN_REVEAL]        = {0,   "",     false};
     eventMap[EventType::BRICK_POWERUP_REVEAL]     = {0,   "",     false};

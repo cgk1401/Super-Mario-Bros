@@ -30,7 +30,7 @@ private:
 
 public:
     void addLayer(const char* filepath, Rectangle srcRect, float speed, float scale = 1);
-    void update(Mario& mario, Camera2D& camera, float deltatime);
+    void update(Vector2 marioPos, Camera2D& camera, float deltatime);
     void draw();
     void unload();
 };

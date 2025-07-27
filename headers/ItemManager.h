@@ -15,7 +15,8 @@ private:
     Animation mushroomAni;
     Animation flowerAni;
     Animation starAni;
-
+    Animation coinAni;
+    
     ItemManager();
     ~ItemManager();
 public:

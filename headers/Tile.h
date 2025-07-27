@@ -1,12 +1,13 @@
 ﻿#pragma once
 #include "raylib.h"
 #include "TileBehavior.h"
-
+#include "../headers/Global.h"
 enum TileType {
 	EMPTY = 0,
 	GROUND,
 	BRICK,
 	PIPE,
+	COIN,
 	COINS_BLOCK,			//A block of multiple coins
 	QUESTION_BLOCK,			// consisting of coin, power-up items such as flower, star,. depending on game, level or mario's super form
 	USED_QUESTION_BLOCK,
@@ -26,9 +27,10 @@ public:
 	Rectangle srcRect;					// vi tri trong tileset
 	TileType type;						// loai tile: brick, pipe, empty,...
 	TileBehavior* behavior;				// behavior of each tile
+	MapTheme theme;
 
-	Tile(int _id = 0, Rectangle _sourceRect = { 0 }, TileType _type = EMPTY, TileBehavior* _behavior = nullptr)
-		: id(_id), srcRect(_sourceRect), type(_type), behavior(_behavior) {
+	Tile(int _id = 0, Rectangle _sourceRect = { 0 }, TileType _type = EMPTY, TileBehavior* _behavior = nullptr, MapTheme _theme = MapTheme::OVERWORLD)
+		: id(_id), srcRect(_sourceRect), type(_type), behavior(_behavior), theme(_theme){
 	}
 
 	Tile(const Tile& other)

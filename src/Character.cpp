@@ -132,7 +132,7 @@ void Character::Draw() {
 		}
 	}
 
-	DrawRectangleLinesEx(getBound(), 0.4f, RED);
+	//DrawRectangleLinesEx(getBound(), 0.4f, RED);
 
 }
 float approach(float current, float target, float increase) {
@@ -272,4 +272,5 @@ void Character::collectItem(ItemType type, Vector2 itemPosition)
 	if (type == ItemType::MUSHROOM) notify(EventType::POWERUP_COLLECT_MUSHROOM, &itemPosition);
 	else if (type == ItemType::FLOWER) notify(EventType::POWERUP_COLLECT_FLOWER, &itemPosition);
 	else if (type == ItemType::STAR) notify(EventType::POWERUP_COLLECT_STAR, &itemPosition);
+	else if (type == ItemType::COIN) notify(EventType::COIN_COLLECT, &itemPosition);
 }

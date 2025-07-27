@@ -60,7 +60,7 @@ void MenuState::update(float deltatime){
         }
 
         if (buttons[0]->IsClicked()) {
-            Singleton<Game>::getInstance().changeState(new PlayState());
+            Singleton<Game>::getInstance().changeState(new PlayState(Global::level));
         }
         else if (buttons[1]->IsClicked()) {
             selectedButton = 1; //setting_buttons

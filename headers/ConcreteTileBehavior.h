@@ -28,16 +28,6 @@ public:
 	~DecorationTileBehavior() = default;
 };
 
-class ItemBehavior : public TileBehavior {
-public:
-	TileBehavior* clone() const override {return new ItemBehavior(*this);}
-	void onHeadCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	void onFootCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	void onGeneralCollision(Character* character, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	void update(float dt, int tileRow, int tileCol, Map* map, MapTileInstance* tileInstance) override{}
-	bool isSolid() override { return false; }
-	~ItemBehavior() = default;
-};
 class SolidTileBehavior : public TileBehavior { //dùng chugn cho ground + mấy block đứng lên dc nhưng ko chứa item hay hiệu ứng j (pipe, ...)
 public:
 	TileBehavior* clone() const override {return new SolidTileBehavior(*this);}

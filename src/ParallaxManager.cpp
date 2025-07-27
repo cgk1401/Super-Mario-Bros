@@ -17,22 +17,21 @@ void ParallaxManager::addLayer(const char* filepath, Rectangle srcRect, float sp
     layers.push_back(layer);
 }
 
-void ParallaxManager::update(Mario& mario, Camera2D& camera, float deltaTime) {
-    //Vector2 marioPos = mario.getPos();
-    //Vector2 screenPos = GetWorldToScreen2D(marioPos, camera);
+void ParallaxManager::update(Vector2 marioPos, Camera2D& camera, float deltaTime) {
+    Vector2 screenPos = GetWorldToScreen2D(marioPos, camera);
 
 
-    //
-    //    for (auto& layer : layers) {
-    //        layer.scrollX = -camera.target.x * layer.scrollSpeed * 0.8;
+    
+       for (auto& layer : layers) {
+           layer.scrollX = -camera.target.x * layer.scrollSpeed * 0.8;
 
-    //        if (layer.scrollX >= layer.scaledWidth) {
-    //            layer.scrollX -= layer.scaledWidth;
-    //        }
-    //        else if (layer.scrollX < 0.0f) {
-    //            layer.scrollX += layer.scaledWidth;
-    //        }
-    //    }
+           if (layer.scrollX >= layer.scaledWidth) {
+               layer.scrollX -= layer.scaledWidth;
+           }
+           else if (layer.scrollX < 0.0f) {
+               layer.scrollX += layer.scaledWidth;
+           }
+       }
    
 }
 

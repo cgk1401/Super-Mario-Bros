@@ -1,5 +1,5 @@
 #include "../headers/Global.h"
-
+#include "../headers/Map.h"
 Map* Global::map = nullptr;
 Camera2D Global::camera = {};
 pair<int,int> Global::level = {1,1};
@@ -24,4 +24,8 @@ Texture2D resizedImage(const char* imagePath, float width, float height){
 
 bool operator==(pair<int, int> a, pair<int,int>b){
     return a.first == b.first && a.second == b.second;
+}
+
+inline int operator+(int lhs, MapTheme rhs) {
+    return lhs + static_cast<int>(rhs);
 }
