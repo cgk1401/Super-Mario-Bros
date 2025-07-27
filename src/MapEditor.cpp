@@ -306,7 +306,7 @@ void MapEditor::render() {
         SaveConfirmationDialog* currentstate = dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState());
         currentstate->render();
         if (currentstate->buttonclick[0] == true) {
-            saveToFile({1,1});
+            saveToFile();
             saveFileNoti_timer.start(1);
             _option_buttons = false;
             currentstate->buttonclick[0] = false;

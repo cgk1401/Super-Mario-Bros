@@ -79,11 +79,14 @@ void AudioSettingsMenu::render() {
 	DrawText(soundText, positionPanel.x + LEFT_MARGIN, soundSlider.y, 20, darkYellow);
 	DrawText(TextFormat("%.2f", musicVolume), positionPanel.x + LEFT_MARGIN + MeasureText(musicText, 20) + 8, musicSlider.y, 20, WHITE);
 	DrawText(TextFormat("%.2f", soundVolume), positionPanel.x + LEFT_MARGIN + MeasureText(soundText, 20) + 8, soundSlider.y, 20, WHITE);
-	DrawRectangleRounded(musicSlider, 0.4, 15, darkYellow);
-	DrawRectangleRounded(soundSlider, 0.4, 15, darkYellow);
-	DrawRectangleRounded(musicSliderHandle, 0.4, 15, DARKGRAY);
-	DrawRectangleRounded(soundSliderHandle, 0.4, 15, DARKGRAY);
+	DrawRectangleRounded(musicSlider, 0.4, 15, DARKGRAY);
+	DrawRectangleRounded(soundSlider, 0.4, 15, DARKGRAY);
+	DrawRectangleRounded({ musicSlider.x, musicSlider.y, musicSliderHandle.x - musicSlider.x, musicSlider.height }, 0.4, 15, darkYellow);
+	DrawRectangleRounded({ soundSlider.x, soundSlider.y, soundSliderHandle.x - soundSlider.x, soundSlider.height }, 0.4, 15, darkYellow);
+	DrawRectangleRounded(musicSliderHandle, 0.4, 15, DARKBLUE);
+	DrawRectangleRounded(soundSliderHandle, 0.4, 15, DARKBLUE);
 }
+
 
 void AudioSettingsMenu::setmusicVolume(MusicType type) {
 	SetMusicVolume(Singleton<SoundManager>::getInstance().getMusic(type), musicVolume);
