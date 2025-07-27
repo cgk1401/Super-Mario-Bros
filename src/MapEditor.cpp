@@ -83,7 +83,7 @@ void MapEditor::saveToFile() {
         }
         MyFile << endl;
     }
-
+    mapData_first = mapData;
     cout << "Saved file successfully: " << filename << endl;
     MyFile.close();
 }
@@ -175,6 +175,36 @@ void MapEditor::handleInput() {
             }
 
         }
+    }
+
+    
+    if (back_button->IsClicked()) 
+    {   
+        _option = 1;
+        if(hasChanged() && dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState()) == nullptr)
+             Singleton<Game>::getInstance().addState(new SaveConfirmationDialog());
+        else
+            Singleton<Game>::getInstance().changeState(new MenuState());
+    }
+    else if (tilePicking_button->IsClicked()) {
+        editType = EditorMode::DRAW;
+    }
+    else if (eraserTool_button->IsClicked()) {
+        editType = EditorMode::ERASE;
+    }
+    else if(save_button->IsClicked()){
+        saveToFile();
+        saveFileNoti_timer.start(1);
+    }
+    else if (uploadFile_button->IsClicked()) {
+        loadFromFile(level, true);
+    }
+    else if (play_button->IsClicked()){
+        _option = 2;
+        if(hasChanged() && dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState()) == nullptr)
+             Singleton<Game>::getInstance().addState(new SaveConfirmationDialog());
+        else
+        Singleton<Game>::getInstance().changeState(new PlayState(level));
     }
 }
 
@@ -275,6 +305,9 @@ void MapEditor::render() {
         DrawRectangleLinesEx(eraserTool_button->getBounds(), 1, YELLOW);
     }
 
+  
+    back_button->draw();
+
     if (saveFileNoti_timer.isRunning()) {
         const float rectW = screenWidth * 0.6;
         const float rectH = 60;
@@ -286,14 +319,45 @@ void MapEditor::render() {
 
     back_button->draw();
     
+    
+    // Đặt logic update SaveConfirmationDialog trong render mới có thể cập nhật các phím vì update của mapeditor = false 
+    if (dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState()) != nullptr) {
+        SaveConfirmationDialog* currentstate = dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState());
+        currentstate->render();
+        if (currentstate->buttonclick[0] == true) {
+            saveToFile();
+            saveFileNoti_timer.start(1);
+            //_option_buttons = false;
+            currentstate->buttonclick[0] = false;
+            if(_option == 1)
+                Singleton<Game>::getInstance().changeState(new MenuState);
+            else if(_option == 2)
+                Singleton<Game>::getInstance().changeState(new PlayState(level));
+
+        }
+        else {
+            if (currentstate->buttonclick[2] == true) {
+                //_option_buttons = false;
+                Singleton<Game>::getInstance().pop();
+            }
+            else if (currentstate->buttonclick[1] == true){
+                 if(_option == 1)
+                    Singleton<Game>::getInstance().changeState(new MenuState);
+                else if(_option == 2)
+                    Singleton<Game>::getInstance().changeState(new PlayState(level));
+
+            }
+        }
+    }
+
 } 
 
 void MapEditor::update(float deltatime) {
     back_button->update(deltatime);
+    Singleton<SoundManager>::getInstance().updateMusic();
     
-   
     Map::update(true);
-    handleInput();
+
     saveFileNoti_timer.update(deltatime);
     tilePicking_button->update(deltatime);
     eraserTool_button->update(deltatime);
@@ -301,24 +365,9 @@ void MapEditor::update(float deltatime) {
     uploadFile_button->update(deltatime);
     play_button->update(deltatime);
 
-    if (back_button->IsClicked()) 
-        Singleton<Game>::getInstance().changeState(new MenuState());
-    else if (tilePicking_button->IsClicked()) {
-        editType = EditorMode::DRAW;
-    }
-    else if (eraserTool_button->IsClicked()) {
-        editType = EditorMode::ERASE;
-    }
-    else if(save_button->IsClicked()){
-        saveToFile();
-        saveFileNoti_timer.start(1);
-    }
-    else if (uploadFile_button->IsClicked()) {
-        loadFromFile(level, true);
-    }
-    else if (play_button->IsClicked()){
-        Singleton<Game>::getInstance().changeState(new PlayState(level));
-    }
+    handleInput();
+    
+
     uiWidth = screenWidth - (int)mapWidth;
     int uiStartX = mapWidth;
     Vector2 mouseWorld = GetScreenToWorld2D(GetMousePosition(), camera);
@@ -410,5 +459,19 @@ void MapEditor::update(float deltatime) {
 
 bool MapEditor::IsInsideMap(int row, int col){
     return row < rows && col < columns && row >= 0 && col >= 0;
+}
+
+bool operator!=(const MapTileInstance& a,const  MapTileInstance& b){
+    return a.tileID != b.tileID;
+}
+bool MapEditor::hasChanged() const{
+    for(int x = 0; x < mapData.size(); x++){
+        for(int y = 0; y < mapData[x].size(); y++){
+            if(mapData[x][y] != mapData_first[x][y]){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 

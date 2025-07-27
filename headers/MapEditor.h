@@ -1,9 +1,10 @@
-#pragma once
+﻿#pragma once
 #include "../headers/Map.h"
 #include "../headers/Global.h"
 #include "../headers/GameState.h"
 #include "../headers/Button.h"
 #include "../headers/Timer.h"
+#include "SaveConfirmationDialog.h"
 
 enum class EditorMode {
     DRAW,
@@ -35,6 +36,8 @@ private:
               world_1_2, world_1_2_A, world_1_2_B,
               world_1_3,
               world_1_4;
+    
+    int _option = 0;
 public:
     MapEditor(pair<int, int> level  = {1,1},int r = 15, int c = 220);
     ~MapEditor();
@@ -47,6 +50,8 @@ public:
     //Inherit GameState
     void update(float deltatime) override;
     void render() override;
-
     void handleInput();
+
+private:
+    bool hasChanged() const;
 };

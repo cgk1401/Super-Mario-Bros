@@ -10,6 +10,8 @@ TextureManager::TextureManager(){
     texture.emplace(TextureType::ITEM, LoadTexture("../assets/Item/Items Objects and NPCs.png"));
     texture.emplace(TextureType::LUIGI, LoadTexture("../assets/GUI/Luigi.png"));
     texture.emplace(TextureType::TILESET, LoadTexture("../assets/Map/tileset_gutter64x64.png"));
+    texture.emplace(TextureType::BUTTONPANEL, LoadTexture("../Assets/Gui/buttonPanel.png"));
+    texture.emplace(TextureType::AUDIOPANEL, LoadTexture("../Assets/Gui/audioPanel.png"));
 }
 
  TextureManager::~TextureManager(){

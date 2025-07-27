@@ -3,6 +3,7 @@
 #include "../headers/PlayState.h"
 #include "../headers/MapEditor.h"
 #include "../headers/CharacterSelection.h"
+#include "../headers/AudioSettingsMenu.h"
 #include "../headers/LevelState.h"
 
 MenuState::MenuState() {
@@ -18,8 +19,8 @@ MenuState::MenuState() {
     buttons = CreateButtons(buttonLabels, cfg);
 
 
-    const int amount_setting_button = 3;
-    const char* setting_buttonLabels[amount_setting_button] = { "CHARACTER", "LEVEL", "MAP EDITOR"};
+    const int amount_setting_button = 4;
+    const char* setting_buttonLabels[amount_setting_button] = { "CHARACTER", "LEVEL", "MAP EDITOR", "AUDIO"};
 
     ButtonLayoutConfig _cfg(amount_setting_button);
     setting_buttons = CreateButtons(setting_buttonLabels, amount_setting_button);
@@ -80,6 +81,9 @@ void MenuState::update(float deltatime){
         }
         else if (setting_buttons[2]->IsClicked()) {
             Singleton<Game>::getInstance().changeState(new MapEditor());
+        }
+        else if (setting_buttons[3]->IsClicked()) {
+            Singleton<Game>::getInstance().changeState(new AudioSettingsMenu());
         }
         else if (backButton->IsClicked()) {
             selectedButton = 0;

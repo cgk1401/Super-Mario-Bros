@@ -66,12 +66,14 @@ Map::~Map(){
 void Map::initMap(int r, int c) {
     mapRects.clear();
     mapData.clear();
+    mapData_first.clear();
 
     rows = r;
     columns = c;
 
     mapRects.resize(rows, vector<Rectangle>(columns));
     mapData.resize(rows, vector<MapTileInstance>(columns));
+    mapData_first.resize(rows, vector<MapTileInstance>(columns));
 
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
@@ -80,6 +82,8 @@ void Map::initMap(int r, int c) {
             mapData[x][y] = { 0, false };
         }
     }
+
+    mapData_first = mapData;
 }
 
 void Map::createTileAnimation() {
@@ -451,6 +455,7 @@ void Map::loadFromFile(pair<int, int> level, bool isEditing) {
         }
     }
 
+    mapData_first = mapData;
     cout << "Loaded file successfully: " << filename << endl;
     MyReadFile.close();
 }

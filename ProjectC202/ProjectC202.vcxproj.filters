@@ -204,6 +204,9 @@
     <ClCompile Include="..\src\Textbox.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\SaveConfirmationDialog.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\HUD.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -217,6 +220,9 @@
       <Filter>Source Files\Effect</Filter>
     </ClCompile>
     <ClCompile Include="..\src\LevelState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\AudioSettingsMenu.cpp">
       <Filter>Source Files\States</Filter>
     </ClCompile>
   </ItemGroup>
@@ -376,6 +382,12 @@
     </ClInclude>
     <ClInclude Include="..\headers\HUD.h">
       <Filter>Header Files\GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\SaveConfirmationDialog.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\AudioSettingsMenu.h">
+      <Filter>Header Files\States</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\OBSERVER\Observer.h">
       <Filter>Header Files\Entity</Filter>

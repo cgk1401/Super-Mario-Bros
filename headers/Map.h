@@ -39,6 +39,8 @@ protected:
 
     pair<int, int> level = {1,1};
     MapTheme maptheme;
+
+    vector<vector<MapTileInstance>> mapData_first;
 public:
     int rows = 12, columns = 16;
     int tileRows, tileColumns; 

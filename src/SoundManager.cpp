@@ -1,7 +1,13 @@
-#include "../headers/SoundManager.h"
+﻿#include "../headers/SoundManager.h"
+#include <iostream>
 
 SoundManager::SoundManager() {
+    cout << "TẠO TẠO TẠO TẠO TẠO\n";
+    musicVolume = 0.5f;
+    soundVolume = 0.5f;
     load();
+    setmusicVolume();
+    setsoundVolume();
 }
 
 SoundManager::~SoundManager() {
@@ -86,6 +92,53 @@ void SoundManager::stopMusic() {
 }
 
 void SoundManager::updateMusic() {
+    cout << musicVolume << endl;
     if (musicPlaying)
         UpdateMusicStream(musics[currentMusicType]);
 }
+
+void SoundManager::continueMusic() {
+    PlayMusicStream(musics[currentMusicType]);
+}
+
+Sound SoundManager::getSound(SoundType type) {
+    return sounds[type];
+}
+
+MusicType SoundManager::getCurrentMusicType() {
+    return currentMusicType;
+}
+
+Music SoundManager::getCurrentMusic() {
+    return musics[currentMusicType];
+}
+
+float SoundManager::getmusicVolume() {
+    return this->musicVolume;
+}
+
+float SoundManager::getsoundVolume() {
+    return this->soundVolume;
+}
+
+void SoundManager::setvaluemusicVolume(float value) {
+    this->musicVolume = value;
+}
+
+void SoundManager::setvaluesoundVolume(float value) {
+    this->soundVolume = value;
+}
+
+void SoundManager::setmusicVolume() {
+    for (auto& it : musics) {
+        SetMusicVolume(it.second, musicVolume);
+    }
+}
+
+void SoundManager::setsoundVolume() {
+    for (auto& it : sounds) {
+        SetSoundVolume(it.second, soundVolume);
+    }
+}
+
+

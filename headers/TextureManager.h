@@ -6,7 +6,7 @@ using namespace std;
 template <typename T>
 class Singleton;
 
-enum class TextureType{
+enum class TextureType {
     MARIO,
     MARIOINVINCIBILITY,
     ENEMY,
@@ -14,6 +14,8 @@ enum class TextureType{
     ITEM,
     BUTTON,
     LUIGI,
+    BUTTONPANEL,
+    AUDIOPANEL,
 };
 
 class TextureManager{

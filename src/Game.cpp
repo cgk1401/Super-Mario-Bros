@@ -20,7 +20,7 @@ Game::~Game(){
 }
 
 void Game::run(){
-
+ 
     while(!WindowShouldClose()){
         //Xử lí event
         float deltatime = GetFrameTime();
@@ -84,4 +84,8 @@ int Game::getStateCount() {
 
 vector<GameState*>& Game::getstateStack(){
     return this->stateStack;
+}
+
+GameState* Game::getFirstState() {
+    return stateStack.back();
 }
