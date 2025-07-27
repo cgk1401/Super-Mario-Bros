@@ -11,13 +11,13 @@ private :
 
     Button* backButton;
 
-    float musicVolume;
-    float soundVolume;
-
     Rectangle musicSlider;
     Rectangle soundSlider;
     Rectangle musicSliderHandle;
     Rectangle soundSliderHandle;
+
+    float currentmusicVolume;
+    float currentsoundVolume;
 
     const char* musicText = "MUSIC";
     const char* soundText = "SOUND";
@@ -32,8 +32,5 @@ public :
     void update(float deltatime) override;
     void render() override;
     bool allowUpdateBelow() override { return false; }
-
-    void setmusicVolume(MusicType type);
-    void setsoundVolume(SoundType type);
 };
 

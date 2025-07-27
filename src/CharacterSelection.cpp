@@ -29,6 +29,7 @@ CharacterSelection::~CharacterSelection() {
 }
 
 void CharacterSelection::update(float deltatime) {
+    Singleton<SoundManager>::getInstance().updateMusic();
     for (auto& choice : characterChoices) {
         choice->update(deltatime);
     }

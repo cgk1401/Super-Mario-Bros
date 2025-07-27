@@ -324,6 +324,7 @@ void MapEditor::render() {
 
 void MapEditor::update(float deltatime) {
     back_button->update(deltatime);
+    Singleton<SoundManager>::getInstance().updateMusic();
     if (back_button->IsClicked()) _option_buttons = !_option_buttons;
     if (_option_buttons) {
         for (auto& button : option_buttons) {

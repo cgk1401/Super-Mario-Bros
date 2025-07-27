@@ -83,7 +83,7 @@ void MenuState::update(float deltatime){
             Singleton<Game>::getInstance().changeState(new MapEditor());
         }
         else if (setting_buttons[3]->IsClicked()) {
-            Singleton<Game>::getInstance().addState(new AudioSettingsMenu());
+            Singleton<Game>::getInstance().changeState(new AudioSettingsMenu());
         }
         else if (backButton->IsClicked()) {
             selectedButton = 0;

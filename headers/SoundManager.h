@@ -59,6 +59,9 @@ private:
     MusicType currentMusicType;
     bool musicPlaying = false;
 
+    float musicVolume;
+    float soundVolume;
+
     SoundManager();
     ~SoundManager();
 
@@ -71,6 +74,16 @@ public:
     void playMusic(MusicType type, bool loop = true);
     void stopMusic();
     void updateMusic(); // gọi mỗi frame!
+    void continueMusic();
     Sound getSound(SoundType type);
-    Music getMusic(MusicType type);
+    MusicType getCurrentMusicType();
+    Music getCurrentMusic();
+
+    float getmusicVolume();
+    float getsoundVolume();
+    void setvaluemusicVolume(float value);
+    void setvaluesoundVolume(float value);
+
+    void setmusicVolume();
+    void setsoundVolume();
 };
