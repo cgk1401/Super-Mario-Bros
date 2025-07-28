@@ -20,6 +20,7 @@ Map::Map(pair<int, int> _level, int r, int c) {
     tileColumns = texture.width / TILE_SIZE;
 
     tileSetSourceRects.resize(tileRows);
+    cout << "tileRows: " << tileRows << endl;
     //for (auto& t : tileSetSourceRects) {
 
     //    t.resize(tileColumns);
@@ -190,13 +191,17 @@ void Map::createTileCatalog() {
     }
     //catalog for the rest, which have 6 palettes instead of 4 (add snow and mushroom)
 
-    for (int i = 21; i <= tileRows; i++) {
-        for (int j = 1; j < 11; j++) {
-			tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], ENEMY, new DecorationTileBehavior())); //Ground tiles
+    for (int i = 21; i <= 21; i++) {
+        for(auto& theme: themes){
+            int themeOffset = static_cast<int>(theme);
+            for (int j = 1; j < 11; j++) {
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j - 1], ENEMY, new DecorationTileBehavior(), theme)); //Ground tiles
+            }
+
+            for (int j = 11; j < 14; j++) {
+                if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new DecorationTileBehavior(), theme)); //Ground tiles
+            }
         }
-        for (int j = 11; j < 14; j++) {
-            if (i != 23) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new DecorationTileBehavior())); //Ground tiles
-		}
     }
     //temporary enemies to add to map
 
@@ -304,7 +309,7 @@ Tile Map::getTile(int tileID) const {
         TraceLog(LOG_INFO, "inavailable in catalog");
         return Tile(0, tileSetSourceRects[0][0], EMPTY, tileCatalog.at(0).behavior);
     }
-    return Tile(it->second.id, it->second.srcRect, it->second.type, it->second.behavior);
+    return Tile(it->second.id, it->second.srcRect, it->second.type, it->second.behavior, it->second.theme);
 }
 
 Tile Map::getTile(int row, int col) const {
@@ -322,23 +327,20 @@ MapTileInstance* Map::getMapTileInstance(int row, int col) {
     return &mapData[row][col];
 }
 
-void Map::setEnemySpawnCallback(function<void(EnemyType, Vector2)> callback) {
+void Map::setEnemySpawnCallback(function<void(EnemyType, Vector2, MapTheme)> callback) {
     spawnEnemyCallback = callback;
 }
 
-EnemyType Map::getEnemyType(int tileID) {
-    switch (tileID)
-    {
-    case 541:
-        return EnemyType::GOOMBA; break;
-    case 543:
-        return EnemyType::KOOPA; break;
-    case 544:
-        return EnemyType::PIRANT_PLANT; break;
+EnemyType Map::getEnemyType(int ID) {
+   for(int i = 21; i <= tileSetSourceRects.size(); i++){
+       for(int j = 1 ; j <= tileSetSourceRects[i].size(); j++){
+            if(j == 1  && ID == getTileIDFromCoords(i, j)) return EnemyType::GOOMBA;
+            else if(j== 3 && ID == getTileIDFromCoords(i, j)) return EnemyType::KOOPA;
+            else if(j== 4 && ID == getTileIDFromCoords(i, j)) return EnemyType::PIRANT_PLANT;
+        }
+   }
 
-    default:
-        return EnemyType::GOOMBA;
-    }
+   return EnemyType::None;
 }
 void Map::setTile(int row, int col, int tileID) {
     if (row < 0 || row >= rows || col < 0 || col >= columns) {
@@ -357,11 +359,15 @@ void Map::setTile(int row, int col, int tileID) {
 
         if (spawnEnemyCallback) {
             EnemyType enemyType = getEnemyType(tileID);
+            if(enemyType == EnemyType::None) {
+                TraceLog(LOG_ERROR, "Invalid enemy");
+                return;
+            }
             Vector2 spawnPos = {
                 static_cast<float>(col * TILE_SIZE),
                 static_cast<float>(row * TILE_SIZE)
             };
-            spawnEnemyCallback(enemyType, spawnPos);
+            spawnEnemyCallback(enemyType, spawnPos, it->second.theme);
         }
     }
     mapData[row][col].tileID = tileID;
@@ -424,7 +430,6 @@ void Map::loadFromFile(pair<int, int> level, bool isEditing) {
                     auto it = tileCatalog.find(id);
                     if (id && it != tileCatalog.end()) {
                         if(it->second.type == TileType::COIN){
-                            cout << "spawn coin\n";
                             Singleton<ItemManager>::getInstance().Spawn(ItemType::COIN, {(float) y * TILE_SIZE, (float) x * TILE_SIZE});
                         }
                     }
@@ -456,7 +461,7 @@ void Map::loadFromFile(pair<int, int> level, bool isEditing) {
     }
 
     mapData_first = mapData;
-    cout << "Loaded file successfully: " << filename << endl;
+    std::cout << "Loaded file successfully: " << filename << endl;
     MyReadFile.close();
 }
 

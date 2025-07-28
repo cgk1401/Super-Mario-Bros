@@ -70,7 +70,10 @@ void BrickTileBehavior::update(float dt, int tileRow, int tileCol, Map* map, Map
 
     if (brickState->hasBroken) {
         //EffectManager::get().spawnCoin(tileRow, tileCol);
-        Singleton<EffectManager>::getInstance().spawnBrickBreak(tileRow, tileCol);
+        Tile tile = map->getTile(tileInstance->tileID);
+        cout << "id: " << tileInstance->tileID << endl; 
+        cout << "theme: " << (float) tile.theme << endl;
+        Singleton<EffectManager>::getInstance().spawnBrickBreak(tileRow, tileCol, tile.theme);
         brickState->hasBroken = false;
         map->removeTile(tileRow, tileCol);
     }
@@ -132,7 +135,7 @@ void QuestionTileBehavior::update(float dt, int tileRow, int tileCol, Map* map, 
         if (tileState->bounceTimer.isFinished()) {
             tileState->isBouncing = false;
             map->updateTileInstancePosition(tileRow, tileCol, { 0, 0 }); // reset vị trí
-            int id =  map->getTileIDFromCoords(1, 22);
+            int id =  map->getTileIDFromCoords(1 +(int) map->getTile(tileInstance->tileID).theme * 2 , 22 );
             map->setTile(tileRow, tileCol, id);
            // cout << 1;
         }

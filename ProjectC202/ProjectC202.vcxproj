@@ -194,6 +194,7 @@
     <ClInclude Include="..\headers\ConcreteTileBehavior.h" />
     <ClInclude Include="..\headers\EffectManager.h" />
     <ClInclude Include="..\headers\Enemy.h" />
+    <ClInclude Include="..\headers\EnemyFactory.h" />
     <ClInclude Include="..\headers\FireBall.h" />
     <ClInclude Include="..\headers\FireBallExplosionEffect.h" />
     <ClInclude Include="..\headers\FireState.h" />

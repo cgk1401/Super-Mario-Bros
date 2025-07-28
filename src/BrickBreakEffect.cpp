@@ -1,11 +1,11 @@
 #include "../headers/BrickBreakEffect.h"
-
-BrickBreakEffect::BrickBreakEffect(Vector2 position)
-        : pos(position){
+#include "../headers/Global.h"
+BrickBreakEffect::BrickBreakEffect(Vector2 position, MapTheme _theme)
+        : pos(position), maptheme(_theme){
     
     vector<Rectangle> brickFrames;
     for(int i = 0; i < 2; i++){
-        brickFrames.push_back(Rectangle{(float)(180 + i * 10), 26, 8, 8});
+        brickFrames.push_back(Rectangle{(float)(180 + i * 10), 26 + (float) _theme * 108, 8, 8});
     }
 
     anim.frame = brickFrames;
@@ -51,8 +51,9 @@ void BrickBreakEffect::update(float dt) {
 
 
 void BrickBreakEffect::draw(const Texture2D& texture) {
+    Rectangle src = anim.getcurrentframe();
     for (auto& p : particle) {
-        DrawTexturePro(texture, anim.getcurrentframe(),
+        DrawTexturePro(texture, src,
             { p.x, p.y, anim.getcurrentframe().width * 3, anim.getcurrentframe().height * 3 },
             { 0,0 }, 0, WHITE);
     }

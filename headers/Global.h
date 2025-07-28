@@ -64,6 +64,7 @@ enum class Direction {
 };
 
 enum class EnemyType {
+	None,
 	GOOMBA,
 	KOOPA,
 	KOOPA_SHELL,

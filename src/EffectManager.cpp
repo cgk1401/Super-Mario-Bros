@@ -16,13 +16,13 @@ EffectManager::EffectManager(){
    
 }
 
-void EffectManager::spawnBrickBreak(int row, int col){
+void EffectManager::spawnBrickBreak(int row, int col, MapTheme theme){
     float x =(float) col * Map::TILE_SIZE;
     float y =(float) row * Map::TILE_SIZE;
 
     Vector2 spawnPos = { x + Map::TILE_SIZE / 2 - 8, y + Map::TILE_SIZE / 2 - 8 }; // căn giữa tile
     
-    effects.emplace_back(new BrickBreakEffect(spawnPos));
+    effects.emplace_back(new BrickBreakEffect(spawnPos, theme));
     
 }
 

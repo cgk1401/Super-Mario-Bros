@@ -14,6 +14,8 @@ protected:
 	Direction direction;
 	bool onGround;
 	Vector2 velocity;
+
+	MapTheme theme;
 public:
 	Enemy() : 
 		position({ 0,0 }), 
@@ -21,7 +23,8 @@ public:
 		texture({ 0 }), 
 		onGround(true), 
 		velocity({0,0}),
-		direction(Direction::Left) {}
+		direction(Direction::Left),
+		theme(MapTheme::OVERWORLD) {}
 
 	friend class Collision;
 	virtual ~Enemy() = default;

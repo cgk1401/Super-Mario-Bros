@@ -23,8 +23,8 @@ private:
 	PlantState currentState = PlantState::Hidden;
 public:
 	PiranhaPlant();
-	PiranhaPlant(Vector2 pipeTop);
-	PiranhaPlant(Vector2 pipeTop, float riseHeight);
+	PiranhaPlant(Vector2 pipeTop, MapTheme _theme);
+	PiranhaPlant(Vector2 pipeTop, float riseHeight, MapTheme _theme);
 	~PiranhaPlant();
 
 	void LoadSource() override;

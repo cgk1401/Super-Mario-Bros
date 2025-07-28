@@ -26,7 +26,7 @@ private :
 
 public :
 	KoopTroopa();
-	KoopTroopa(Vector2 position);
+	KoopTroopa(Vector2 position, MapTheme _theme);
 	~KoopTroopa() override;
 
 	void LoadSource() override;

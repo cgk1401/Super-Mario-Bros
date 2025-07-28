@@ -26,7 +26,7 @@ private:
 public:
 
     //EFFECT METHODs
-    void spawnBrickBreak(int row, int col);
+    void spawnBrickBreak(int row, int col, MapTheme theme);
     void spawnCoin(int row, int col);
     void explosionEffect(Vector2 pos);
     void goombaDead(Vector2 pos);

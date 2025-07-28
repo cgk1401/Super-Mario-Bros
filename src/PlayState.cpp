@@ -28,8 +28,8 @@ PlayState::PlayState(pair<int, int> _level) {
     world[level] = new Map(level);
     
     world[level]->setEnemySpawnCallback(
-        [this](EnemyType type, Vector2 pos) {
-            enemies.push_back(EnemyFactory::createEnemy(type, pos));
+        [this](EnemyType type, Vector2 pos, MapTheme theme) {
+            enemies.push_back(EnemyFactory::createEnemy(type, pos, theme));
         }
     );
     

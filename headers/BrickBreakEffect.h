@@ -14,9 +14,11 @@ private:
     vector<Vector2> velocity;
     Animation anim;
     Timer time;
+
+    MapTheme maptheme;
 public:
     BrickBreakEffect() {}
-    BrickBreakEffect(Vector2 position);
+    BrickBreakEffect(Vector2 position, MapTheme _theme);
     ~BrickBreakEffect();
     
     void update(float dt) override;

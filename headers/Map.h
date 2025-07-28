@@ -35,7 +35,7 @@ protected:
     map<TileType, Animation> tileAnimation;
     void createTileCatalog();
     void createTileAnimation();
-    function<void(EnemyType, Vector2)> spawnEnemyCallback;
+    function<void(EnemyType, Vector2, MapTheme)> spawnEnemyCallback;
 
     pair<int, int> level = {1,1};
     MapTheme maptheme;
@@ -60,8 +60,8 @@ public:
     void updateTileInstancePosition(int tileRow, int tileCol, Vector2 offset);
     MapTheme getMapTheme(pair<int, int> level);
     
-    void setEnemySpawnCallback(std::function<void(EnemyType, Vector2)> callback);
-    EnemyType getEnemyType(int tileID);
+    void setEnemySpawnCallback(std::function<void(EnemyType, Vector2, MapTheme)> callback);
+    EnemyType getEnemyType(int ID);
 
     void setTile(int row, int col, int tileID);
     void removeTile(int row, int col);

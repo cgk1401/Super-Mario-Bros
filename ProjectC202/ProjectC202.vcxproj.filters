@@ -404,5 +404,8 @@
     <ClInclude Include="..\headers\LevelState.h">
       <Filter>Header Files\States</Filter>
     </ClInclude>
+    <ClInclude Include="..\headers\EnemyFactory.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

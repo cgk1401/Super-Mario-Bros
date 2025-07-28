@@ -72,7 +72,7 @@ void AudioSettingsMenu::update(float deltatime) {
 	}
 
 	if (backButton->IsClicked()) {
-		Singleton<Game>::getInstance().changeState(new MenuState());
+		Singleton<Game>::getInstance().pop();
 	}
 }
 

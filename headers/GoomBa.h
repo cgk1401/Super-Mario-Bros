@@ -19,9 +19,11 @@ private:
 	float jump = -10;
 	float gravity = 50;
 	Timer stomp_dead_timer;
+
+
 public:
 	GoomBa();
-	GoomBa(Vector2 position);
+	GoomBa(Vector2 position, MapTheme theme);
 	~GoomBa() override;
 
 	void LoadSource() override;

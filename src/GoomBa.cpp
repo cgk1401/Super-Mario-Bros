@@ -10,9 +10,10 @@ GoomBa::GoomBa() : Enemy(){
 	LoadSource();
 }
 
-GoomBa::GoomBa(Vector2 position) : Enemy() {
+GoomBa::GoomBa(Vector2 position, MapTheme theme) : Enemy() {
 	currentState = GoomBaState::Run;
 	this->position = position;
+	this->theme = theme; 
 	LoadSource();
 }
 
@@ -29,15 +30,15 @@ void GoomBa::LoadSource() {
 	run.currentframe = 0;
 	run.currenttime = 0;
 	run.durationtime = 0.3f;
-	run.frame.push_back({ 0, 16, 16, 16 });
-	run.frame.push_back({ 18, 16, 16, 16 });
+	run.frame.push_back({ 0 + (float)theme * 74, 16, 16, 16 });
+	run.frame.push_back({ 18+ (float)theme * 74, 16, 16, 16 });
 	animation[GoomBaState::Run] = run;
 
 	Animation die;
 	die.currentframe = 0;
 	die.currenttime = 0;
 	die.durationtime = 0.3f;
-	die.frame.push_back({ 36, 24, 16, 8 });
+	die.frame.push_back({ 36+ (float)theme * 74, 24, 16, 8 });
 	animation[GoomBaState::DIE_STOMP] = die;
 
 	animation[GoomBaState::DIE_FALLING].frame = {};

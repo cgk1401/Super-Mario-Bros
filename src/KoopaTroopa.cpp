@@ -9,8 +9,9 @@ KoopTroopa::KoopTroopa() : Enemy() {
 	LoadSource();
 }
 
-KoopTroopa::KoopTroopa(Vector2 position) {
+KoopTroopa::KoopTroopa(Vector2 position, MapTheme _theme) {
 	this->position = position;
+	theme = _theme;
 	LoadSource();
 
 	currentState = KoopaState::Walk;
@@ -26,19 +27,19 @@ void KoopTroopa::LoadSource() {
 	walk.currentframe = 0;
 	walk.currenttime = 0;
 	walk.durationtime = 0.3f;
-	walk.frame.push_back({ 0, 112, 16, 24 });
-	walk.frame.push_back({ 18, 112, 16, 24 });
+	walk.frame.push_back({ 0 + (float)theme * 146, 112, 16, 24 });
+	walk.frame.push_back({ 18 + (float)theme * 146, 112, 16, 24 });
 	animation[KoopaState::Walk] = walk;
 
 	Animation shell;
 	shell.currentframe = 0;
 	shell.currenttime = 0;
 	shell.durationtime = 0.2;
-	shell.frame.push_back({ 72, 120, 16, 16 });
+	shell.frame.push_back({ 72 + (float)theme * 146, 120, 16, 16 });
 	animation[KoopaState::Shell] = shell;
 
 	Animation die;
-	die.frame.push_back({ 72, 120, 16, 16 });
+	die.frame.push_back({ 72 + (float)theme * 146, 120, 16, 16 });
 	die.durationtime = 0.2;
 	animation[KoopaState::Die] = die;
 	

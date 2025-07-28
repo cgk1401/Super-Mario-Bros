@@ -11,19 +11,21 @@ PiranhaPlant::PiranhaPlant() : Enemy(){
 	riseoffset = riseHeight;
 }
 
-PiranhaPlant::PiranhaPlant(Vector2 pipeTop) {
+PiranhaPlant::PiranhaPlant(Vector2 pipeTop, MapTheme _theme) {
 	basePos = pipeTop;
 	this->position = pipeTop;
+	theme = _theme;
 	LoadSource();
 
 	float riseHeight = animation.getcurrentframe().height * scale;
 	riseoffset = riseHeight;
 }
 
-PiranhaPlant::PiranhaPlant(Vector2 pipeTop, float riseHeight) {
+PiranhaPlant::PiranhaPlant(Vector2 pipeTop, float riseHeight, MapTheme _theme) {
 	basePos = pipeTop;
 	riseoffset = riseHeight;
 	this->position = pipeTop;
+	theme = _theme;
 	LoadSource();
 }
 PiranhaPlant::~PiranhaPlant() {
@@ -38,8 +40,8 @@ void PiranhaPlant::LoadSource() {
 	animation.currentframe = 0;
 	animation.currenttime = 0;
 	animation.durationtime = 0.3f;
-	animation.frame.push_back({ 0, 138, 16, 24 });
-	animation.frame.push_back({ 18, 138, 16, 24 });
+	animation.frame.push_back({ 0+ (float)theme * 146, 138, 16, 24 });
+	animation.frame.push_back({ 18+ (float)theme * 146, 138, 16, 24 });
 }
 
 void PiranhaPlant::Update(float deltatime, Map* map) {
