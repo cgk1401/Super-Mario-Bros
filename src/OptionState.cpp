@@ -29,8 +29,8 @@ void OptionState::update(float deltatime) {
 	else if (buttons[1]->IsClicked()) {
 		//CONTINUE
 	}
-	else if (this->buttons[2]->IsClicked()) {
-		Singleton<Game>::getInstance().addState(new LevelState);
+	else if (buttons[2]->IsClicked()) {
+		Singleton<Game>::getInstance().replaceState(new LevelState());
 	}
 	else if (backButton->IsClicked()) {
 		Singleton<Game>::getInstance().pop();
