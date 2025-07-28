@@ -40,6 +40,8 @@ MapEditor::MapEditor(pair<int, int> level ,int r, int c) : Map(level, r, c) {
     world_1_3   = LoadTexture("../assets/Map/World 1-3.png");
     world_1_4   = LoadTexture("../assets/Map/World 1-4.png");
     this->level = level;
+
+    loadFromFile(level, true);
 }
 MapEditor::~MapEditor() {
     delete back_button;

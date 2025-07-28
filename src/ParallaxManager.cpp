@@ -20,8 +20,6 @@ void ParallaxManager::addLayer(const char* filepath, Rectangle srcRect, float sp
 void ParallaxManager::update(Vector2 marioPos, Camera2D& camera, float deltaTime) {
     Vector2 screenPos = GetWorldToScreen2D(marioPos, camera);
 
-
-    
        for (auto& layer : layers) {
            layer.scrollX = -camera.target.x * layer.scrollSpeed * 0.8;
 

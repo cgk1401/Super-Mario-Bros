@@ -29,3 +29,10 @@ bool operator==(pair<int, int> a, pair<int,int>b){
 inline int operator+(int lhs, MapTheme rhs) {
     return lhs + static_cast<int>(rhs);
 }
+
+float approach(float current, float target, float increase) {
+	if (current < target) {
+		return fmin(current + increase, target);
+	}
+	return fmax(current - increase, target);
+}

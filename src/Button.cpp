@@ -15,6 +15,8 @@ Button::Button() {
     fontSize = 20;
     useTexture = false;
     Tooltip = "";
+
+    FONT = GetFontDefault();
 }
 
 Button::Button(float x, float y, float width, float height, const char* labelText, Color buttonColor, Color hoverCol, Color textCol, int fontSize, const char* tooltip) {
@@ -27,7 +29,7 @@ Button::Button(float x, float y, float width, float height, const char* labelTex
     isHovered = false;
     useTexture = false; 
     Tooltip = tooltip;
-    
+    FONT = LoadFont("../assets/font/PolygonParty.ttf");
 }
 
 Button::Button(const char* imagePath, float x, float y, float width, float height, const char* labelText, Color textCol, int fontSize, const char* tooltip) {
@@ -40,6 +42,8 @@ Button::Button(const char* imagePath, float x, float y, float width, float heigh
 
     Tooltip = tooltip;
     texture = LoadTexture(imagePath);
+    FONT = LoadFont("../assets/font/PolygonParty.ttf");
+
 }
 Button::Button(const Texture2D& texture, float x, float y, float width, float height, const char* labelText, Color textCol, int fontSize, const char* tooltip){
     bounds = { x, y, width, height };
@@ -51,6 +55,8 @@ Button::Button(const Texture2D& texture, float x, float y, float width, float he
 
     Tooltip = tooltip;
     this->texture = texture;
+    FONT = LoadFont("../assets/font/PolygonParty.ttf");
+
 }
 
 Button::~Button() {
@@ -74,17 +80,10 @@ void Button::operator=(const Button& b) {
    
 }
 
-float approach_(float current, float target, float increase) {
-	if (current < target) {
-		return fmin(current + increase, target);
-	}
-	return fmax(current - increase, target);
-}
-
 void Button::update(float deltatime) {
     Vector2 mouse = GetMousePosition();
     isHovered = CheckCollisionPointRec(mouse, bounds);
-
+    
     if (isHovered) {
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             isPressing = true;
@@ -96,22 +95,23 @@ void Button::update(float deltatime) {
                 isPressing = false;
                 goto go_here;
             }
-            scale = approach_(scale, PRESS_SCALE, deltatime / 2);
+            scale = approach(scale, PRESS_SCALE, deltatime / 2);
             
         }
         else if (isPressing) {
             isPressing = false;
-            scale = approach_(scale, MULTI_SCALE, deltatime / 2);
+            scale = approach(scale, MULTI_SCALE, deltatime / 2);
         }
         else {
             go_here:
-            scale = approach_(scale, MULTI_SCALE, deltatime / 2);
+            scale = approach(scale, MULTI_SCALE, deltatime / 2);
         }
     }
     else {
-        scale = approach_(scale, 1.0f, deltatime / 2 );
+        scale = approach(scale, 1.0f, deltatime / 2 );
         isPressing = false;
     }
+
 }
 
 
@@ -121,7 +121,7 @@ void Button::draw() {
     dest.height = bounds.height * scale;
     dest.x = bounds.x + (bounds.width - dest.width) / 2.0f;
     dest.y = bounds.y + (bounds.height - dest.height) / 2.0f;
-
+    
     if (useTexture) {
         Rectangle src = {0, 0, (float)texture.width, (float)texture.height};
         Color drawColor = isHovered ? Color{180, 180, 180, 255} : WHITE;
@@ -131,11 +131,13 @@ void Button::draw() {
         DrawRectangleRec(dest, isHovered ? hoverColor : color);
     }
     float textFontSize = fontSize * scale;
-    int textWidth = MeasureText(label.c_str(), textFontSize);
-    float textX = dest.x + (dest.width - textWidth) / 2;
-    float textY = dest.y + (dest.height - textFontSize) / 2;
-    DrawText(label.c_str(), (int)textX, (int)textY, textFontSize, textColor);
-
+    float spacing = 2;
+    Vector2 text = MeasureTextEx(FONT, label.c_str(), textFontSize, spacing);
+    
+    float textX = dest.x + (dest.width - text.x) / 2;
+    float textY = dest.y + (dest.height - text.y) / 2;
+    //DrawText(label.c_str(), (int)textX, (int)textY, textFontSize, textColor);
+    DrawTextEx(FONT, label.c_str(), { textX, textY }, textFontSize, spacing, textColor);
     if (isHovered && Tooltip != "") {
         float textFontSize = 20;
         int textWidth = MeasureText(Tooltip.c_str(), textFontSize);
@@ -149,6 +151,10 @@ void Button::draw() {
         DrawRectangleRec(tooltipDest, DARKGRAY);
         DrawText(Tooltip.c_str(), textX, textY, textFontSize, WHITE);
     }
+}
+void Button::updateScale(float newScale) {
+    
+    scale = newScale;
 }
 
 

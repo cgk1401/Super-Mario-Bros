@@ -35,7 +35,7 @@ void PauseState::update(float deltatime){
         Singleton<Game>::getInstance().pop();
     }
     else if (buttons[2]->IsClicked()){
-        Singleton<Game>::getInstance().replaceState(new AudioSettingsMenu);
+        Singleton<Game>::getInstance().addState(new AudioSettingsMenu);
     }
 
 

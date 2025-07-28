@@ -27,7 +27,7 @@ public:
 
 
 private:
-    HUD hud;
+    HUD* hud;
     //Map* map;
     //Manage the level for each world
     std::map<pair<int, int>, Map*> world; //world[1][1] -> level 1-1'

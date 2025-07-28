@@ -58,7 +58,7 @@ void Game::addState(GameState* newGameState) {
     stateStack.push_back(newGameState);
 }
 void Game::pop() {
-    if (!stateStack.empty()) {
+    if (stateStack.size() > 1) {
         delete stateStack.back();  // FREE
         stateStack.pop_back();
     }

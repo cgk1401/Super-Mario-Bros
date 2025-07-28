@@ -14,18 +14,19 @@ MenuState::MenuState() {
     buttons.resize(amount_button);
 
     ButtonLayoutConfig cfg(amount_button);
-    const char* buttonLabels[amount_button] = {"PLAY", "SETTINGS", "EXIT"};
+    const char* buttonLabels[amount_button] = {"PLAY", "LEVEL DESIGN", "EXIT"};
     
     buttons = CreateButtons(buttonLabels, cfg);
 
 
-    const int amount_setting_button = 4;
-    const char* setting_buttonLabels[amount_setting_button] = { "CHARACTER", "LEVEL", "MAP EDITOR", "AUDIO"};
+    const int amount_setting_button = 3;
+    const char* setting_buttonLabels[amount_setting_button] = { "CHARACTER", "LEVEL", "MAP EDITOR"};
 
     ButtonLayoutConfig _cfg(amount_setting_button);
     setting_buttons = CreateButtons(setting_buttonLabels, amount_setting_button);
 
     backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
+    option_button = new Button("../assets/GUI/option_button.png", 10, 10, 100, 100, "", WHITE);
 
     font       = LoadFont("../assets/font/knightwarrior.otf");
 
@@ -34,11 +35,23 @@ MenuState::MenuState() {
     luigi_character = LoadTexture("../assets/GUI/menu_luigi.png");
 
     textbox = TextBox(0, 0, 200, 40, "", RED, GRAY, BLACK);
+
+    //dont care this=)
+    for(int i = 0; i < 5; i++){
+        starAnimation.frame.push_back({(float)i * 600, 0, 600, 600});
+    }
+    for(int i = 4; i >= 0; i--){
+        starAnimation.frame.push_back({(float)i * 600, 0, 600, 600});
+    }
+    starAnimation.durationtime = 0.08f;
+    starTexture = LoadTexture("../assets/GUI/star_sprite.png");
+    
 }
 
 MenuState::~MenuState() {
     delete backButton;
-
+    delete option_button;
+    
     for (auto& button : buttons) {
         delete button;
     }
@@ -55,16 +68,26 @@ MenuState::~MenuState() {
 void MenuState::update(float deltatime){
     //textbox.update();
     Singleton<SoundManager>::getInstance().updateMusic();
+    starAnimation.Update(deltatime);
     if (selectedButton == 0) {
+        option_button->update(deltatime);
         for (auto& button : buttons) {
             button->update(deltatime);
         }
 
-        if (buttons[0]->IsClicked()) {
-            Singleton<Game>::getInstance().changeState(new PlayState(Global::level));
+        if(option_button->IsClicked()){
+            Singleton<Game>::getInstance().addState(new AudioSettingsMenu());
+        }
+        else if (buttons[0]->IsClicked()) {
+            //if (buttons[0]->IsClicked()) {
+            //    Singleton<Game>::getInstance().clear();
+            //    Singleton<Game>::getInstance().addState(new PlayState());
+            //}
+            Singleton<Game>::getInstance().addState(new OptionState());
         }
         else if (buttons[1]->IsClicked()) {
-            selectedButton = 1; //setting_buttons
+            //selectedButton = 1; //setting_buttons
+            Singleton<Game>::getInstance().addState(new LevelState(true));
         }
         else if (buttons[2]->IsClicked()) {
             exit(0);
@@ -77,13 +100,10 @@ void MenuState::update(float deltatime){
         if (setting_buttons[0]->IsClicked()) //CHARACTER
             Singleton<Game>::getInstance().addState(new CharacterSelection);
         else if (setting_buttons[1]->IsClicked()) { //LEVEL
-			Singleton<Game>::getInstance().addState(new LevelState);
+			Singleton<Game>::getInstance().addState(new LevelState(true));
         }
         else if (setting_buttons[2]->IsClicked()) {
             Singleton<Game>::getInstance().changeState(new MapEditor());
-        }
-        else if (setting_buttons[3]->IsClicked()) {
-            Singleton<Game>::getInstance().changeState(new AudioSettingsMenu());
         }
         else if (backButton->IsClicked()) {
             selectedButton = 0;
@@ -96,15 +116,19 @@ void MenuState::update(float deltatime){
 void MenuState::render(){
     
     DrawTexture(background, 0, 0, WHITE);
-    if (selectedButton == 0)
+    if (selectedButton == 0){
+        option_button->draw();
         for (auto& button : buttons) {
             button->draw();
         }
+    }
     else if (selectedButton == 1)
         {   for (auto& button : setting_buttons)
                 button->draw();
             backButton->draw();
         }
+
+   
     //HEADER TITLE
     DrawTextEx(font, "MARIO MARIO", {screenWidth * 0.33f, screenHeight * 0.1f}, 100, 5, DARKBROWN);
    
@@ -115,6 +139,12 @@ void MenuState::render(){
         { 0,0 }, 0,
         WHITE
     );
+     Rectangle src = starAnimation.getcurrentframe();
+    DrawTexturePro(starTexture,
+                src,
+                {screenWidth * 0.767f, screenHeight * 0.212f, 140, 140},
+                {0,0},
+                17, WHITE);
     //textbox.Draw();
     
 }

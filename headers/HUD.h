@@ -11,7 +11,7 @@ private:
     float time;
     int score;
     int coins;
-    int map_level;
+    pair<int, int> map_level;
     int lives;
     
     Font font;
@@ -19,16 +19,16 @@ private:
     Rectangle hudRect; //vùng giới hạn các position của các thông số trên 
    
 public:
-    HUD();
+    HUD(pair<int, int> level = {1,1});
     ~HUD();
     void setScore(int s);
     void setCoins(int c);
     void setLives(int l);
-    void setMapLevel(int m);
+    void setMapLevel(pair<int, int> m);
     void setTime(int t);
     bool PauseButton_IsPressed();
 
-    void update();
+    void update(float dt);
     void draw();
     void onNotify(const EventType& event, void* data = nullptr) override;
 };

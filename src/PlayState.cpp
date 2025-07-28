@@ -9,8 +9,10 @@
 #include "../headers/Luigi.h"
 
 PlayState::PlayState(pair<int, int> _level) {
-    if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
-    else Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
+    if (_level == pair {1,1}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
+    else if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
+    else if (_level == pair {1,3}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
+    else if (_level == pair {1,4}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_CASTLE, true);
 
     if (selectedCharacter == CharacterType::Mario) {
         character = new Mario({ 100, 300 });
@@ -19,10 +21,7 @@ PlayState::PlayState(pair<int, int> _level) {
         character = new Luigi({ 100, 300 });
     }
 
-    EffectManager* effects = &Singleton<EffectManager>::getInstance();
-    character->attachObserver(&hud);
-    character->attachObserver(effects);
-    
+   
     level = _level;
     Global::level = _level;
     world[level] = new Map(level);
@@ -32,12 +31,17 @@ PlayState::PlayState(pair<int, int> _level) {
             enemies.push_back(EnemyFactory::createEnemy(type, pos, theme));
         }
     );
+    hud = new HUD(level);
     
     Singleton<ItemManager>::getInstance().clearItems();
     world[level]->loadFromFile(level);
     Global::map = world[level];
     camera.init({0,0});
-   
+
+    EffectManager* effects = &Singleton<EffectManager>::getInstance();
+    character->attachObserver(hud);
+    character->attachObserver(effects);
+
     bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.05, 9.2);
     bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 9.2);
     bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 9.2);
@@ -60,7 +64,7 @@ void PlayState::update(float dt){
     
 
     camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
-    hud.update(); 
+    hud->update(dt); 
     PauseButton->update(dt);
     if (PauseButton->IsClicked()) {       
         Singleton<Game>::getInstance().addState(new PauseState());
@@ -132,7 +136,7 @@ void PlayState::render() {
     //fg.draw();
     EndMode2D();
 
-    hud.draw();
+    hud->draw();
     PauseButton->draw();
 }
 

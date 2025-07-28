@@ -14,11 +14,11 @@ private:
 	vector<Button*> buttons;
 	vector<Rectangle> levelSigns;
 	Font font;
-
+	bool isEditorMode;
 public: 
-	LevelState();
+	LevelState(bool isEditorMode = false);
 	~LevelState();
-	void update(float deltatime);
-	void render();
+	void update(float deltatime) override;
+	void render() override;
 	bool allowUpdateBelow() override { return false; }
 };

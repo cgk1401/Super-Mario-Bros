@@ -225,6 +225,9 @@
     <ClCompile Include="..\src\AudioSettingsMenu.cpp">
       <Filter>Source Files\States</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\OptionState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -406,6 +409,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\EnemyFactory.h">
       <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\OptionState.h">
+      <Filter>Header Files\States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

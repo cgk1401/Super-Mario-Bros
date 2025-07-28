@@ -3,7 +3,8 @@
 #include "../headers/Game.h"
 #include "../headers/MenuState.h"
 
-LevelState::LevelState() {
+LevelState::LevelState(bool _isEditorMode) {
+	isEditorMode = _isEditorMode;
 	background = resizedImage("../assets/GUI/Menu background.png", screenWidth, screenHeight);
 	int amount_button = 4;
 	buttons.resize(amount_button);
@@ -25,29 +26,34 @@ LevelState::~LevelState() {
 		delete button;
 	}
 	UnloadFont(font);
+	UnloadTexture(background);
 }
 void LevelState::update(float deltatime) {
+	Singleton<SoundManager>::getInstance().updateMusic();
 	for (auto& button : buttons) {
 		button->update(deltatime);
 	}
 	backButton->update(deltatime);
 	if (buttons[0]->IsClicked()) {
 		// Load Level 1
-		Singleton<Game>::getInstance().changeState(new MapEditor({1,1}));
+		if(isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({1,1}));
+		else 			 Singleton<Game>::getInstance().changeState(new PlayState({1,1}));
+		
 	}
 	else if (buttons[1]->IsClicked()) {
 		// Load Level 2
-		Singleton<Game>::getInstance().changeState(new MapEditor({1,2}));
-
+		if(isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({1,2}));
+		else 			 Singleton<Game>::getInstance().changeState(new PlayState({1,2}));
 	}
 	else if (buttons[2]->IsClicked()) {
 		// Load Level 3
-		Singleton<Game>::getInstance().changeState(new MapEditor({1,3}));
-
+		if(isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({1,3}));
+		else 			 Singleton<Game>::getInstance().changeState(new PlayState({1,3}));
 	}
 	else if (buttons[3]->IsClicked()) {
 		// Load Level 4
-		Singleton<Game>::getInstance().changeState(new MapEditor({1,4}));
+		if(isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({1,4}));
+		else 			 Singleton<Game>::getInstance().changeState(new PlayState({1,4}));
 	}	
 	else if (backButton->IsClicked()) {
 		Singleton<Game>::getInstance().pop();

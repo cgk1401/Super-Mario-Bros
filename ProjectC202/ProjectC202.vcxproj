@@ -165,6 +165,7 @@
     <ClCompile Include="..\src\NormalState.cpp" />
     <ClCompile Include="..\src\OBSERVER\EventDataBase.cpp" />
     <ClCompile Include="..\src\OBSERVER\Subject.cpp" />
+    <ClCompile Include="..\src\OptionState.cpp" />
     <ClCompile Include="..\src\ParallaxManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PiranhaPlant.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="..\headers\OBSERVER\EventDataBase.h" />
     <ClInclude Include="..\headers\OBSERVER\Observer.h" />
     <ClInclude Include="..\headers\OBSERVER\Subject.h" />
+    <ClInclude Include="..\headers\OptionState.h" />
     <ClInclude Include="..\headers\ParallaxManager.h" />
     <ClInclude Include="..\headers\PauseState.h" />
     <ClInclude Include="..\headers\PiranhaPlant.h" />

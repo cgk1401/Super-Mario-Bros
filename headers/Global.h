@@ -95,4 +95,5 @@ public:
 
 bool operator==(pair<int, int> a, pair<int,int>b);
 inline int operator+(int lhs, MapTheme rhs);
+float approach(float current, float target, float increase);
 #endif 

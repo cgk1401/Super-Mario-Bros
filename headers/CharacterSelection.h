@@ -7,12 +7,18 @@ using namespace std;
 class CharacterSelection : public GameState {
 private:
     Button* backButton;
-  
+    Button* play_button;
+
     Font font;
     Texture2D background;
     vector <Texture2D> characters;
     vector<Button*> characterChoices;
     Texture2D* selectCharacter;
+
+    Timer time;
+    float speed = 10;
+    // bool startLaunching = false;
+    // float scale = 1;
 public:
     CharacterSelection();
     ~CharacterSelection();

@@ -135,12 +135,6 @@ void Character::Draw() {
 	//DrawRectangleLinesEx(getBound(), 0.4f, RED);
 
 }
-float approach(float current, float target, float increase) {
-	if (current < target) {
-		return fmin(current + increase, target);
-	}
-	return fmax(current - increase, target);
-}
 void Character::HandleInput(float deltatime) {
 	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
 	float acc = config.ACCELERATION;
@@ -239,15 +233,19 @@ void Character::Update(float deltatime) {
 
 	position.x += velocity.x * deltatime;
 	position.y += velocity.y * deltatime;
-}
 
+	if(position.y > screenHeight + 10) onDead();
+}
+void Character::onDead(){
+	Singleton<SoundManager>::getInstance().play(SoundType::DIE);
+	currentAction = ActionState::Die;
+}
 void Character::DIE(Enemy* e){
 	if(currentAction == ActionState::Die) return;
 	
 	if(getCharacterStateType() == CharacterStateType::NormalState){
-		currentAction = ActionState::Die;
+		onDead();
 		Singleton<EffectManager>::getInstance().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
-		Singleton<SoundManager>::getInstance().play(SoundType::DIE);
 	}
 	else if(getCharacterStateType() == CharacterStateType::SuperState || getCharacterStateType() == CharacterStateType::FireState){
 		//TRANSFORM GRADUALLY TO NORMAL STATE

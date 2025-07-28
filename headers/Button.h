@@ -20,11 +20,13 @@ private:
     float scale = 1;
     bool isPressing = false;
     std::string Tooltip;
+
+    Font FONT;
 public:
     Button();
-    Button(float x, float y, float width, float height, const char* labelText, Color buttonColor, Color hoverCol, Color textCol, int fontSize = 20, const char* tooltip = "");
-    Button(const char* imagePath, float x, float y, float width, float height, const char* labelText, Color textColor, int fontSize = 20, const char* tooltip = "");
-    Button(const Texture2D& texture, float x, float y, float width, float height, const char* labelText, Color textColor, int fontSize = 20, const char* tooltip = "");
+    Button(float x, float y, float width, float height, const char* labelText, Color buttonColor, Color hoverCol, Color textCol, int fontSize = 30, const char* tooltip = "");
+    Button(const char* imagePath, float x, float y, float width, float height, const char* labelText, Color textColor, int fontSize = 30, const char* tooltip = "");
+    Button(const Texture2D& texture, float x, float y, float width, float height, const char* labelText, Color textColor, int fontSize = 30, const char* tooltip = "");
 
     ~Button();
 
@@ -33,6 +35,7 @@ public:
     void draw();
 
     void updatePos(Vector2 newPos);
+    void updateScale(float newScale);
     bool IsClicked();
     bool IsMouseDown();
     Rectangle getBounds() const;

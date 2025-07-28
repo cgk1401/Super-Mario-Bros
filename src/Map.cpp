@@ -20,7 +20,7 @@ Map::Map(pair<int, int> _level, int r, int c) {
     tileColumns = texture.width / TILE_SIZE;
 
     tileSetSourceRects.resize(tileRows);
-    cout << "tileRows: " << tileRows << endl;
+    //cout << "tileRows: " << tileRows << endl;
     //for (auto& t : tileSetSourceRects) {
 
     //    t.resize(tileColumns);
@@ -411,11 +411,12 @@ void Map::loadFromFile(pair<int, int> level, bool isEditing) {
 
     int fileRows, fileCols;
     MyReadFile >> fileRows >> fileCols;
-
+    cout << fileCols << endl;
     int loadCols = isEditing ? MAX_COLUMN : fileCols;
     initMap(fileRows, loadCols); // Re-initialize map with new dimensions
     columns = loadCols;
 
+   
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < fileCols; y++) {
             string s;

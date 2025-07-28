@@ -2,7 +2,7 @@
 #include <iostream>
 
 SoundManager::SoundManager() {
-    cout << "TẠO TẠO TẠO TẠO TẠO\n";
+    //cout << "TẠO TẠO TẠO TẠO TẠO\n";
     musicVolume = 0.5f;
     soundVolume = 0.5f;
     load();
@@ -92,7 +92,6 @@ void SoundManager::stopMusic() {
 }
 
 void SoundManager::updateMusic() {
-    cout << musicVolume << endl;
     if (musicPlaying)
         UpdateMusicStream(musics[currentMusicType]);
 }
