@@ -25,6 +25,7 @@ LevelState::~LevelState() {
 		delete button;
 	}
 	UnloadFont(font);
+	UnloadTexture(background);
 }
 void LevelState::update(float deltatime) {
 	for (auto& button : buttons) {

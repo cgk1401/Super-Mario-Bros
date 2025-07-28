@@ -162,6 +162,7 @@
     <ClCompile Include="..\src\MenuState.cpp" />
     <ClCompile Include="..\src\GoombaDeadEffect.cpp" />
     <ClCompile Include="..\src\NormalState.cpp" />
+    <ClCompile Include="..\src\OptionState.cpp" />
     <ClCompile Include="..\src\ParallaxManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PiranhaPlant.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="..\headers\Mushroom.h" />
     <ClInclude Include="..\headers\GoombaDeadEffect.h" />
     <ClInclude Include="..\headers\NormalState.h" />
+    <ClInclude Include="..\headers\OptionState.h" />
     <ClInclude Include="..\headers\ParallaxManager.h" />
     <ClInclude Include="..\headers\PauseState.h" />
     <ClInclude Include="..\headers\PiranhaPlant.h" />

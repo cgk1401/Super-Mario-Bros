@@ -15,7 +15,7 @@ private:
 public: 
 	LevelState();
 	~LevelState();
-	void update(float deltatime);
-	void render();
+	void update(float deltatime) override;
+	void render() override;
 	bool allowUpdateBelow() override { return false; }
 };

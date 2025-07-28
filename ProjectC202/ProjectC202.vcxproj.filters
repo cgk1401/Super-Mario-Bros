@@ -210,6 +210,9 @@
     <ClCompile Include="..\src\LevelState.cpp">
       <Filter>Source Files\States</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\OptionState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -369,6 +372,9 @@
       <Filter>Header Files\Core</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\LevelState.h">
+      <Filter>Header Files\States</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\OptionState.h">
       <Filter>Header Files\States</Filter>
     </ClInclude>
   </ItemGroup>
