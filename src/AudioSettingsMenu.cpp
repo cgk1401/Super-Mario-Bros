@@ -6,7 +6,7 @@
 #include "MenuState.h"
 
 AudioSettingsMenu::AudioSettingsMenu() {
-	background = resizedImage("../assets/GUI/Menu Background.png", screenWidth, screenHeight);
+	background = Singleton<TextureManager>::getInstance().load(TextureType::BACKGROUND_1);
 	audioPanel = Singleton<TextureManager>::getInstance().load(TextureType::AUDIOPANEL);
 	currentmusicVolume = Singleton<SoundManager>::getInstance().getmusicVolume();
 	currentsoundVolume = Singleton<SoundManager>::getInstance().getsoundVolume();
@@ -34,7 +34,6 @@ AudioSettingsMenu::AudioSettingsMenu() {
 
 AudioSettingsMenu::~AudioSettingsMenu() {
 	delete backButton;
-	UnloadTexture(background);
 }
 
 void AudioSettingsMenu::update(float deltatime) {
@@ -77,7 +76,10 @@ void AudioSettingsMenu::update(float deltatime) {
 }
 
 void AudioSettingsMenu::render() {
-	DrawTexture(background, 0, 0, WHITE);
+	DrawTexture(background, 0, 0, WHITE); DrawTexturePro(background,
+		{ 0,0, (float)background.width,(float)background.height },
+		{ 0,0, screenWidth, screenHeight },
+		{ 0,0 }, 0, WHITE);
 	DrawRectangleRec(Rectangle{ 0, 0, screenWidth, screenHeight }, Fade(BLACK, 0.4f));
 	backButton->draw();
 	DrawTexture(audioPanel, positionPanel.x, positionPanel.y, WHITE);

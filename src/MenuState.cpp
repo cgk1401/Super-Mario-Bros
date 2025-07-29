@@ -30,7 +30,7 @@ MenuState::MenuState() {
 
     font       = LoadFont("../assets/font/knightwarrior.otf");
 
-    background      = resizedImage("../assets/GUI/Menu Background.png", screenWidth, screenHeight);
+    background      = Singleton<TextureManager>::getInstance().load(TextureType::BACKGROUND_1);
     mario_character = LoadTexture("../assets/GUI/menu_mario.png");
     luigi_character = LoadTexture("../assets/GUI/menu_luigi.png");
 
@@ -60,7 +60,6 @@ MenuState::~MenuState() {
         delete button;
     }
 
-    UnloadTexture(background);
     UnloadTexture(mario_character);
     UnloadFont(font);
 }
@@ -115,7 +114,10 @@ void MenuState::update(float deltatime){
 
 void MenuState::render(){
     
-    DrawTexture(background, 0, 0, WHITE);
+    DrawTexturePro(background,
+			{0,0, (float)background.width,(float) background.height},
+			{0,0, screenWidth, screenHeight},
+			 {0,0}, 0, WHITE);
     if (selectedButton == 0){
         option_button->draw();
         for (auto& button : buttons) {

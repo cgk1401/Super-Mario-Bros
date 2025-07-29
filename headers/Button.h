@@ -18,6 +18,7 @@ private:
     Texture2D texture;
     bool useTexture;
     float scale = 1;
+    float defaultScale = 1;
     bool isPressing = false;
     std::string Tooltip;
 
@@ -32,13 +33,16 @@ public:
 
     void operator=(const Button& b);
     void update(float deltatime);
-    void draw();
+    void draw(Color tint = WHITE);
 
     void updatePos(Vector2 newPos);
     void updateScale(float newScale);
     bool IsClicked();
     bool IsMouseDown();
+    bool IsHovered() const;
     Rectangle getBounds() const;
+    Rectangle getScaledRect() const;
+    Vector2 getPosition() const;
 };
 
 #endif

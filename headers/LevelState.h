@@ -15,6 +15,8 @@ private:
 	vector<Rectangle> levelSigns;
 	Font font;
 	bool isEditorMode;
+
+	Rectangle workRect;
 public: 
 	LevelState(bool isEditorMode = false);
 	~LevelState();

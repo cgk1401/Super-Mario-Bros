@@ -16,6 +16,8 @@ enum class TextureType {
     LUIGI,
     BUTTONPANEL,
     AUDIOPANEL,
+    BACKGROUND_1,
+    BACKGROUND_2,
 };
 
 class TextureManager{

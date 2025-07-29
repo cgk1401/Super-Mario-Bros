@@ -9,13 +9,12 @@ OptionState::OptionState() {
 
 	backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
 	font = LoadFont("../assets/font/knightwarrior.otf");
-	background = LoadTexture("../assets/GUI/option_background.png");
+	background = Singleton<TextureManager>::getInstance().load(TextureType::BACKGROUND_2);
 }
 OptionState::~OptionState() {
 	for (auto& button : buttons)
 		delete button;
 	delete backButton;
-	UnloadTexture(background);
 	UnloadFont(font);
 }
 void OptionState::update(float deltatime) {
@@ -30,7 +29,7 @@ void OptionState::update(float deltatime) {
 		//CONTINUE
 	}
 	else if (buttons[2]->IsClicked()) {
-		Singleton<Game>::getInstance().replaceState(new LevelState());
+		Singleton<Game>::getInstance().addState(new LevelState());
 	}
 	else if (backButton->IsClicked()) {
 		Singleton<Game>::getInstance().pop();

@@ -16,7 +16,7 @@ private:
     Texture2D* selectCharacter;
 
     Timer time;
-    float speed = 10;
+    float speed = 11.8f;
     // bool startLaunching = false;
     // float scale = 1;
 public:

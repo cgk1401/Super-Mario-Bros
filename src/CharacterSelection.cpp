@@ -6,7 +6,7 @@ CharacterSelection::CharacterSelection() {
     font = LoadFont("../assets/font/knightwarrior.otf");
 
     backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
-    play_button = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), screenWidth, screenHeight * 0.85f, screenWidth / 3 * 0.5f, screenHeight * 0.25f * 0.5f, "PLAY", WHITE, 35);
+    play_button = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), screenWidth, screenHeight * 0.85f, screenWidth * 0.23f, screenHeight * 0.25f * 0.5f, "START GAME", WHITE, 35);
 
     background = LoadTexture("../assets/GUI/Character_Seletion.png");
     characters.resize(2);
@@ -38,16 +38,18 @@ void CharacterSelection::update(float deltatime) {
     speed = approach(speed, 0 , 0.2);
     float posX = play_button->getBounds().x;
     float posY = play_button->getBounds().y;
-    posX = approach(posX, screenWidth * 0.8f, speed);
+    posX = approach(posX, screenWidth * 0.7f, speed);
     play_button->updatePos({posX, posY});
 
     play_button->update(deltatime);
     backButton->update(deltatime);
     if (selectedCharacter == CharacterType::Mario) {
         characterChoices[0]->updateScale(1.1f);
+        characterChoices[1]->updateScale(1);
     }
     else if (selectedCharacter == CharacterType::Luigi) {
         characterChoices[1]->updateScale(1.1f);
+        characterChoices[0]->updateScale(1);
     }
     if (characterChoices[0]->IsClicked()) {
         selectCharacter = &characters[0];
@@ -87,10 +89,12 @@ void CharacterSelection::render() {
     float offset = 100;
     if (selectedCharacter == CharacterType::Mario) {
         Rectangle optionBound = characterChoices[0]->getBounds();
+        characterChoices[1]->draw(Fade(BLACK, 0.5f));
         DrawTriangle({ optionBound.x - 50, optionBound.y + optionBound.height / 2 - 50}, { optionBound.x - 50, optionBound.y + optionBound.height / 2 + 50 }, { optionBound.x - 25, optionBound.y + optionBound.height / 2  }, RED);
     }
     else if (selectedCharacter == CharacterType::Luigi) {
         Rectangle optionBound = characterChoices[1]->getBounds();
+        characterChoices[0]->draw(Fade(BLACK, 0.5f));
         DrawTriangle({ optionBound.x - 50, optionBound.y + optionBound.height / 2 - 50 }, { optionBound.x - 50, optionBound.y + optionBound.height / 2 + 50 }, { optionBound.x - 25, optionBound.y + optionBound.height / 2 }, GREEN);
 
     }
