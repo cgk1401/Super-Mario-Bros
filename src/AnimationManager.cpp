@@ -12,6 +12,8 @@ void AnimationManager::LoadAnimation(const string& filename, CharacterStateType 
 		else if (chartype.key() == "Luigi") type = CharacterType::Luigi;
 		else if (chartype.key() == "SmallCharacter") type = CharacterType::SmallCharacter;
 		else if (chartype.key() == "BigCharacter") type = CharacterType::BigCharacter;
+		else if (chartype.key() == "TransforSmallMario") type = CharacterType::TransforSmallMario;
+		else if (chartype.key() == "TransforSmallLuigi") type = CharacterType::TransforSmallLuigi;
 
 		for (auto& action : chartype.value().items()) {
 			ActionState actionType;

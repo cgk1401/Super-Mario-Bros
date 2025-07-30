@@ -55,6 +55,8 @@ enum class CharacterType {
 	Luigi,
 	SmallCharacter,
 	BigCharacter,
+	TransforSmallMario,
+	TransforSmallLuigi,
 };
 inline CharacterType selectedCharacter = CharacterType::Mario;
 

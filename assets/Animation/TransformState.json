@@ -9,7 +9,7 @@
       "duration": 0.3
     }
   },
-  "SmallCharacter": {
+  "TransforSmallMario": {
     "Idle": {
       "frames": [
         { "x": 233, "y": 1, "width": 16, "height": 32 },
@@ -48,6 +48,37 @@
         { "x": 324, "y": 72, "width": 16, "height": 32 }
         ],
         "duration": 0.3
+    }
+  },
+  "TransforSmallLuigi": {
+    "Idle": {
+      "frames": [
+        { "x": 233, "y": 66, "width": 16, "height": 32 },
+        { "x": 318, "y": 99, "width": 16, "height": 16 },
+
+        { "x": 250, "y": 66, "width": 16, "height": 32 },
+        { "x": 318, "y": 99, "width": 16, "height": 16 },
+
+        { "x": 267, "y": 66, "width": 16, "height": 32 },
+        { "x": 318, "y": 99, "width": 16, "height": 16 },
+
+        { "x": 284, "y": 66, "width": 16, "height": 32 },
+        { "x": 318, "y": 99, "width": 16, "height": 16 },
+
+        { "x": 301, "y": 66, "width": 16, "height": 32 },
+        { "x": 318, "y": 99, "width": 16, "height": 16 },
+
+        { "x": 318, "y": 66, "width": 16, "height": 32 },
+        { "x": 318, "y": 99, "width": 16, "height": 16 },
+
+        { "x": 233, "y": 99, "width": 16, "height": 16 },
+        { "x": 250, "y": 99, "width": 16, "height": 16 },
+        { "x": 267, "y": 99, "width": 16, "height": 16 },
+        { "x": 284, "y": 99, "width": 16, "height": 16 },
+        { "x": 301, "y": 99, "width": 16, "height": 16 },
+        { "x": 318, "y": 88, "width": 16, "height": 16 }
+      ],
+      "duration": 0.1
     }
   }
 }
