@@ -237,15 +237,16 @@ void Character::Update(float deltatime) {
 	if(position.y > screenHeight + 10) onDead();
 }
 void Character::onDead(){
+	Singleton<EffectManager>::getInstance().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
 	Singleton<SoundManager>::getInstance().play(SoundType::DIE);
 	currentAction = ActionState::Die;
+	notify(EventType::ON_DEATH);
 }
 void Character::DIE(Enemy* e){
 	if(currentAction == ActionState::Die) return;
 	
 	if(getCharacterStateType() == CharacterStateType::NormalState){
 		onDead();
-		Singleton<EffectManager>::getInstance().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
 	}
 	else if(getCharacterStateType() == CharacterStateType::SuperState || getCharacterStateType() == CharacterStateType::FireState){
 		//TRANSFORM GRADUALLY TO NORMAL STATE

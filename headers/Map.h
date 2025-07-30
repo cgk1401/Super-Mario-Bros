@@ -2,6 +2,7 @@
 #include "../headers/Tile.h"
 #include "../headers/Global.h"
 #include "../headers/Animation.h"
+#include "FireBar.h"
 #include "raylib.h"
 #include <map>
 #include <vector>
@@ -41,6 +42,7 @@ protected:
     MapTheme maptheme;
 
     vector<vector<MapTileInstance>> mapData_first;
+    vector<FireBar*> firebars;
 public:
     int rows = 12, columns = 16;
     int tileRows, tileColumns; 
@@ -65,4 +67,5 @@ public:
 
     void setTile(int row, int col, int tileID);
     void removeTile(int row, int col);
+    
 };

@@ -68,7 +68,8 @@ enum class EnemyType {
 	GOOMBA,
 	KOOPA,
 	KOOPA_SHELL,
-	PIRANT_PLANT
+	PIRANT_PLANT,
+	FIRE_BAR,
 };
 
 
@@ -77,7 +78,8 @@ enum class ItemType {
 	COIN = 1,
 	MUSHROOM = 2,
 	FLOWER = 3,
-	STAR = 4
+	STAR = 4,
+	FIRE_BAR = 5,
 };
 
 enum class DeathType

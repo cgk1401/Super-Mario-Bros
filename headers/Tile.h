@@ -17,6 +17,7 @@ enum TileType {
 	FINISHING_POLE,			// finishing pole tile, used in some levels to mark the end. trigger some events when mario touches it
 	ENEMY,
 	STAR_BRICK,
+	FIREBAR_BLOCK,
 	//list ra hết mấy loại tile nha...
 };
 

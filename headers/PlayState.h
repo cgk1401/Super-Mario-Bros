@@ -13,11 +13,12 @@
 #include "../headers/KoopaTroopa.h"
 #include "../headers/PiranhaPlant.h"
 #include "../headers/Enemy.h"
+#include "../headers/FireBar.h"
 using namespace std;
 
-class PlayState : public GameState{
+class PlayState : public GameState, public Observer{
 public:
-    PlayState(pair<int, int> _level = {1,1});
+    PlayState(pair<int, int> _level = {1,1}, HUD* hud = nullptr);
 
     ~PlayState();
     void update(float deltatime) override;
@@ -25,7 +26,7 @@ public:
     bool allowUpdateBelow() override {return false;}
     void ChangeCharacter(CharacterType newtype);
 
-
+    void onNotify(const EventType& event, void* data = nullptr) override;
 private:
     HUD* hud;
     //Map* map;
@@ -42,6 +43,8 @@ private:
     ParallaxManager fg; //foreground
 
     Button* PauseButton;
+
+    Timer newRound_countDown;
 };
 
 #endif

@@ -37,9 +37,17 @@ void HUD::setMapLevel(pair<int, int> m){
 void HUD::setTime(int t){
     this->time = t;
 }
+int HUD::getLives(){
+    return lives;
+}
 
 
 void HUD::onNotify(const EventType& event, void* data){
+    if (event == EventType::ON_DEATH) {
+        lives--;
+        score = 0;
+        time = 400.5f;
+    }
    map<EventType, EventInfo> eventMap = Singleton<EventDataBase>::getInstance().getMap();
     auto it = eventMap.find(event);
     if(it == eventMap.end()) return;
