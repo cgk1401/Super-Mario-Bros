@@ -28,6 +28,42 @@ LevelState::~LevelState() {
 	}
 	UnloadFont(font);
 }
+
+void LevelState::handleInput() {
+	if (buttons[0]->IsClicked()) {
+		// Load Level 1
+		if (isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({ 1,1 }));
+		else 			 Singleton<Game>::getInstance().changeState(new PlayState({ 1,1 }));
+		shouldExit = true;
+
+	}
+	else if (buttons[1]->IsClicked()) {
+		// Load Level 2
+		if (isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({ 1,2 }));
+		else 			 Singleton<Game>::getInstance().changeState(new PlayState({ 1,2 }));
+		shouldExit = true;
+
+	}
+	else if (buttons[2]->IsClicked()) {
+		// Load Level 3
+		if (isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({ 1,3 }));
+		else 			 Singleton<Game>::getInstance().changeState(new PlayState({ 1,3 }));
+		shouldExit = true;
+
+	}
+	else if (buttons[3]->IsClicked()) {
+		// Load Level 4
+		if (isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({ 1,4 }));
+		else 			 Singleton<Game>::getInstance().changeState(new PlayState({ 1,4 }));
+		shouldExit = true;
+
+	}
+	else if (backButton->IsClicked()) {
+		Singleton<Game>::getInstance().pop();
+		shouldExit = true;
+
+	}
+}
 void LevelState::update(float deltatime) {
 	Singleton<SoundManager>::getInstance().updateMusic();
 	for (auto& button : buttons) {
@@ -35,7 +71,7 @@ void LevelState::update(float deltatime) {
 	}
 	backButton->update(deltatime);
 
-	 // Tìm nút đang được hover
+	///_______________________BUTTON CLICK ANIMATION_______________________________
     int hoveredIndex = -1;
     for (int i = 0; i < buttons.size(); i++) {
         if (buttons[i]->IsHovered()) {
@@ -43,7 +79,6 @@ void LevelState::update(float deltatime) {
             break;
         }
     }
-
     const float distance = 320;
     for (int i = 0; i < buttons.size(); i++) {
         float offset = 0;
@@ -63,33 +98,11 @@ void LevelState::update(float deltatime) {
         buttons[i]->updatePos({ posX, currentPos.y });
 		levelSigns[i].x = posX + buttons[i]->getBounds().width / 2;
     }
-	if (buttons[0]->IsClicked()) {
-		// Load Level 1
-		if(isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({1,1}));
-		else 			 Singleton<Game>::getInstance().changeState(new PlayState({1,1}));
-		
-	}
-	else if (buttons[1]->IsClicked()) {
-		// Load Level 2
-		if(isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({1,2}));
-		else 			 Singleton<Game>::getInstance().changeState(new PlayState({1,2}));
-	}
-	else if (buttons[2]->IsClicked()) {
-		// Load Level 3
-		if(isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({1,3}));
-		else 			 Singleton<Game>::getInstance().changeState(new PlayState({1,3}));
-	}
-	else if (buttons[3]->IsClicked()) {
-		// Load Level 4
-		if(isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({1,4}));
-		else 			 Singleton<Game>::getInstance().changeState(new PlayState({1,4}));
-	}	
-	else if (backButton->IsClicked()) {
-		Singleton<Game>::getInstance().pop();
-	}
-
+	///___________________________________________________________________________
+	
 }
 void LevelState::render() {
+	///_____________________________BACKGROUND_______________________________________
 	DrawTexturePro(background,
 			{0,0, (float)background.width,(float) background.height},
 			{0,0, screenWidth, screenHeight},
@@ -97,6 +110,7 @@ void LevelState::render() {
 	DrawRectangleRec(Rectangle{ 0, 0, screenWidth, screenHeight }, Fade(BLACK, 0.4f));
 	DrawRectangleRec(workRect, Fade(DARKBROWN, 0.7f));
 
+	///____________________________MAP LEVEL OPTIONS___________________________________________
 	int threshold = 5;
 	int line_height = 3;
 	DrawLineEx({ workRect.x, workRect.y - threshold }, { screenWidth, workRect.y - threshold }, line_height, WHITE);
@@ -105,7 +119,8 @@ void LevelState::render() {
 	for (auto& button : buttons) {
 		button->draw();
 	}
-	// Render level signs
+
+	///____________________________LEVEL SIGNS___________________________________________
 	for (size_t i = 0; i < levelSigns.size(); ++i) {
 		DrawRectangleRec(levelSigns[i], WHITE);
 		DrawTextEx(font, TextFormat("Level %zu", i + 1), {levelSigns[i].x + 10, levelSigns[i].y + 10},20, 5, BLACK);

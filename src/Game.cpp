@@ -25,9 +25,9 @@ void Game::run(){
         //Xử lí event
         float deltatime = GetFrameTime();
         for (int i = stateStack.size() - 1; i >= 0; i--) {
-            
+            stateStack[i]->handleInput();
+            if (i > stateStack.size() - 1) break;
              stateStack[i]->update(deltatime);
-             if (i > stateStack.size() - 1) break;
              if (!stateStack[i]->allowUpdateBelow()) break;
         }
     

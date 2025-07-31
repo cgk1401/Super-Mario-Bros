@@ -17,11 +17,8 @@ OptionState::~OptionState() {
 	delete backButton;
 	UnloadFont(font);
 }
-void OptionState::update(float deltatime) {
-	Singleton<SoundManager>::getInstance().updateMusic();
-	for (auto& button : buttons)
-		button->update(deltatime);
-	backButton->update(deltatime);
+
+void OptionState::handleInput() {
 	if (buttons[0]->IsClicked()) {
 		Singleton<Game>::getInstance().addState(new CharacterSelection());
 	}
@@ -33,7 +30,15 @@ void OptionState::update(float deltatime) {
 	}
 	else if (backButton->IsClicked()) {
 		Singleton<Game>::getInstance().pop();
+		shouldExit = true;
+
 	}
+}
+void OptionState::update(float deltatime) {
+	Singleton<SoundManager>::getInstance().updateMusic();
+	for (auto& button : buttons)
+		button->update(deltatime);
+	backButton->update(deltatime);
 }
 void OptionState::render() {
 	DrawTexturePro(background,

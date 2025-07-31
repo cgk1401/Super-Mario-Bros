@@ -19,10 +19,13 @@ private:
     float speed = 11.8f;
     // bool startLaunching = false;
     // float scale = 1;
+
+
 public:
     CharacterSelection();
     ~CharacterSelection();
 
+    void handleInput() override;
     void update(float deltatime) override;
     void render() override;
     bool allowUpdateBelow() override { return false; }

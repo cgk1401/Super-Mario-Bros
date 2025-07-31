@@ -21,6 +21,7 @@ public:
     PlayState(pair<int, int> _level = {1,1}, HUD* hud = nullptr);
 
     ~PlayState();
+    void handleInput() override;
     void update(float deltatime) override;
     void render() override;
     bool allowUpdateBelow() override {return false;}
@@ -45,6 +46,7 @@ private:
     Button* PauseButton;
 
     Timer newRound_countDown;
+
 };
 
 #endif

@@ -21,10 +21,13 @@ private:
 
     Animation starAnimation;
     Texture2D starTexture;
+
 public:
     MenuState();
     ~MenuState();
     TextBox textbox;
+
+    void handleInput() override;
     void    update(float deltatime) override;
     void    render() override;
 };

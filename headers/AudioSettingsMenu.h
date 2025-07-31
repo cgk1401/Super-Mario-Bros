@@ -25,10 +25,12 @@ private :
     float LEFT_MARGIN = 30;
     bool draggingMusicSlider;
     bool draggingSoundSlider;
+
 public :
     AudioSettingsMenu();
     ~AudioSettingsMenu();
 
+    void handleInput() override;
     void update(float deltatime) override;
     void render() override;
     bool allowUpdateBelow() override { return false; }

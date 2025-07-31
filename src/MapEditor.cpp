@@ -137,7 +137,7 @@ void MapEditor::handleInput() {
     //MULTI-TILE brush
     int uiStartX = mapWidth;
      int currentY = 40; 
-    Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), cameraEditor);
+    Vector2 mouseWorld_editor = GetScreenToWorld2D(GetMousePosition(), cameraEditor);
     Vector2 mousePos = GetMousePosition();
     Rectangle workplace = {mapWidth, 0, screenWidth, screenHeight};
     for (int r = 0; r < tileRows; r++) {
@@ -145,7 +145,7 @@ void MapEditor::handleInput() {
             Rectangle tileSrc = tileSetSourceRects[r][c];
             Rectangle tileDest = { (float)uiStartX + 10 + (float)c * TILE_SIZE, (float)currentY + (float)r * TILE_SIZE, (float)TILE_SIZE, (float)TILE_SIZE };
 
-            if (CheckCollisionPointRec(mousePos, workplace) && CheckCollisionPointRec(mouseWorldPos, tileDest) ) {
+            if (CheckCollisionPointRec(mousePos, workplace) && CheckCollisionPointRec(mouseWorld_editor, tileDest) ) {
     
                 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
                     isDragging = true;
@@ -178,7 +178,76 @@ void MapEditor::handleInput() {
 
         }
     }
+    uiWidth = screenWidth - (int)mapWidth;
+    // Check if mouse is over the map area
+    float wheel = GetMouseWheelMove();
+    Vector2 mouseWorld = GetScreenToWorld2D(GetMousePosition(), camera);
+    Rectangle mapDrawingArea = { 0, 0, (float)mapWidth, (float)screenHeight };
+    if (CheckCollisionPointRec(GetMousePosition(), mapDrawingArea)) {
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < columns; y++) {
 
+                if (CheckCollisionPointRec(mouseWorld, mapRects[x][y])) {
+                    if (editType == EditorMode::DRAW) {
+                        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+                            Vector2 mouseOnTilePos = { (int)mouseWorld.x / TILE_SIZE,(int)mouseWorld.y / TILE_SIZE };
+                            Rectangle pickedTile = { mouseOnTilePos.x * TILE_SIZE , mouseOnTilePos.y * TILE_SIZE, TILE_SIZE, TILE_SIZE };
+                            for (int i = 0; i < brushBuffer.size(); i++) {
+                                for (int j = 0; j < brushBuffer[i].size(); j++) {
+                                    int coor_x = brushBuffer[i][j].y / TILE_SIZE; //tileSetSrc
+                                    int coor_y = brushBuffer[i][j].x / TILE_SIZE;
+                                    int tileID = getTileIDFromCoords(coor_x + 1, coor_y + 1);
+                                    int pasteY = (pickedTile.x + i * TILE_SIZE) / TILE_SIZE;
+                                    int pasteX = (pickedTile.y + j * TILE_SIZE) / TILE_SIZE;
+
+                                    if (IsInsideMap(pasteX, pasteY)) {
+                                        setTile(pasteX, pasteY, tileID);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else if (editType == EditorMode::ERASE) {
+                        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
+                            removeTile(x, y);
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+    if (CheckCollisionPointRec(mousePos, mapDrawingArea)) {
+        if (wheel != 0) {
+            // cameraEditor.target = GetMousePosition();
+            camera.zoom += wheel * 0.1f;
+            if (camera.zoom < 0.2f) camera.zoom = 0.2f;
+            if (camera.zoom > 2.0f) camera.zoom = 2.0f;
+        }
+        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+            Vector2 delta = GetMouseDelta();
+            delta = Vector2Scale(delta, -1.0f / camera.zoom);
+            camera.target = Vector2Add(camera.target, delta);
+        }
+    }
+
+
+
+    //CameraEditor update
+    if (CheckCollisionPointRec(mousePos, workplace)) {
+        if (wheel != 0) {
+            // cameraEditor.target = GetMousePosition();
+            cameraEditor.zoom += wheel * 0.1f;
+            if (cameraEditor.zoom < 0.2f) cameraEditor.zoom = 0.2f;
+            if (cameraEditor.zoom > 5.0f) cameraEditor.zoom = 5.0f;
+        }
+        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+            Vector2 delta = GetMouseDelta();
+            delta = Vector2Scale(delta, -1.0f / cameraEditor.zoom);
+            cameraEditor.target = Vector2Add(cameraEditor.target, delta);
+        }
+    }
     
     if (back_button->IsClicked()) 
     {   
@@ -186,7 +255,11 @@ void MapEditor::handleInput() {
         if(hasChanged() && dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState()) == nullptr)
              Singleton<Game>::getInstance().addState(new SaveConfirmationDialog());
         else
+        {
             Singleton<Game>::getInstance().changeState(new MenuState());
+            shouldExit = true;
+            return;
+        }
     }
     else if (tilePicking_button->IsClicked()) {
         editType = EditorMode::DRAW;
@@ -206,10 +279,27 @@ void MapEditor::handleInput() {
         if(hasChanged() && dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState()) == nullptr)
              Singleton<Game>::getInstance().addState(new SaveConfirmationDialog());
         else
-        Singleton<Game>::getInstance().changeState(new PlayState(level));
+        {
+            Singleton<Game>::getInstance().changeState(new PlayState(level));
+            shouldExit = true;
+            return;
+        }
     }
 }
 
+
+void MapEditor::update(float deltatime) {
+    back_button->update(deltatime);
+    Singleton<SoundManager>::getInstance().updateMusic();
+    Map::update(true);
+    saveFileNoti_timer.update(deltatime);
+    tilePicking_button->update(deltatime);
+    eraserTool_button->update(deltatime);
+    save_button->update(deltatime);
+    uploadFile_button->update(deltatime);
+    play_button->update(deltatime);
+
+}
 void MapEditor::render() {
    
     //Tile map
@@ -331,133 +421,45 @@ void MapEditor::render() {
             saveFileNoti_timer.start(1);
             //_option_buttons = false;
             currentstate->buttonclick[0] = false;
-            if(_option == 1)
+            if (_option == 1)
+            {
                 Singleton<Game>::getInstance().changeState(new MenuState);
-            else if(_option == 2)
-                Singleton<Game>::getInstance().changeState(new PlayState(level));
+                shouldExit = true;
 
+            }
+            else if (_option == 2)
+            {
+                Singleton<Game>::getInstance().changeState(new PlayState(level));
+                shouldExit = true;
+
+            }
         }
         else {
             if (currentstate->buttonclick[2] == true) {
                 //_option_buttons = false;
                 Singleton<Game>::getInstance().pop();
-            }
-            else if (currentstate->buttonclick[1] == true){
-                 if(_option == 1)
-                    Singleton<Game>::getInstance().changeState(new MenuState);
-                else if(_option == 2)
-                    Singleton<Game>::getInstance().changeState(new PlayState(level));
+                shouldExit = true;
 
+            }
+            else if (currentstate->buttonclick[1] == true) {
+                if (_option == 1)
+                {
+                    Singleton<Game>::getInstance().changeState(new MenuState);
+                    shouldExit = true;
+
+                }
+                else if (_option == 2)
+                {
+                    Singleton<Game>::getInstance().changeState(new PlayState(level));
+                    shouldExit = true;
+
+                }
             }
         }
     }
 
 } 
 
-void MapEditor::update(float deltatime) {
-    back_button->update(deltatime);
-    Singleton<SoundManager>::getInstance().updateMusic();
-    
-    Map::update(true);
-
-    saveFileNoti_timer.update(deltatime);
-    tilePicking_button->update(deltatime);
-    eraserTool_button->update(deltatime);
-    save_button->update(deltatime);
-    uploadFile_button->update(deltatime);
-    play_button->update(deltatime);
-
-    handleInput();
-    
-
-    uiWidth = screenWidth - (int)mapWidth;
-    int uiStartX = mapWidth;
-    Vector2 mouseWorld = GetScreenToWorld2D(GetMousePosition(), camera);
-
-    // Check if mouse is over the map area
-     float wheel = GetMouseWheelMove();
-    Vector2 mousePos = GetMousePosition();
-    Rectangle mapDrawingArea = { 0, 0, (float)mapWidth, (float)screenHeight };
-
-    if (CheckCollisionPointRec(GetMousePosition(), mapDrawingArea)) {
-        for (int x = 0; x < rows; x++) {
-            for (int y = 0; y < columns; y++) { 
-
-                if (CheckCollisionPointRec(mouseWorld, mapRects[x][y])) {
-                    if (editType == EditorMode::DRAW) {
-                        if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-                            Vector2 mouseOnTilePos = { (int)mouseWorld.x / TILE_SIZE,(int)mouseWorld.y / TILE_SIZE };
-                            Rectangle pickedTile = { mouseOnTilePos.x * TILE_SIZE , mouseOnTilePos.y * TILE_SIZE, TILE_SIZE, TILE_SIZE };
-                            for (int i = 0; i < brushBuffer.size(); i++) {
-                                for (int j = 0; j < brushBuffer[i].size(); j++) {
-                                    int coor_x = brushBuffer[i][j].y / TILE_SIZE; //tileSetSrc
-                                    int coor_y = brushBuffer[i][j].x / TILE_SIZE;
-                                    int tileID = getTileIDFromCoords(coor_x + 1, coor_y + 1);
-                                    int pasteY = (pickedTile.x + i * TILE_SIZE) / TILE_SIZE;
-                                    int pasteX = (pickedTile.y + j * TILE_SIZE) / TILE_SIZE;
-
-                                    if (IsInsideMap(pasteX, pasteY)) {
-                                        setTile(pasteX, pasteY, tileID);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    else if (editType == EditorMode::ERASE) {
-                         if (IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
-                            removeTile(x, y);
-                        }
-                    }
-                }
-            }     
-        }
-            
-     }
-
-    if (CheckCollisionPointRec(mousePos, mapDrawingArea)) {
-        if (wheel != 0) {
-            // cameraEditor.target = GetMousePosition();
-            camera.zoom += wheel * 0.1f;
-            if (camera.zoom < 0.2f) camera.zoom = 0.2f;
-            if (camera.zoom > 2.0f) camera.zoom = 2.0f;
-        }
-        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-            Vector2 delta = GetMouseDelta();
-            delta = Vector2Scale(delta, -1.0f / camera.zoom);
-            camera.target = Vector2Add(camera.target, delta);
-        }
-    }
-
-   
-
-    //CameraEditor update
-
-    Rectangle workplace = {mapWidth, 0, screenWidth, screenHeight};
-    if (CheckCollisionPointRec(mousePos, workplace)) {
-        if (wheel != 0) {
-            // cameraEditor.target = GetMousePosition();
-            cameraEditor.zoom += wheel * 0.1f;
-            if (cameraEditor.zoom < 0.2f) cameraEditor.zoom = 0.2f;
-            if (cameraEditor.zoom > 5.0f) cameraEditor.zoom = 5.0f;
-        }
-
-    
-        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
-        
-                Vector2 delta = GetMouseDelta();
-                delta = Vector2Scale(delta, -1.0f / cameraEditor.zoom);
-                cameraEditor.target = Vector2Add(cameraEditor.target, delta);
-                
-        }
-     }
-
-        /*if (camera.target.x < 0) {
-        camera.target.x = 0;
-    }
-    else if(camera.target.x > TILE_SIZE * columns){
-        camera.target.x = TILE_SIZE * columns;
-    }*/
-}
 
 bool MapEditor::IsInsideMap(int row, int col){
     return row < rows && col < columns && row >= 0 && col >= 0;

@@ -22,12 +22,14 @@ private :
     const char* text = "DO YOU WANT TO SAVE YOUR WORK?";
     Vector2 posistionText;
 
+
 public :
 	SaveConfirmationDialog();
 	~SaveConfirmationDialog();
 
     vector <bool> buttonclick;
 
+    void handleInput() override;
     void update(float deltatime) override;
     void render() override;
     bool allowUpdateBelow() override { return false; }

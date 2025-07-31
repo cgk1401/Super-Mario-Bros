@@ -10,10 +10,12 @@ using namespace std;
 class PauseState : public GameState{
 private:
     vector<Button*> buttons;
+
 public:
     PauseState();
     ~PauseState();
 
+    void handleInput() override;
     void    update(float deltatime);
     void    render();
     bool allowUpdateBelow() override { return false; }

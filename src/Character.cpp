@@ -163,22 +163,22 @@ void Character::HandleInput(float deltatime) {
 	//	if (isGround) Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 	//}
 	 //xử lý nhảy
-	 /*if (IsKeyPressed(KEY_SPACE) && isGround) {
+	 if (IsKeyPressed(KEY_SPACE) && isGround) {
 		velocity.y = config.JUMPFORCE;
 		isGround = false;
 		isJumpingUp = true;
 		jumpTimeElapsed = 0.0f;
 		setActionState(ActionState::Jump);
+		Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 	 }
 
-	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
-		 Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
+	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !isGround) {
 		jumpTimeElapsed += deltatime;
 	 }
 	 else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
 		isJumpingUp = false;
-	 }*/
-
+	 }
+	 /*
 	if (IsKeyDown(KEY_SPACE)) {
 		if (isGround) {
 			if(getCharacterStateType() == CharacterStateType::NormalState)
@@ -198,6 +198,7 @@ void Character::HandleInput(float deltatime) {
 	else {
 		isJumpingUp = false;
 	}
+	*/
 }
 void Character::Update(float deltatime) {
 	currentState->Update(deltatime);
