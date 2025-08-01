@@ -163,22 +163,22 @@ void Character::HandleInput(float deltatime) {
 	//	if (isGround) Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 	//}
 	 //xử lý nhảy
-	 /*if (IsKeyPressed(KEY_SPACE) && isGround) {
+	 if (IsKeyPressed(KEY_SPACE) && isGround) {
 		velocity.y = config.JUMPFORCE;
 		isGround = false;
 		isJumpingUp = true;
 		jumpTimeElapsed = 0.0f;
 		setActionState(ActionState::Jump);
+		Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 	 }
 
-	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME) {
-		 Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
+	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !isGround) {
 		jumpTimeElapsed += deltatime;
 	 }
 	 else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
 		isJumpingUp = false;
-	 }*/
-
+	 }
+	 /*
 	if (IsKeyDown(KEY_SPACE)) {
 		if (isGround) {
 			if(getCharacterStateType() == CharacterStateType::NormalState)
@@ -198,6 +198,7 @@ void Character::HandleInput(float deltatime) {
 	else {
 		isJumpingUp = false;
 	}
+	*/
 }
 void Character::Update(float deltatime) {
 	currentState->Update(deltatime);
@@ -237,15 +238,16 @@ void Character::Update(float deltatime) {
 	if(position.y > screenHeight + 10) onDead();
 }
 void Character::onDead(){
+	Singleton<EffectManager>::getInstance().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
 	Singleton<SoundManager>::getInstance().play(SoundType::DIE);
 	currentAction = ActionState::Die;
+	notify(EventType::ON_DEATH);
 }
 void Character::DIE(Enemy* e){
 	if(currentAction == ActionState::Die) return;
 	
 	if(getCharacterStateType() == CharacterStateType::NormalState){
 		onDead();
-		Singleton<EffectManager>::getInstance().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
 	}
 	else if(getCharacterStateType() == CharacterStateType::SuperState || getCharacterStateType() == CharacterStateType::FireState){
 		//TRANSFORM GRADUALLY TO NORMAL STATE

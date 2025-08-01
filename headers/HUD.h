@@ -20,13 +20,14 @@ private:
    
 public:
     HUD(pair<int, int> level = {1,1});
+    HUD(const HUD& a) = default;
     ~HUD();
     void setScore(int s);
     void setCoins(int c);
     void setLives(int l);
     void setMapLevel(pair<int, int> m);
     void setTime(int t);
-    bool PauseButton_IsPressed();
+    int getLives();
 
     void update(float dt);
     void draw();

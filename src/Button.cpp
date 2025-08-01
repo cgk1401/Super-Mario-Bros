@@ -100,22 +100,22 @@ void Button::update(float deltatime) {
         }
         else if (isPressing) {
             isPressing = false;
-            scale = approach(scale, MULTI_SCALE, deltatime / 2);
+            scale = approach(scale, MULTI_SCALE * defaultScale, deltatime / 2);
         }
         else {
             go_here:
-            scale = approach(scale, MULTI_SCALE, deltatime / 2);
+            scale = approach(scale, MULTI_SCALE * defaultScale, deltatime / 2);
         }
     }
     else {
-        scale = approach(scale, 1.0f, deltatime / 2 );
+        scale = approach(scale, defaultScale, deltatime / 2 );
         isPressing = false;
     }
 
 }
 
 
-void Button::draw() {
+void Button::draw(Color tint) {
     Rectangle dest;
     dest.width = bounds.width * scale;
     dest.height = bounds.height * scale;
@@ -124,7 +124,7 @@ void Button::draw() {
     
     if (useTexture) {
         Rectangle src = {0, 0, (float)texture.width, (float)texture.height};
-        Color drawColor = isHovered ? Color{180, 180, 180, 255} : WHITE;
+        Color drawColor = isHovered ? Color{180, 180, 180, 255} : tint;
 
         DrawTexturePro(texture, src, dest, {0, 0}, 0.0f, drawColor);
     } else {
@@ -154,7 +154,7 @@ void Button::draw() {
 }
 void Button::updateScale(float newScale) {
     
-    scale = newScale;
+    defaultScale = newScale;
 }
 
 
@@ -172,4 +172,21 @@ void Button::updatePos(Vector2 newPos) {
 }
 Rectangle Button::getBounds() const {
     return bounds;
+}
+
+Rectangle Button::getScaledRect() const{
+      Rectangle dest;
+    dest.width = bounds.width * scale;
+    dest.height = bounds.height * scale;
+    dest.x = bounds.x + (bounds.width - dest.width) / 2.0f;
+    dest.y = bounds.y + (bounds.height - dest.height) / 2.0f;
+    return dest;    
+}
+
+bool Button::IsHovered() const{
+    return this->isHovered;
+}
+
+Vector2 Button::getPosition() const{
+    return {bounds.x, bounds.y};
 }

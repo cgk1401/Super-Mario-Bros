@@ -50,7 +50,7 @@ public:
     //Inherit GameState
     void update(float deltatime) override;
     void render() override;
-    void handleInput();
+    void handleInput() override;
 
 private:
     bool hasChanged() const;

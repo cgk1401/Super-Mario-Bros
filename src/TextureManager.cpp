@@ -12,6 +12,8 @@ TextureManager::TextureManager(){
     texture.emplace(TextureType::TILESET, LoadTexture("../assets/Map/tileset_gutter64x64.png"));
     texture.emplace(TextureType::BUTTONPANEL, LoadTexture("../Assets/Gui/buttonPanel.png"));
     texture.emplace(TextureType::AUDIOPANEL, LoadTexture("../Assets/Gui/audioPanel.png"));
+    texture.emplace(TextureType::BACKGROUND_1, LoadTexture("../assets/GUI/Menu Background.png"));
+    texture.emplace(TextureType::BACKGROUND_2, LoadTexture("../assets/GUI/option_background.png"));
 }
 
  TextureManager::~TextureManager(){

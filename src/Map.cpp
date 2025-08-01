@@ -113,7 +113,7 @@ void Map::createTileCatalog() {
             int themeOffset = static_cast<int>(theme) * 2;
 
             for (int j = 1; j < 7; j++) {
-                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new SolidTileBehavior(), theme)); //Ground tile
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], j == 5 ? USED_QUESTION_BLOCK : GROUND, new SolidTileBehavior(), theme)); //Ground tile
             }
 
             for (int j = 7; j < 9; j++) {
@@ -138,7 +138,7 @@ void Map::createTileCatalog() {
                 if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], COIN, new DecorationTileBehavior(), theme));
                 if (i % 2 == 1) {
                     tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme));
-                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j + 1), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j + 1 - 1], USED_QUESTION_BLOCK, new SolidTileBehavior(), theme));
+                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j + 1), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j + 1 - 1], FIREBAR_BLOCK, new SolidTileBehavior(), theme));
                 }
             }
 
@@ -432,6 +432,9 @@ void Map::loadFromFile(pair<int, int> level, bool isEditing) {
                     if (id && it != tileCatalog.end()) {
                         if(it->second.type == TileType::COIN){
                             Singleton<ItemManager>::getInstance().Spawn(ItemType::COIN, {(float) y * TILE_SIZE, (float) x * TILE_SIZE});
+                        }
+                        else if(it->second.type == TileType::FIREBAR_BLOCK){
+                            Singleton<ItemManager>::getInstance().Spawn(ItemType::FIRE_BAR, {(float) y * TILE_SIZE + TILE_SIZE / 3, (float) x * TILE_SIZE + TILE_SIZE / 3});
                         }
                     }
                 }

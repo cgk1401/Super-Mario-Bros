@@ -15,9 +15,13 @@ private:
 	vector<Rectangle> levelSigns;
 	Font font;
 	bool isEditorMode;
+
+	Rectangle workRect;
+
 public: 
 	LevelState(bool isEditorMode = false);
 	~LevelState();
+	void handleInput() override;
 	void update(float deltatime) override;
 	void render() override;
 	bool allowUpdateBelow() override { return false; }

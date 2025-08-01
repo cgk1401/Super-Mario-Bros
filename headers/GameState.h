@@ -28,7 +28,8 @@ std::vector <Button*> CreateButtons(const char* buttonLabels[], const ButtonLayo
 //State Pattern
 class GameState{
 public:
-    //virtual void handleInput() = 0;
+    bool shouldExit = false;
+    virtual void handleInput() = 0;
     virtual void update(float deltatime) = 0;
     virtual void render() = 0;
     virtual bool allowUpdateBelow() { return true; }

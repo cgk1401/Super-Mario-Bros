@@ -60,8 +60,8 @@ public:
 	ActionState getCurrentAction() const;
 	CharacterStateType getCharacterStateType() const;
 	void DIE(Enemy* e);
-
 	void onDead();
+	
 	void Draw();
 	void Update(float deltatime);
 	void HandleInput(float dt);

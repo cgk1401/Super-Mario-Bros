@@ -11,7 +11,7 @@ struct PhysicsConfig {
 	float FRICTION = 700.0f;
 	float JUMPFORCE = -450.0f;
 	float GRAVITY = 2000.0f;
-	float MAXJUMPTIME = 0.5f;
+	float MAXJUMPTIME = 0.7f;
 };
 
 class CharacterState {

@@ -11,17 +11,19 @@ class ItemManager {
 private:
     Texture texture;
     vector<Item*> items;
-
+    vector<Item*> hiddenItems;
     Animation mushroomAni;
     Animation flowerAni;
     Animation starAni;
     Animation coinAni;
+    Animation firebarAni;
     
     ItemManager();
     ~ItemManager();
 public:
     void Spawn(ItemType type, Vector2 position);
     void Update(float dt, Character* player, Map* map);
+    void DrawHiddenItem();
     void Draw();
     void clearItems();
     

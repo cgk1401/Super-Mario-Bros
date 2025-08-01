@@ -22,6 +22,8 @@ enum class EventType {
     POWERUP_COLLECT_FLOWER,
     POWERUP_COLLECT_STAR,
     ITEM_COLLECT_1UP,
+
+    ON_DEATH,
 };
 
 struct EventInfo {

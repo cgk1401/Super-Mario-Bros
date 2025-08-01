@@ -21,6 +21,8 @@ ItemManager::ItemManager(){
         coinAni.frame.push_back({180 + (float) i * 10 , 36, 8, 16});
     }
     coinAni.durationtime = 0.1f;
+
+
 }
 
 ItemManager::~ItemManager() {
@@ -39,14 +41,30 @@ void ItemManager::Spawn(ItemType type, Vector2 position) {
             item = new Star(position, starAni); break;
         case ItemType::COIN:
             item = new Coin(position, coinAni); break;
+        case ItemType::FIRE_BAR:
+            item = new FireBar(position, firebarAni); break;
     }
-    if (item) items.push_back(item);
+    if (item) {
+        if(auto f = dynamic_cast<FireBar*>(item)){
+            items.push_back(item);
+        }
+        else
+            hiddenItems.push_back(item);
+    }
 }
 
 void ItemManager::Update(float dt, Character* player, Map* map) {
     for (auto item : items) {
         item->Update(dt);
+        FireBar* f = dynamic_cast<FireBar*>(item);
+        if(f)
+        {
+            f->checkCollision(player);
+        }
+    }
 
+    for(auto& item: hiddenItems){
+        item->Update(dt);
         Rectangle itemRect = item->getBound();
         Rectangle marioBound = player->getBound();
         if (!item->collected && CheckCollisionRecs(itemRect, marioBound)) {
@@ -61,14 +79,19 @@ void ItemManager::Update(float dt, Character* player, Map* map) {
         Star* s = dynamic_cast<Star*>(item);
         if(s)
             Collision::handleStarCollision(s, map);
-    }
 
+    }
     // Erase collected items
     items.erase(remove_if(items.begin(), items.end(),
         [](Item* i) {
             if (i->collected || i->position.y > GetScreenHeight() + 50) { delete i; return true; }
             return false;
         }), items.end());
+    hiddenItems.erase(remove_if(hiddenItems.begin(), hiddenItems.end(),
+        [](Item* i) {
+            if (i->collected || i->position.y > GetScreenHeight() + 50) { delete i; return true; }
+            return false;
+        }), hiddenItems.end());
 }
 
 void ItemManager::Draw() {
@@ -76,9 +99,17 @@ void ItemManager::Draw() {
         item->Draw(texture);
 }
 
+void ItemManager::DrawHiddenItem() {
+    for (auto item : hiddenItems)
+        item->Draw(texture);
+}
 void ItemManager::clearItems() {
-    for (auto item : items) {
+    for (auto& item : items) {
         delete item;
     }
+    for (auto& item: hiddenItems){
+        delete item;
+    }
+    hiddenItems.clear();
     items.clear();
 }

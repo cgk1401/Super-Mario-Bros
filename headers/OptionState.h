@@ -14,9 +14,12 @@ private:
 	Button* backButton;
 	Font font;
 	Texture2D background;
+
 public:
 	OptionState();
 	~OptionState();
+
+	void handleInput() override;
 	void update(float) override;
 	void render() override;
 	bool allowUpdateBelow() override { return false; }

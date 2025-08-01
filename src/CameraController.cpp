@@ -14,29 +14,29 @@ void CameraController::update(Rectangle playerBound, float endPos) {
     float threshold = screenWidth / 2.0f;
     float desiredCamX = camera.target.x;
     float playerWidth = abs(playerBound.width);
-    // if (playerBound.x + playerBound.width > camera.target.x + threshold) {
-    //     desiredCamX = playerBound.x + playerBound.width - threshold;
-    // }
-    // else if (playerBound.x < camera.target.x - threshold) {
-    //     desiredCamX = playerBound.x - threshold;
-    // }
+    if (playerBound.x + playerBound.width > camera.target.x + threshold) {
+        desiredCamX = playerBound.x + playerBound.width - threshold;
+    }
+    else if (playerBound.x < camera.target.x - threshold) {
+        desiredCamX = playerBound.x - threshold;
+    }
 
-    // float maxCamX = endPos - screenWidth; 
-    // if (desiredCamX > maxCamX) desiredCamX = maxCamX;
+    float maxCamX = endPos - screenWidth; 
+    if (desiredCamX > maxCamX) desiredCamX = maxCamX;
 
-    // if (desiredCamX < 0) desiredCamX = 0;
+    if (desiredCamX < 0) desiredCamX = 0;
 
-    // camera.target.x = desiredCamX;
+    camera.target.x = desiredCamX;
 
 
    
 
     //camera follows mario in whole game (TEST!!)
     
-    if (playerBound.x + playerWidth / 2 - screenWidth / 2 > 0)
-        camera.target.x = playerBound.x + playerWidth / 2 - screenWidth / 2 ;
-    else camera.target.x = 0;
-    camera.target.y = 0;
+    // if (playerBound.x + playerWidth / 2 - screenWidth / 2 > 0)
+    //     camera.target.x = playerBound.x + playerWidth / 2 - screenWidth / 2 ;
+    // else camera.target.x = 0;
+    // camera.target.y = 0;
 
     // float wheel = GetMouseWheelMove();
     

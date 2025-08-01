@@ -144,6 +144,7 @@
     <ClCompile Include="..\src\EffectManager.cpp" />
     <ClCompile Include="..\src\FireBall.cpp" />
     <ClCompile Include="..\src\FireBallExplosionEffect.cpp" />
+    <ClCompile Include="..\src\FireBar.cpp" />
     <ClCompile Include="..\src\FireState.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
     <ClCompile Include="..\src\GameState.cpp" />
@@ -198,6 +199,7 @@
     <ClInclude Include="..\headers\EnemyFactory.h" />
     <ClInclude Include="..\headers\FireBall.h" />
     <ClInclude Include="..\headers\FireBallExplosionEffect.h" />
+    <ClInclude Include="..\headers\FireBar.h" />
     <ClInclude Include="..\headers\FireState.h" />
     <ClInclude Include="..\headers\Flower.h" />
     <ClInclude Include="..\headers\Game.h" />

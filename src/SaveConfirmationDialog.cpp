@@ -76,14 +76,9 @@ SaveConfirmationDialog::SaveConfirmationDialog() {
 }
 
 SaveConfirmationDialog::~SaveConfirmationDialog() {
-	//UnloadTexture(buttonPanel);
 	for (int i = 0; i < buttonsettings.size(); i++) delete buttonsettings[i];
 }
-
-void SaveConfirmationDialog::update(float deltatime) {
-	for (int i = 0; i < 3; i++) {
-		buttonsettings[i]->update(deltatime);
-	}
+void SaveConfirmationDialog::handleInput() {
 	if (buttonsettings[0]->IsClicked()) {
 		buttonclick[0] = true;
 	}
@@ -92,6 +87,12 @@ void SaveConfirmationDialog::update(float deltatime) {
 	}
 	else if (buttonsettings[2]->IsClicked()) {
 		buttonclick[2] = true;
+	}
+}
+
+void SaveConfirmationDialog::update(float deltatime) {
+	for (int i = 0; i < 3; i++) {
+		buttonsettings[i]->update(deltatime);
 	}
 }
 

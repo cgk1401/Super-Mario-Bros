@@ -6,7 +6,7 @@
 #include "MenuState.h"
 
 AudioSettingsMenu::AudioSettingsMenu() {
-	background = resizedImage("../assets/GUI/Menu Background.png", screenWidth, screenHeight);
+	background = Singleton<TextureManager>::getInstance().load(TextureType::BACKGROUND_1);
 	audioPanel = Singleton<TextureManager>::getInstance().load(TextureType::AUDIOPANEL);
 	currentmusicVolume = Singleton<SoundManager>::getInstance().getmusicVolume();
 	currentsoundVolume = Singleton<SoundManager>::getInstance().getsoundVolume();
@@ -34,12 +34,10 @@ AudioSettingsMenu::AudioSettingsMenu() {
 
 AudioSettingsMenu::~AudioSettingsMenu() {
 	delete backButton;
-	UnloadTexture(background);
 }
 
-void AudioSettingsMenu::update(float deltatime) {
-	backButton->update(deltatime);
-	Singleton<SoundManager>::getInstance().updateMusic();
+
+void AudioSettingsMenu::handleInput() {
 
 	if (CheckCollisionPointRec(GetMousePosition(), musicSliderHandle) && IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
 		draggingMusicSlider = true;
@@ -48,13 +46,7 @@ void AudioSettingsMenu::update(float deltatime) {
 		draggingMusicSlider = false;
 	}
 
-	if (draggingMusicSlider) {
-		currentmusicVolume = (GetMousePosition().x - musicSlider.x) * float(1) / musicSlider.width;
-		currentmusicVolume = clamp(currentmusicVolume, 0.0f, 1.0f);
-		musicSliderHandle.x = musicSlider.x + currentmusicVolume * (musicSlider.width - musicSliderHandle.width);
-		Singleton<SoundManager>::getInstance().setvaluemusicVolume(currentmusicVolume);
-		Singleton<SoundManager>::getInstance().setmusicVolume();
-	}
+
 
 	if (CheckCollisionPointRec(GetMousePosition(), soundSliderHandle) && IsMouseButtonDown(MOUSE_LEFT_BUTTON)) {
 		draggingSoundSlider = true;
@@ -63,6 +55,23 @@ void AudioSettingsMenu::update(float deltatime) {
 		draggingSoundSlider = false;
 	}
 
+	if (backButton->IsClicked()) {
+		Singleton<Game>::getInstance().pop();
+		shouldExit = true;
+	}
+}
+
+void AudioSettingsMenu::update(float deltatime) {
+	backButton->update(deltatime);
+	Singleton<SoundManager>::getInstance().updateMusic();
+
+	if (draggingMusicSlider) {
+		currentmusicVolume = (GetMousePosition().x - musicSlider.x) * float(1) / musicSlider.width;
+		currentmusicVolume = clamp(currentmusicVolume, 0.0f, 1.0f);
+		musicSliderHandle.x = musicSlider.x + currentmusicVolume * (musicSlider.width - musicSliderHandle.width);
+		Singleton<SoundManager>::getInstance().setvaluemusicVolume(currentmusicVolume);
+		Singleton<SoundManager>::getInstance().setmusicVolume();
+	}
 	if (draggingSoundSlider) {
 		currentsoundVolume = (GetMousePosition().x - soundSlider.x) * float(1) / soundSlider.width;
 		currentsoundVolume = clamp(currentsoundVolume, 0.0f, 1.0f);
@@ -70,14 +79,13 @@ void AudioSettingsMenu::update(float deltatime) {
 		Singleton<SoundManager>::getInstance().setvaluesoundVolume(currentsoundVolume);
 		Singleton<SoundManager>::getInstance().setsoundVolume();
 	}
-
-	if (backButton->IsClicked()) {
-		Singleton<Game>::getInstance().pop();
-	}
 }
 
 void AudioSettingsMenu::render() {
-	DrawTexture(background, 0, 0, WHITE);
+	DrawTexture(background, 0, 0, WHITE); DrawTexturePro(background,
+		{ 0,0, (float)background.width,(float)background.height },
+		{ 0,0, screenWidth, screenHeight },
+		{ 0,0 }, 0, WHITE);
 	DrawRectangleRec(Rectangle{ 0, 0, screenWidth, screenHeight }, Fade(BLACK, 0.4f));
 	backButton->draw();
 	DrawTexture(audioPanel, positionPanel.x, positionPanel.y, WHITE);

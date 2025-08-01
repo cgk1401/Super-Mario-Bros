@@ -38,7 +38,7 @@ void SoundManager::load() {
 	sounds[SoundType::GAMEOVER1] = LoadSound("../assets/sfx/gameover.wav");
 	sounds[SoundType::GAMEOVER2] = LoadSound("../assets/sfx/gameover2.wav");
 	sounds[SoundType::BEEP] = LoadSound("../assets/sfx/beep.wav");
-    sounds[SoundType::HOVER_BUTTON] = LoadSound("../assets/GUI/sound/hover-button.mp3");
+    sounds[SoundType::HOVER_BUTTON] = LoadSound("../assets/GUI/sound/hover_sfx.mp3");
     sounds[SoundType::CLICK_BUTTON] = LoadSound("../assets/GUI/sound/button-click.mp3");
 
     // Music
