@@ -159,46 +159,21 @@ void Character::HandleInput(float deltatime) {
 		}
 	}
 
-	//if (IsKeyDown(KEY_SPACE)) {
-	//	if (isGround) Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
-	//}
-	 //xử lý nhảy
-	 if (IsKeyPressed(KEY_SPACE) && isGround) {
-		velocity.y = config.JUMPFORCE;
-		isGround = false;
-		isJumpingUp = true;
-		jumpTimeElapsed = 0.0f;
-		setActionState(ActionState::Jump);
-		Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
-	 }
+	if (IsKeyPressed(KEY_SPACE) && isGround) {
+	velocity.y = config.JUMPFORCE;
+	isGround = false;
+	isJumpingUp = true;
+	jumpTimeElapsed = 0.0f;
+	setActionState(ActionState::Jump);
+	Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
+	}
 
-	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !isGround) {
-		jumpTimeElapsed += deltatime;
-	 }
-	 else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
-		isJumpingUp = false;
-	 }
-	 /*
-	if (IsKeyDown(KEY_SPACE)) {
-		if (isGround) {
-			if(getCharacterStateType() == CharacterStateType::NormalState)
-				Singleton<SoundManager>::getInstance().play(SoundType::JUMP_SMALL);
-			else  Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
-			velocity.y = config.JUMPFORCE;
-			isGround = false;
-			isJumpingUp = true;
-			jumpTimeElapsed = 0.0f;
-		}
-		else if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !isGround) {
-			jumpTimeElapsed += deltatime;
-			velocity.y = config.JUMPFORCE;  // hoặc scale theo thời gian
-			//cout << "is jumpin\n";
-		}
+	if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !isGround) {
+	jumpTimeElapsed += deltatime;
 	}
-	else {
-		isJumpingUp = false;
+	else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
+	isJumpingUp = false;
 	}
-	*/
 }
 void Character::Update(float deltatime) {
 	currentState->Update(deltatime);

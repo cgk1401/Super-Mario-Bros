@@ -31,7 +31,7 @@ void AnimationManager::LoadAnimation(const string& filename, CharacterStateType 
 			for (auto& frame : action.value()["frames"]) {
 				anim.frame.push_back({ frame["x"], frame["y"], frame["width"], frame["height"] });
 			}
-			animations[type][statetype][actionType] = anim;;
+			animations[type][statetype][actionType] = anim;
 		}
 	}
 	input.close();
