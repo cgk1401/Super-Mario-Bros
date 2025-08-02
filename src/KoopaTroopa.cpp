@@ -105,7 +105,7 @@ void KoopTroopa::moveRight() {
 }
 
 bool KoopTroopa::isDead(){
-	return position.y >= GetScreenHeight() + 50 || currentState == KoopaState::Die;
+	return position.y >= screenHeight + 50 || currentState == KoopaState::Die;
 }
 
 void KoopTroopa::Fall() {

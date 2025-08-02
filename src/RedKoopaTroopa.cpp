@@ -53,29 +53,88 @@ void RedKoopaTroopa::Draw() {
 }
 
 void RedKoopaTroopa::Update(float deltatime, Map* map) {
+	animations[currentState].Update(deltatime);
 
+	if (!onGround) {
+		velocity.y += gravity * deltatime;
+	}
+	else {
+		velocity.y = 0;
+	}
+	if (onGround && velocity.y > 0) {
+		velocity.y = 0;
+	}
+
+	if (direction == Direction::Right) {
+		moveRight();
+	}
+	else if (direction == Direction::Left) {
+		moveLeft();
+	}
+
+	Collision::handleEnemyCollision(this, map);
 }
 
-void RedKoopaTroopa::onDeath(DeathType type, Character* player) {
-
+void RedKoopaTroopa::onDeath(DeathType type, Character* source) {
+	switch (type) {
+	case DeathType::STOMP:
+		if (currentState == RedKoopaState::Walk) {
+			currentState = RedKoopaState::Shell;
+			isStationary = true;
+			animations[currentState].reset();
+		}
+		else if (currentState == RedKoopaState::Shell) {
+			isStationary = false;
+			float player_mid = source->getBound().x + source->getBound().width / 2;
+			float enemy_mid = this->bound.x + this->bound.width / 2;
+			changeDirection(player_mid >= enemy_mid ? Direction::Left : Direction::Right);
+		}
+		break;
+	case DeathType::FALLING:
+	case DeathType::SHELL_HIT:
+		currentState = RedKoopaState::Die;
+		Singleton<EffectManager>::getInstance().koopaDeath(this->position, texture, animations[RedKoopaState::Die].getcurrentframe());
+		break;
+	}
 }
 
 bool RedKoopaTroopa::isDead() {
-	return false;
+	return position.y >= screenHeight + 50 || currentState == RedKoopaState::Die;
 }
 
 void RedKoopaTroopa::moveLeft() {
-
+	if (currentState == RedKoopaState::Walk) {
+		velocity.x = -walkSpeed * GetFrameTime();
+	}
+	else if (currentState == RedKoopaState::Shell) {
+		if (!isStationary) {
+			velocity.x = -shellSpeed * GetFrameTime();
+		}
+	}
+	position.x += velocity.x;
 }
 
 void RedKoopaTroopa::moveRight() {
+	if (currentState == RedKoopaState::Walk) {
+		velocity.x = walkSpeed * GetFrameTime();
+	}
+	else if (currentState == RedKoopaState::Shell) {
+		if (!isStationary) {
+			velocity.x = shellSpeed * GetFrameTime();
+		}
+	}
+	position.x += velocity.x;
 
 }
 
 void RedKoopaTroopa::Fall() {
-
+	currentState == RedKoopaState::Shell;
+	velocity.y += gravity * GetFrameTime();
+	position.y += velocity.y;
 }
 
 EnemyType RedKoopaTroopa::getType() const {
-	return EnemyType();
+	if (this->currentState == RedKoopaState::Shell)
+		return EnemyType::KOOPA_SHELL;
+	return EnemyType::KOOPA;
 }
