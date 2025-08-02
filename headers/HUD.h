@@ -28,6 +28,8 @@ public:
     void setMapLevel(pair<int, int> m);
     void setTime(int t);
     int getLives();
+    int getTime();
+    void generateTimeToCoins();
 
     void update(float dt);
     void draw();

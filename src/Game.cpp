@@ -28,6 +28,7 @@ void Game::run(){
             stateStack[i]->handleInput();
             if (i > stateStack.size() - 1) break;
              stateStack[i]->update(deltatime);
+             if (i > stateStack.size() - 1) break;
              if (!stateStack[i]->allowUpdateBelow()) break;
         }
     

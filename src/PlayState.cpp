@@ -50,7 +50,10 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud) {
     bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 9.2);
     
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
-   PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
+    PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
+
+   cutscene.play(new ScreenEffectCutscene(SreenType::NONE, BLACK, 3, TextFormat("ROUND %d - %d\n Lives: x%d", level.first, level.second, hud->getLives())));
+   if (level == pair{1,1}) cutscene.play(new KidnapCutscene);
 }
 PlayState::~PlayState() {
     for (auto& [level, mapPtr] : world) {  
@@ -62,13 +65,22 @@ PlayState::~PlayState() {
 }
 
 void PlayState::handleInput() {
+    
     if (PauseButton->IsClicked()) {
         Singleton<Game>::getInstance().addState(new PauseState());
         shouldExit = true;
     }
+    if(cutscene.isActive()){
+        return;
+    }
 }
 
 void PlayState::update(float dt){
+    if(cutscene.isActive()){
+        cutscene.update(dt);
+        return;
+    }
+
     ///______________________________WOLRD__________________________________________
     camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
     Global::camera = camera.getCamera();
@@ -82,6 +94,7 @@ void PlayState::update(float dt){
 
     if (character->getCurrentAction() != ActionState::Die) {
         Singleton<SoundManager>::getInstance().updateMusic();
+        character->HandleInput(dt);
         character->Update(dt);
         hud->update(dt); 
         Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
@@ -92,11 +105,17 @@ void PlayState::update(float dt){
             if (newRound_countDown.isFinished()) {
                 if(hud->getLives() <= 0){
                     //trigger a GAMEOVER scene
-
+                    cutscene.play(new ScreenEffectCutscene(SreenType::NONE, BLACK, 5.5, "GAME OVER"));
+                    Singleton<SoundManager>::getInstance().play(SoundType::GAMEOVER1);
                 }
                 else Singleton<Game>::getInstance().replaceState(new PlayState(level, hud));
                 return;
             }
+        }
+        
+        if(newRound_countDown.isFinished()){
+            Singleton<Game>::getInstance().changeState(new PlayState(level));
+            return;
         }
     }
     Collision::handlePlayer_EnemyCollision(character, enemies);
@@ -135,7 +154,10 @@ void PlayState::render() {
     Singleton<EffectManager>::getInstance().drawHiddenEffects();
     Singleton<ItemManager>::getInstance().DrawHiddenItem();
     world[level]->draw();
-    if (character->getCurrentAction() != ActionState::Die) character->Draw();
+    if (character->getCurrentAction() != ActionState::Die) {
+        Tile tile = world[level]->getTile(character->getBound().y / Map::TILE_SIZE, character->getBound().x / Map::TILE_SIZE);
+        if (tile.type != TileType::BLACK_BLOCK) character->Draw();
+    }
     for(auto& e: enemies){
         e->Draw();
     }
@@ -147,6 +169,7 @@ void PlayState::render() {
     ///______________________________GUI________________________________________
     hud->draw();
     PauseButton->draw();
+    if(cutscene.isActive()) cutscene.draw();
 }
 
 void PlayState::ChangeCharacter(CharacterType newtype) {
@@ -160,7 +183,10 @@ void PlayState::ChangeCharacter(CharacterType newtype) {
 
 void PlayState::onNotify(const EventType& event, void* data){
     if(event == EventType::ON_DEATH){
-        
         newRound_countDown.start(4);
+    }
+    else if (event == EventType::FLAG_POLE){
+       cutscene.play(new FlagPoleCutscene(character, hud, world[level], camera));
+    
     }
 }

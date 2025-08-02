@@ -31,6 +31,9 @@ enum class SoundType {
     BEEP,
     HOVER_BUTTON,
     CLICK_BUTTON,
+    TELEPORT,
+    SCREAM,
+    FOOTSTEP,
 };
 
 enum class MusicType {
@@ -71,6 +74,8 @@ public:
     void unload();   // cleanup tất cả
 
     void play(SoundType type);
+    void stopSound(SoundType type);
+    void stopAllSounds();
     void playMusic(MusicType type, bool loop = true);
     void stopMusic();
     void updateMusic(); // gọi mỗi frame!

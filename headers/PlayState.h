@@ -14,6 +14,8 @@
 #include "../headers/PiranhaPlant.h"
 #include "../headers/Enemy.h"
 #include "../headers/FireBar.h"
+#include "CUTSCENES/CutSceneManager.h"
+
 using namespace std;
 
 class PlayState : public GameState, public Observer{
@@ -47,6 +49,7 @@ private:
 
     Timer newRound_countDown;
 
+    CutsceneManager cutscene;
 };
 
 #endif

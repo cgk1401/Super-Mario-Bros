@@ -169,7 +169,9 @@ void Character::HandleInput(float deltatime) {
 		isJumpingUp = true;
 		jumpTimeElapsed = 0.0f;
 		setActionState(ActionState::Jump);
-		Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
+		if (getCharacterStateType() == CharacterStateType::NormalState)
+			Singleton<SoundManager>::getInstance().play(SoundType::JUMP_SMALL);
+		else  Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 	 }
 
 	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !isGround) {
@@ -200,7 +202,7 @@ void Character::HandleInput(float deltatime) {
 	}
 	*/
 }
-void Character::Update(float deltatime) {
+void Character::Update(float deltatime, bool applyPhysics) {
 	currentState->Update(deltatime);
 	//DO NOT UPDATE WHEN MARIO IS TRANSFORMING
 	if (currentState->getStateType() == CharacterStateType::TransformState) return;
@@ -210,27 +212,29 @@ void Character::Update(float deltatime) {
 	Rectangle currentframe = animations[currentAction].getcurrentframe();
 	BasePosition = position.y +  currentframe.height * scale;
 
-	HandleInput(deltatime);
-	if (!isGround) {
-		if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
-			velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
+		if (!isGround) {
+			if(applyPhysics){
+					if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
+						velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
+					}
+					else {
+						velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
+					
+					}
+					if(isJumpingUp) setActionState(ActionState::Jump);
+			}
 		}
 		else {
-			velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
-		
-		}
-		if(isJumpingUp) setActionState(ActionState::Jump);
-	}
-	else {
-		//cout << "on ground\n";
-		velocity.y = 0; 
-		isJumpingUp = false;
-		if (fabs(velocity.x) < 0.1f) {
-			if (IsKeyDown(KEY_P)) {
-				setActionState(ActionState::FlagpoleHold);
+			//cout << "on ground\n";
+			velocity.y = 0; 
+			isJumpingUp = false;
+			if (fabs(velocity.x) < 0.1f) {
+				if (IsKeyDown(KEY_P)) {
+					setActionState(ActionState::FlagpoleHold);
+				} 
 			} 
-		} 
-	}
+		}
+	
 
 	position.x += velocity.x * deltatime;
 	position.y += velocity.y * deltatime;
@@ -274,3 +278,19 @@ void Character::collectItem(ItemType type, Vector2 itemPosition)
 	else if (type == ItemType::STAR) notify(EventType::POWERUP_COLLECT_STAR, &itemPosition);
 	else if (type == ItemType::COIN) notify(EventType::COIN_COLLECT, &itemPosition);
 }
+
+
+void Character::moveRight(const float& speed){
+	currentdirection = Direction::Right;
+	setActionState(ActionState::Run);
+	position.x += speed;
+}
+void Character::moveLeft(const float& speed){
+	currentdirection = Direction::Left;
+	setActionState(ActionState::Run);
+	position.x -= speed;
+}
+void Character::moveDown(const float& speed){
+	currentdirection = Direction::Left;
+	position.y += speed;
+} //flagpole only

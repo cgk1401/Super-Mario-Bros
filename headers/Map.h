@@ -68,4 +68,5 @@ public:
     void setTile(int row, int col, int tileID);
     void removeTile(int row, int col);
     
+    pair<int, int> getLevel();
 };

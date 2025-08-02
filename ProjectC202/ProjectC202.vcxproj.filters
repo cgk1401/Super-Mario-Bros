@@ -79,6 +79,12 @@
     <Filter Include="Source Files\Entity\Item">
       <UniqueIdentifier>{55a6198f-c489-4597-a9b1-f13352f9ffca}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Cutscene">
+      <UniqueIdentifier>{6ab5c217-6b8a-4e02-8d95-03d36af0406a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Cutscene">
+      <UniqueIdentifier>{90cbf132-8db4-4fcc-bca4-f25c368bc63b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Game.cpp">
@@ -230,6 +236,18 @@
     </ClCompile>
     <ClCompile Include="..\src\FireBar.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CUTSCENES\CutSceneManager.cpp">
+      <Filter>Source Files\Cutscene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CUTSCENES\ScreenEffectCutscene.cpp">
+      <Filter>Source Files\Cutscene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CUTSCENES\KinapCutscene.cpp">
+      <Filter>Source Files\Cutscene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CUTSCENES\FlagPoleCutscene.cpp">
+      <Filter>Source Files\Cutscene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -418,6 +436,21 @@
     </ClInclude>
     <ClInclude Include="..\headers\FireBar.h">
       <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CUTSCENES\Cutscene.h">
+      <Filter>Header Files\Cutscene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CUTSCENES\CutSceneManager.h">
+      <Filter>Header Files\Cutscene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CUTSCENES\ScreenEffectCutscene.h">
+      <Filter>Header Files\Cutscene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CUTSCENES\KidnapCutscene.h">
+      <Filter>Header Files\Cutscene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CUTSCENES\FlagPoleCutscene.h">
+      <Filter>Header Files\Cutscene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
