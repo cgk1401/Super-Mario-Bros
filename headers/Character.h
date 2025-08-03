@@ -63,11 +63,15 @@ public:
 	void onDead();
 	
 	void Draw();
-	void Update(float deltatime);
+	void Update(float deltatime, bool applyPhysics = true);
 	void HandleInput(float dt);
 
 	void collectCoin();
 	void breakBrick();
 	void killEnemy(EnemyType type, Vector2 enemyPosition);
 	void collectItem(ItemType type, Vector2 itemPosition);
+
+	void moveRight(const float& speed = 2);
+	void moveLeft(const float& speed = 2);
+	void moveDown(const float& speed = 2); //flagpole only
 };

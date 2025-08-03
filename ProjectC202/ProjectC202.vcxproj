@@ -141,6 +141,10 @@
     <ClCompile Include="..\src\CharacterState.cpp" />
     <ClCompile Include="..\src\Collision.cpp" />
     <ClCompile Include="..\src\ConcreteTileBehavior.cpp" />
+    <ClCompile Include="..\src\CUTSCENES\CutSceneManager.cpp" />
+    <ClCompile Include="..\src\CUTSCENES\FlagPoleCutscene.cpp" />
+    <ClCompile Include="..\src\CUTSCENES\KinapCutscene.cpp" />
+    <ClCompile Include="..\src\CUTSCENES\ScreenEffectCutscene.cpp" />
     <ClCompile Include="..\src\EffectManager.cpp" />
     <ClCompile Include="..\src\FireBall.cpp" />
     <ClCompile Include="..\src\FireBallExplosionEffect.cpp" />
@@ -194,6 +198,11 @@
     <ClInclude Include="..\headers\CharacterState.h" />
     <ClInclude Include="..\headers\Collision.h" />
     <ClInclude Include="..\headers\ConcreteTileBehavior.h" />
+    <ClInclude Include="..\headers\CUTSCENES\Cutscene.h" />
+    <ClInclude Include="..\headers\CUTSCENES\CutSceneManager.h" />
+    <ClInclude Include="..\headers\CUTSCENES\FlagPoleCutscene.h" />
+    <ClInclude Include="..\headers\CUTSCENES\KidnapCutscene.h" />
+    <ClInclude Include="..\headers\CUTSCENES\ScreenEffectCutscene.h" />
     <ClInclude Include="..\headers\EffectManager.h" />
     <ClInclude Include="..\headers\Enemy.h" />
     <ClInclude Include="..\headers\EnemyFactory.h" />

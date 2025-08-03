@@ -121,6 +121,8 @@ void Map::createTileCatalog() {
             }
 
             for (int j = 9; j < 16; j++) {
+                if(j == 14) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], BLACK_BLOCK, new DecorationTileBehavior(), theme)); //Decoration tile
+                else
                 tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme)); //Decoration tile
             }
 
@@ -477,4 +479,8 @@ void Map::loadFromFile(pair<int, int> level, bool isEditing) {
 MapTheme Map::getMapTheme(pair<int, int> level){
     if(level == pair{1,2}) return MapTheme::UNDERGROUND;
 
+}
+
+pair<int, int> Map::getLevel() {
+    return level;
 }

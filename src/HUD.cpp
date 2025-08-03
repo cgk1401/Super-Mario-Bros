@@ -40,7 +40,19 @@ void HUD::setTime(int t){
 int HUD::getLives(){
     return lives;
 }
+int HUD::getTime(){
+    return time;
+}
 
+void HUD::generateTimeToCoins(){
+    if(time <= 0 ) {
+        time = 0;
+        return;
+    }
+    time--;
+    score += 100 ;
+    if((int)time % 5 == 0) Singleton<SoundManager>::getInstance().play(SoundType::BEEP);
+}
 
 void HUD::onNotify(const EventType& event, void* data){
     if (event == EventType::ON_DEATH) {

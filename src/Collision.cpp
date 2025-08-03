@@ -11,7 +11,7 @@
 #include "../headers/ConcreteTileBehavior.h"
 #include <cmath>
 
-void Collision::handlePlayerCollision(Character* player, Map* map) {
+void Collision::handlePlayerCollision(Character* player, Map* map, bool hasNotified) {
  
     player->isGround = false;
 
@@ -56,6 +56,12 @@ void Collision::handlePlayerCollision(Character* player, Map* map) {
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(bound, tileRect)) {
+                if(hasNotified == false && tile.type == TileType::FINISHING_POLE ){
+                    player->velocity = {0,0};
+                    player->position.x = y * Map::TILE_SIZE;
+                    player->notify(EventType::FLAG_POLE, &tileRect);
+                    return;
+                }
                 if (tile.behavior->isSolid()) {
                     float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);
                     float overlapY = fmin(bound.y + bound.height, tileRect.y + tileRect.height) - fmax(bound.y, tileRect.y);

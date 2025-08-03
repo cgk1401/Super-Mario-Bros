@@ -24,6 +24,7 @@ enum class EventType {
     ITEM_COLLECT_1UP,
 
     ON_DEATH,
+    FLAG_POLE,
 };
 
 struct EventInfo {

@@ -36,3 +36,7 @@ float approach(float current, float target, float increase) {
 	}
 	return fmax(current - increase, target);
 }
+
+float lerp(float a, float b, float t) {
+    return a + (b - a) * t;
+}

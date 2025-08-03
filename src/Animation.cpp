@@ -8,8 +8,18 @@ void Animation::Update(float deltatime) {
 	currenttime += deltatime;
 	if (currenttime >= durationtime) {
 		currenttime = 0;
-		currentframe = (currentframe + 1) % frame.size();
+		
+		if (loop) {
+			currentframe = (currentframe + 1) % frame.size();
+		} else {
+			if (currentframe < frame.size() - 1) {
+				currentframe++;
+			}
+		}
 	}
+}
+bool Animation::isFinish() const{
+	return loop == false && currentframe == frame.size() - 1;
 }
 
 Rectangle Animation::getcurrentframe() const {

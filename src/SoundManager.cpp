@@ -40,7 +40,10 @@ void SoundManager::load() {
 	sounds[SoundType::BEEP] = LoadSound("../assets/sfx/beep.wav");
     sounds[SoundType::HOVER_BUTTON] = LoadSound("../assets/GUI/sound/hover_sfx.mp3");
     sounds[SoundType::CLICK_BUTTON] = LoadSound("../assets/GUI/sound/button-click.mp3");
-
+    sounds[SoundType::TELEPORT] = LoadSound("../assets/Cutscene/Kidnap/teleport.mp3");
+    sounds[SoundType::FOOTSTEP] = LoadSound("../assets/Cutscene/Kidnap/footsteps-male.mp3");
+    sounds[SoundType::SCREAM] = LoadSound("../assets/Cutscene/Kidnap/scream.mp3");
+    
     // Music
      musics[MusicType::MAIN_THEME_OVERWORLD] = LoadMusicStream("../assets/music/Mario/DEFAULT_OVERWORLD_THEME.mp3");
 	 musics[MusicType::MAIN_THEME_UNDERGROUND] = LoadMusicStream("../assets/music/Mario/DEFAULT_UNDERGROUND_THEME.mp3");
@@ -71,6 +74,17 @@ void SoundManager::play(SoundType type) {
     if (sounds.count(type))
         PlaySound(sounds[type]);
 }
+void SoundManager::stopSound(SoundType type){
+    if (sounds.count(type))
+        StopSound(sounds[type]);
+}
+void SoundManager::stopAllSounds(){
+    for(auto it : sounds){
+        if(IsSoundPlaying(it.second)){
+            StopSound(it.second);
+        }
+    }
+}
 
 void SoundManager::playMusic(MusicType type, bool loop) {
     if (!musics.count(type)) return;
@@ -81,7 +95,7 @@ void SoundManager::playMusic(MusicType type, bool loop) {
     PlayMusicStream(musics[type]);
     musicPlaying = true;
 
-    if (loop) musics[type].looping = true;
+    musics[type].looping = loop;
 }
 
 void SoundManager::stopMusic() {
