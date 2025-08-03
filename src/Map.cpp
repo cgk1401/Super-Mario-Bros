@@ -332,16 +332,20 @@ void Map::setEnemySpawnCallback(function<void(EnemyType, Vector2, MapTheme)> cal
 }
 
 EnemyType Map::getEnemyType(int ID) {
-   for(int i = 21; i <= tileSetSourceRects.size(); i++){
-       for(int j = 1 ; j <= tileSetSourceRects[i].size(); j++){
-            if(j == 1  && ID == getTileIDFromCoords(i, j)) return EnemyType::GOOMBA;
-            else if(j== 3 && ID == getTileIDFromCoords(i, j)) return EnemyType::KOOPA;
-            else if(j== 4 && ID == getTileIDFromCoords(i, j)) return EnemyType::PIRANT_PLANT;
+    for (int i = 21; i <= tileSetSourceRects.size(); i++) {
+        for (int j = 1; j <= tileSetSourceRects[i].size(); j++) {
+            if (j == 1 && ID == getTileIDFromCoords(i, j)) return EnemyType::GOOMBA;
+            else if (j == 3 && ID == getTileIDFromCoords(i, j)) {
+                if (i == 23) EnemyType::REDKOOPA;
+                else return EnemyType::KOOPA;
+            }
+            else if (j == 4 && ID == getTileIDFromCoords(i, j)) return EnemyType::PIRANT_PLANT;
         }
-   }
+    }
 
    return EnemyType::None;
 }
+
 void Map::setTile(int row, int col, int tileID) {
     if (row < 0 || row >= rows || col < 0 || col >= columns) {
         return;

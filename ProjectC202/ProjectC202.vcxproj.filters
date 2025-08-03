@@ -231,9 +231,6 @@
     <ClCompile Include="..\src\FireBar.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\RedKoopaTroopa.cpp">
-      <Filter>Source Files\Entity\Enemy</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -417,9 +414,6 @@
       <Filter>Header Files\States</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\FireBar.h">
-      <Filter>Header Files\Entity\Enemy</Filter>
-    </ClInclude>
-    <ClInclude Include="..\headers\RedKoopaTroopa.h">
       <Filter>Header Files\Entity\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\EnemyFactory.h">

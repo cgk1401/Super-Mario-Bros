@@ -9,6 +9,9 @@ enum class KoopaState {
 	Walk,
 	Shell,
 	Die, //falling off (die by fireball)
+	RedWalk,
+	RedShell,
+	RedDie,
 };
 
 class KoopTroopa : public Enemy {
@@ -23,10 +26,11 @@ private :
 	bool isStationary = false;
 	float gravity = 1000; // vận tốc rơi
 	const float scale = 3.0f;
+	EnemyType enemyType;
 
 public :
-	KoopTroopa();
-	KoopTroopa(Vector2 position, MapTheme _theme);
+	KoopTroopa(EnemyType type);
+	KoopTroopa(Vector2 position, EnemyType type,MapTheme _theme);
 	~KoopTroopa() override;
 
 	void LoadSource() override;

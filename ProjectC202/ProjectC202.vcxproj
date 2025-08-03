@@ -171,7 +171,6 @@
     <ClCompile Include="..\src\PauseState.cpp" />
     <ClCompile Include="..\src\PiranhaPlant.cpp" />
     <ClCompile Include="..\src\PlayState.cpp" />
-    <ClCompile Include="..\src\RedKoopaTroopa.cpp" />
     <ClCompile Include="..\src\SaveConfirmationDialog.cpp" />
     <ClCompile Include="..\src\PọintEffect.cpp" />
     <ClCompile Include="..\src\SoundManager.cpp" />
@@ -230,7 +229,6 @@
     <ClInclude Include="..\headers\PauseState.h" />
     <ClInclude Include="..\headers\PiranhaPlant.h" />
     <ClInclude Include="..\headers\PlayState.h" />
-    <ClInclude Include="..\headers\RedKoopaTroopa.h" />
     <ClInclude Include="..\headers\SaveConfirmationDialog.h" />
     <ClInclude Include="..\headers\PointEffect.h" />
     <ClInclude Include="..\headers\Singleton.h" />
