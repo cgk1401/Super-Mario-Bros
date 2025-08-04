@@ -139,10 +139,10 @@ bool KoopTroopa::isDead(){
 
 void KoopTroopa::Fall() {
 	if (enemyType == EnemyType::KOOPA) {
-		currentState == KoopaState::Shell;
+		currentState = KoopaState::Shell;
 	}
 	else if (enemyType == EnemyType::REDKOOPA) {
-		currentState == KoopaState::RedShell;
+		currentState = KoopaState::RedShell;
 	}
 	velocity.y += gravity * GetFrameTime();
 	position.y += velocity.y;
@@ -153,10 +153,10 @@ void KoopTroopa::onDeath(DeathType type, Character* source) {
 	case DeathType::STOMP:
 		if (currentState == KoopaState::Walk || currentState == KoopaState::RedWalk) {
 			if (enemyType == EnemyType::KOOPA) {
-				currentState == KoopaState::Shell;
+				currentState = KoopaState::Shell;
 			}
 			else if (enemyType == EnemyType::REDKOOPA) {
-				currentState == KoopaState::RedShell;
+				currentState = KoopaState::RedShell;
 			}
 			isStationary = true;
 			animation[currentState].reset();
@@ -186,10 +186,10 @@ EnemyType KoopTroopa::getType() const {
 	if (this->currentState == KoopaState::Shell){
 		return EnemyType::KOOPA_SHELL;
 	}
-	else if (this->currentState == KoopaState::RedShell) {
+	if (this->currentState == KoopaState::RedShell) {
 		return EnemyType::REDKOOP_SHELL;
 	}
-	else if (enemyType == EnemyType::KOOPA) {
+	if (enemyType == EnemyType::KOOPA) {
 		return EnemyType::KOOPA;
 	}
 	return EnemyType::REDKOOPA;
