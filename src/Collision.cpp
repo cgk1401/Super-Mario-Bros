@@ -433,7 +433,7 @@ void Collision::handleEnemy_EnemyCollison(vector<Enemy*>& enemies) {
             Rectangle o_bound = other->bound;
             // Special case: Koopa in Shell hitting Goomba
             if (auto* k = dynamic_cast<KoopTroopa*>(other)) {
-                if (k->currentState == KoopaState::Shell) {
+                if (k->currentState == KoopaState::Shell || k->currentState == KoopaState::RedShell) {
                     if (CheckCollisionRecs(e_bound, o_bound)) {
                         e->onDeath(DeathType::SHELL_HIT);
                         break;
@@ -444,6 +444,7 @@ void Collision::handleEnemy_EnemyCollison(vector<Enemy*>& enemies) {
             }
             if (auto* g = dynamic_cast<KoopTroopa*>(e)) {
                 if (g->currentState == KoopaState::Shell) break;
+                if (g->currentState == KoopaState::RedShell) break;
             }
             
 

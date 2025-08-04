@@ -30,7 +30,7 @@ private :
 
 public :
 	KoopTroopa(EnemyType type);
-	KoopTroopa(Vector2 position, EnemyType type,MapTheme _theme);
+	KoopTroopa(Vector2 position, EnemyType type, MapTheme _theme);
 	~KoopTroopa() override;
 
 	void LoadSource() override;
@@ -43,5 +43,5 @@ public :
 	void moveRight();
 	void Fall();
 	
-	EnemyType getType() const;
+	EnemyType getType() const override;
 };

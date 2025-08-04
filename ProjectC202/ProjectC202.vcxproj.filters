@@ -249,6 +249,9 @@
     <ClCompile Include="..\src\CUTSCENES\FlagPoleCutscene.cpp">
       <Filter>Source Files\Cutscene</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Bowser.cpp">
+      <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -450,6 +453,9 @@
       <Filter>Header Files\Cutscene</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\EnemyFactory.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Bowser.h">
       <Filter>Header Files\Entity\Enemy</Filter>
     </ClInclude>
   </ItemGroup>

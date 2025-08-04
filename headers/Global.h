@@ -70,9 +70,11 @@ enum class EnemyType {
 	GOOMBA,
 	KOOPA,
 	REDKOOPA,
-	KOOPA_SHELL,		
+	KOOPA_SHELL,
+	REDKOOP_SHELL,
 	PIRANT_PLANT,
 	FIRE_BAR,
+	BOWSER,
 };
 
 

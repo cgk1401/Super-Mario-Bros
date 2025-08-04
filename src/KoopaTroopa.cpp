@@ -114,31 +114,36 @@ void KoopTroopa::Update(float deltatime, Map* map) {
 
 void KoopTroopa::moveLeft() {
 
-	if (currentState == KoopaState::Walk) {
+	if (currentState == KoopaState::Walk || currentState == KoopaState::RedWalk) {
 		velocity.x = -walkSpeed * GetFrameTime();
 	}
-	else if (currentState == KoopaState::Shell) {
+	else if (currentState == KoopaState::Shell || currentState == KoopaState::RedShell) {
 		if (!isStationary) velocity.x = -shellSpeed * GetFrameTime();
 	}
 	position.x += velocity.x;
 }
 
 void KoopTroopa::moveRight() {
-	if (currentState == KoopaState::Walk) {
+	if (currentState == KoopaState::Walk || currentState == KoopaState::RedWalk) {
 		velocity.x = walkSpeed * GetFrameTime();
 	}
-	else if (currentState == KoopaState::Shell) {
+	else if (currentState == KoopaState::Shell || currentState == KoopaState::RedShell) {
 		if(!isStationary) velocity.x = shellSpeed * GetFrameTime();
 	}
 	position.x += velocity.x;
 }
 
 bool KoopTroopa::isDead(){
-	return position.y >= screenHeight + 50 || currentState == KoopaState::Die;
+	return position.y >= screenHeight + 50 || currentState == KoopaState::Die || currentState == KoopaState::RedDie;
 }
 
 void KoopTroopa::Fall() {
-	currentState = KoopaState::Shell;
+	if (enemyType == EnemyType::KOOPA) {
+		currentState == KoopaState::Shell;
+	}
+	else if (enemyType == EnemyType::REDKOOPA) {
+		currentState == KoopaState::RedShell;
+	}
 	velocity.y += gravity * GetFrameTime();
 	position.y += velocity.y;
 }
@@ -147,7 +152,12 @@ void KoopTroopa::onDeath(DeathType type, Character* source) {
 	switch (type) {
 	case DeathType::STOMP:
 		if (currentState == KoopaState::Walk || currentState == KoopaState::RedWalk) {
-			currentState = KoopaState::Shell;
+			if (enemyType == EnemyType::KOOPA) {
+				currentState == KoopaState::Shell;
+			}
+			else if (enemyType == EnemyType::REDKOOPA) {
+				currentState == KoopaState::RedShell;
+			}
 			isStationary = true;
 			animation[currentState].reset();
 		}
@@ -173,10 +183,13 @@ void KoopTroopa::onDeath(DeathType type, Character* source) {
 }
 
 EnemyType KoopTroopa::getType() const {
-	if (this->currentState == KoopaState::Shell || this->currentState == KoopaState::RedShell){;
+	if (this->currentState == KoopaState::Shell){
 		return EnemyType::KOOPA_SHELL;
 	}
-	if (enemyType == EnemyType::KOOPA) {
+	else if (this->currentState == KoopaState::RedShell) {
+		return EnemyType::REDKOOP_SHELL;
+	}
+	else if (enemyType == EnemyType::KOOPA) {
 		return EnemyType::KOOPA;
 	}
 	return EnemyType::REDKOOPA;

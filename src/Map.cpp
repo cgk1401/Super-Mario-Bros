@@ -201,7 +201,7 @@ void Map::createTileCatalog() {
             }
 
             for (int j = 11; j < 14; j++) {
-                if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new DecorationTileBehavior(), theme)); //Ground tiles
+                if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], ENEMY, new DecorationTileBehavior(), theme)); //Ground tiles
             }
         }
     }
@@ -335,13 +335,16 @@ void Map::setEnemySpawnCallback(function<void(EnemyType, Vector2, MapTheme)> cal
 
 EnemyType Map::getEnemyType(int ID) {
     for (int i = 21; i <= tileSetSourceRects.size(); i++) {
-        for (int j = 1; j <= tileSetSourceRects[i].size(); j++) {
+        for (int j = 1; j <= tileSetSourceRects[i-1].size(); j++) {
             if (j == 1 && ID == getTileIDFromCoords(i, j)) return EnemyType::GOOMBA;
             else if (j == 3 && ID == getTileIDFromCoords(i, j)) {
-                if (i == 23) EnemyType::REDKOOPA;
+                if (i == 23) {
+                    return EnemyType::REDKOOPA;
+                }
                 else return EnemyType::KOOPA;
             }
             else if (j == 4 && ID == getTileIDFromCoords(i, j)) return EnemyType::PIRANT_PLANT;
+            else if (j == 13 && (i == 21 || i == 22 || i == 24) && ID == getTileIDFromCoords(i, j)) return EnemyType::BOWSER;
         }
     }
 
