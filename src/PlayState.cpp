@@ -8,31 +8,24 @@
 #include "../headers/SoundManager.h"
 #include "../headers/Luigi.h"
 
-PlayState::PlayState(pair<int, int> _level, HUD* _hud) {
+PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character) {
     if (_level == pair {1,1})      Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
     else if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
     else if (_level == pair {1,3}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
     else if (_level == pair {1,4}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_CASTLE, true);
 
-    if (selectedCharacter == CharacterType::Mario) {
-        character = new Mario({ 100, 300 });
-    }
-    else if (selectedCharacter == CharacterType::Luigi) {
-        character = new Luigi({ 100, 300 });
-    }
-
-   
     level = _level;
     Global::level = _level;
     world[level] = new Map(level);
+    
+    if(_hud) hud = _hud;
+    else hud = new HUD(level);
     
     world[level]->setEnemySpawnCallback(
         [this](EnemyType type, Vector2 pos, MapTheme theme) {
             enemies.push_back(EnemyFactory::createEnemy(type, pos, theme));
         }
     );
-    hud = _hud;
-    if(!hud) hud = new HUD(level);
 
     Singleton<ItemManager>::getInstance().clearItems();
     world[level]->loadFromFile(level);
@@ -41,10 +34,27 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud) {
 
     EffectManager* effects = &Singleton<EffectManager>::getInstance();
     
+    if (_character) {
+        character = _character;
+        character->deleteAllObservers();
+        character->setPosition({ 100, 300 });
+    }
+    else {
+        Vector2 startPoint = { 100, 300 };
+        if (level == pair{ 1,1 }) startPoint = { 100, 12 * Map::TILE_SIZE };
+
+        if (selectedCharacter == CharacterType::Mario) {
+            character = new Mario(startPoint);
+        }
+        else if (selectedCharacter == CharacterType::Luigi) {
+            character = new Luigi(startPoint);
+        }
+    }
+
     character->attachObserver(this);
     character->attachObserver(hud);
     character->attachObserver(effects);
-
+    
     bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.05, 9.2);
     bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 9.2);
     bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 9.2);
@@ -53,7 +63,7 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud) {
     PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
 
    cutscene.play(new ScreenEffectCutscene(SreenType::NONE, BLACK, 3, TextFormat("ROUND %d - %d\n Lives: x%d", level.first, level.second, hud->getLives())));
-   if (level == pair{1,1}) cutscene.play(new KidnapCutscene);
+   if (level == pair{1,1}) cutscene.play(new KidnapCutscene(world[level], character));
 }
 PlayState::~PlayState() {
     for (auto& [level, mapPtr] : world) {  
@@ -78,6 +88,7 @@ void PlayState::handleInput() {
 void PlayState::update(float dt){
     if(cutscene.isActive()){
         cutscene.update(dt);
+       
         return;
     }
 
@@ -94,7 +105,7 @@ void PlayState::update(float dt){
 
     if (character->getCurrentAction() != ActionState::Die) {
         Singleton<SoundManager>::getInstance().updateMusic();
-        character->HandleInput(dt);
+        if(character->getCharacterStateType() !=  CharacterStateType::TransformState) character->HandleInput(dt);
         character->Update(dt);
         hud->update(dt); 
         Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
@@ -155,7 +166,7 @@ void PlayState::render() {
     Singleton<ItemManager>::getInstance().DrawHiddenItem();
     world[level]->draw();
     if (character->getCurrentAction() != ActionState::Die) {
-        Tile tile = world[level]->getTile(character->getBound().y / Map::TILE_SIZE, character->getBound().x / Map::TILE_SIZE);
+        Tile tile = world[level]->getTile((character->getBound().y + character->getBound().height / 2) / Map::TILE_SIZE, character->getBound().x / Map::TILE_SIZE);
         if (tile.type != TileType::BLACK_BLOCK) character->Draw();
     }
     for(auto& e: enemies){

@@ -69,7 +69,7 @@ void MapEditor::saveToFile() {
     for (int y = columns - 1; y >= 0; y--) {
         for (int x = 0; x < rows; x++) {
             if (mapData[x][y].tileID != 0) {
-                limitCol = y;
+                limitCol = y + 1;
                 goto found;
             }
         }

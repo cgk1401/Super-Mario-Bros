@@ -25,6 +25,7 @@ enum class EventType {
 
     ON_DEATH,
     FLAG_POLE,
+    FINISH_LEVEL,
 };
 
 struct EventInfo {

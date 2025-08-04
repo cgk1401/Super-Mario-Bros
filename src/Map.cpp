@@ -201,7 +201,7 @@ void Map::createTileCatalog() {
             }
 
             for (int j = 11; j < 14; j++) {
-                if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new DecorationTileBehavior(), theme)); //Ground tiles
+                if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], ENEMY, new DecorationTileBehavior(), theme)); //Ground tiles
             }
         }
     }
@@ -335,7 +335,7 @@ void Map::setEnemySpawnCallback(function<void(EnemyType, Vector2, MapTheme)> cal
 
 EnemyType Map::getEnemyType(int ID) {
    for(int i = 21; i <= tileSetSourceRects.size(); i++){
-       for(int j = 1 ; j <= tileSetSourceRects[i].size(); j++){
+       for(int j = 1 ; j <= tileSetSourceRects[i - 1].size(); j++){
             if(j == 1  && ID == getTileIDFromCoords(i, j)) return EnemyType::GOOMBA;
             else if(j== 3 && ID == getTileIDFromCoords(i, j)) return EnemyType::KOOPA;
             else if(j== 4 && ID == getTileIDFromCoords(i, j)) return EnemyType::PIRANT_PLANT;
@@ -413,11 +413,12 @@ void Map::loadFromFile(pair<int, int> level, bool isEditing) {
 
     int fileRows, fileCols;
     MyReadFile >> fileRows >> fileCols;
-    cout << fileCols << endl;
+    //cout << fileCols << endl;
     int loadCols = isEditing ? MAX_COLUMN : fileCols;
     initMap(fileRows, loadCols); // Re-initialize map with new dimensions
     columns = loadCols;
 
+    cout << "FILE COLS: " << fileCols << endl;
    
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < fileCols; y++) {

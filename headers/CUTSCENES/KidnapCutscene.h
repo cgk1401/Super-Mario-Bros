@@ -64,13 +64,16 @@ enum class KidnapPhase {
     WALKING,    
     UFO_APPEARS,
     HELP,    
-    DISAPPEAR, 
+    DISAPPEAR,
     WAIT,
+    MOVE_CAMERA_TO_MARIO,
+    SURPRISED_EMOJI,
+    BACK_TO_ORIGIN,
     DONE ,     
 };
 class KidnapCutscene : public Cutscene {
 public:
-    KidnapCutscene();
+    KidnapCutscene(Map* _map, Character* _character);
     ~KidnapCutscene() = default;
 
     void update(float dt) override;
@@ -79,6 +82,7 @@ public:
 
 private:
     ///Texture2D background;
+    Texture2D emojiTexture; 
     bool done = false;
     float elapsedTime = 0.0f;
     KidnapPhase currentPhase = KidnapPhase::INTRO;
@@ -87,10 +91,15 @@ private:
     UFOInvader ufo;
     CameraController camera;
     Animation help_Ani;
+    Animation surprise_emoji_Ani;
     Map* map;
+    Character* character;
 
     vector<Rectangle> blackScene;
     bool start;
+
+    bool princess_Disappreared;
+
 private:
     void handlePhase(float dt);
 

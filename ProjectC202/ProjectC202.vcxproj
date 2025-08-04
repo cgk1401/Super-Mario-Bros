@@ -143,7 +143,7 @@
     <ClCompile Include="..\src\ConcreteTileBehavior.cpp" />
     <ClCompile Include="..\src\CUTSCENES\CutSceneManager.cpp" />
     <ClCompile Include="..\src\CUTSCENES\FlagPoleCutscene.cpp" />
-    <ClCompile Include="..\src\CUTSCENES\KinapCutscene.cpp" />
+    <ClCompile Include="..\src\CUTSCENES\KidnapCutscene.cpp" />
     <ClCompile Include="..\src\CUTSCENES\ScreenEffectCutscene.cpp" />
     <ClCompile Include="..\src\EffectManager.cpp" />
     <ClCompile Include="..\src\FireBall.cpp" />
@@ -169,7 +169,6 @@
     <ClCompile Include="..\src\GoombaDeadEffect.cpp" />
     <ClCompile Include="..\src\NormalState.cpp" />
     <ClCompile Include="..\src\OBSERVER\EventDataBase.cpp" />
-    <ClCompile Include="..\src\OBSERVER\Subject.cpp" />
     <ClCompile Include="..\src\OptionState.cpp" />
     <ClCompile Include="..\src\ParallaxManager.cpp" />
     <ClCompile Include="..\src\PauseState.cpp" />

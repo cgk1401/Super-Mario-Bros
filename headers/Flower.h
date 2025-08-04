@@ -46,6 +46,8 @@ public:
         CharacterState* currentState = player->GetCurrentState();
         if(currentState == dynamic_cast<FireState*>(currentState)){
             //get more coin scores
+            player->collectItem(ItemType::FLOWER, position);
+            collected = true;
             return;
         }
         player->ChangeMiddleState(CharacterStateType::FireState);

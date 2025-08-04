@@ -11,7 +11,6 @@ FlagPoleCutscene::FlagPoleCutscene(Character* _player, HUD* _hud, Map* _map, Cam
 
     Singleton<SoundManager>::getInstance().play(SoundType::FLAGPOLE);
     Singleton<SoundManager>::getInstance().playMusic(MusicType::LEVEL_COMPLETE, false);
-    
 }
 
 void FlagPoleCutscene::handlePhase(float dt){
@@ -27,9 +26,8 @@ void FlagPoleCutscene::handlePhase(float dt){
         break;
     case FlagPolePhase::WALK: {
         player->moveRight();
-    Singleton<SoundManager>::getInstance().updateMusic();
-
-        Tile tile = map->getTile(player->getBound().y / Map::TILE_SIZE, player->getBound().x / Map::TILE_SIZE);
+        Singleton<SoundManager>::getInstance().updateMusic();
+        Tile tile = map->getTile((player->getBound().y + player->getBound().height * 0.7f)/ Map::TILE_SIZE, (player->getBound().x ) / Map::TILE_SIZE);
         if (tile.type == TileType::BLACK_BLOCK) {
             currentPhase = FlagPolePhase::INTO_CASTLE;
         }
@@ -76,7 +74,10 @@ bool FlagPoleCutscene::isFinished() const {
     if(currentPhase == FlagPolePhase::DONE){
         pair<int, int> currentLevel = map->getLevel();
         pair<int, int> newLevel = {currentLevel.first, currentLevel.second + 1};
-        if (newLevel.second <= 4)Singleton<Game>::getInstance().changeState(new PlayState(newLevel));
+        if (newLevel.second <= 4) {
+            player->notify(EventType::FINISH_LEVEL);
+            Singleton<Game>::getInstance().changeState(new PlayState(newLevel, hud, player));
+        }
     }
     return currentPhase == FlagPolePhase::DONE;
 }

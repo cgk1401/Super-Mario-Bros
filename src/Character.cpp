@@ -294,3 +294,11 @@ void Character::moveDown(const float& speed){
 	currentdirection = Direction::Left;
 	position.y += speed;
 } //flagpole only
+
+void Character::setPosition(Vector2 newPosition) {
+	this->position = newPosition;
+}
+
+Vector2 Character::getPosition(){
+	return this->position;
+}

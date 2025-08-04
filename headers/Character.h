@@ -74,4 +74,6 @@ public:
 	void moveRight(const float& speed = 2);
 	void moveLeft(const float& speed = 2);
 	void moveDown(const float& speed = 2); //flagpole only
+	void setPosition(Vector2 newPosition);
+	Vector2 getPosition();
 };

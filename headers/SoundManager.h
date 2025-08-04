@@ -34,6 +34,7 @@ enum class SoundType {
     TELEPORT,
     SCREAM,
     FOOTSTEP,
+    SURPRISE_SFX,
 };
 
 enum class MusicType {

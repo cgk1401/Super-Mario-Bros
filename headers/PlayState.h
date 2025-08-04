@@ -20,7 +20,7 @@ using namespace std;
 
 class PlayState : public GameState, public Observer{
 public:
-    PlayState(pair<int, int> _level = {1,1}, HUD* hud = nullptr);
+    PlayState(pair<int, int> _level = {1,1}, HUD* hud = nullptr, Character* _character = nullptr);
 
     ~PlayState();
     void handleInput() override;

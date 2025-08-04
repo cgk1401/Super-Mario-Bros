@@ -60,6 +60,9 @@ void HUD::onNotify(const EventType& event, void* data){
         score = 0;
         time = 400.5f;
     }
+    else if(event == EventType::FINISH_LEVEL){
+        time = 400.5f;
+    }
    map<EventType, EventInfo> eventMap = Singleton<EventDataBase>::getInstance().getMap();
     auto it = eventMap.find(event);
     if(it == eventMap.end()) return;

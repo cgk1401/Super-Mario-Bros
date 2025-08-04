@@ -44,8 +44,6 @@ public:
             velocity.y += gravity * dt;
         }
         
-
-        cout << "velocity: " << velocity.y << endl;
         position.x += velocity.x * dt;
         position.y += velocity.y * dt;
 
