@@ -18,6 +18,7 @@ LevelState::LevelState(bool _isEditorMode) {
 		levelSigns[i] = { workRect.x + (float)i * 320 + buttons[i]->getBounds().width / 2, workRect.y + workRect.height, 100 ,40 };
 	}
 	backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
+	ownMap_button = new Button("", screenWidth * 0.8f, 10, 200, 100, "YOUR OWN MAP", WHITE, 30, "Start with your own map");
 	font = LoadFont("../assets/font/knightwarrior.otf");
 	
 }
@@ -63,6 +64,11 @@ void LevelState::handleInput() {
 		shouldExit = true;
 
 	}
+	else if(ownMap_button->IsClicked()){
+		if (isEditorMode) Singleton<Game>::getInstance().changeState(new MapEditor({ 0,0 }));
+		else 			 Singleton<Game>::getInstance().changeState(new PlayState({ 0,0 }));
+		shouldExit = true;
+	}
 }
 void LevelState::update(float deltatime) {
 	Singleton<SoundManager>::getInstance().updateMusic();
@@ -70,6 +76,7 @@ void LevelState::update(float deltatime) {
 		button->update(deltatime);
 	}
 	backButton->update(deltatime);
+	ownMap_button->update(deltatime);
 
 	///_______________________BUTTON CLICK ANIMATION_______________________________
     int hoveredIndex = -1;
@@ -116,6 +123,7 @@ void LevelState::render() {
 	DrawLineEx({ workRect.x, workRect.y - threshold }, { screenWidth, workRect.y - threshold }, line_height, WHITE);
 	DrawLineEx({workRect.x, workRect.y + workRect.height + threshold}, { screenWidth, workRect.y + workRect.height + threshold }, line_height, WHITE);
 	backButton->draw();
+	ownMap_button->draw();
 	for (auto& button : buttons) {
 		button->draw();
 	}

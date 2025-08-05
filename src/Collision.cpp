@@ -30,67 +30,70 @@ void Collision::handlePlayerCollision(Character* player, Map* map, bool hasNotif
     int endCol = min(map->columns - 1, characterRightTile + 1);
     int startRow = max(0, characterTopTile - 1);
     int endRow = min(map->rows - 1, characterBottomTile + 1);
-    LayerType layerType = LayerType::PLATFORM;
 
-    for (int x = endRow - 1 < 0 ? 0 : endRow - 1; x <= endRow; x++) {
-        for (int y = startCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y, layerType);
-            MapTileInstance* tileInstance = map->getMapTileInstance(x, y, layerType);
-            Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
+    vector<LayerType> layerTypes = {LayerType::PLATFORM};
 
-            if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
-                player->position.y = tileRect.y - bound.height;
-                player->velocity.y = 0;
+    for(auto& layerType: layerTypes){
+        for (int x = endRow - 1 < 0 ? 0 : endRow - 1; x <= endRow; x++) {
+            for (int y = startCol; y <= endCol; y++) {
+                Tile tile = map->getTile(x, y, layerType);
+                MapTileInstance* tileInstance = map->getMapTileInstance(x, y, layerType);
+                Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
-                player->isGround = true;
-                player->isJumpingUp = false;
-                tile.behavior->onFootCollision(player, x, y, map, tileInstance);
+                if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
+                    player->position.y = tileRect.y - bound.height;
+                    player->velocity.y = 0;
+
+                    player->isGround = true;
+                    player->isJumpingUp = false;
+                    tile.behavior->onFootCollision(player, x, y, map, tileInstance);
+                }
             }
         }
-    }
-      endRow = endRow - 1 < startRow ? startRow : endRow - 1;
-    for (int x = startRow; x <= endRow; x++) {
-        for (int y = startCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y, layerType);
+        endRow = endRow - 1 < startRow ? startRow : endRow - 1;
+        for (int x = startRow; x <= endRow; x++) {
+            for (int y = startCol; y <= endCol; y++) {
+                Tile tile = map->getTile(x, y, layerType);
 
-            MapTileInstance* tileInstance = map->getMapTileInstance(x, y, layerType);
-            Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
+                MapTileInstance* tileInstance = map->getMapTileInstance(x, y, layerType);
+                Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
-            if (CheckCollisionRecs(bound, tileRect)) {
-                if(hasNotified == false && tile.type == TileType::FINISHING_POLE ){
-                    player->velocity = {0,0};
-                    player->position.x = y * Map::TILE_SIZE;
-                    player->notify(EventType::FLAG_POLE, &tileRect);
-                    return;
-                }
-                if (tile.behavior->isSolid()) {
-                    float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);
-                    float overlapY = fmin(bound.y + bound.height, tileRect.y + tileRect.height) - fmax(bound.y, tileRect.y);
-                    if (overlapX > 0 && overlapY > 0) {
-                        if (overlapY < overlapX) { // trên dưới của tile
-                            if (player->velocity.y < 0) { // chạm đầu
-                                player->position.y = tileRect.y + tileRect.height;
-                                player->velocity.y = 0;
-                                player->isJumpingUp = false;
-                                tile.behavior->onHeadCollision(player, x, y, map, tileInstance);
+                if (CheckCollisionRecs(bound, tileRect)) {
+                    if(hasNotified == false && tile.type == TileType::FINISHING_POLE ){
+                        player->velocity = {0,0};
+                        player->position.x = y * Map::TILE_SIZE;
+                        player->notify(EventType::FLAG_POLE, &tileRect);
+                        return;
+                    }
+                    if (tile.behavior->isSolid()) {
+                        float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);
+                        float overlapY = fmin(bound.y + bound.height, tileRect.y + tileRect.height) - fmax(bound.y, tileRect.y);
+                        if (overlapX > 0 && overlapY > 0) {
+                            if (overlapY < overlapX) { // trên dưới của tile
+                                if (player->velocity.y < 0) { // chạm đầu
+                                    player->position.y = tileRect.y + tileRect.height;
+                                    player->velocity.y = 0;
+                                    player->isJumpingUp = false;
+                                    tile.behavior->onHeadCollision(player, x, y, map, tileInstance);
+                                }
+
                             }
-
+                            else { // 2 bên của tile 
+                                if (player->velocity.x > 0) { // đang đi sang phải,  đụng bên trái tile
+                                    player->position.x -= overlapX;
+                                }
+                                else if (player->velocity.x < 0) { // đang đi sang trái, đụng bên phải tile
+                                    player->position.x += overlapX;
+                                }
+                                player->velocity.x = 0;
+                                tile.behavior->onGeneralCollision(player, x, y, map, tileInstance);
+                            }
+                            bound = player->getBound();
                         }
-                        else { // 2 bên của tile 
-                            if (player->velocity.x > 0) { // đang đi sang phải,  đụng bên trái tile
-                                player->position.x -= overlapX;
-                            }
-                            else if (player->velocity.x < 0) { // đang đi sang trái, đụng bên phải tile
-                                player->position.x += overlapX;
-                            }
-                            player->velocity.x = 0;
-                            tile.behavior->onGeneralCollision(player, x, y, map, tileInstance);
-                        }
-                        bound = player->getBound();
                     }
                 }
+            
             }
-           
         }
     }
 }

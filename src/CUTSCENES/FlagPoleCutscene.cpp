@@ -21,16 +21,18 @@ void FlagPoleCutscene::handlePhase(float dt){
         player->setActionState(ActionState::FlagpoleHold);   
 
         if(elapsedTime > 2.0f){
+            elapsedTime = 0;
             currentPhase = FlagPolePhase::WALK;
         }
         break;
     case FlagPolePhase::WALK: {
-        player->moveRight();
+        const float speed = 2;
+        player->moveRight(speed);
         Singleton<SoundManager>::getInstance().updateMusic();
-        Tile tile = map->getTile((player->getBound().y + player->getBound().height * 0.7f)/ Map::TILE_SIZE, (player->getBound().x ) / Map::TILE_SIZE, LayerType::PLATFORM);
-        if (tile.type == TileType::BLACK_BLOCK) {
+       if(elapsedTime > 3.1f){
+            player->setActionState(ActionState::Idle);
             currentPhase = FlagPolePhase::INTO_CASTLE;
-        }
+       }
         break;
     }
     case FlagPolePhase::INTO_CASTLE:

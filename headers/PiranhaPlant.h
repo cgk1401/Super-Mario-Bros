@@ -12,13 +12,13 @@ enum class PlantState {
 class PiranhaPlant : public Enemy {
 private:
 	Animation animation;
-	const float hiddenhold = 7.0f; // thời gian giữa các lần mọc lên
+	const float hiddenhold = 5.0f; // thời gian giữa các lần mọc lên
 	const float risetime = 0.5f; // thời gian mọc lên và tụt xuống
 	float riseoffset; // chiều cao của cây
 	Vector2 basePos; // vị trí mép ống
-	const float biteHold = 0.7f;
+	const float biteHold = 1.3f;
 	float timer = 0;
-	const float scale = 3.0f;
+	const float scale = 5.0f; //3
 
 	PlantState currentState = PlantState::Hidden;
 public:

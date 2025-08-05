@@ -137,7 +137,7 @@ void Map::createTileCatalog() {
             }
 
             for (int j = 9; j < 16; j++) {
-                if(j == 14) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], BLACK_BLOCK, new DecorationTileBehavior(), theme, LayerType::FOREGROUND)); //Decoration tile
+                if(j == 14 || j == 15) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], BLACK_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
                 else
                 tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
             }
@@ -194,7 +194,7 @@ void Map::createTileCatalog() {
             else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tiles
         }
 
-        tileCatalog.emplace(getTileIDFromCoords(i, 12), Tile(getTileIDFromCoords(i, 12), tileSetSourceRects[i - 1][12 - 1], FINISHING_POLE, new DecorationTileBehavior(), theme, LayerType::PLATFORM)); //Ground tiles
+        tileCatalog.emplace(getTileIDFromCoords(i, 12), Tile(getTileIDFromCoords(i, 12), tileSetSourceRects[i - 1][12 - 1], FINISHING_POLE, new DecorationTileBehavior(), theme, LayerType::FOREGROUND)); //Ground tiles
 
         for (int j = 13; j < 19; j++) {
             tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tiles
@@ -222,14 +222,6 @@ void Map::createTileCatalog() {
             }
         }
     }
-    //temporary enemies to add to map
-
- 
-
-    //tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
-    //tileCatalog.emplace(1, Tile(1, tile, ));
-
-
 }
 bool operator!=(Vector2 v1, Vector2 v2) {
     return v1.x != v2.x || v1.y != v2.y;
@@ -245,13 +237,9 @@ void Map::update(bool isEditing) {
             for (int col = 0; col < columns; col++) {
                 int id = layer.mapData[row][col].tileID;
                 if (id != 0) {
-                    //tileCatalog[id].behavior->update(GetFrameTime(), row, col, this, &mapData[row][col]);
                     Tile tile = getTile(row, col, layer.type);
 
                     MapTileInstance* tileInstance = getMapTileInstance(row, col, layer.type);
-                    
-                    //if (!tileInstance || tileInstance->tileID == 0) continue;
-                    //tile.behavior->update(GetFrameTime(), x, y, map, tileInstance);
                     Vector2 ori = { 0, 0 };
                 
                     if(tile.behavior) tile.behavior->update(dt, row, col, this, tileInstance);
@@ -302,7 +290,6 @@ void Map::draw(bool isEditing) {
                     DrawTexturePro(tileTexture, src, destRect, { 0,0 }, 0, WHITE);
                 }
                 if (isEditing)
-                    //Draw grid lines
                     DrawRectangleLines(mapRects[x][y].x,
                         mapRects[x][y].y,
                         TILE_SIZE,
@@ -384,7 +371,7 @@ Tile Map::getTile(int tileID) const {
 
 Tile Map::getTile(int row, int col, LayerType layerType) const {
     if (row < 0 || row >= rows || col < 0 || col >= columns) {
-        return getTile(0); // Return empty tile info for out of bounds
+        return getTile(0); 
     }
     int layerID = static_cast<int>(layerType);
     int tileID = layers[layerID].mapData[row][col].tileID;
@@ -419,16 +406,12 @@ void Map::setTile(int row, int col, int tileID, int layerIndex) {
         throw std::out_of_range(to_string(row)  +  "  - " + to_string(col));
     }
 
-    //if ( mapData[row][col].tileID == tileID) return;
-    //cout << tileID << endl;
     auto it = tileCatalog.find(tileID);
     if (it == tileCatalog.end()) {
         TraceLog(LOG_ERROR, "INVALID ID");
         return;
     }
     if (it->second.type == ENEMY) {
-        //mapData[row][col].tileID = 0;
-
         if (spawnEnemyCallback) {
             EnemyType enemyType = getEnemyType(tileID);
             if(enemyType == EnemyType::None) {
@@ -455,13 +438,11 @@ void Map::refactorMapTXT(const char* filename) {
     int rows, cols;
     in >> rows >> cols;
 
-    // Tạo 5 map riêng theo layer
-    vector<vector<int>> layerData[5]; // max 5 layers
+    vector<vector<int>> layerData[5]; 
     for (int i = 0; i < 5; i++) {
         layerData[i].resize(rows, vector<int>(cols, 0));
     }
 
-    // Đọc từng tileID rồi phân theo layer
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < cols; y++) {
             string s;
@@ -497,15 +478,12 @@ void Map::refactorMapTXT(const char* filename) {
 
      string outFile = "test1.txt";
         ofstream out(outFile);
-    // Ghi ra từng file layer
     for (int i = 0; i < 5; i++) {
        
         if (!out.is_open()) {
             cerr << "Failed to write " << outFile << endl;
             continue;
         }
-
-        out << rows << " " << cols << "\n";
         for (int x = 0; x < rows; x++) {
             for (int y = 0; y < cols; y++) {
                 out << layerData[i][x][y] << " ";

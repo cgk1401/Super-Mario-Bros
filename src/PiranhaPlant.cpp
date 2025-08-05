@@ -12,8 +12,8 @@ PiranhaPlant::PiranhaPlant() : Enemy(){
 }
 
 PiranhaPlant::PiranhaPlant(Vector2 pipeTop, MapTheme _theme) {
-	basePos = pipeTop;
-	this->position = pipeTop;
+	basePos = {pipeTop.x + 20, pipeTop.y + 10};
+	this->position = basePos;
 	theme = _theme;
 	LoadSource();
 
@@ -22,9 +22,9 @@ PiranhaPlant::PiranhaPlant(Vector2 pipeTop, MapTheme _theme) {
 }
 
 PiranhaPlant::PiranhaPlant(Vector2 pipeTop, float riseHeight, MapTheme _theme) {
-	basePos = pipeTop;
+	basePos = {pipeTop.x + 20, pipeTop.y + 10};
+	this->position = basePos;
 	riseoffset = riseHeight;
-	this->position = pipeTop;
 	theme = _theme;
 	LoadSource();
 }
