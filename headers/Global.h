@@ -32,6 +32,14 @@ enum class MapTheme {
     UNDERWATER  = 3,
 };
 
+enum class LayerType{
+    BACKGROUND,
+    PLATFORM,
+    ENEMY,
+    ITEM,
+    FOREGROUND,
+};
+
 enum class CharacterStateType {
 	NormalState,
 	SuperState,

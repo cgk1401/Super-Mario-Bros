@@ -64,28 +64,34 @@ void MapEditor::saveToFile() {
     }
     
   
-    int limitCol = columns;
+    int limitCol = 0;
    
-    for (int y = columns - 1; y >= 0; y--) {
-        for (int x = 0; x < rows; x++) {
-            if (mapData[x][y].tileID != 0) {
-                limitCol = y + 1;
-                goto found;
+    for(auto& layer: layers){
+        for (int y = columns - 1; y >= 0; y--) {
+            for (int x = 0; x < rows; x++) {
+                if (layer.mapData[x][y].tileID != 0 && y > limitCol) {
+                    limitCol = y + 1;
+                    goto nextLayer;
+                }
             }
         }
+    nextLayer:;
     }
-    found:
+    
 
     MyFile << rows << " " << limitCol << "\n";
-    for (int x = 0; x < rows; x++) {
-        for (int y = 0; y < limitCol; y++) {
-            // Save TileID directly
-            MyFile << mapData[x][y].tileID; // Access tileID from MapTileInstance
-            if (y < columns - 1) MyFile << " ";
+    for(int i = 0; i < numberLayers; i++){
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < limitCol; y++) {
+                // Save TileID directly
+                MyFile << layers[i].mapData[x][y].tileID; // Access tileID from MapTileInstance
+                if (y < columns - 1) MyFile << " ";
+            }
+            MyFile << endl;
         }
         MyFile << endl;
+        layers[i].mapData_first = layers[i].mapData;
     }
-    mapData_first = mapData;
     cout << "Saved file successfully: " << filename << endl;
     MyFile.close();
 }
@@ -201,7 +207,11 @@ void MapEditor::handleInput() {
                                     int pasteX = (pickedTile.y + j * TILE_SIZE) / TILE_SIZE;
 
                                     if (IsInsideMap(pasteX, pasteY)) {
-                                        setTile(pasteX, pasteY, tileID);
+                                        auto it = tileCatalog.find(tileID);
+                                        if (it != tileCatalog.end()) {
+                                            int id = static_cast<int>(it->second.layerType);
+                                            setTile(pasteX, pasteY, tileID, id);
+                                        }
                                     }
                                 }
                             }
@@ -469,10 +479,12 @@ bool operator!=(const MapTileInstance& a,const  MapTileInstance& b){
     return a.tileID != b.tileID;
 }
 bool MapEditor::hasChanged() const{
-    for(int x = 0; x < mapData.size(); x++){
-        for(int y = 0; y < mapData[x].size(); y++){
-            if(mapData[x][y] != mapData_first[x][y]){
-                return true;
+    for(auto& layer: layers){
+        for(int x = 0; x < layer.mapData.size(); x++){
+            for(int y = 0; y < layer.mapData[x].size(); y++){
+                if(layer.mapData[x][y] != layer.mapData_first[x][y]){
+                    return true;
+                }
             }
         }
     }

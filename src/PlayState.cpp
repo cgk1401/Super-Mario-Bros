@@ -162,18 +162,21 @@ void PlayState::update(float dt){
 void PlayState::render() {
     ///______________________________WORLD__________________________________________
     BeginMode2D(camera.getCamera());
+    world[level]->drawLayer(LayerType::BACKGROUND);
     Singleton<EffectManager>::getInstance().drawHiddenEffects();
     Singleton<ItemManager>::getInstance().DrawHiddenItem();
-    world[level]->draw();
+    
     if (character->getCurrentAction() != ActionState::Die) {
-        Tile tile = world[level]->getTile((character->getBound().y + character->getBound().height / 2) / Map::TILE_SIZE, character->getBound().x / Map::TILE_SIZE);
+        Tile tile = world[level]->getTile((character->getBound().y + character->getBound().height / 2) / Map::TILE_SIZE, character->getBound().x / Map::TILE_SIZE, LayerType::PLATFORM);
         if (tile.type != TileType::BLACK_BLOCK) character->Draw();
     }
     for(auto& e: enemies){
         e->Draw();
     }
+    world[level]->drawLayer(LayerType::PLATFORM);
     Singleton<EffectManager>::getInstance().draw();
     Singleton<ItemManager>::getInstance().Draw();
+    world[level]->drawLayer(LayerType::FOREGROUND);
     //fg.draw();
     EndMode2D();
 

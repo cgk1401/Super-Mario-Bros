@@ -27,7 +27,7 @@ void FlagPoleCutscene::handlePhase(float dt){
     case FlagPolePhase::WALK: {
         player->moveRight();
         Singleton<SoundManager>::getInstance().updateMusic();
-        Tile tile = map->getTile((player->getBound().y + player->getBound().height * 0.7f)/ Map::TILE_SIZE, (player->getBound().x ) / Map::TILE_SIZE);
+        Tile tile = map->getTile((player->getBound().y + player->getBound().height * 0.7f)/ Map::TILE_SIZE, (player->getBound().x ) / Map::TILE_SIZE, LayerType::PLATFORM);
         if (tile.type == TileType::BLACK_BLOCK) {
             currentPhase = FlagPolePhase::INTO_CASTLE;
         }

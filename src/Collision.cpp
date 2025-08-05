@@ -30,11 +30,12 @@ void Collision::handlePlayerCollision(Character* player, Map* map, bool hasNotif
     int endCol = min(map->columns - 1, characterRightTile + 1);
     int startRow = max(0, characterTopTile - 1);
     int endRow = min(map->rows - 1, characterBottomTile + 1);
+    LayerType layerType = LayerType::PLATFORM;
 
     for (int x = endRow - 1 < 0 ? 0 : endRow - 1; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y);
-            MapTileInstance* tileInstance = map->getMapTileInstance(x, y);
+            Tile tile = map->getTile(x, y, layerType);
+            MapTileInstance* tileInstance = map->getMapTileInstance(x, y, layerType);
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
@@ -50,9 +51,9 @@ void Collision::handlePlayerCollision(Character* player, Map* map, bool hasNotif
       endRow = endRow - 1 < startRow ? startRow : endRow - 1;
     for (int x = startRow; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y);
+            Tile tile = map->getTile(x, y, layerType);
 
-            MapTileInstance* tileInstance = map->getMapTileInstance(x, y);
+            MapTileInstance* tileInstance = map->getMapTileInstance(x, y, layerType);
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(bound, tileRect)) {
@@ -119,10 +120,12 @@ void Collision::handleEnemyCollision(Enemy* e, Map* map){
     int startRow = max(0, characterTopTile - 1);
     int endRow = min(map->rows - 1, characterBottomTile + 1);
 
+    LayerType layerType = LayerType::PLATFORM;
+
     for (int x = endRow - 1 < 0 ? 0 : endRow - 1; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y);
-            MapTileInstance* tileInstance = map->getMapTileInstance(x, y);
+            Tile tile = map->getTile(x, y, layerType);
+            MapTileInstance* tileInstance = map->getMapTileInstance(x, y, layerType);
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
@@ -148,7 +151,7 @@ void Collision::handleEnemyCollision(Enemy* e, Map* map){
 
     for (int x = startRow; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y);
+            Tile tile = map->getTile(x, y, layerType);
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(bound, tileRect)) {
@@ -210,12 +213,13 @@ void Collision::handleMushroomCollisionMap(Mushroom* mushroom, Map* map){
     int endCol = min(map->columns - 1, characterRightTile + 1);
     int startRow = max(0, characterTopTile - 1);
     int endRow = min(map->rows - 1, characterBottomTile + 1);
+    LayerType layerType = LayerType::PLATFORM;
 
     for (int x = endRow - 1 < 0 ? 0 : endRow - 1; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y);
+            Tile tile = map->getTile(x, y, layerType);
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
-            MapTileInstance* tileInstance = map->getMapTileInstance(x, y);
+            MapTileInstance* tileInstance = map->getMapTileInstance(x, y, layerType);
             if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
                 if (tileInstance->offsetPos.y < 0) {
                     mushroom->position.y = tileRect.y - bound.height - 3;
@@ -241,7 +245,7 @@ void Collision::handleMushroomCollisionMap(Mushroom* mushroom, Map* map){
     endRow = endRow - 1 < startRow ? startRow : endRow - 1;
     for (int x = startRow; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y);
+            Tile tile = map->getTile(x, y, layerType);
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(bound, tileRect)) {
@@ -302,9 +306,11 @@ void Collision::handleStarCollision(Star* star, Map* map) {
     int startRow = max(0, characterTopTile - 1);
     int endRow = min(map->rows - 1, characterBottomTile + 1);
 
+    LayerType layerType = LayerType::PLATFORM;
+
     for (int x = endRow - 1 < 0 ? 0 : endRow - 1; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y);
+            Tile tile = map->getTile(x, y, layerType);
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(tileRect, footSensor) && tile.behavior->isSolid()) {
@@ -319,7 +325,7 @@ void Collision::handleStarCollision(Star* star, Map* map) {
     endRow = endRow - 1 < startRow ? startRow : endRow - 1;
     for (int x = startRow; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y);
+            Tile tile = map->getTile(x, y, layerType);
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
 
             if (CheckCollisionRecs(bound, tileRect)) {
@@ -369,10 +375,12 @@ void Collision::handleFireBallCollisionMap(FireBall* fireball , Map* map) {
     int endCol = min(map->columns - 1, right + 1);
     int fireballtRow = max(0, top - 1);
     int endRow = min(map->rows - 1, bottom + 1);
+    
+    LayerType layerType = LayerType::PLATFORM;
 
     for (int x = fireballtRow; x <= endRow; x++) {
         for (int y = fireballtCol; y <= endCol; y++) {
-            Tile tile = map->getTile(x, y);
+            Tile tile = map->getTile(x, y, layerType);
             if (!tile.behavior->isSolid()) continue;
 
             Rectangle tileRect = {
