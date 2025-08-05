@@ -19,10 +19,25 @@ void Bowser::LoadSource() {
 	cout << "Position Bowser " << position.x << ":" << position.y << endl;
 	texture = Singleton<TextureManager>::getInstance().load(TextureType::ENEMY);
 
-	animations.frame.push_back({ 0 + (float)theme * 146, 208, 32, 32 });
-	animations.frame.push_back({ 34 + (float)theme * 146, 208, 32, 32});
-	animations.frame.push_back({ 68 + (float)theme * 146, 208, 32, 32 });
-	animations.frame.push_back({ 102 + (float)theme * 146, 208, 32, 32 });
+	// OVERWORLD, UNDERGROUND && CASTLE, UNDERWATER
+	if (theme == MapTheme::OVERWORLD) {
+		animations.frame.push_back({ 0, 208, 32, 32 });
+		animations.frame.push_back({ 34, 208, 32, 32 });
+		animations.frame.push_back({ 68, 208, 32, 32 });
+		animations.frame.push_back({ 102, 208, 32, 32 });
+	}
+	else if (theme == MapTheme::UNDERGROUND || theme == MapTheme::CASTLE) {
+		animations.frame.push_back({ 0 + 146, 208, 32, 32 });
+		animations.frame.push_back({ 34 + 146, 208, 32, 32 });
+		animations.frame.push_back({ 68 + 146, 208, 32, 32 });
+		animations.frame.push_back({ 102 + 146, 208, 32, 32 });
+	}
+	else if (theme == MapTheme::UNDERWATER) {
+		animations.frame.push_back({ 0 + 2 * 146, 208, 32, 32 });
+		animations.frame.push_back({ 34 + 2 * 146, 208, 32, 32 });
+		animations.frame.push_back({ 68 + 2 * 146, 208, 32, 32 });
+		animations.frame.push_back({ 102 + 2 * 146, 208, 32, 32 });
+	}
 	animations.currentframe = 0;
 	animations.currenttime = 0.0f;
 	animations.durationtime = 0.1f;
