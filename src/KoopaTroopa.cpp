@@ -113,7 +113,6 @@ void KoopTroopa::Update(float deltatime, Map* map) {
 }
 
 void KoopTroopa::moveLeft() {
-
 	if (currentState == KoopaState::Walk || currentState == KoopaState::RedWalk) {
 		velocity.x = -walkSpeed * GetFrameTime();
 	}

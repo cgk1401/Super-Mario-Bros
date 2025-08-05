@@ -2,7 +2,6 @@
 #include <iostream>
 
 SoundManager::SoundManager() {
-    //cout << "TẠO TẠO TẠO TẠO TẠO\n";
     musicVolume = 0.5f;
     soundVolume = 0.5f;
     load();

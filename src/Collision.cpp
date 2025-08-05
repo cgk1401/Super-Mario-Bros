@@ -145,12 +145,10 @@ void Collision::handleEnemyCollision(Enemy* e, Map* map){
     }
 
     endRow = endRow - 1 < startRow ? startRow : endRow - 1;
-
     for (int x = startRow; x <= endRow; x++) {
         for (int y = startCol; y <= endCol; y++) {
             Tile tile = map->getTile(x, y);
             Rectangle tileRect = { (float)(y * Map::TILE_SIZE), (float)(x * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
-
             if (CheckCollisionRecs(bound, tileRect)) {
                 if (tile.behavior->isSolid()) {
                     float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);
@@ -167,21 +165,57 @@ void Collision::handleEnemyCollision(Enemy* e, Map* map){
                             if (e->velocity.x > 0) { // đang đi sang phải,  đụng bên trái tile
                                 e->position.x -= overlapX;
                                 e->changeDirection(Direction::Left);
+                                cout << "change -----------------\n";
                             }
                             else if (e->velocity.x < 0) { // đang đi sang trái, đụng bên phải tile
                                 e->position.x += overlapX;
                                 e->changeDirection(Direction::Right);
+                                cout << "change -----------------\n";
                             }
-                            e->velocity.x = 0;
+                            //e->velocity.x = 0;
                         }
                         bound = e->bound;
                     }
                 }
             }
-
         }
     }
-    
+   if (KoopTroopa* ko = dynamic_cast<KoopTroopa*>(e); ko != nullptr && e->onGround) {
+       if (ko->enemyType == EnemyType::REDKOOPA) {
+           int checkTileX, checkTileY;
+
+           if (e->direction == Direction::Right) {
+               checkTileX = (int)((e->position.x + e->bound.width) / Map::TILE_SIZE);
+           }
+           else if (e->direction == Direction::Left) {
+               checkTileX = (int)((e->position.x) / Map::TILE_SIZE);
+           }
+           else {
+               return;
+           }
+
+           cout << "checktilex : " << checkTileX << " | pos.x: " << e->position.x << " | direction: " << (e->direction == Direction::Right ? "Right" : "Left") << endl;
+           checkTileY = (int)((bound.y + bound.height) / Map::TILE_SIZE);
+
+           if (checkTileX < 0 || checkTileX >= map->columns || checkTileY < 0 || checkTileY >= map->rows) {
+               return;
+           }
+
+           Tile groundTile = map->getTile(checkTileY, checkTileX);
+
+           if (!groundTile.behavior->isSolid()) {
+               cout << "RA VUC QUAY DAU\n";
+               cout << "Before changeDirection - Direction: " << (e->direction == Direction::Right ? "Right" : "Left") << endl;
+               if (e->direction == Direction::Right) {
+                   e->changeDirection(Direction::Left);
+               }
+               else {
+                   e->changeDirection(Direction::Right);
+               }
+               cout << "After changeDirection - Direction: " << (e->direction == Direction::Right ? "Right" : "Left") << endl;
+           }
+        }
+   }
 }
 
 
