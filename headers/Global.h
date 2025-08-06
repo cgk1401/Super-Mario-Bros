@@ -93,6 +93,7 @@ enum class DeathType
 	FALLING,
 	SHELL_HIT,
 };
+
 class Global {
 public:
     static Map* map;

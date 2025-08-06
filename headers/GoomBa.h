@@ -10,7 +10,7 @@ enum class GoomBaState {
 	DIE_FALLING
 };
 
-class GoomBa : public Enemy {
+class GoomBa : public Enemy{
 private:
 	map <GoomBaState, Animation> animation;
 	GoomBaState currentState = GoomBaState::Run;

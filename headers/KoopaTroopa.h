@@ -14,7 +14,7 @@ enum class KoopaState {
 	RedDie,
 };
 
-class KoopTroopa : public Enemy {
+class KoopTroopa : public Enemy{
 	friend class Collision;
 private :
 	map <KoopaState, Animation> animation;

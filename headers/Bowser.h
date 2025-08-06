@@ -1,25 +1,23 @@
-#pragma once
+﻿#pragma once
 
 #include "Enemy.h"
 #include "time.h"
+#include <functional>
+#include <random>
 
 class Bowser : public Enemy {
 private :
-	/*
-	Vector2 position;
-	Rectangle bound;
-	Texture texture;
-
-	Direction direction;
-	bool onGround;
-	Vector2 velocity;
-
-	MapTheme theme;
-	*/
-
 	Animation animations;
 	const float scale = 3.0f;
 	bool isdied = false;
+
+	float moveDistance = 120.0f;
+	float moved = 0.0f;
+	float moveSpeed = 50.0f;
+	float jumpForce = -500.0f; 
+	float jumpCooldown = 3.0f;
+	float jumpTimer = 0.0f;
+	bool movingRight = true;
 
 public :
 	Bowser();
@@ -32,4 +30,7 @@ public :
 	bool isDead() override;
 
 	EnemyType getType() const override;
+
+	void Jump();
+
 };

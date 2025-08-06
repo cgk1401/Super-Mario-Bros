@@ -165,12 +165,12 @@ void Collision::handleEnemyCollision(Enemy* e, Map* map){
                             if (e->velocity.x > 0) { // đang đi sang phải,  đụng bên trái tile
                                 e->position.x -= overlapX;
                                 e->changeDirection(Direction::Left);
-                                cout << "change -----------------\n";
+                                cout << "change Trai-----------------\n";
                             }
                             else if (e->velocity.x < 0) { // đang đi sang trái, đụng bên phải tile
                                 e->position.x += overlapX;
                                 e->changeDirection(Direction::Right);
-                                cout << "change -----------------\n";
+                                cout << "change Phai-----------------\n";
                             }
                             //e->velocity.x = 0;
                         }

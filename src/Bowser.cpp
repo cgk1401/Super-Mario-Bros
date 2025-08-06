@@ -1,5 +1,6 @@
-#include "../headers/Bowser.h"
+﻿#include "../headers/Bowser.h"
 #include "../headers/TextureManager.h"
+#include "../headers/Collision.h"
 
 Bowser::Bowser():Enemy(){
 	this->position = { 150, 900 };
@@ -15,8 +16,6 @@ Bowser::Bowser(Vector2 position, MapTheme theme) : Enemy() {
 Bowser::~Bowser() {}
 
 void Bowser::LoadSource() {
-	cout << "Bowser-------------\n";
-	cout << "Position Bowser " << position.x << ":" << position.y << endl;
 	texture = Singleton<TextureManager>::getInstance().load(TextureType::ENEMY);
 
 	// OVERWORLD, UNDERGROUND && CASTLE, UNDERWATER
@@ -40,7 +39,7 @@ void Bowser::LoadSource() {
 	}
 	animations.currentframe = 0;
 	animations.currenttime = 0.0f;
-	animations.durationtime = 0.1f;
+	animations.durationtime = 0.3f;
 }
 
 void Bowser::Draw() {
@@ -53,6 +52,48 @@ void Bowser::Draw() {
 
 void Bowser::Update(float deltatime, Map* map) {
 	animations.Update(deltatime);
+
+	jumpTimer += deltatime;
+
+	if (onGround && jumpTimer >= jumpCooldown) {
+		Jump();
+		jumpTimer = 0.0f;
+	}
+
+	if (!onGround) {
+		velocity.y += 800.0f * deltatime;
+	}
+	else {
+		velocity.y = 0;
+	}
+
+	if (movingRight) {
+		velocity.x = moveSpeed;
+	}
+	else {
+		velocity.x = -moveSpeed;
+	}
+
+	moved += fabs(velocity.x * deltatime);
+
+	if (moved >= moveDistance) {
+		movingRight = !movingRight;
+		moved = 0.0f;
+		if (onGround) {
+			Jump();
+			jumpTimer = 0.0f;
+		}
+	}
+	
+
+	position.x += velocity.x * deltatime;
+	position.y += velocity.y * deltatime;
+
+	Rectangle currentFrame = animations.getcurrentframe();
+	bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
+
+	Collision::handleEnemyCollision(this, map);
+
 }
 
 void Bowser::onDeath(DeathType type, Character* player)
@@ -66,3 +107,9 @@ bool Bowser::isDead() {
 EnemyType Bowser::getType() const {
 	return EnemyType::BOWSER;
 }
+
+void Bowser::Jump() {
+	velocity.y = jumpForce;
+	onGround = false;
+}
+
