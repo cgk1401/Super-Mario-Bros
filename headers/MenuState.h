@@ -5,6 +5,7 @@
 #include "../headers/Button.h"
 #include "../headers/Textbox.h"
 #include "OptionState.h"
+
 using namespace std;
 
 class MenuState : public GameState {
@@ -26,6 +27,7 @@ public:
     MenuState();
     ~MenuState();
     TextBox textbox;
+
 
     void handleInput() override;
     void    update(float deltatime) override;

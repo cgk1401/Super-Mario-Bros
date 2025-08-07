@@ -38,7 +38,6 @@ MenuState::MenuState() {
     }
     starAnimation.durationtime = 0.08f;
     starTexture = LoadTexture("../assets/GUI/star_sprite.png");
-    
 }
 
 MenuState::~MenuState() {
@@ -102,29 +101,27 @@ void MenuState::update(float deltatime){
         for (auto& button : setting_buttons) button->update(deltatime);
         backButton->update(deltatime);
     }
-
-    
 }
 
-void MenuState::render(){
+void MenuState::render() {
     DrawTexturePro(background,
-			{0,0, (float)background.width,(float) background.height},
-			{0,0, screenWidth, screenHeight},
-			 {0,0}, 0, WHITE);
+        { 0,0, (float)background.width,(float)background.height },
+        { 0,0, screenWidth, screenHeight },
+        { 0,0 }, 0, WHITE);
     ///_____________________________OPTIONS_________________________________________
-    if (selectedButton == 0){
+    if (selectedButton == 0) {
         option_button->draw();
         for (auto& button : buttons) {
             button->draw();
         }
     }
-    else if (selectedButton == 1){   
+    else if (selectedButton == 1) {
         for (auto& button : setting_buttons)
-                button->draw();
-            backButton->draw();
+            button->draw();
+        backButton->draw();
     }
     ///_________________________HEADER TITLE____________________________________________
-    DrawTextEx(font, "MARIO MARIO", {screenWidth * 0.33f, screenHeight * 0.1f}, 100, 5, DARKBROWN);
+    DrawTextEx(font, "MARIO MARIO", { screenWidth * 0.33f, screenHeight * 0.1f }, 100, 5, DARKBROWN);
 
     ///_________________________MARIO/LUIGI____________________________________________
     DrawTexturePro(selectedCharacter == CharacterType::Mario ? mario_character : luigi_character,
@@ -135,10 +132,9 @@ void MenuState::render(){
     );
     Rectangle src = starAnimation.getcurrentframe();
     DrawTexturePro(starTexture,
-                src,
-                {screenWidth * 0.767f, screenHeight * 0.212f, 140, 140},
-                {0,0},
-                17, WHITE);
+        src,
+        { screenWidth * 0.767f, screenHeight * 0.212f, 140, 140 },
+        { 0,0 },
+        17, WHITE);
     //textbox.Draw();
-    
 }

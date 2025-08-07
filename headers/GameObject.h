@@ -21,6 +21,7 @@ public:
         onGround = false;
         interactWithMap = true;
     }
+    virtual ~GameObject() = default;
     virtual void update(float deltatime) = 0;
     virtual void draw() = 0;
     virtual Rectangle getBound() const = 0;

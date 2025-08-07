@@ -121,7 +121,7 @@ void Character::draw() {
 }
 void Character::HandleInput(float deltatime) {
 	if(isControlled == true) return;
-	
+
 	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
 	float acc = config.ACCELERATION;
 

@@ -132,6 +132,7 @@
     <ClCompile Include="..\src\Animation.cpp" />
     <ClCompile Include="..\src\AnimationManager.cpp" />
     <ClCompile Include="..\src\AudioSettingsMenu.cpp" />
+    <ClCompile Include="..\src\Bowser.cpp" />
     <ClCompile Include="..\src\BrickBreakEffect.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CameraController.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="..\src\CUTSCENES\KidnapCutscene.cpp" />
     <ClCompile Include="..\src\CUTSCENES\ScreenEffectCutscene.cpp" />
     <ClCompile Include="..\src\EffectManager.cpp" />
+    <ClCompile Include="..\src\Enemy.cpp" />
     <ClCompile Include="..\src\FireBall.cpp" />
     <ClCompile Include="..\src\FireBallExplosionEffect.cpp" />
     <ClCompile Include="..\src\FireBar.cpp" />
@@ -189,6 +191,7 @@
     <ClInclude Include="..\headers\AnimationManager.h" />
     <ClInclude Include="..\headers\AudioSettingsMenu.h" />
     <ClInclude Include="..\headers\BaseEffect.h" />
+    <ClInclude Include="..\headers\Bowser.h" />
     <ClInclude Include="..\headers\BrickBreakEffect.h" />
     <ClInclude Include="..\headers\Button.h" />
     <ClInclude Include="..\headers\CameraController.h" />

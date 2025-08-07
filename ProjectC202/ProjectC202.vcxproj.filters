@@ -249,6 +249,9 @@
     <ClCompile Include="..\src\GameObject.cpp">
       <Filter>Source Files\Entity</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Bowser.cpp">
+      <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -428,9 +431,6 @@
     <ClInclude Include="..\headers\LevelState.h">
       <Filter>Header Files\States</Filter>
     </ClInclude>
-    <ClInclude Include="..\headers\EnemyFactory.h">
-      <Filter>Header Files\Entity\Enemy</Filter>
-    </ClInclude>
     <ClInclude Include="..\headers\OptionState.h">
       <Filter>Header Files\States</Filter>
     </ClInclude>
@@ -454,6 +454,12 @@
     </ClInclude>
     <ClInclude Include="..\headers\GameObject.h">
       <Filter>Header Files\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\EnemyFactory.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Bowser.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

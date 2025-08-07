@@ -4,17 +4,23 @@
 #include "../headers/EffectManager.h"
 class Map;
 
-KoopTroopa::KoopTroopa() : Enemy() {
-	this->position = { 200, 200 };
+KoopTroopa::KoopTroopa(EnemyType type) : Enemy() {
+	this->position = { 500, 200 };
+	enemyType = type;
 	LoadSource();
+
+	if (enemyType == EnemyType::KOOPA) currentState = KoopaState::Walk;
+	else if (enemyType == EnemyType::REDKOOPA) currentState = KoopaState::RedWalk;
 }
 
-KoopTroopa::KoopTroopa(Vector2 position, MapTheme _theme) {
+KoopTroopa::KoopTroopa(Vector2 position, EnemyType type, MapTheme _theme) {
 	this->position = position;
 	theme = _theme;
+	enemyType = type;
 	LoadSource();
 
-	currentState = KoopaState::Walk;
+	if (enemyType == EnemyType::KOOPA) currentState = KoopaState::Walk;
+	else if (enemyType == EnemyType::REDKOOPA) currentState = KoopaState::RedWalk;
 }
 
 KoopTroopa::~KoopTroopa() {
@@ -23,25 +29,48 @@ KoopTroopa::~KoopTroopa() {
 void KoopTroopa::LoadSource() {
 	texture = Singleton<TextureManager>::getInstance().load(TextureType::ENEMY);
 
-	Animation walk;
-	walk.currentframe = 0;
-	walk.currenttime = 0;
-	walk.durationtime = 0.3f;
-	walk.frame.push_back({ 0 + (float)theme * 146, 112, 16, 24 });
-	walk.frame.push_back({ 18 + (float)theme * 146, 112, 16, 24 });
-	animation[KoopaState::Walk] = walk;
+	if (enemyType == EnemyType::KOOPA) {
+		Animation walk;
+		walk.currentframe = 0;
+		walk.currenttime = 0;
+		walk.durationtime = 0.3f;
+		walk.frame.push_back({ 0 + (float)theme * 146, 112, 16, 24 });
+		walk.frame.push_back({ 18 + (float)theme * 146, 112, 16, 24 });
+		animation[KoopaState::Walk] = walk;
 
-	Animation shell;
-	shell.currentframe = 0;
-	shell.currenttime = 0;
-	shell.durationtime = 0.2;
-	shell.frame.push_back({ 72 + (float)theme * 146, 120, 16, 16 });
-	animation[KoopaState::Shell] = shell;
+		Animation shell;
+		shell.currentframe = 0;
+		shell.currenttime = 0;
+		shell.durationtime = 0.2;
+		shell.frame.push_back({ 72 + (float)theme * 146, 120, 16, 16 });
+		animation[KoopaState::Shell] = shell;
 
-	Animation die;
-	die.frame.push_back({ 72 + (float)theme * 146, 120, 16, 16 });
-	die.durationtime = 0.2;
-	animation[KoopaState::Die] = die;
+		Animation die;
+		die.frame.push_back({ 72 + (float)theme * 146, 120, 16, 16 });
+		die.durationtime = 0.2;
+		animation[KoopaState::Die] = die;
+	}
+	else if (enemyType == EnemyType::REDKOOPA) {
+		Animation redwalk;
+		redwalk.currentframe = 0;
+		redwalk.currenttime = 0.0f;
+		redwalk.durationtime = 0.3f;
+		redwalk.frame.push_back({ 0, 318, 16, 24 });
+		redwalk.frame.push_back({ 18, 318, 16, 24 });
+		animation[KoopaState::RedWalk] = redwalk;
+
+		Animation redshell;
+		redshell.currentframe = 0;
+		redshell.currenttime = 0;
+		redshell.durationtime = 0.2;
+		redshell.frame.push_back({ 72 , 326, 16, 16 });
+		animation[KoopaState::RedShell] = redshell;
+
+		Animation reddie;
+		reddie.frame.push_back({ 72 , 326, 16, 16 });
+		reddie.durationtime = 0.2;
+		animation[KoopaState::RedDie] = reddie;
+	}
 	
 }
 
@@ -80,31 +109,36 @@ void KoopTroopa::update(float deltatime) {
 
 void KoopTroopa::moveLeft() {
 
-	if (currentState == KoopaState::Walk) {
+	if (currentState == KoopaState::Walk || currentState == KoopaState::RedWalk) {
 		velocity.x = -walkSpeed * GetFrameTime();
 	}
-	else if (currentState == KoopaState::Shell) {
+	else if (currentState == KoopaState::Shell || currentState == KoopaState::RedShell) {
 		if (!isStationary) velocity.x = -shellSpeed * GetFrameTime();
 	}
 	position.x += velocity.x;
 }
 
 void KoopTroopa::moveRight() {
-	if (currentState == KoopaState::Walk) {
+	if (currentState == KoopaState::Walk || currentState == KoopaState::RedWalk) {
 		velocity.x = walkSpeed * GetFrameTime();
 	}
-	else if (currentState == KoopaState::Shell) {
+	else if (currentState == KoopaState::Shell || currentState == KoopaState::RedShell) {
 		if(!isStationary) velocity.x = shellSpeed * GetFrameTime();
 	}
 	position.x += velocity.x;
 }
 
 bool KoopTroopa::isDead(){
-	return position.y >= GetScreenHeight() + 50 || currentState == KoopaState::Die;
+	return position.y >= screenHeight + 50 || currentState == KoopaState::Die || currentState == KoopaState::RedDie;
 }
 
 void KoopTroopa::Fall() {
-	currentState = KoopaState::Shell;
+	if (enemyType == EnemyType::KOOPA) {
+		currentState = KoopaState::Shell;
+	}
+	else if (enemyType == EnemyType::REDKOOPA) {
+		currentState = KoopaState::RedShell;
+	}
 	velocity.y += gravity * GetFrameTime();
 	position.y += velocity.y;
 }
@@ -112,12 +146,17 @@ void KoopTroopa::Fall() {
 void KoopTroopa::onDeath(DeathType type, Character* player) {
 	switch (type) {
 	case DeathType::STOMP:
-		if (currentState == KoopaState::Walk) {
-			currentState = KoopaState::Shell;
+		if (currentState == KoopaState::Walk || currentState == KoopaState::RedWalk) {
+			if (enemyType == EnemyType::KOOPA) {
+				currentState = KoopaState::Shell;
+			}
+			else if (enemyType == EnemyType::REDKOOPA) {
+				currentState = KoopaState::RedShell;
+			}
 			isStationary = true;
 			animation[currentState].reset();
 		}
-		else if (currentState == KoopaState::Shell) {
+		else if (currentState == KoopaState::Shell || currentState == KoopaState::RedShell) {
 			isStationary = false;
 			float player_mid = player->getBound().x + player->getBound().width / 2;
 			float enemy_mid = getBound().x + getBound().width / 2;
@@ -127,16 +166,29 @@ void KoopTroopa::onDeath(DeathType type, Character* player) {
 	case DeathType::FIREBALL_HIT:
 	case DeathType::FALLING:
 	case DeathType::SHELL_HIT:
-		currentState = KoopaState::Die;
-		Singleton<EffectManager>::getInstance().koopaDeath(this->position, texture, animation[KoopaState::Die].getcurrentframe());
+		if (enemyType == EnemyType::KOOPA) {
+			currentState = KoopaState::Die;
+			Singleton<EffectManager>::getInstance().koopaDeath(this->position, texture, animation[KoopaState::Die].getcurrentframe());
+		}
+		else if (enemyType == EnemyType::REDKOOPA) {
+			currentState = KoopaState::RedDie;
+			Singleton<EffectManager>::getInstance().koopaDeath(this->position, texture, animation[KoopaState::RedDie].getcurrentframe());
+		}
 		break;
 	}
 }
 
-EnemyType KoopTroopa::getType() const{
-	if(this->currentState == KoopaState::Shell)
+EnemyType KoopTroopa::getType() const {
+	if (this->currentState == KoopaState::Shell){
 		return EnemyType::KOOPA_SHELL;
-	return EnemyType::KOOPA;
+	}
+	if (this->currentState == KoopaState::RedShell) {
+		return EnemyType::REDKOOP_SHELL;
+	}
+	if (enemyType == EnemyType::KOOPA) {
+		return EnemyType::KOOPA;
+	}
+	return EnemyType::REDKOOPA;
 }
 Rectangle KoopTroopa::getBound() const {
 	Rectangle frame = animation.at(currentState).getcurrentframe();

@@ -64,6 +64,8 @@ enum class CharacterType {
 	Luigi,
 	SmallCharacter,
 	BigCharacter,
+	TransforSmallMario,
+	TransforSmallLuigi,
 };
 inline CharacterType selectedCharacter = CharacterType::Mario;
 
@@ -79,9 +81,12 @@ enum class EnemyType {
 	None,
 	GOOMBA,
 	KOOPA,
+	REDKOOPA,
 	KOOPA_SHELL,
+	REDKOOP_SHELL,
 	PIRANT_PLANT,
 	FIRE_BAR,
+	BOWSER,
 };
 
 

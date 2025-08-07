@@ -10,10 +10,7 @@ protected:
 	Direction direction;
 	MapTheme theme;
 public:
-	Enemy() :
-		texture({ 0 }), 
-		direction(Direction::Left),
-		theme(MapTheme::OVERWORLD) {}
+	Enemy();
 
 	friend class Collision;
 	virtual ~Enemy() = default;
@@ -22,46 +19,22 @@ public:
 	virtual bool isDead() = 0; 
 
 	virtual EnemyType getType() const = 0;
-	virtual void changeDirection(Direction newDirection) {
-		if (direction != newDirection) 
-			direction = newDirection;
-	}
+	virtual void changeDirection(Direction newDirection);
 	
 
-	virtual bool isActive() const {
-		Vector2 screenPos = GetWorldToScreen2D(this->position, Global::camera);
-		float tolerance = Map::TILE_SIZE;
-		return (
-			screenPos.x <= screenWidth + tolerance &&
-			screenPos.y >= -tolerance &&
-			screenPos.y <= screenHeight + tolerance
-			);
-	}
+	virtual bool isActive() const;
 
-
+	//_______Inherit GameObject_________
 	virtual void draw() override = 0;
 	virtual void update(float deltatime) override = 0;
 	virtual Rectangle getBound() const override = 0;
-	ObjectType getObjectType() const {
-		return ObjectType::ENEMY;
-	} 
+	ObjectType getObjectType() const;
 
-	void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override {
-		if(tileInstance->offsetPos.y != 0 ){
-			onDeath(DeathType::FALLING);
-		}
-		else if (auto brickstate = dynamic_cast<BrickTileState*>(tileInstance->state)){
-				if(brickstate->hasBroken == true)
-					onDeath(DeathType::FALLING);
-		}
-	}
-	void onGeneralCollision(Direction collideSide, Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override{
-		if(collideSide == Direction::Left){
-			direction = Direction::Right;
-		}
-		else direction = Direction::Left;
-	}
-    void onHeadCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override{}
+	//Collide with map
+	virtual void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
+	virtual void onGeneralCollision(Direction collideSide, Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance);
+	virtual void onHeadCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
 	
+	//Collide with entities
     virtual void onCollideWith(GameObject* object) override = 0;
 };

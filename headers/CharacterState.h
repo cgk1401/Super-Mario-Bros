@@ -5,8 +5,8 @@ class Character;
 #include "AnimationManager.h"
 
 struct PhysicsConfig {
-	float SPEED = 250.0f;
-	float MAX_SPEED = 350.0f;
+	float SPEED = 350.0f;
+	float MAX_SPEED = 450.0f;
 	float ACCELERATION = 500.0f;
 	float FRICTION = 700.0f;
 	float JUMPFORCE = -450.0f;

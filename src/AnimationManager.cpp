@@ -12,6 +12,8 @@ void AnimationManager::LoadAnimation(const string& filename, CharacterStateType 
 		else if (chartype.key() == "Luigi") type = CharacterType::Luigi;
 		else if (chartype.key() == "SmallCharacter") type = CharacterType::SmallCharacter;
 		else if (chartype.key() == "BigCharacter") type = CharacterType::BigCharacter;
+		else if (chartype.key() == "TransforSmallMario") type = CharacterType::TransforSmallMario;
+		else if (chartype.key() == "TransforSmallLuigi") type = CharacterType::TransforSmallLuigi;
 
 		for (auto& action : chartype.value().items()) {
 			ActionState actionType;
@@ -29,7 +31,7 @@ void AnimationManager::LoadAnimation(const string& filename, CharacterStateType 
 			for (auto& frame : action.value()["frames"]) {
 				anim.frame.push_back({ frame["x"], frame["y"], frame["width"], frame["height"] });
 			}
-			animations[type][statetype][actionType] = anim;;
+			animations[type][statetype][actionType] = anim;
 		}
 	}
 	input.close();

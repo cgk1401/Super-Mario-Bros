@@ -24,7 +24,7 @@ void TransformState::SetAnimation(Character* c) {
 			if (previoustype == CharacterStateType::SuperState || previoustype == CharacterStateType::FireState) {
 
 				character->animations[ActionState::Idle] = Singleton<AnimationManager>::getInstance().getAnimation(
-					CharacterType::SmallCharacter,
+					CharacterType::TransforSmallMario,
 					CharacterStateType::TransformState,
 					ActionState::Idle
 				);
@@ -44,6 +44,19 @@ void TransformState::SetAnimation(Character* c) {
 				ActionState::Idle
 			);
 			Singleton<SoundManager>::getInstance().play(SoundType::POWERUP);
+		}
+		else if (statetype == CharacterStateType::NormalState) {
+			character->texture = Singleton<TextureManager>::getInstance().load(TextureType::MARIOINVINCIBILITY);
+			if (previoustype == CharacterStateType::SuperState || previoustype == CharacterStateType::FireState) {
+
+				character->animations[ActionState::Idle] = Singleton<AnimationManager>::getInstance().getAnimation(
+					CharacterType::TransforSmallLuigi,
+					CharacterStateType::TransformState,
+					ActionState::Idle
+				);
+			}
+			Singleton<SoundManager>::getInstance().play(SoundType::PIPEDOWN);
+
 		}
 	}
 
