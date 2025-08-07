@@ -30,6 +30,6 @@ public :
 	virtual CharacterStateType getStateType() = 0;
 
 	Character* getCharacter();
-	bool getIsGround();
+	bool getonGround();
 	void SetBasePosition(float newposition);
 };

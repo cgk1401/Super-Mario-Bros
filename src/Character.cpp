@@ -7,6 +7,7 @@
 #include "../headers/EffectManager.h"
 #include "../headers/TransformState.h"
 #include "../headers/Enemy.h"
+#include "Global.h"
 #include <iostream>
 using namespace std;
 
@@ -88,20 +89,6 @@ Rectangle Character::getBound() const {
     };
 }
 
-
-Rectangle Character::getFootSensor() const {
-	Rectangle bound = getBound();
-	float width = bound.width - 6.0f;
-	float height = 4;
-
-	return{
-		bound.x + 3.0f,
-		bound.y + bound.height - height / 2,
-		width,
-		height
-	};
-}
-
 ActionState Character::getCurrentAction() const{
 	return currentAction;
 }
@@ -109,7 +96,7 @@ ActionState Character::getCurrentAction() const{
 CharacterStateType Character::getCharacterStateType() const{
 	return currentState->getStateType();
 }
-void Character::Draw() {
+void Character::draw() {
 	Rectangle currentframe = animations[currentAction].getcurrentframe();
 	
 	if (currentdirection == Direction::Right) {
@@ -127,15 +114,14 @@ void Character::Draw() {
 	if (firestate) {
 		for (int i = 0; i < firestate->getFireBall().size(); i++) {
 			if (firestate->getFireBall()[i]->isActive) {
-				firestate->getFireBall()[i]->Draw(firestate->getCharacter());
+				firestate->getFireBall()[i]->draw();
 			}
 		}
 	}
-
-	//DrawRectangleLinesEx(getBound(), 0.4f, RED);
-
 }
 void Character::HandleInput(float deltatime) {
+	if(isControlled == true) return;
+	
 	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
 	float acc = config.ACCELERATION;
 
@@ -153,19 +139,15 @@ void Character::HandleInput(float deltatime) {
 	}
 
 	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
-		if (isGround) {
+		if (onGround) {
 			velocity.x = 0.0f;
 			setActionState(ActionState::Idle);
 		}
 	}
-
-	//if (IsKeyDown(KEY_SPACE)) {
-	//	if (isGround) Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
-	//}
 	 //xử lý nhảy
-	 if (IsKeyPressed(KEY_SPACE) && isGround) {
+	 if (IsKeyPressed(KEY_SPACE) && onGround) {
 		velocity.y = config.JUMPFORCE;
-		isGround = false;
+		onGround = false;
 		isJumpingUp = true;
 		jumpTimeElapsed = 0.0f;
 		setActionState(ActionState::Jump);
@@ -174,35 +156,15 @@ void Character::HandleInput(float deltatime) {
 		else  Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 	 }
 
-	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !isGround) {
+	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !onGround) {
 		jumpTimeElapsed += deltatime;
 	 }
 	 else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
 		isJumpingUp = false;
 	 }
-	 /*
-	if (IsKeyDown(KEY_SPACE)) {
-		if (isGround) {
-			if(getCharacterStateType() == CharacterStateType::NormalState)
-				Singleton<SoundManager>::getInstance().play(SoundType::JUMP_SMALL);
-			else  Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
-			velocity.y = config.JUMPFORCE;
-			isGround = false;
-			isJumpingUp = true;
-			jumpTimeElapsed = 0.0f;
-		}
-		else if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !isGround) {
-			jumpTimeElapsed += deltatime;
-			velocity.y = config.JUMPFORCE;  // hoặc scale theo thời gian
-			//cout << "is jumpin\n";
-		}
-	}
-	else {
-		isJumpingUp = false;
-	}
-	*/
+	
 }
-void Character::Update(float deltatime, bool applyPhysics) {
+void Character::update(float deltatime) {
 	currentState->Update(deltatime);
 	//DO NOT UPDATE WHEN MARIO IS TRANSFORMING
 	if (currentState->getStateType() == CharacterStateType::TransformState) return;
@@ -212,20 +174,19 @@ void Character::Update(float deltatime, bool applyPhysics) {
 	Rectangle currentframe = animations[currentAction].getcurrentframe();
 	BasePosition = position.y +  currentframe.height * scale;
 
-		if (!isGround) {
-			if(applyPhysics){
-					if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
-						velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
-					}
-					else {
-						velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
-					
-					}
-					if(isJumpingUp) setActionState(ActionState::Jump);
+		if (!onGround) {
+			if(currentAction != ActionState::FlagpoleHold){
+				if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
+					velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
+				}
+				else {
+					velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
+				
+				}
+				if(isJumpingUp) setActionState(ActionState::Jump);
 			}
 		}
 		else {
-			//cout << "on ground\n";
 			velocity.y = 0; 
 			isJumpingUp = false;
 			if (fabs(velocity.x) < 0.1f) {
@@ -301,4 +262,49 @@ void Character::setPosition(Vector2 newPosition) {
 
 Vector2 Character::getPosition(){
 	return this->position;
+}
+
+ObjectType Character::getObjectType() const{
+	return ObjectType::CHARACTER;
+}
+void Character::onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) {
+	isJumpingUp = false;
+    tile.behavior->onFootCollision(this, row, col, map, tileInstance);
+}
+
+void Character::onHeadCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) {
+	isJumpingUp = false;
+    tile.behavior->onHeadCollision(this, row, col, map, tileInstance);
+}
+
+void Character::onGeneralCollision(Direction collideSide, Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) {
+    tile.behavior->onGeneralCollision(this, row, col, map, tileInstance);
+}
+
+void Character::onCollideWith(GameObject* object) {
+	if(currentAction == ActionState::Die || getCharacterStateType() == CharacterStateType::TransformState) return;
+
+    if (object->getObjectType() == ObjectType::ENEMY) {
+		Enemy* enemy = dynamic_cast<Enemy*>(object);
+		if(!enemy || enemy->isDead()) return;
+        Direction dir = getCollisionDirection(this, enemy);
+        if (dir == Direction::Bottom) { //bottom of mario
+			killEnemy(enemy->getType(), enemy->position);
+            enemy->onDeath(DeathType::STOMP, this);
+            this->velocity.y = -300;
+			this->position.y -= 10;     
+        }
+        else {
+            this->DIE(enemy);    
+        }
+    }
+	else if(object->getObjectType() == ObjectType::ITEM){
+		Item* item = dynamic_cast<Item*>(object);
+		if(!item) return;
+
+		if(!item->collected){
+			item->OnCollected(this);
+		}
+
+	}
 }

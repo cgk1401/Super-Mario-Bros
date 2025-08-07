@@ -50,6 +50,7 @@ private:
     Timer newRound_countDown;
 
     CutsceneManager cutscene;
+
 };
 
 #endif

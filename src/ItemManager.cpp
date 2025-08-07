@@ -2,6 +2,7 @@
 #include "../headers/TextureManager.h"
 #include "../headers/Collision.h"
 #include "../headers/Coin.h"
+#include "FireBar.h"
 ItemManager::ItemManager(){
     texture = Singleton<TextureManager>::getInstance().load(TextureType::ITEM);
 
@@ -55,7 +56,7 @@ void ItemManager::Spawn(ItemType type, Vector2 position) {
 
 void ItemManager::Update(float dt, Character* player, Map* map) {
     for (auto item : items) {
-        item->Update(dt);
+        item->update(dt);
         FireBar* f = dynamic_cast<FireBar*>(item);
         if(f)
         {
@@ -64,22 +65,7 @@ void ItemManager::Update(float dt, Character* player, Map* map) {
     }
 
     for(auto& item: hiddenItems){
-        item->Update(dt);
-        Rectangle itemRect = item->getBound();
-        Rectangle marioBound = player->getBound();
-        if (!item->collected && CheckCollisionRecs(itemRect, marioBound)) {
-            item->OnCollected(player);
-        }
-
-        Mushroom* m = dynamic_cast<Mushroom*>(item);
-        if (m) {
-            Collision::handleMushroomCollisionMap(m, map);
-        }
-
-        Star* s = dynamic_cast<Star*>(item);
-        if(s)
-            Collision::handleStarCollision(s, map);
-
+        item->update(dt);
     }
     // Erase collected items
     items.erase(remove_if(items.begin(), items.end(),
@@ -96,12 +82,12 @@ void ItemManager::Update(float dt, Character* player, Map* map) {
 
 void ItemManager::Draw() {
     for (auto item : items)
-        item->Draw(texture);
+        item->draw();
 }
 
 void ItemManager::DrawHiddenItem() {
     for (auto item : hiddenItems)
-        item->Draw(texture);
+        item->draw();
 }
 void ItemManager::clearItems() {
     for (auto& item : items) {
@@ -112,4 +98,15 @@ void ItemManager::clearItems() {
     }
     hiddenItems.clear();
     items.clear();
+}
+
+vector<Item*> ItemManager::getItems() const{
+    vector<Item*> allItems;
+    for(auto& item: items){
+        allItems.push_back(item);
+    }
+    for(auto& item: hiddenItems){
+        allItems.push_back(item);
+    }
+    return allItems;
 }

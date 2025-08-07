@@ -27,7 +27,7 @@ public:
     void update(float dt) override;
     void draw() override;
     bool isFinished() const override;
-
+     void setFinish() override;
 private:
     Character* player;
     HUD* hud;

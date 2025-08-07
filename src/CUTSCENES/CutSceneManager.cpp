@@ -28,8 +28,7 @@ void CutsceneManager::update(float dt) {
         skip_button->updatePos({posX, posY});
         if(skip_button->IsClicked()){
             for(auto& scene: cutscenes)
-                if (scene) delete scene;
-            cutscenes.clear();
+                scene->setFinish();
             Singleton<SoundManager>::getInstance().stopAllSounds();
         }
         skip_button->update(dt);

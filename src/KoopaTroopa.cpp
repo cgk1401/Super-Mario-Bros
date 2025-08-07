@@ -45,15 +45,15 @@ void KoopTroopa::LoadSource() {
 	
 }
 
-void KoopTroopa::Draw() {
+void KoopTroopa::draw() {
 	Rectangle currentframe = animation[currentState].getcurrentframe();
 	currentframe.width = direction == Direction::Left ? abs(currentframe.width) : -abs(currentframe.width);
 
-	bound = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
-	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
+	Rectangle dest = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
+	DrawTexturePro(texture, currentframe, dest, { 0,0 }, 0, WHITE);
 }
 
-void KoopTroopa::Update(float deltatime, Map* map) {
+void KoopTroopa::update(float deltatime) {
 	animation[currentState].Update(deltatime);
 
 	if (!onGround) {
@@ -76,11 +76,6 @@ void KoopTroopa::Update(float deltatime, Map* map) {
 	}
 
 	position.y += velocity.y * deltatime;
-
-	Rectangle currentFrame = animation[currentState].getcurrentframe();
-	bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
-
-	Collision::handleEnemyCollision(this, map);
 }
 
 void KoopTroopa::moveLeft() {
@@ -114,7 +109,7 @@ void KoopTroopa::Fall() {
 	position.y += velocity.y;
 }
 
-void KoopTroopa::onDeath(DeathType type, Character* source) {
+void KoopTroopa::onDeath(DeathType type, Character* player) {
 	switch (type) {
 	case DeathType::STOMP:
 		if (currentState == KoopaState::Walk) {
@@ -124,11 +119,12 @@ void KoopTroopa::onDeath(DeathType type, Character* source) {
 		}
 		else if (currentState == KoopaState::Shell) {
 			isStationary = false;
-			float player_mid = source->getBound().x + source->getBound().width / 2;
-			float enemy_mid = this->bound.x + this->bound.width / 2;
+			float player_mid = player->getBound().x + player->getBound().width / 2;
+			float enemy_mid = getBound().x + getBound().width / 2;
 			changeDirection(player_mid >= enemy_mid ? Direction::Left : Direction::Right);
 		}
 		break;
+	case DeathType::FIREBALL_HIT:
 	case DeathType::FALLING:
 	case DeathType::SHELL_HIT:
 		currentState = KoopaState::Die;
@@ -141,4 +137,32 @@ EnemyType KoopTroopa::getType() const{
 	if(this->currentState == KoopaState::Shell)
 		return EnemyType::KOOPA_SHELL;
 	return EnemyType::KOOPA;
+}
+Rectangle KoopTroopa::getBound() const {
+	Rectangle frame = animation.at(currentState).getcurrentframe();
+	float delta = 2.0f; //narrow the width
+    return {
+        position.x + delta,
+        position.y,
+        frame.width * scale - delta * 2,
+        frame.height * scale
+    };
+}
+
+
+void KoopTroopa::onCollideWith(GameObject* object) {
+	if(object->getObjectType() == ObjectType::ENEMY){
+		Enemy* enemy = dynamic_cast<Enemy*>(object);
+		if(!enemy || enemy->isDead()) return;
+
+		if(currentState == KoopaState::Shell){
+			enemy->onDeath(DeathType::SHELL_HIT);
+			return;
+		}
+		//else
+		if(this->direction == Direction::Right){
+			this->direction = Direction::Left;
+		}
+		else this->direction = Direction::Right;
+	}
 }

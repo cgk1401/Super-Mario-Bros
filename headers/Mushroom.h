@@ -21,11 +21,12 @@ public:
         height = animation.getcurrentframe().height * 4;
     }
 
-    void Update(float dt) override {
-        animation.Update(dt);
+    void update(float deltatime) override {
+        animation.Update(deltatime);
         const float gravity = 1000;
         
         if(!startRunning){
+            interactWithMap = false;
             velocity.x = 0;
             velocity.y =  -100;
 
@@ -34,22 +35,22 @@ public:
             }
         }
         else{
-            
+            interactWithMap = true;
             if(direction == Direction::Right){
                 velocity.x = 100;
             }
             else if (direction == Direction::Left){
                 velocity.x = -100;
             }
-            velocity.y += gravity * dt;
+            velocity.y += gravity * deltatime;
         }
         
-        position.x += velocity.x * dt;
-        position.y += velocity.y * dt;
+        position.x += velocity.x * deltatime;
+        position.y += velocity.y * deltatime;
 
     }
 
-    void Draw(const Texture& texture) override {
+    void draw() override {
         Rectangle src = animation.getcurrentframe();
         DrawTexturePro(
             texture,
@@ -85,4 +86,32 @@ public:
             frame.height * 4
         };
     }
+
+    void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override {
+          Rectangle tileRect = { (float)(col * Map::TILE_SIZE), (float)(row * Map::TILE_SIZE), (float)Map::TILE_SIZE, (float)Map::TILE_SIZE };
+          Rectangle bound = getBound();
+         if (tileInstance->offsetPos.y < 0) {
+            position.y = tileRect.y - bound.height - 3;
+            velocity.y = -300;
+            onGround = false;
+            if (velocity.x > 0) { 
+                changeDirection(Direction::Left);
+            }
+            else if (velocity.x < 0) { 
+                changeDirection(Direction::Right);
+            }
+        }
+        else if (tileInstance->offsetPos.y == 0){
+            position.y = tileRect.y - bound.height - 0.3f;
+            velocity.y = 0;
+            onGround = true;
+        }
+    }
+    void onGeneralCollision(Direction collideSide, Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override {
+        if(collideSide == Direction::Left){
+			direction = Direction::Right;
+		}
+		else direction = Direction::Left;
+    }
+    void onHeadCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override {}
 };

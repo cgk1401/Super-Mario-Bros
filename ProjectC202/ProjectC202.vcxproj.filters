@@ -246,6 +246,9 @@
     <ClCompile Include="..\src\CUTSCENES\FlagPoleCutscene.cpp">
       <Filter>Source Files\Cutscene</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\GameObject.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -448,6 +451,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\CUTSCENES\FlagPoleCutscene.h">
       <Filter>Header Files\Cutscene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\GameObject.h">
+      <Filter>Header Files\Entity</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
 class PlayState;
 FlagPoleCutscene::FlagPoleCutscene(Character* _player, HUD* _hud, Map* _map, CameraController _camera){
     player = _player;
+    player->isControlled = true;
     hud = _hud;
     map = _map;
     camera = _camera;
@@ -49,7 +50,6 @@ void FlagPoleCutscene::handlePhase(float dt){
         }
         break;
     case FlagPolePhase::DONE:
-
         break;
     default:
         break;
@@ -59,12 +59,11 @@ void FlagPoleCutscene::handlePhase(float dt){
 
 void FlagPoleCutscene::update(float dt) {
     elapsedTime += dt;
-    Collision::handlePlayerCollision(player, map, true);
+    Collision::handleMapCollision(player, map);
     handlePhase(dt);
 
     if(currentPhase != FlagPolePhase::INTO_CASTLE){
-        if(currentPhase == FlagPolePhase::SLIDE_DOWN) player->Update(dt, false);
-        else player->Update(dt);
+        player->update(dt);
     }
     else hud->update(dt);
 }
@@ -74,6 +73,8 @@ void FlagPoleCutscene::draw() {
 bool FlagPoleCutscene::isFinished() const {
     /*if done, move to next level*/
     if(currentPhase == FlagPolePhase::DONE){
+        hud->setScore(hud->getTime() * 100);
+        player->isControlled = false;
         pair<int, int> currentLevel = map->getLevel();
         pair<int, int> newLevel = {currentLevel.first, currentLevel.second + 1};
         if (newLevel.second <= 4) {
@@ -82,4 +83,7 @@ bool FlagPoleCutscene::isFinished() const {
         }
     }
     return currentPhase == FlagPolePhase::DONE;
+}
+void FlagPoleCutscene::setFinish(){
+currentPhase = FlagPolePhase::DONE;
 }

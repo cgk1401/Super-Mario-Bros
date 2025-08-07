@@ -79,7 +79,7 @@ public:
     void update(float dt) override;
     void draw() override;
     bool isFinished() const override;
-
+     void setFinish() override;
 private:
     ///Texture2D background;
     Texture2D emojiTexture; 

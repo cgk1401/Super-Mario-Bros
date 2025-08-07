@@ -27,4 +27,5 @@ public:
     void Draw();
     void clearItems();
     
+    vector<Item*> getItems() const;
 };

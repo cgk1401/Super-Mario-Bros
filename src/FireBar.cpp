@@ -22,7 +22,7 @@ FireBar::FireBar(Vector2 _position, const Animation& ani){
     }
     angle = 0;
 }
-void FireBar::Update(float deltatime) {
+void FireBar::update(float deltatime) {
     angle += 2;
     fireAnimation.Update(deltatime);
     const float fire_width = 3.5 * 8;
@@ -30,11 +30,9 @@ void FireBar::Update(float deltatime) {
     for (int i = 0; i < bar.size(); i++) {
         float distanceFromCenter = i * fire_width;
         
-        // vector ban đầu (trục thẳng đứng)
         float localX = 0;
         float localY = -distanceFromCenter;
 
-        // xoay vector quanh tâm
         float rad = angle * DEG2RAD;
         float rotatedX = localX * cos(rad) - localY * sin(rad);
         float rotatedY = localX * sin(rad) + localY * cos(rad);
@@ -43,7 +41,7 @@ void FireBar::Update(float deltatime) {
         bar[i].y = position.y + rotatedY;
     }
 }
-void FireBar::Draw(const Texture& texure) {
+void FireBar::draw() {
     for(auto& fire: bar){
         DrawTexturePro(texture,
                         fireAnimation.getcurrentframe(),

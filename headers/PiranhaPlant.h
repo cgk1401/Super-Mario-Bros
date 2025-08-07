@@ -6,7 +6,8 @@ enum class PlantState {
 	Hidden,
 	Rising,
 	Holding,
-	Falling
+	Falling,
+	Die
 };
 
 class PiranhaPlant : public Enemy {
@@ -28,10 +29,13 @@ public:
 	~PiranhaPlant();
 
 	void LoadSource() override;
-	void Update(float deltatime, Map* map) override;
-	void Draw() override;
-	bool isDead() {return false;}
-	void onDeath(DeathType type, Character* player = nullptr) override{}
+	void update(float deltatime) override;
+	void draw() override;
+	bool isDead() override;
+	void onDeath(DeathType type, Character* player = nullptr) override;
 	void ChangeState(PlantState newState);
 	EnemyType getType() const;
+	Rectangle getBound() const override;
+
+	void onCollideWith(GameObject* object) override;
 };

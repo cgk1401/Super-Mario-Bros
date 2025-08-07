@@ -2,7 +2,6 @@
 #include "../headers/Tile.h"
 #include "../headers/Global.h"
 #include "../headers/Animation.h"
-#include "FireBar.h"
 #include "raylib.h"
 #include <map>
 #include <vector>

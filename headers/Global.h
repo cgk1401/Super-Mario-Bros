@@ -21,6 +21,7 @@ const int screenHeight = 900; //800
 Texture2D resizedImage(const char* imagePath, float width, float height);
 class Map;
 class Enemy;
+class GameObject;
 
 constexpr Color DARK_BLUE = { 22, 72, 159, 255 };
 
@@ -68,7 +69,10 @@ inline CharacterType selectedCharacter = CharacterType::Mario;
 
 enum class Direction {
 	Left,
-	Right
+	Right,
+	Top,
+	Bottom,
+	None,
 };
 
 enum class EnemyType {
@@ -95,6 +99,7 @@ enum class DeathType
 	STOMP,
 	FALLING,
 	SHELL_HIT,
+	FIREBALL_HIT,
 };
 class Global {
 public:
@@ -107,5 +112,8 @@ bool operator==(pair<int, int> a, pair<int,int>b);
 inline int operator+(int lhs, MapTheme rhs);
 float approach(float current, float target, float increase);
 //float lerp(float a, float b, float t);
+
+Direction getCollisionDirection(GameObject* a, GameObject* b);
+Direction getCollisionDirection(const Rectangle& rectA, const Rectangle& rectB);
 
 #endif 

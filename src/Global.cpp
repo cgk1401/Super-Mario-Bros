@@ -1,5 +1,6 @@
 #include "../headers/Global.h"
 #include "../headers/Map.h"
+#include "GameObject.h"
 Map* Global::map = nullptr;
 Camera2D Global::camera = {};
 pair<int,int> Global::level = {1,1};
@@ -39,4 +40,49 @@ float approach(float current, float target, float increase) {
 
 float lerp(float a, float b, float t) {
     return a + (b - a) * t;
+}
+
+
+Direction getCollisionDirection(GameObject* a, GameObject* b) {
+    Rectangle rectA = a->getBound();
+    Rectangle rectB = b->getBound();
+
+    float dx = (rectA.x + rectA.width / 2.0f) - (rectB.x + rectB.width / 2.0f);
+    float dy = (rectA.y + rectA.height / 2.0f) - (rectB.y + rectB.height / 2.0f);
+
+    float combinedHalfWidth = (rectA.width + rectB.width) / 2.0f;
+    float combinedHalfHeight = (rectA.height + rectB.height) / 2.0f;
+
+    float overlapX = combinedHalfWidth - fabsf(dx);
+    float overlapY = combinedHalfHeight - fabsf(dy);
+
+    if (overlapX <= 0 || overlapY <= 0)
+        return Direction::None;
+
+    if (overlapX < overlapY) {
+        return dx > 0 ? Direction::Left : Direction::Right;
+    } else {
+        return dy > 0 ? Direction::Top : Direction::Bottom;
+    }
+}
+
+
+Direction getCollisionDirection(const Rectangle& rectA, const Rectangle& rectB) {
+    float dx = (rectA.x + rectA.width / 2.0f) - (rectB.x + rectB.width / 2.0f);
+    float dy = (rectA.y + rectA.height / 2.0f) - (rectB.y + rectB.height / 2.0f);
+
+    float combinedHalfWidth = (rectA.width + rectB.width) / 2.0f;
+    float combinedHalfHeight = (rectA.height + rectB.height) / 2.0f;
+
+    float overlapX = combinedHalfWidth - fabsf(dx);
+    float overlapY = combinedHalfHeight - fabsf(dy);
+
+    if (overlapX <= 0 || overlapY <= 0)
+        return Direction::None;
+
+    if (overlapX < overlapY) {
+        return dx > 0 ? Direction::Left : Direction::Right;
+    } else {
+        return dy > 0 ? Direction::Top : Direction::Bottom;
+    }
 }

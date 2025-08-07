@@ -88,7 +88,7 @@ void SuperState::Update(float deltatime) {
 void SuperState::HandleInput(float deltatime) {
 	
 	// if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT) && !IsKeyDown(KEY_DOWN)) {
-	// 	if (character->isGround) {
+	// 	if (character->onGround) {
 	// 		// trạng thái đang ở trên mặt đất, nhấn KEY_P sẽ đặt trạng thái thành FlagpoleHold
 	// 		//if (IsKeyDown(KEY_P)) {
 	// 			//haracter->setActionState(ActionState::FlagpoleHold);

@@ -25,18 +25,19 @@ public:
         direction = Direction::Right;
     }
 
-    void Update(float dt) override {
-        animation.Update(dt);
-    
+    void update(float deltatime) override {
+        animation.Update(deltatime);
         if(!startRunning){
             velocity.x = 0;
             velocity.y = -100;
+            interactWithMap = false;
 
             if(position.y + height < startPos){
                 startRunning = true;
             }
         }
         else{
+            interactWithMap = true;
             
             if(direction == Direction::Right){
                 velocity.x = 100;
@@ -44,15 +45,15 @@ public:
             else if (direction == Direction::Left){
                 velocity.x = -100;
             }
-            velocity.y += 1000 * dt;
+            velocity.y += 1000 * deltatime;
         }
         
 
-        position.x += velocity.x * dt;
-        position.y +=  velocity.y * dt ;
+        position.x += velocity.x * deltatime;
+        position.y +=  velocity.y * deltatime ;
     }
 
-    void Draw(const Texture& texture) override {
+    void draw() override {
         Rectangle src = animation.getcurrentframe();
         DrawTexturePro(
             texture,
@@ -81,4 +82,15 @@ public:
     }
 
     bool isRunning() const {return startRunning;}
+
+    void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override {
+        velocity.y = BOUNCE_FORCE;
+    }
+    void onGeneralCollision(Direction collideSide, Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override {
+        if(collideSide == Direction::Left){
+			direction = Direction::Right;
+		}
+		else direction = Direction::Left;
+    }
+    void onHeadCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override {}
 };

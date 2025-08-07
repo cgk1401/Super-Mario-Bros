@@ -4,10 +4,10 @@
 #include "Animation.h"
 #include "CharacterState.h"
 #include "Character.h"
-
+#include "Item.h"
 class FireState;
 
-class FireBall {
+class FireBall : public Item{
 	friend class FireState;
 	friend class Collision;
 private:
@@ -34,12 +34,18 @@ public:
 	bool isActive;
 	void SetAnimation(Character* character);
 	void SetVelocity(Vector2 velocity);
-	void Update(float deltatime);
-	void Draw(Character* character);
+	void update(float deltatime) override;
+	void draw() override;
 	void Deactivate();
 	void explode();
 
 	void ActiveStatus(float deltatime);
 
-	Rectangle getBound() const;
+	Rectangle getBound() const override;
+
+	void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
+    void onGeneralCollision(Direction collideSide, Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
+    void onHeadCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
+	void OnCollected(Character* player) override{};
+	void onCollideWith(GameObject* object) override;
 };

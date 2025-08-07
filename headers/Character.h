@@ -6,6 +6,7 @@
 #include "CharacterState.h"
 #include "Global.h"
 #include "OBSERVER/Subject.h"
+#include "GameObject.h"
 using namespace std;
 
 class CharacterState;
@@ -18,8 +19,7 @@ class StarmanState;
 
 class Map;
 
-class Character : public Subject {
-	friend class Collision;
+class Character : public GameObject, public Subject {
 	friend class CharacterState;
 	friend class NormalState;
 	friend class SuperState;
@@ -31,9 +31,6 @@ class Character : public Subject {
 protected:
 	Texture texture;
 	map <ActionState, Animation> animations;
-	Vector2 position;
-	Vector2 velocity = { 0,0 };
-
 	CharacterType type;
 	CharacterState* currentState;
 	ActionState currentAction;
@@ -44,9 +41,11 @@ protected:
 
 	PhysicsConfig config;
 	bool isJumpingUp = false;
-	bool isGround = false;
 	float jumpTimeElapsed = 0;
+
 public:
+	bool isControlled = false; 
+
 	virtual ~Character();
 
 	void ChangeState(CharacterStateType newState, CharacterStateType previousState);
@@ -55,16 +54,10 @@ public:
 	virtual CharacterType getCharacterType() = 0;
 	void setActionState(ActionState newActionState);
 	void setDirection(Direction newDirection);
-	Rectangle getBound() const;
-	Rectangle getFootSensor() const;
 	ActionState getCurrentAction() const;
 	CharacterStateType getCharacterStateType() const;
 	void DIE(Enemy* e);
 	void onDead();
-	
-	void Draw();
-	void Update(float deltatime, bool applyPhysics = true);
-	void HandleInput(float dt);
 
 	void collectCoin();
 	void breakBrick();
@@ -76,4 +69,16 @@ public:
 	void moveDown(const float& speed = 2); //flagpole only
 	void setPosition(Vector2 newPosition);
 	Vector2 getPosition();
+
+	void HandleInput(float dt);
+	//Inherit GameObject methods
+	void draw() override;
+	void update(float deltatime) override;
+	Rectangle getBound() const override;
+	ObjectType getObjectType() const override;
+
+	void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
+	void onGeneralCollision(Direction collideSide, Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
+    void onHeadCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
+    void onCollideWith(GameObject* object) override;
 };

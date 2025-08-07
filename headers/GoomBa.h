@@ -27,8 +27,6 @@ public:
 	~GoomBa() override;
 
 	void LoadSource() override;
-	void Draw() override;
-	void Update(float deltatime, Map* map) override;
 	void onDeath(DeathType type, Character* player = nullptr) override;
 	bool isDead() override;
 
@@ -39,4 +37,10 @@ public:
 	void ChangeState(GoomBaState newState); // thay đổi trạng thái khi collision
 
 	EnemyType getType() const;
+
+	void draw() override;
+	void update(float deltatime) override;
+	Rectangle getBound() const override;
+	
+    void onCollideWith(GameObject* object) override;
 };

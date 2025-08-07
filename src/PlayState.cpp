@@ -92,6 +92,8 @@ void PlayState::update(float dt){
         return;
     }
 
+    //______________________________COLLISION DETECTION____________________________
+    
     ///______________________________WOLRD__________________________________________
     camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
     Global::camera = camera.getCamera();
@@ -100,15 +102,35 @@ void PlayState::update(float dt){
     //fg.update( mario,camera.getCamera(), dt);
     world[level]->update();
 
-    ///______________________________ENTITIES__________________________________________
-    Collision::handlePlayerCollision(character, world[level]);
+    
+    for(auto& e: enemies){
+        if(e->isActive()) e->update(dt);
+    }
+    vector<GameObject*> allObjects;
+    allObjects.push_back(character);
+    allObjects.insert(allObjects.end(), enemies.begin(), enemies.end());
+    vector<Item*> items = Singleton<ItemManager>::getInstance().getItems();
+    allObjects.insert(allObjects.end(), items.begin(), items.end());
+    FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
+    if (fireState) {
+        auto& fireballs = fireState->getFireBall(); 
+        for (auto& f : fireballs) {
+           allObjects.push_back(f);
+        }
+    }
+    for(auto& object: allObjects){
+        Collision::handleMapCollision(object, world[level]);
+    }
 
+    Collision::handleMultipleObjectCollisions(allObjects);
+
+    ///______________________________ENTITIES__________________________________________
     if (character->getCurrentAction() != ActionState::Die) {
         Singleton<SoundManager>::getInstance().updateMusic();
         if(character->getCharacterStateType() !=  CharacterStateType::TransformState) character->HandleInput(dt);
-        character->Update(dt);
         hud->update(dt); 
         Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
+        character->update(dt);
     }
     else {
         if (newRound_countDown.isRunning()) {
@@ -129,26 +151,12 @@ void PlayState::update(float dt){
             return;
         }
     }
-    Collision::handlePlayer_EnemyCollision(character, enemies);
-   
     Singleton<EffectManager>::getInstance().update(dt);
 
-    Collision::handleEnemy_EnemyCollison(enemies);
-    for(auto& e: enemies){
-        Collision::handleEnemyCollision(e, world[level]);
-        if(e->isActive()) e->Update(dt, world[level]);
-    }
     
-    FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
-    if (fireState) {
-        auto& fireballs = fireState->getFireBall(); 
-        for (auto& f : fireballs) {
-            if (f) Collision::handleFireball_EnemyCollision(f, enemies);
-        }
-    }
 
     ///______________________________DELETION__________________________________________
-    enemies.erase(remove_if(enemies.begin(), enemies.end(),
+      enemies.erase(remove_if(enemies.begin(), enemies.end(),
         [](Enemy* e) {
             if (e->isDead()) {
                 delete e;
@@ -166,14 +174,16 @@ void PlayState::render() {
     Singleton<EffectManager>::getInstance().drawHiddenEffects();
     Singleton<ItemManager>::getInstance().DrawHiddenItem();
     
-    if (character->getCurrentAction() != ActionState::Die) {
-        Tile tile = world[level]->getTile((character->getBound().y + character->getBound().height / 2) / Map::TILE_SIZE, character->getBound().x / Map::TILE_SIZE, LayerType::PLATFORM);
-        if (tile.type != TileType::BLACK_BLOCK) character->Draw();
-    }
     for(auto& e: enemies){
-        e->Draw();
+        e->draw();
     }
     world[level]->drawLayer(LayerType::PLATFORM);
+
+    if (character->getCurrentAction() != ActionState::Die) {
+        Tile tile = world[level]->getTile((character->getBound().y + character->getBound().height / 2) / Map::TILE_SIZE, character->getBound().x / Map::TILE_SIZE, LayerType::PLATFORM);
+        if (tile.type != TileType::BLACK_BLOCK) character->draw();
+    }
+    
     Singleton<EffectManager>::getInstance().draw();
     Singleton<ItemManager>::getInstance().Draw();
     world[level]->drawLayer(LayerType::FOREGROUND);

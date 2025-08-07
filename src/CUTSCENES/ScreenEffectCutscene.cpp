@@ -30,5 +30,5 @@ void ScreenEffectCutscene::draw() {
 }
 
 bool ScreenEffectCutscene::isFinished() const {
-    return time.isFinished();
+    return finished || time.isFinished();
 }

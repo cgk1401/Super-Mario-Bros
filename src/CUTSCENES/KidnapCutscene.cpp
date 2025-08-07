@@ -2,6 +2,7 @@
 #include "CUTSCENES/ScreenEffectCutscene.h"
 #include "Global.h"
 #include "cmath"
+#include "Character.h"
 #define SCALE 5.0f
 //Set states
 template <typename T>
@@ -273,7 +274,7 @@ void KidnapCutscene::update(float dt) {
 void KidnapCutscene::draw(){
     BeginMode2D(camera.getCamera());
     map->draw();
-    character->Draw();
+    character->draw();
 
     if(princess_Disappreared == false){
         
@@ -312,4 +313,7 @@ void KidnapCutscene::draw(){
 }
 bool KidnapCutscene::isFinished() const{
     return currentPhase == KidnapPhase::DONE;
+}
+void KidnapCutscene::setFinish(){
+currentPhase = KidnapPhase::DONE;
 }
