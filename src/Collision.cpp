@@ -558,3 +558,13 @@ void Collision::handleFireball_EnemyCollision(FireBall* fireball, vector<Enemy*>
         }
     }
 }
+
+//void Collision::handleBowserball_CharacterCollision(BowserFireBall* bowserfireball, Character* character) {
+//    Rectangle firebound = bowserfireball->getBound();
+//    Rectangle characterbound = character->getBound();
+//
+//    if (CheckCollisionRecs(firebound, characterbound)) {
+//        character->onDead();
+//        bowserfireball->Deactive();
+//    }
+//}

@@ -48,10 +48,15 @@ void Bowser::Draw() {
 	
 	bound = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
 	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
+	
+	DrawFireBreath();
 }
 
 void Bowser::Update(float deltatime, Map* map) {
 	animations.Update(deltatime);
+
+	UpdateFireBreath(deltatime);
+	cout << fireballs.size() << endl;
 
 	jumpTimer += deltatime;
 
@@ -92,6 +97,8 @@ void Bowser::Update(float deltatime, Map* map) {
 	Rectangle currentFrame = animations.getcurrentframe();
 	bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
 
+	CreateFireBalls(deltatime);
+
 	Collision::handleEnemyCollision(this, map);
 
 }
@@ -111,5 +118,40 @@ EnemyType Bowser::getType() const {
 void Bowser::Jump() {
 	velocity.y = jumpForce;
 	onGround = false;
+}
+
+void Bowser::DrawFireBreath() {
+	for (auto& it : fireballs) {
+		it->Draw();
+	}
+}
+
+void Bowser::CreateFireBalls(float deltatime) {
+	fireBreathTimer += deltatime;
+	
+	if (fireBreathTimer >= fireBreathCooldown) {
+		fireBreathTimer = 0.0f;
+		if (Global::character != nullptr) {
+			fireballs.push_back(new BowserFireBall({ position.x, position.y }, Global::character->getPosition().y));
+		}
+	}
+}
+
+void Bowser::UpdateFireBreath(float deltatime) {
+	for (auto& it : fireballs) {
+		it->Update(deltatime);
+	}
+	RemoveFireBreath();
+}
+
+void Bowser::RemoveFireBreath() {
+	for (auto it = fireballs.begin(); it != fireballs.end();) {
+		if ((*it)->getIsActive() == false) {
+			it = fireballs.erase(it);
+		}
+		else {
+			it++;
+		}
+	}
 }
 

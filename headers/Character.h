@@ -57,6 +57,7 @@ public:
 	void setDirection(Direction newDirection);
 	Rectangle getBound() const;
 	Rectangle getFootSensor() const;
+	Vector2 getPosition() const;
 	ActionState getCurrentAction() const;
 	CharacterStateType getCharacterStateType() const;
 	void DIE(Enemy* e);

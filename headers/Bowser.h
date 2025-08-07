@@ -2,8 +2,9 @@
 
 #include "Enemy.h"
 #include "time.h"
-#include <functional>
-#include <random>
+#include "BowserFireBall.h"
+#include <vector>
+using namespace std;
 
 class Bowser : public Enemy {
 private :
@@ -18,6 +19,10 @@ private :
 	float jumpCooldown = 3.0f;
 	float jumpTimer = 0.0f;
 	bool movingRight = true;
+	
+	vector <BowserFireBall*> fireballs;
+	float fireBreathCooldown = 2.0f;
+	float fireBreathTimer = 0.0f;
 
 public :
 	Bowser();
@@ -30,7 +35,12 @@ public :
 	bool isDead() override;
 
 	EnemyType getType() const override;
-
 	void Jump();
 
+	// BowserFireball
+	void DrawFireBreath();
+	void CreateFireBalls(float deltatime);
+	void UpdateFireBreath(float deltatime);
+	void RemoveFireBreath();
+	
 };

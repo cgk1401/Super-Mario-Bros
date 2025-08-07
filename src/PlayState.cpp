@@ -21,6 +21,7 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud) {
         character = new Luigi({ 100, 300 });
     }
 
+    Global::character = character;
    
     level = _level;
     Global::level = _level;
@@ -135,6 +136,11 @@ void PlayState::update(float dt){
             if (f) Collision::handleFireball_EnemyCollision(f, enemies);
         }
     }
+    //for (auto e : enemies) {
+    //    if (dynamic_cast<Bowser*> (e) ){
+    //        //Collision::handleBowserball_CharacterCollision()
+    //    }
+    //}
 
     ///______________________________DELETION__________________________________________
     enemies.erase(remove_if(enemies.begin(), enemies.end(),

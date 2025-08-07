@@ -6,6 +6,7 @@ class Map;
 class Mushroom;
 class Star;
 #include "FireBall.h"
+#include "BowserFireBall.h"]
 
 class Collision{
 public:
@@ -18,4 +19,5 @@ public:
     static void handleEnemy_EnemyCollison(vector<Enemy*>& enemies);
     static void handlePlayer_EnemyCollision(Character* player, vector<Enemy*>& enemies);
     static void handleFireball_EnemyCollision(FireBall* fireball, vector<Enemy*> enemies);
+    //static void handleBowserball_CharacterCollision(BowserFireBall* bowserfireball, Character* character);
 };

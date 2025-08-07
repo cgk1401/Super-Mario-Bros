@@ -133,6 +133,7 @@
     <ClCompile Include="..\src\AnimationManager.cpp" />
     <ClCompile Include="..\src\AudioSettingsMenu.cpp" />
     <ClCompile Include="..\src\Bowser.cpp" />
+    <ClCompile Include="..\src\BowserFireBall.cpp" />
     <ClCompile Include="..\src\BrickBreakEffect.cpp" />
     <ClCompile Include="..\src\Button.cpp" />
     <ClCompile Include="..\src\CameraController.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="..\headers\AudioSettingsMenu.h" />
     <ClInclude Include="..\headers\BaseEffect.h" />
     <ClInclude Include="..\headers\Bowser.h" />
+    <ClInclude Include="..\headers\BowserFireBall.h" />
     <ClInclude Include="..\headers\BrickBreakEffect.h" />
     <ClInclude Include="..\headers\Button.h" />
     <ClInclude Include="..\headers\CameraController.h" />

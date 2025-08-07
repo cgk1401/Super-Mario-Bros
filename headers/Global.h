@@ -21,6 +21,7 @@ const int screenHeight = 900; //800
 Texture2D resizedImage(const char* imagePath, float width, float height);
 class Map;
 class Enemy;
+class Character;
 
 constexpr Color DARK_BLUE = { 22, 72, 159, 255 };
 
@@ -99,6 +100,7 @@ public:
     static Map* map;
 	static Camera2D camera;
 	static pair<int,int> level;
+	static Character* character;
 };
 
 bool operator==(pair<int, int> a, pair<int,int>b);

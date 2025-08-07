@@ -102,6 +102,10 @@ Rectangle Character::getFootSensor() const {
 	};
 }
 
+Vector2 Character::getPosition() const {
+	return { position.x, position.y };
+}
+
 ActionState Character::getCurrentAction() const{
 	return currentAction;
 }
