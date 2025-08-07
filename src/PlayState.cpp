@@ -20,7 +20,7 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud) {
     else if (selectedCharacter == CharacterType::Luigi) {
         character = new Luigi({ 100, 300 });
     }
-
+    
     Global::character = character;
    
     level = _level;
@@ -136,9 +136,12 @@ void PlayState::update(float dt){
             if (f) Collision::handleFireball_EnemyCollision(f, enemies);
         }
     }
+
     //for (auto e : enemies) {
-    //    if (dynamic_cast<Bowser*> (e) ){
-    //        //Collision::handleBowserball_CharacterCollision()
+    //    if (Bowser* bowser = dynamic_cast<Bowser*> (e) ){
+    //        for (auto ball : bowser->getBowserFireball()) {
+    //            Collision::handleBowserball_CharacterCollision(ball, character);
+    //        }
     //    }
     //}
 

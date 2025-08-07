@@ -5,6 +5,7 @@ Camera2D Global::camera = {};
 pair<int,int> Global::level = {1,1};
 Character* Global::character = nullptr;
 
+
 Texture2D resizedImage(const char* imagePath, float width, float height){
     Image img = LoadImage(imagePath);
     if (img.data == NULL) {

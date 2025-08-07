@@ -95,6 +95,8 @@ enum class DeathType
 	SHELL_HIT,
 };
 
+//extern Character* globalcharacter;
+
 class Global {
 public:
     static Map* map;

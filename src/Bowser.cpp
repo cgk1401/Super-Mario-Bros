@@ -1,5 +1,6 @@
 ﻿#include "../headers/Bowser.h"
 #include "../headers/TextureManager.h"
+#include "../headers/SoundManager.h"
 #include "../headers/Collision.h"
 
 Bowser::Bowser():Enemy(){
@@ -13,7 +14,11 @@ Bowser::Bowser(Vector2 position, MapTheme theme) : Enemy() {
 	LoadSource();
 }
 
-Bowser::~Bowser() {}
+Bowser::~Bowser() {
+	for (auto it : fireballs) {
+		delete it;
+	}
+}
 
 void Bowser::LoadSource() {
 	texture = Singleton<TextureManager>::getInstance().load(TextureType::ENEMY);
@@ -131,9 +136,9 @@ void Bowser::CreateFireBalls(float deltatime) {
 	
 	if (fireBreathTimer >= fireBreathCooldown) {
 		fireBreathTimer = 0.0f;
-		if (Global::character != nullptr) {
-			fireballs.push_back(new BowserFireBall({ position.x, position.y }, Global::character->getPosition().y));
-		}
+		fireballs.push_back(new BowserFireBall({ position.x, position.y }, Global::character->getPosition().y));
+		Singleton<SoundManager>::getInstance().play(SoundType::BOWSERFIREBALL);
+		
 	}
 }
 
@@ -141,17 +146,29 @@ void Bowser::UpdateFireBreath(float deltatime) {
 	for (auto& it : fireballs) {
 		it->Update(deltatime);
 	}
+	CheckCollisionWithCharacter();
 	RemoveFireBreath();
+}
+
+void Bowser::CheckCollisionWithCharacter() {
+	for (auto it : fireballs) {
+		Collision::handleBowserball_CharacterCollision(it, Global::character);
+	}
 }
 
 void Bowser::RemoveFireBreath() {
 	for (auto it = fireballs.begin(); it != fireballs.end();) {
 		if ((*it)->getIsActive() == false) {
+			delete* it;
 			it = fireballs.erase(it);
 		}
 		else {
 			it++;
 		}
 	}
+}
+
+vector<BowserFireBall*> Bowser::getBowserFireball() {
+	return this->fireballs;
 }
 

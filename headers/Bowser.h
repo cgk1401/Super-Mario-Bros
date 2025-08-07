@@ -4,9 +4,11 @@
 #include "time.h"
 #include "BowserFireBall.h"
 #include <vector>
+#include "CharacterState.h"
+#include "PlayState.h"
 using namespace std;
 
-class Bowser : public Enemy {
+class Bowser : public Enemy{
 private :
 	Animation animations;
 	const float scale = 3.0f;
@@ -41,6 +43,8 @@ public :
 	void DrawFireBreath();
 	void CreateFireBalls(float deltatime);
 	void UpdateFireBreath(float deltatime);
+	void CheckCollisionWithCharacter();
 	void RemoveFireBreath();
+	vector <BowserFireBall*> getBowserFireball();
 	
 };

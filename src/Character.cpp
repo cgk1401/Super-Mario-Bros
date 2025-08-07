@@ -225,6 +225,7 @@ void Character::Update(float deltatime, bool applyPhysics) {
 	if(position.y > screenHeight + 10) onDead();
 }
 void Character::onDead(){
+	if (currentAction == ActionState::Die) return;
 	Singleton<EffectManager>::getInstance().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
 	Singleton<SoundManager>::getInstance().play(SoundType::DIE);
 	currentAction = ActionState::Die;
