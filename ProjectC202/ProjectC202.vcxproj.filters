@@ -252,6 +252,12 @@
     <ClCompile Include="..\src\Bowser.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CUTSCENES\PipeCutscene.cpp">
+      <Filter>Source Files\Cutscene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -460,6 +466,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\Bowser.h">
       <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CUTSCENES\PipeCutscene.h">
+      <Filter>Header Files\Cutscene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

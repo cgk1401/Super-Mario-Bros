@@ -43,6 +43,9 @@ int HUD::getLives(){
 int HUD::getTime(){
     return time;
 }
+int HUD::getScore(){
+    return score;
+}
 
 void HUD::generateTimeToCoins(){
     if(time <= 0 ) {

@@ -7,8 +7,8 @@
 #include "../headers/ItemManager.h"
 #include "../headers/SoundManager.h"
 #include "../headers/Luigi.h"
-
-PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character) {
+#include "CUTSCENES/PipeCutscene.h"
+PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, const char* _extraMap_filename) {
     if (_level == pair {1,1})      Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
     else if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
     else if (_level == pair {1,3}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
@@ -28,7 +28,15 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character) {
     );
 
     Singleton<ItemManager>::getInstance().clearItems();
-    world[level]->loadFromFile(level);
+
+     string filename;
+    if(!_extraMap_filename){
+       
+        filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+       
+    }
+    else filename = _extraMap_filename;
+     world[level]->loadFromFile(filename.c_str());
     Global::map = world[level];
     camera.init({0,0});
 
@@ -62,7 +70,7 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character) {
     //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
     PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
 
-   cutscene.play(new ScreenEffectCutscene(SreenType::NONE, BLACK, 3, TextFormat("ROUND %d - %d\n Lives: x%d", level.first, level.second, hud->getLives())));
+   if(level.first >= 1 || !_extraMap_filename) cutscene.play(new ScreenEffectCutscene(SreenType::NONE, BLACK, 3, TextFormat("ROUND %d - %d\n Lives: x%d", level.first, level.second, hud->getLives())));
    if (level == pair{1,1}) cutscene.play(new KidnapCutscene(world[level], character));
 }
 PlayState::~PlayState() {
@@ -88,7 +96,6 @@ void PlayState::handleInput() {
 void PlayState::update(float dt){
     if(cutscene.isActive()){
         cutscene.update(dt);
-       
         return;
     }
 
@@ -104,7 +111,14 @@ void PlayState::update(float dt){
 
     
     for(auto& e: enemies){
-        if(e->isActive()) e->update(dt);
+        if(e->isActive()) {
+            //Follow player
+            // if(character->position.x > e->position.x + 50){
+            //     e->changeDirection(Direction::Right);
+            // }
+            // else  e->changeDirection(Direction::Left);
+            e->update(dt);
+        }
     }
     vector<GameObject*> allObjects;
     allObjects.push_back(character);
@@ -212,5 +226,8 @@ void PlayState::onNotify(const EventType& event, void* data){
     else if (event == EventType::FLAG_POLE){
        cutscene.play(new FlagPoleCutscene(character, hud, world[level], camera));
     
+    }
+    else if(event == EventType::PIPE_ENTER){
+       if(level == pair{1,2}) cutscene.play(new PipeCutscene(character, hud, world[level], "map0_2.txt" ));
     }
 }

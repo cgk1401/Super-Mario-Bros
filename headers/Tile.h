@@ -6,7 +6,8 @@ enum TileType {
 	EMPTY = 0,
 	GROUND,
 	BRICK,
-	PIPE,
+	HORIZONTAL_PIPE,
+	VERTICAL_PIPE,
 	COIN,
 	COINS_BLOCK,			//A block of multiple coins
 	QUESTION_BLOCK,			// consisting of coin, power-up items such as flower, star,. depending on game, level or mario's super form

@@ -74,6 +74,15 @@ void Collision::handleMapCollision(GameObject* object, Map* map){
                                 character->notify(EventType::FLAG_POLE, &tileRect);
                             return;
                         }
+                        else if(tile.type == TileType::HORIZONTAL_PIPE){
+                             Character* character = dynamic_cast<Character*>(object);
+                            if(character->isControlled == true) return;
+                             Direction collideDirection = getCollisionDirection(bound, tileRect);
+                             if(collideDirection == Direction::Right){
+                                character->notify(EventType::PIPE_ENTER, &tileRect);
+                             }
+                             return;
+                        }
                     }
                     if (tile.behavior->isSolid()) {
                         float overlapX = fmin(bound.x + bound.width, tileRect.x + tileRect.width) - fmax(bound.x, tileRect.x);

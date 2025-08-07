@@ -40,8 +40,9 @@ MapEditor::MapEditor(pair<int, int> level ,int r, int c) : Map(level, r, c) {
     world_1_3   = LoadTexture("../assets/Map/World 1-3.png");
     world_1_4   = LoadTexture("../assets/Map/World 1-4.png");
     this->level = level;
-
-    loadFromFile(level, true);
+    string filename;
+    filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+    loadFromFile(filename.c_str(), true);
 }
 MapEditor::~MapEditor() {
     delete back_button;
@@ -51,11 +52,7 @@ MapEditor::~MapEditor() {
     brushBuffer.clear();
 }
 
-void MapEditor::saveToFile() {
-    string filename;
-    filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
-
-
+void MapEditor::saveToFile(const char* filename) {
     ofstream MyFile(filename);
 
     if (!MyFile.is_open()) {
@@ -278,11 +275,15 @@ void MapEditor::handleInput() {
         editType = EditorMode::ERASE;
     }
     else if(save_button->IsClicked()){
-        saveToFile();
+         string filename;
+        filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+        saveToFile(filename.c_str());
         saveFileNoti_timer.start(1);
     }
     else if (uploadFile_button->IsClicked()) {
-        loadFromFile(level, true);
+        string filename;
+        filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+        loadFromFile(filename.c_str(), true);
     }
     else if (play_button->IsClicked()){
         _option = 2;
@@ -427,7 +428,9 @@ void MapEditor::render() {
         SaveConfirmationDialog* currentstate = dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState());
         currentstate->render();
         if (currentstate->buttonclick[0] == true) {
-            saveToFile();
+             string filename;
+            filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+            saveToFile(filename.c_str());
             saveFileNoti_timer.start(1);
             //_option_buttons = false;
             currentstate->buttonclick[0] = false;

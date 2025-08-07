@@ -29,6 +29,7 @@ public:
     void setTime(int t);
     int getLives();
     int getTime();
+    int getScore();
     void generateTimeToCoins();
 
     void update(float dt);

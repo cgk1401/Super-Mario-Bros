@@ -59,7 +59,7 @@ public:
     virtual ~Map();
     void initMap(int r, int c);
     void update(bool isEditing = false);
-    void loadFromFile(pair<int, int> level, bool isEditing = false);
+    void loadFromFile(const char* filename, bool isEditing = false);
     void draw(bool isEditing = false);
     void drawLayer(LayerType layertype);
     

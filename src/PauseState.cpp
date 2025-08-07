@@ -10,6 +10,7 @@ PauseState::PauseState() {
     ButtonLayoutConfig cfg(amount_button);
     const char* buttonLabels[4] = { "RESUME", "RESTART", "OPTIONS", "QUIT" };
     buttons = CreateButtons(buttonLabels, cfg);
+   Singleton<SoundManager>::getInstance().play(SoundType::PAUSE);
 }
 
 PauseState::~PauseState() {

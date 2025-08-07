@@ -93,7 +93,6 @@ void Map::initMap(int r, int c) {
 
         for (int x = 0; x < rows; x++) {
             for (int y = 0; y < columns; y++) {
-                // << x << " - " << y << endl;
                 mapRects[x][y] = { (float)(y * TILE_SIZE), (float)(x * TILE_SIZE), (float)TILE_SIZE, (float)TILE_SIZE };
                 layer.mapData[x][y].tileID = 0;
             }
@@ -142,7 +141,7 @@ void Map::createTileCatalog() {
                 tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
             }
 
-            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 16), Tile(getTileIDFromCoords(i + themeOffset, 16), tileSetSourceRects[i + themeOffset - 1][16 - 1], PIPE, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Pipe tile
+            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 16), Tile(getTileIDFromCoords(i + themeOffset, 16), tileSetSourceRects[i + themeOffset - 1][16 - 1], HORIZONTAL_PIPE, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Pipe tile
 
             for (int j = 17; j < 20; j++) {
                 tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
@@ -181,9 +180,14 @@ void Map::createTileCatalog() {
 
     for (int i = 9; i < 21; i++) {
         MapTheme theme = MapTheme::OVERWORLD;
-        for (int j = 1; j < 6; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], PIPE, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Pipe tiles
+        for (int j = 1; j <= 2; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], VERTICAL_PIPE, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Pipe tiles
         }
+        
+        for (int j = 3; j <= 5; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], HORIZONTAL_PIPE, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Pipe tiles
+        }
+
 
         for (int j = 6; j < 9; j++) {
             tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Ground tiles
@@ -194,7 +198,7 @@ void Map::createTileCatalog() {
             else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tiles
         }
 
-        tileCatalog.emplace(getTileIDFromCoords(i, 12), Tile(getTileIDFromCoords(i, 12), tileSetSourceRects[i - 1][12 - 1], FINISHING_POLE, new DecorationTileBehavior(), theme, LayerType::FOREGROUND)); //Ground tiles
+        tileCatalog.emplace(getTileIDFromCoords(i, 12), Tile(getTileIDFromCoords(i, 12), tileSetSourceRects[i - 1][12 - 1], FINISHING_POLE, new DecorationTileBehavior(), theme, LayerType::PLATFORM)); //Ground tiles
 
         for (int j = 13; j < 19; j++) {
             tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tiles
@@ -525,10 +529,7 @@ void Map::updateTileInstancePosition(int row, int col, Vector2 offset, LayerType
 }
 
 
-void Map::loadFromFile(pair<int, int> level, bool isEditing) {
-    string filename;
-    filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
-
+void Map::loadFromFile(const char* filename, bool isEditing) {
     ifstream MyReadFile(filename);
 
     if (!MyReadFile.is_open()) {

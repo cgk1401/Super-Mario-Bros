@@ -73,7 +73,7 @@ void FlagPoleCutscene::draw() {
 bool FlagPoleCutscene::isFinished() const {
     /*if done, move to next level*/
     if(currentPhase == FlagPolePhase::DONE){
-        hud->setScore(hud->getTime() * 100);
+        hud->setScore( hud->getScore() + hud->getTime() * 100);
         player->isControlled = false;
         pair<int, int> currentLevel = map->getLevel();
         pair<int, int> newLevel = {currentLevel.first, currentLevel.second + 1};

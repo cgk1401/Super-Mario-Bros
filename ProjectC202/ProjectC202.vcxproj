@@ -145,6 +145,7 @@
     <ClCompile Include="..\src\CUTSCENES\CutSceneManager.cpp" />
     <ClCompile Include="..\src\CUTSCENES\FlagPoleCutscene.cpp" />
     <ClCompile Include="..\src\CUTSCENES\KidnapCutscene.cpp" />
+    <ClCompile Include="..\src\CUTSCENES\PipeCutscene.cpp" />
     <ClCompile Include="..\src\CUTSCENES\ScreenEffectCutscene.cpp" />
     <ClCompile Include="..\src\EffectManager.cpp" />
     <ClCompile Include="..\src\Enemy.cpp" />
@@ -205,6 +206,7 @@
     <ClInclude Include="..\headers\CUTSCENES\CutSceneManager.h" />
     <ClInclude Include="..\headers\CUTSCENES\FlagPoleCutscene.h" />
     <ClInclude Include="..\headers\CUTSCENES\KidnapCutscene.h" />
+    <ClInclude Include="..\headers\CUTSCENES\PipeCutscene.h" />
     <ClInclude Include="..\headers\CUTSCENES\ScreenEffectCutscene.h" />
     <ClInclude Include="..\headers\EffectManager.h" />
     <ClInclude Include="..\headers\Enemy.h" />
