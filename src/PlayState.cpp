@@ -8,6 +8,8 @@
 #include "../headers/SoundManager.h"
 #include "../headers/Luigi.h"
 
+#include "../headers/LevelCompleteState.h"
+
 PlayState::PlayState(pair<int, int> _level, HUD* _hud) {
     if (_level == pair {1,1})      Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
     else if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
@@ -108,7 +110,7 @@ void PlayState::update(float dt){
                     cutscene.play(new ScreenEffectCutscene(SreenType::NONE, BLACK, 5.5, "GAME OVER"));
                     Singleton<SoundManager>::getInstance().play(SoundType::GAMEOVER1);
                 }
-                else Singleton<Game>::getInstance().replaceState(new PlayState(level, hud));
+                else Singleton<Game>::getInstance().replaceState(new LevelCompleteState);
                 return;
             }
         }

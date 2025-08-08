@@ -249,6 +249,9 @@
     <ClCompile Include="..\src\CUTSCENES\FlagPoleCutscene.cpp">
       <Filter>Source Files\Cutscene</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\LevelCompleteState.cpp">
+      <Filter>Source Files\States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -451,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\EnemyFactory.h">
       <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\LevelCompleteState.h">
+      <Filter>Header Files\States</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
