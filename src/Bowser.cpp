@@ -61,14 +61,42 @@ void Bowser::Update(float deltatime, Map* map) {
 	animations.Update(deltatime);
 
 	UpdateFireBreath(deltatime);
-	cout << fireballs.size() << endl;
 
-	jumpTimer += deltatime;
-
-	if (onGround && jumpTimer >= jumpCooldown) {
-		Jump();
-		jumpTimer = 0.0f;
+	if (this->position.x < Global::character->getPosition().x) {
+		this->direction = Direction::Right;
 	}
+
+	if (direction == Direction::Right) {
+		velocity.x = 0;
+	}
+	else if (direction == Direction::Left) {
+		jumpTimer += deltatime;
+
+		if (onGround && jumpTimer >= jumpCooldown) {
+			Jump();
+			jumpTimer = 0.0f;
+		}
+
+		if (movingRight) {
+			velocity.x = moveSpeed;
+		}
+		else {
+			velocity.x = -moveSpeed;
+		}
+
+		moved += fabs(velocity.x * deltatime);
+
+		if (moved >= moveDistance) {
+			movingRight = !movingRight;
+			moved = 0.0f;
+			if (onGround) {
+				Jump();
+				jumpTimer = 0.0f;
+			}
+		}
+		CreateFireBalls(deltatime);
+	}
+
 
 	if (!onGround) {
 		velocity.y += 800.0f * deltatime;
@@ -77,7 +105,7 @@ void Bowser::Update(float deltatime, Map* map) {
 		velocity.y = 0;
 	}
 
-	if (movingRight) {
+	/*if (movingRight) {
 		velocity.x = moveSpeed;
 	}
 	else {
@@ -93,7 +121,7 @@ void Bowser::Update(float deltatime, Map* map) {
 			Jump();
 			jumpTimer = 0.0f;
 		}
-	}
+	}*/
 	
 
 	position.x += velocity.x * deltatime;
@@ -102,14 +130,15 @@ void Bowser::Update(float deltatime, Map* map) {
 	Rectangle currentFrame = animations.getcurrentframe();
 	bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
 
-	CreateFireBalls(deltatime);
+	/*CreateFireBalls(deltatime);*/
 
 	Collision::handleEnemyCollision(this, map);
 
 }
 
-void Bowser::onDeath(DeathType type, Character* player)
-{
+void Bowser::onDeath(DeathType type, Character* player) {
+	animations.durationtime = 0.1f;
+	Singleton<SoundManager>::getInstance().play(SoundType::BOWSERFALL);
 }
 
 bool Bowser::isDead() {
