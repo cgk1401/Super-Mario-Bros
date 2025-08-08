@@ -8,6 +8,8 @@
 #include "../headers/SoundManager.h"
 #include "../headers/Luigi.h"
 #include "CUTSCENES/PipeCutscene.h"
+#include "nlohmann/json.hpp"
+
 PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, const char* _extraMap_filename) {
     if (_level == pair {1,1})      Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
     else if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
@@ -72,6 +74,27 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, co
 
    if(level.first >= 1 || !_extraMap_filename) cutscene.play(new ScreenEffectCutscene(SreenType::NONE, BLACK, 3, TextFormat("ROUND %d - %d\n Lives: x%d", level.first, level.second, hud->getLives())));
    if (level == pair{1,1}) cutscene.play(new KidnapCutscene(world[level], character));
+}
+
+PlayState::PlayState(const char* filename){
+    Singleton<ItemManager>::getInstance().clearItems();
+    loadGame(filename);
+    Global::map = world[level];
+    camera.init({0,0});
+
+    EffectManager* effects = &Singleton<EffectManager>::getInstance();
+    
+    character->attachObserver(this);
+    character->attachObserver(hud);
+    character->attachObserver(effects);
+    
+    bg.addLayer("../assets/Map/Layers/back.png",{0, 55 , 144, 108}, 0.05, 9.2);
+    bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 9.2);
+    bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 9.2);
+    
+    //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
+    PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
+
 }
 PlayState::~PlayState() {
     for (auto& [level, mapPtr] : world) {  
@@ -140,7 +163,7 @@ void PlayState::update(float dt){
 
     ///______________________________ENTITIES__________________________________________
     if (character->getCurrentAction() != ActionState::Die) {
-        Singleton<SoundManager>::getInstance().updateMusic();
+        Singleton<SoundManager>::getInstance().updateMusic(dt);
         if(character->getCharacterStateType() !=  CharacterStateType::TransformState) character->HandleInput(dt);
         hud->update(dt); 
         Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
@@ -223,6 +246,11 @@ void PlayState::onNotify(const EventType& event, void* data){
     if(event == EventType::ON_DEATH){
         newRound_countDown.start(4);
     }
+    else if(event == EventType::COIN_COLLECT){
+        Vector2* pos = static_cast<Vector2*>(data);
+        if(pos)
+            world[level]->removeTile(pos->y / Map::TILE_SIZE, pos->x / Map::TILE_SIZE );
+    }
     else if (event == EventType::FLAG_POLE){
        cutscene.play(new FlagPoleCutscene(character, hud, world[level], camera));
     
@@ -230,4 +258,123 @@ void PlayState::onNotify(const EventType& event, void* data){
     else if(event == EventType::PIPE_ENTER){
        if(level == pair{1,2}) cutscene.play(new PipeCutscene(character, hud, world[level], "map0_2.txt" ));
     }
+}
+
+void PlayState::saveGame(const char* filename) {
+    nlohmann::json j;
+
+    // Save music playback time
+    j["music"]["playtime"] = Singleton<SoundManager>::getInstance().getMusicPlayTime();
+
+    // Save player data
+    j["player"]["x"] = character->getPosition().x;
+    j["player"]["y"] = character->getPosition().y;
+    j["player"]["type"] = character->getCharacterType();
+    j["player"]["state"] = character->getCharacterStateType();
+    j["player"]["action"] = character->getCurrentAction();
+    j["player"]["direction"] = character->getDirection();
+
+    // Save HUD
+    j["hud"]["score"] = hud->getScore();
+    j["hud"]["coins"] = hud->getCoin();
+    j["hud"]["lives"] = hud->getLives();
+    j["hud"]["time"] = hud->getTime();
+
+    // Save level info
+    j["level"]["world"] = level.first;
+    j["level"]["map"] = level.second;
+
+    // Save map info
+    auto* map = world[level]; 
+    j["map"]["row"] = map->rows;
+    j["map"]["column"] = map->columns;
+    j["map"]["layerCount"] = map->numberLayers;
+
+    const std::vector<Layer>& mapData = map->getMapData();
+    for (int i = 0; i < map->numberLayers; i++) {
+        const Layer& layer = mapData[i];
+        nlohmann::json layerJson;
+
+        layerJson["type"] = static_cast<int>(layer.type);
+        layerJson["visible"] = layer.visible;
+        layerJson["hasCollision"] = layer.hasCollision;
+
+        for (const auto& row : layer.mapData) {
+            string rowStr = "";
+            for (int tile = 0; tile < row.size(); tile++ ) {
+               rowStr += to_string(row[tile].tileID);
+               if(tile < row.size() - 1) rowStr += " ";
+            }
+            layerJson["data"].push_back(rowStr);
+        }
+        j["map"]["layers"].push_back(layerJson); 
+    }
+
+    ofstream file(filename);
+    if (file.is_open()) {
+        file << setw(4) << j;
+        file.close();
+    } else {
+        cerr << "Failed to save game to " << filename << endl;
+    }
+}
+
+
+
+void PlayState::loadGame(const char* filename) {
+    ifstream file(filename);
+    if (!file.is_open()) {
+        cerr << "Failed to open save file: " << filename <<endl;
+        return;
+    }
+
+    nlohmann::json j;
+    file >> j;
+    file.close();
+
+    // Load level info
+    level = { j["level"]["world"], j["level"]["map"] };
+    
+    if (level == pair {1,1})      Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
+    else if (level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
+    else if (level == pair {1,3}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
+    else if (level == pair {1,4}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_CASTLE, true);
+
+    float musicPlayTime = j["music"]["playtime"];
+    Singleton<SoundManager>::getInstance().setMusicPlayTime(musicPlayTime);
+    // Load map data
+    world[level] = new Map(level);
+    world[level]->setEnemySpawnCallback(
+        [this](EnemyType type, Vector2 pos, MapTheme theme) {
+            enemies.push_back(EnemyFactory::createEnemy(type, pos, theme));
+        }
+    );
+   cout << "before loading" << endl;
+    world[level]->loadMapFromJson(j["map"]);
+
+    // Load player state
+     Vector2 pos = {
+        j["player"]["x"],
+        j["player"]["y"]
+    };
+    CharacterType type =(CharacterType) j["player"]["type"];
+        if(type == CharacterType::Mario){
+            character = new Mario(pos);
+            selectedCharacter = CharacterType::Mario;
+
+        }
+        else if (type == CharacterType::Luigi){
+            character = new Luigi(pos);
+            selectedCharacter = CharacterType::Luigi;
+        }
+    character->setCharacterState((CharacterStateType)j["player"]["state"]);
+    character->setActionState((ActionState)j["player"]["action"]);
+    character->setDirection((Direction)j["player"]["direction"]);
+
+    // Load HUD
+    hud = new HUD(level);
+    hud->setScore(j["hud"]["score"]);
+    hud->setCoins(j["hud"]["coins"]);
+    hud->setLives(j["hud"]["lives"]);
+    hud->setTime(j["hud"]["time"]);
 }

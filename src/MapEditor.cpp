@@ -301,7 +301,7 @@ void MapEditor::handleInput() {
 
 void MapEditor::update(float deltatime) {
     back_button->update(deltatime);
-    Singleton<SoundManager>::getInstance().updateMusic();
+    Singleton<SoundManager>::getInstance().updateMusic(deltatime);
     Map::update(true);
     saveFileNoti_timer.update(deltatime);
     tilePicking_button->update(deltatime);

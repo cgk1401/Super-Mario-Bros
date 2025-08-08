@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <functional>
+#include <sstream>
 using namespace std;
 #define MAX_COLUMN 220
 
@@ -267,8 +268,8 @@ void Map::draw(bool isEditing) {
 
         for (int x = 0; x < rows; x++) {
             for (int y = 0; y < columns; y++) {
+               
                 int id = layer.mapData[x][y].tileID;
-
                 auto it = tileCatalog.find(id);
                 if (id && it != tileCatalog.end()) {
                     Texture2D tileTexture = texture;
@@ -317,6 +318,9 @@ void Map::drawLayer(LayerType layertype){
 
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
+                if (x >= layer.mapData.size() || y >= layer.mapData[x].size()) {
+                    continue;
+                }
             int id = layer.mapData[x][y].tileID;
 
             auto it = tileCatalog.find(id);
@@ -435,6 +439,12 @@ void Map::setTile(int row, int col, int tileID, int layerIndex) {
             spawnEnemyCallback(enemyType, spawnPos, it->second.theme);
         }
     }
+    else if(it->second.type == TileType::COIN){
+        Singleton<ItemManager>::getInstance().Spawn(ItemType::COIN, {(float) col * TILE_SIZE, (float) row * TILE_SIZE});
+    }
+    else if(it->second.type == TileType::FIREBAR_BLOCK){
+        Singleton<ItemManager>::getInstance().Spawn(ItemType::FIRE_BAR, {(float) col * TILE_SIZE + TILE_SIZE / 3, (float) row * TILE_SIZE + TILE_SIZE / 3});
+    }
     layers.at(layerIndex).mapData[row][col].tileID = tileID;
 }
 
@@ -538,9 +548,8 @@ void Map::loadFromFile(const char* filename, bool isEditing) {
     }
     int fileRows, fileCols;
     MyReadFile >> fileRows >> fileCols;
-    //cout << fileCols << endl;
     int loadCols = isEditing ? MAX_COLUMN : fileCols;
-    initMap(fileRows, loadCols); // Re-initialize map with new dimensions
+    initMap(fileRows, loadCols);
     columns = loadCols;
 
     cout << "FILE COLS: " << fileCols << endl;
@@ -556,16 +565,6 @@ void Map::loadFromFile(const char* filename, bool isEditing) {
                     try {
                         int tileID = stoi(s);
                         setTile(x, y, tileID, i);
-                        int id = layers[i].mapData[x][y].tileID;
-                        auto it = tileCatalog.find(id);
-                        if (id && it != tileCatalog.end()) {
-                            if(it->second.type == TileType::COIN){
-                                Singleton<ItemManager>::getInstance().Spawn(ItemType::COIN, {(float) y * TILE_SIZE, (float) x * TILE_SIZE});
-                            }
-                            else if(it->second.type == TileType::FIREBAR_BLOCK){
-                                Singleton<ItemManager>::getInstance().Spawn(ItemType::FIRE_BAR, {(float) y * TILE_SIZE + TILE_SIZE / 3, (float) x * TILE_SIZE + TILE_SIZE / 3});
-                            }
-                        }
                     }
                     catch (const std::out_of_range& e) {
                         cerr << "Out of bounds error at (" << x << "," << y << ") in layer " << i << ": " << e.what() << endl;
@@ -602,9 +601,6 @@ void Map::loadFromFile(const char* filename, bool isEditing) {
     }
     std::cout << "Loaded file successfully: " << filename << endl;
     MyReadFile.close();
-
-    //refactorMapTXT(filename.c_str());
-   
 }
 
 
@@ -615,4 +611,52 @@ MapTheme Map::getMapTheme(pair<int, int> level){
 
 pair<int, int> Map::getLevel() {
     return level;
+}
+
+vector<Layer> Map::getMapData() const{
+    return this->layers;
+}
+void Map::loadMapFromJson(const nlohmann::json& mapJson) {
+    rows = mapJson["row"];
+    columns = mapJson["column"];
+    numberLayers = mapJson["layerCount"];
+
+    initMap(rows, columns);
+
+    for (const auto& layerJson : mapJson["layers"]) {
+        Layer layer;
+        layer.type = (LayerType)layerJson["type"];
+        int typeIdx = (int)  layer.type;
+
+        layers[typeIdx].type = layer.type;
+        layers[typeIdx].visible = layerJson["visible"];
+        layers[typeIdx].hasCollision = layerJson["hasCollision"];
+
+
+        auto mapDataJson = layerJson["data"]; 
+
+        for (int row = 0; row < mapDataJson.size(); row++) {
+            string s = mapDataJson[row];
+            stringstream ss(s);
+            int id;
+            int col = 0;
+            while(ss >> id){
+                 try {
+                        int tileID = stoi(s);
+                        setTile(row, col, id, (int)layer.type);
+                    }
+                    catch (const std::out_of_range& e) {
+                        cerr << "Out of bounds error at (" << row << "," << col << ") in layer " << (int)layer.type << ": " << e.what() << endl;
+                        setTile(row, col, 0, (int)layer.type); 
+                    }
+                    catch (const std::exception& e) {
+                        cerr << "General error at (" << row << "," << col << ") in layer " << (int)layer.type << ": " << e.what() << endl;
+                        setTile(row, col, 0, (int)layer.type); 
+
+                    }
+                ++col;
+            }
+        }
+        layers[typeIdx].mapData_first = layers[typeIdx].mapData;
+    }
 }

@@ -21,7 +21,7 @@ using namespace std;
 class PlayState : public GameState, public Observer{
 public:
     PlayState(pair<int, int> _level = {1,1}, HUD* hud = nullptr, Character* _character = nullptr, const char* _extraMap_filename = nullptr);
-
+    PlayState(const char* filename);
     ~PlayState();
     void handleInput() override;
     void update(float deltatime) override;
@@ -30,14 +30,13 @@ public:
     void ChangeCharacter(CharacterType newtype);
 
     void onNotify(const EventType& event, void* data = nullptr) override;
+    void saveGame(const char* filename);
+
 private:
     HUD* hud;
-    //Map* map;
-    //Manage the level for each world
-    std::map<pair<int, int>, Map*> world; //world[1][1] -> level 1-1'
+    map<pair<int, int>, Map*> world;
     pair<int, int> level = {1, 1};
 
-    //Character* mario = new Mario({100, 200});
     Character* character;
     vector<Enemy*> enemies;
     
@@ -50,7 +49,7 @@ private:
     Timer newRound_countDown;
 
     CutsceneManager cutscene;
-
+    void loadGame(const char* filename);
 };
 
 #endif

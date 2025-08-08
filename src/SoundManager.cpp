@@ -2,7 +2,6 @@
 #include <iostream>
 
 SoundManager::SoundManager() {
-    //cout << "TẠO TẠO TẠO TẠO TẠO\n";
     musicVolume = 0.5f;
     soundVolume = 0.5f;
     load();
@@ -95,7 +94,8 @@ void SoundManager::playMusic(MusicType type, bool loop) {
     currentMusicType = type;
     PlayMusicStream(musics[type]);
     musicPlaying = true;
-
+    musicPlayTime = 0;
+    
     musics[type].looping = loop;
 }
 
@@ -106,9 +106,12 @@ void SoundManager::stopMusic() {
     }
 }
 
-void SoundManager::updateMusic() {
+void SoundManager::updateMusic(float dt) {
     if (musicPlaying)
+    {
         UpdateMusicStream(musics[currentMusicType]);
+        musicPlayTime += dt;
+    }
 }
 
 void SoundManager::continueMusic() {
@@ -126,6 +129,10 @@ MusicType SoundManager::getCurrentMusicType() {
 Music SoundManager::getCurrentMusic() {
     return musics[currentMusicType];
 }
+float SoundManager::getMusicPlayTime(){
+    return musicPlayTime;
+}
+
 
 float SoundManager::getmusicVolume() {
     return this->musicVolume;
@@ -141,6 +148,10 @@ void SoundManager::setvaluemusicVolume(float value) {
 
 void SoundManager::setvaluesoundVolume(float value) {
     this->soundVolume = value;
+}
+void SoundManager::setMusicPlayTime(float _musicPlayTime){
+    musicPlayTime = _musicPlayTime;
+    SeekMusicStream(getCurrentMusic(), musicPlayTime);
 }
 
 void SoundManager::setmusicVolume() {

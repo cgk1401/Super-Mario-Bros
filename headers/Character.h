@@ -50,15 +50,9 @@ public:
 
 	void ChangeState(CharacterStateType newState, CharacterStateType previousState);
 	void ChangeMiddleState(CharacterStateType newState);
-	CharacterState* GetCurrentState() const;
-	virtual CharacterType getCharacterType() = 0;
-	void setActionState(ActionState newActionState);
-	void setDirection(Direction newDirection);
-	ActionState getCurrentAction() const;
-	CharacterStateType getCharacterStateType() const;
 	void DIE(Enemy* e);
 	void onDead();
-
+	
 	void collectCoin();
 	void breakBrick();
 	void killEnemy(EnemyType type, Vector2 enemyPosition);
@@ -67,15 +61,26 @@ public:
 	void moveRight(const float& speed = 2);
 	void moveLeft(const float& speed = 2);
 	void moveDown(const float& speed = 2); //flagpole only
-	void setPosition(Vector2 newPosition);
-	Vector2 getPosition();
+	void setCharacterState(CharacterStateType newState);
 
-	void HandleInput(float dt);
+	void setPosition(Vector2 newPosition);
+	void setActionState(ActionState newActionState);
+	void setDirection(Direction newDirection);
+	
+	ActionState getCurrentAction() const;
+	CharacterStateType getCharacterStateType() const;
+	Vector2 getPosition();
+	Direction getDirection();
+	Rectangle getBound() const override;
+	ObjectType getObjectType() const override;
+	CharacterState* GetCurrentState() const;
+	virtual CharacterType getCharacterType() = 0;
+
 	//Inherit GameObject methods
 	void draw() override;
 	void update(float deltatime) override;
-	Rectangle getBound() const override;
-	ObjectType getObjectType() const override;
+	void HandleInput(float dt);
+	
 
 	void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
 	void onGeneralCollision(Direction collideSide, Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;

@@ -71,7 +71,7 @@ void LevelState::handleInput() {
 	}
 }
 void LevelState::update(float deltatime) {
-	Singleton<SoundManager>::getInstance().updateMusic();
+	Singleton<SoundManager>::getInstance().updateMusic(deltatime);
 	for (auto& button : buttons) {
 		button->update(deltatime);
 	}

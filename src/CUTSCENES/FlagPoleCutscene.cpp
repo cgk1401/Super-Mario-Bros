@@ -29,7 +29,7 @@ void FlagPoleCutscene::handlePhase(float dt){
     case FlagPolePhase::WALK: {
         const float speed = 2;
         player->moveRight(speed);
-        Singleton<SoundManager>::getInstance().updateMusic();
+        Singleton<SoundManager>::getInstance().updateMusic(dt);
        if(elapsedTime > 3.1f){
             player->setActionState(ActionState::Idle);
             currentPhase = FlagPolePhase::INTO_CASTLE;
@@ -37,7 +37,7 @@ void FlagPoleCutscene::handlePhase(float dt){
         break;
     }
     case FlagPolePhase::INTO_CASTLE:
-    Singleton<SoundManager>::getInstance().updateMusic();
+    Singleton<SoundManager>::getInstance().updateMusic(dt);
         hud->generateTimeToCoins();
         if(hud->getTime() <= 0 ){
             elapsedTime = 0;

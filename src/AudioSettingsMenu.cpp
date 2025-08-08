@@ -63,7 +63,7 @@ void AudioSettingsMenu::handleInput() {
 
 void AudioSettingsMenu::update(float deltatime) {
 	backButton->update(deltatime);
-	Singleton<SoundManager>::getInstance().updateMusic();
+	Singleton<SoundManager>::getInstance().updateMusic(deltatime);
 
 	if (draggingMusicSlider) {
 		currentmusicVolume = (GetMousePosition().x - musicSlider.x) * float(1) / musicSlider.width;

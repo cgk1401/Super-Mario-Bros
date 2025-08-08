@@ -44,6 +44,29 @@ void Character::ChangeState(CharacterStateType newState, CharacterStateType prev
 	currentState->SetAnimation(this);
 }
 
+void Character::setCharacterState(CharacterStateType newState) {
+	if (currentState) {
+		delete currentState;
+	}
+	switch (newState)
+	{
+	case CharacterStateType::NormalState:
+		currentState = new NormalState(this);
+		break;
+	case CharacterStateType::SuperState:
+		currentState = new SuperState(this);
+		break;
+	case CharacterStateType::FireState:
+		currentState = new FireState(this);
+		break;
+	case CharacterStateType::StarmanState:
+		currentState = new StarmanState(this, currentState->getStateType());
+		break;
+	default:
+		break;
+	}
+	currentState->SetAnimation(this);
+}
 void Character::ChangeMiddleState(CharacterStateType newState) {
 	CharacterStateType currentstatetype = currentState->getStateType();
 	if (currentState) {
@@ -307,4 +330,9 @@ void Character::onCollideWith(GameObject* object) {
 		}
 
 	}
+}
+
+
+Direction Character::getDirection() {
+	return currentdirection;
 }

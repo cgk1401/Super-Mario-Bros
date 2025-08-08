@@ -53,7 +53,7 @@ public:
     int rows = 12, columns = 16;
     int tileRows, tileColumns; 
     static constexpr int TILE_SIZE = 64;
-    const int numberLayers = 5;
+    int numberLayers = 5;
 
     Map(pair<int, int> level = {1,1},int r = 12, int c = 32);
     virtual ~Map();
@@ -78,5 +78,8 @@ public:
     
     pair<int, int> getLevel();
     void refactorMapTXT(const char* filename);
+
+    vector<Layer> getMapData() const;
+    void loadMapFromJson(const nlohmann::json& mapJson);
 
 };
