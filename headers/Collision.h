@@ -6,11 +6,13 @@ class Map;
 class Mushroom;
 class Star;
 #include "FireBall.h"
-#include "BowserFireBall.h"]
+#include "BowserFireBall.h"
+#include "VerticalLift.h"
 
 class Collision{
 public:
     static void handlePlayerCollision(Character* mario, Map* map, bool hasNotified = false);
+    static void handlePlayer_VerticalLiftCollision(Character* character, VerticalLift* lift);
     static void handleEnemyCollision(Enemy* enemies, Map* map);
     static void handleMushroomCollisionMap(Mushroom* mushroom, Map* map);
     static void handleStarCollision(Star* star, Map* map);

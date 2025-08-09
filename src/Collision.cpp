@@ -94,6 +94,44 @@ void Collision::handlePlayerCollision(Character* player, Map* map, bool hasNotif
     }
 }
 
+void Collision::handlePlayer_VerticalLiftCollision(Character* character, VerticalLift* lift) {
+    Rectangle boundCharacter = character->getBound();
+    Rectangle boundLift = lift->getBound();
+    Rectangle footSensor = character->getFootSensor();
+
+    if (CheckCollisionRecs(boundCharacter, boundLift)) {
+        float overlapX = fmin(boundCharacter.x + boundCharacter.width, boundLift.x + boundLift.width) - fmax(boundCharacter.x, boundLift.x);
+        float overlapY = fmin(boundCharacter.y + boundCharacter.height, boundLift.y + boundLift.height) - fmax(boundCharacter.y, boundLift.y);
+        if (overlapX > 0 && overlapY > 0) {
+            if (overlapY < overlapX) {
+                // Vertical Collision
+                if (character->velocity.y < 0) {
+                    character->position.y += overlapY;
+                    character->isJumpingUp = false;
+                    character->velocity.y = 0;
+                }
+            }
+            else {
+                // horizontal Collision
+                if (character->velocity.x < 0) {
+                    character->position.x += overlapX;
+                }
+                else {
+                    character->position.x -= overlapX;
+                }
+                character->velocity.x = 0;
+            }
+        }
+    }
+
+    if (CheckCollisionRecs(footSensor, boundLift)) {
+        character->position.y = boundLift.y - boundCharacter.height;
+        character->velocity.y = 0;
+        character->isGround = true;
+        character->isJumpingUp = false;
+    }
+}
+
 void Collision::handleEnemyCollision(Enemy* e, Map* map){
 
     e->onGround = false;

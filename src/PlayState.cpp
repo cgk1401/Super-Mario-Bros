@@ -93,6 +93,7 @@ void PlayState::update(float dt){
 
     ///______________________________ENTITIES__________________________________________
     Collision::handlePlayerCollision(character, world[level]);
+    lift->Update(dt);
 
     if (character->getCurrentAction() != ActionState::Die) {
         Singleton<SoundManager>::getInstance().updateMusic();
@@ -145,7 +146,6 @@ void PlayState::update(float dt){
     //        }
     //    }
     //}
-    lift->Update(dt);
     ///______________________________DELETION__________________________________________
     enemies.erase(remove_if(enemies.begin(), enemies.end(),
         [](Enemy* e) {

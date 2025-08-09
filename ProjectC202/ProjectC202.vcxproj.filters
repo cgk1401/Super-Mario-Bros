@@ -255,9 +255,6 @@
     <ClCompile Include="..\src\BowserFireBall.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="VerticalLift.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\VerticalLift.cpp">
       <Filter>Source Files\Entity\Item</Filter>
     </ClCompile>

@@ -186,7 +186,6 @@
     <ClCompile Include="..\src\SuperState.cpp" />
     <ClCompile Include="..\src\TransformState.cpp" />
     <ClCompile Include="..\src\VerticalLift.cpp" />
-    <ClCompile Include="VerticalLift.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Animation.h" />
