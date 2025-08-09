@@ -156,6 +156,7 @@
     <ClCompile Include="..\src\GameState.cpp" />
     <ClCompile Include="..\src\Global.cpp" />
     <ClCompile Include="..\src\GoomBa.cpp" />
+    <ClCompile Include="..\src\Horizontal.cpp" />
     <ClCompile Include="..\src\HUD.cpp" />
     <ClCompile Include="..\src\ItemManager.cpp" />
     <ClCompile Include="..\src\KoopaDeathEffect.cpp" />
@@ -220,12 +221,14 @@
     <ClInclude Include="..\headers\GameState.h" />
     <ClInclude Include="..\headers\Global.h" />
     <ClInclude Include="..\headers\GoomBa.h" />
+    <ClInclude Include="..\headers\Horizontal.h" />
     <ClInclude Include="..\headers\HUD.h" />
     <ClInclude Include="..\headers\Item.h" />
     <ClInclude Include="..\headers\ItemManager.h" />
     <ClInclude Include="..\headers\KoopaDeathEffect.h" />
     <ClInclude Include="..\headers\KoopaTroopa.h" />
     <ClInclude Include="..\headers\LevelState.h" />
+    <ClInclude Include="..\headers\Lift.h" />
     <ClInclude Include="..\headers\Luigi.h" />
     <ClInclude Include="..\headers\Map.h" />
     <ClInclude Include="..\headers\MapEditor.h" />

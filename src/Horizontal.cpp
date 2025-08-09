@@ -1,24 +1,26 @@
-#include "../headers/VerticalLift.h"
+#include "../headers/Horizontal.h"
 #include "../headers/Global.h"
 #include "../headers/Singleton.h"
 #include "../headers/TextureManager.h"
 #include "../headers/Character.h"
 #include "../headers/Collision.h"
 
-VerticalLift::VerticalLift() : Lift(){
+Horizontal::Horizontal() : Lift() {
 	LoadSource();
-	this->destinationAbove = this->position.y - distance;
-	this->destinationBelow = this->position.y + distance;
+	SetDestination();
 }
 
-VerticalLift::VerticalLift(Vector2 position) : Lift(position) {
+Horizontal::Horizontal(Vector2 position) : Lift(position) {
 	LoadSource();
-	this->destinationAbove = this->position.y - distance;
-	this->destinationBelow = this->position.y + distance;
-
+	SetDestination();
 }
 
-void VerticalLift::LoadSource() {
+void Horizontal::SetDestination() {
+	this->destinationLeft = this->position.x - distance;
+	this->destinationRight = this->position.y + distance;
+}
+
+void Horizontal::LoadSource() {
 	texture = Singleton<TextureManager>::getInstance().load(TextureType::ITEM);
 
 	animations.currentframe = 0;
@@ -29,33 +31,32 @@ void VerticalLift::LoadSource() {
 	bound = { position.x, position.y, animations.getcurrentframe().width * scale, animations.getcurrentframe().height * scale };
 }
 
-void VerticalLift::Update(float deltatime) {
-	if (movingDown) {
-		this->velocity.y = speedY;
+void Horizontal::Update(float deltatime) {
+	if (movingLeft) {
+		this->velocity.x = speedX;
 	}
-	else if (!movingDown) {
-		this->velocity.y = -speedY;
+	else if (!movingLeft) {
+		this->velocity.x = -speedX;
 	}
 
 	position.x += velocity.x * deltatime;
 	position.y += velocity.y * deltatime;
 	bound = { position.x, position.y, animations.getcurrentframe().width * scale, animations.getcurrentframe().height * scale };
 
-	if (position.y <= destinationAbove || position.y >= destinationBelow) {
-		movingDown = !movingDown;
+	if (position.x <= destinationLeft|| position.x >= destinationRight) {
+		movingLeft = !movingLeft;
 	}
 
 	Collision::handlePlayer_VerticalLiftCollision(Global::character, this);
 }
 
-
-void VerticalLift::Draw() {
+void Horizontal::Draw() {
 	Rectangle currentframe = animations.getcurrentframe();
 	bound = { position.x, position.y, animations.getcurrentframe().width * scale, animations.getcurrentframe().height * scale };
 
 	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
 }
 
-Rectangle VerticalLift::getBound() {
+Rectangle Horizontal::getBound() {
 	return this->bound;
 }

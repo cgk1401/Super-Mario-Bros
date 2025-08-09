@@ -22,7 +22,7 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud) {
     }
     
     Global::character = character;
-    lift = new VerticalLift({ 500, 700 });
+    lift = new Horizontal({ 500, 700 });
 
     level = _level;
     Global::level = _level;

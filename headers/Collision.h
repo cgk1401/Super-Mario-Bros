@@ -5,14 +5,16 @@ class Enemy;
 class Map;
 class Mushroom;
 class Star;
-#include "FireBall.h"
-#include "BowserFireBall.h"
-#include "VerticalLift.h"
+class BowserFireBall;
+class Lift;
+class FireBall;
+#include <vector>
+using namespace std;
 
 class Collision{
 public:
     static void handlePlayerCollision(Character* mario, Map* map, bool hasNotified = false);
-    static void handlePlayer_VerticalLiftCollision(Character* character, VerticalLift* lift);
+    static void handlePlayer_VerticalLiftCollision(Character* character, Lift* lift);
     static void handleEnemyCollision(Enemy* enemies, Map* map);
     static void handleMushroomCollisionMap(Mushroom* mushroom, Map* map);
     static void handleStarCollision(Star* star, Map* map);

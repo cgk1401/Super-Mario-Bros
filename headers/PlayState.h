@@ -16,6 +16,7 @@
 #include "../headers/FireBar.h"
 #include "CUTSCENES/CutSceneManager.h"
 #include "VerticalLift.h"
+#include "Horizontal.h"
 
 using namespace std;
 
@@ -52,7 +53,7 @@ private:
 
     CutsceneManager cutscene;
 
-    VerticalLift* lift;
+    Horizontal* lift;
 };
 
 #endif

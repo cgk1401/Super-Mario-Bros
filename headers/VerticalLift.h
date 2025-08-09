@@ -1,33 +1,26 @@
 #pragma once
+#include "Lift.h"
 
-#include <raylib.h>
-#include "Animation.h"
 using namespace std;
 
-class VerticalLift {
+class VerticalLift : public Lift {
 private :
-	Texture2D texture;
-	Animation animations;
-	Vector2 velocity;
-	Vector2 position;
-	Rectangle bound;
-
 	const float speedY = 60.0f;
 	const float scale = 3.0f;
 
 	const float distance = 120.0f;
 	float destinationBelow;
 	float destinationAbove;
-	bool moveingDown = true;
+	bool movingDown = true;
 
 public :
 	VerticalLift();
 	VerticalLift(Vector2 position);
 
-	~VerticalLift() { UnloadTexture(texture); }
+	~VerticalLift() override {};
 
-	void LoadSource();
-	void Update(float deltatime);
-	void Draw();
-	Rectangle getBound();
+	void LoadSource() override;
+	void Update(float deltatime) override;
+    void Draw() override;
+    Rectangle getBound() override;
 };

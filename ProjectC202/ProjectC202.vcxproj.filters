@@ -258,6 +258,9 @@
     <ClCompile Include="..\src\VerticalLift.cpp">
       <Filter>Source Files\Entity\Item</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\Horizontal.cpp">
+      <Filter>Source Files\Entity\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -468,6 +471,12 @@
       <Filter>Header Files\Entity\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\VerticalLift.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Lift.h">
+      <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Horizontal.h">
       <Filter>Header Files\Entity\Item</Filter>
     </ClInclude>
   </ItemGroup>
