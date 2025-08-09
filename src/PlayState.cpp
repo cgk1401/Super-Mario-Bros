@@ -123,7 +123,6 @@ void PlayState::update(float dt){
     }
 
     //______________________________COLLISION DETECTION____________________________
-    
     ///______________________________WOLRD__________________________________________
     camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
     Global::camera = camera.getCamera();
@@ -136,10 +135,12 @@ void PlayState::update(float dt){
     for(auto& e: enemies){
         if(e->isActive()) {
             //Follow player
-            // if(character->position.x > e->position.x + 50){
-            //     e->changeDirection(Direction::Right);
-            // }
-            // else  e->changeDirection(Direction::Left);
+            if(e->FollowPlayer()){
+                if(character->position.x > e->position.x + 50){
+                    e->changeDirection(Direction::Right);
+                }
+                else  e->changeDirection(Direction::Left);
+            }
             e->update(dt);
         }
     }
@@ -162,11 +163,11 @@ void PlayState::update(float dt){
     Collision::handleMultipleObjectCollisions(allObjects);
 
     ///______________________________ENTITIES__________________________________________
+    Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
     if (character->getCurrentAction() != ActionState::Die) {
         Singleton<SoundManager>::getInstance().updateMusic(dt);
         if(character->getCharacterStateType() !=  CharacterStateType::TransformState) character->HandleInput(dt);
         hud->update(dt); 
-        Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
         character->update(dt);
     }
     else {
@@ -190,7 +191,10 @@ void PlayState::update(float dt){
     }
     Singleton<EffectManager>::getInstance().update(dt);
 
+    Global::character = character;
     
+
+
 
     ///______________________________DELETION__________________________________________
       enemies.erase(remove_if(enemies.begin(), enemies.end(),
@@ -367,6 +371,7 @@ void PlayState::loadGame(const char* filename) {
             character = new Luigi(pos);
             selectedCharacter = CharacterType::Luigi;
         }
+    Global::character = character;
     character->setCharacterState((CharacterStateType)j["player"]["state"]);
     character->setActionState((ActionState)j["player"]["action"]);
     character->setDirection((Direction)j["player"]["direction"]);

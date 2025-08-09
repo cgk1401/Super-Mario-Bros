@@ -23,7 +23,7 @@ public:
 	
 
 	virtual bool isActive() const;
-
+	virtual bool FollowPlayer() const;
 	//_______Inherit GameObject_________
 	virtual void draw() override = 0;
 	virtual void update(float deltatime) override = 0;

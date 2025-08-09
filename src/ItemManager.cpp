@@ -31,7 +31,7 @@ ItemManager::~ItemManager() {
     items.clear();  
 }
 
-void ItemManager::Spawn(ItemType type, Vector2 position) {
+void ItemManager::Spawn(ItemType type, Vector2 position, void* extra_data) {
     Item* item = nullptr;
     switch (type) {
         case ItemType::MUSHROOM:
@@ -44,6 +44,12 @@ void ItemManager::Spawn(ItemType type, Vector2 position) {
             item = new Coin(position, coinAni); break;
         case ItemType::FIRE_BAR:
             item = new FireBar(position, firebarAni); break;
+        case ItemType::BOWSER_FIRE_BALL:{
+            float* positionDestinationY = static_cast<float*>(extra_data);
+            if(positionDestinationY) 
+                item = new BowserFireBall(position, *positionDestinationY);
+            break;
+        }
     }
     if (item) {
         if(auto f = dynamic_cast<FireBar*>(item)){

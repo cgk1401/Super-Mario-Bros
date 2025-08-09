@@ -22,6 +22,7 @@ Texture2D resizedImage(const char* imagePath, float width, float height);
 class Map;
 class Enemy;
 class GameObject;
+class Character;
 
 constexpr Color DARK_BLUE = { 22, 72, 159, 255 };
 
@@ -97,6 +98,7 @@ enum class ItemType {
 	FLOWER = 3,
 	STAR = 4,
 	FIRE_BAR = 5,
+	BOWSER_FIRE_BALL,
 };
 
 enum class DeathType
@@ -106,11 +108,15 @@ enum class DeathType
 	SHELL_HIT,
 	FIREBALL_HIT,
 };
+
+//extern Character* globalcharacter;
+
 class Global {
 public:
     static Map* map;
 	static Camera2D camera;
 	static pair<int,int> level;
+	static Character* character;
 };
 
 bool operator==(pair<int, int> a, pair<int,int>b);

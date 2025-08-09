@@ -226,6 +226,7 @@ void Character::update(float deltatime) {
 	if(position.y > screenHeight + 10) onDead();
 }
 void Character::onDead(){
+	if (currentAction == ActionState::Die) return;
 	Singleton<EffectManager>::getInstance().marioDead(this->position, texture, animations[ActionState::Die].getcurrentframe());
 	Singleton<SoundManager>::getInstance().play(SoundType::DIE);
 	currentAction = ActionState::Die;
@@ -251,8 +252,9 @@ void Character::breakBrick(){
 }
 
 void Character::killEnemy(EnemyType type, Vector2 enemyPosition){
-	if(type == EnemyType::GOOMBA) notify(EventType::ENEMY_KILL_GOOMBA, &enemyPosition);
-	else if(type == EnemyType::KOOPA) notify(EventType::ENEMY_KILL_KOOPA, &enemyPosition);
+	if (type == EnemyType::GOOMBA) notify(EventType::ENEMY_KILL_GOOMBA, &enemyPosition);
+	else if (type == EnemyType::KOOPA) notify(EventType::ENEMY_KILL_KOOPA, &enemyPosition);
+	else if (type == EnemyType::REDKOOPA) notify(EventType::ENEMY_KILL_KOOPA, &enemyPosition);
 }
 
 void Character::collectItem(ItemType type, Vector2 itemPosition)

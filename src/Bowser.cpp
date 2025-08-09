@@ -1,6 +1,8 @@
-#include "../headers/Bowser.h"
+﻿#include "../headers/Bowser.h"
 #include "../headers/TextureManager.h"
-
+#include "../headers/SoundManager.h"
+#include "../headers/Collision.h"
+#include "ItemManager.h"
 Bowser::Bowser():Enemy(){
 	this->position = { 150, 900 };
 	LoadSource();
@@ -12,20 +14,37 @@ Bowser::Bowser(Vector2 position, MapTheme theme) : Enemy() {
 	LoadSource();
 }
 
-Bowser::~Bowser() {}
+Bowser::~Bowser() {
+	// for (auto it : fireballs) {
+	// 	delete it;
+	// }
+}
 
 void Bowser::LoadSource() {
-	cout << "Bowser-------------\n";
-	cout << "Position Bowser " << position.x << ":" << position.y << endl;
 	texture = Singleton<TextureManager>::getInstance().load(TextureType::ENEMY);
 
-	animations.frame.push_back({ 0 + (float)theme * 146, 208, 32, 32 });
-	animations.frame.push_back({ 34 + (float)theme * 146, 208, 32, 32});
-	animations.frame.push_back({ 68 + (float)theme * 146, 208, 32, 32 });
-	animations.frame.push_back({ 102 + (float)theme * 146, 208, 32, 32 });
+	// OVERWORLD, UNDERGROUND && CASTLE, UNDERWATER
+	if (theme == MapTheme::OVERWORLD) {
+		animations.frame.push_back({ 0, 208, 32, 32 });
+		animations.frame.push_back({ 34, 208, 32, 32 });
+		animations.frame.push_back({ 68, 208, 32, 32 });
+		animations.frame.push_back({ 102, 208, 32, 32 });
+	}
+	else if (theme == MapTheme::UNDERGROUND || theme == MapTheme::CASTLE) {
+		animations.frame.push_back({ 0 + 146, 208, 32, 32 });
+		animations.frame.push_back({ 34 + 146, 208, 32, 32 });
+		animations.frame.push_back({ 68 + 146, 208, 32, 32 });
+		animations.frame.push_back({ 102 + 146, 208, 32, 32 });
+	}
+	else if (theme == MapTheme::UNDERWATER) {
+		animations.frame.push_back({ 0 + 2 * 146, 208, 32, 32 });
+		animations.frame.push_back({ 34 + 2 * 146, 208, 32, 32 });
+		animations.frame.push_back({ 68 + 2 * 146, 208, 32, 32 });
+		animations.frame.push_back({ 102 + 2 * 146, 208, 32, 32 });
+	}
 	animations.currentframe = 0;
 	animations.currenttime = 0.0f;
-	animations.durationtime = 0.1f;
+	animations.durationtime = 0.3f;
 }
 
 void Bowser::draw() {
@@ -34,14 +53,90 @@ void Bowser::draw() {
 	
 	Rectangle dest = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
 	DrawTexturePro(texture, currentframe, dest, { 0,0 }, 0, WHITE);
+
 }
 
 void Bowser::update(float deltatime) {
 	animations.Update(deltatime);
+
+	//Follow player?
+	// if (this->position.x < Global::character->getPosition().x) {
+	// 	this->direction = Direction::Right;
+	// }
+
+	if (direction == Direction::Right) {
+		velocity.x = 0;
+	}
+	else if (direction == Direction::Left) {
+		jumpTimer += deltatime;
+
+		if (onGround && jumpTimer >= jumpCooldown) {
+			Jump();
+			jumpTimer = 0.0f;
+		}
+
+		if (movingRight) {
+			velocity.x = moveSpeed;
+		}
+		else {
+			velocity.x = -moveSpeed;
+		}
+
+		moved += fabs(velocity.x * deltatime);
+
+		if (moved >= moveDistance) {
+			movingRight = !movingRight;
+			moved = 0.0f;
+			if (onGround) {
+				Jump();
+				jumpTimer = 0.0f;
+			}
+		}
+		CreateFireBalls(deltatime);
+	}
+
+
+	if (!onGround) {
+		velocity.y += 800.0f * deltatime;
+	}
+	else {
+		velocity.y = 0;
+	}
+
+	/*if (movingRight) {
+		velocity.x = moveSpeed;
+	}
+	else {
+		velocity.x = -moveSpeed;
+	}
+
+	moved += fabs(velocity.x * deltatime);
+
+	if (moved >= moveDistance) {
+		movingRight = !movingRight;
+		moved = 0.0f;
+		if (onGround) {
+			Jump();
+			jumpTimer = 0.0f;
+		}
+	}*/
+	
+
+	position.x += velocity.x * deltatime;
+	position.y += velocity.y * deltatime;
+
+	// Rectangle currentFrame = animations.getcurrentframe();
+	// bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
+
+	/*CreateFireBalls(deltatime);*/
+
+	//Collision::handleEnemyCollision(this, map);
+
 }
 
-void Bowser::onDeath(DeathType type, Character* player)
-{
+void Bowser::onDeath(DeathType type, Character* player) {
+	animations.durationtime = 0.1f;
+	Singleton<SoundManager>::getInstance().play(SoundType::BOWSERFALL);
 }
 
 bool Bowser::isDead() {
@@ -66,4 +161,19 @@ Rectangle Bowser::getBound() const {
 
 void Bowser::onCollideWith(GameObject* object) {
 	
+}
+void Bowser::Jump() {
+	velocity.y = jumpForce;
+	onGround = false;
+}
+
+void Bowser::CreateFireBalls(float deltatime) {
+	fireBreathTimer += deltatime;
+	
+	if (fireBreathTimer >= fireBreathCooldown) {
+		fireBreathTimer = 0.0f;
+		float posY = Global::character->getPosition().y;
+		Singleton<ItemManager>::getInstance().Spawn(ItemType::BOWSER_FIRE_BALL, position, &posY);
+		Singleton<SoundManager>::getInstance().play(SoundType::BOWSERFIREBALL);
+	}
 }

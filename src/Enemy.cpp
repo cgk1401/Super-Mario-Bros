@@ -20,6 +20,10 @@ bool Enemy::isActive() const {
 		);
 }
 
+bool Enemy::FollowPlayer() const {
+	return false;
+}
+
 ObjectType Enemy::getObjectType() const {
 	return ObjectType::ENEMY;
 }

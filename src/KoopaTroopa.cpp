@@ -108,7 +108,6 @@ void KoopTroopa::update(float deltatime) {
 }
 
 void KoopTroopa::moveLeft() {
-
 	if (currentState == KoopaState::Walk || currentState == KoopaState::RedWalk) {
 		velocity.x = -walkSpeed * GetFrameTime();
 	}
@@ -216,5 +215,41 @@ void KoopTroopa::onCollideWith(GameObject* object) {
 			this->direction = Direction::Left;
 		}
 		else this->direction = Direction::Right;
+	}
+}
+
+
+void KoopTroopa::onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) {
+	Enemy::onFootCollision(tile, row, col, map, tileInstance);
+	
+	if (getType() == EnemyType::REDKOOPA) {
+		int checkTileX, checkTileY;
+		Rectangle bound = getBound();
+		if (direction == Direction::Right) {
+			checkTileX = (int)((position.x + bound.width) / Map::TILE_SIZE);
+		}
+		else if (direction == Direction::Left) {
+			checkTileX = (int)((position.x) / Map::TILE_SIZE);
+		}
+		else {
+			return;
+		}
+
+		checkTileY = (int)((bound.y + bound.height + 1) / Map::TILE_SIZE);
+
+		if (checkTileX < 0 || checkTileX >= map->columns || checkTileY < 0 || checkTileY >= map->rows) {
+			return;
+		}
+
+		Tile groundTile = map->getTile(checkTileY, checkTileX, tile.layerType);
+
+		if (!groundTile.behavior->isSolid()) {
+			if (direction == Direction::Right) {
+				changeDirection(Direction::Left);
+			}
+			else {
+				changeDirection(Direction::Right);
+			}
+		}
 	}
 }

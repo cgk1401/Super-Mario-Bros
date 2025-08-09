@@ -14,7 +14,7 @@ enum class KoopaState {
 	RedDie,
 };
 
-class KoopTroopa : public Enemy {
+class KoopTroopa : public Enemy{
 	friend class Collision;
 private :
 	map <KoopaState, Animation> animation;
@@ -46,6 +46,7 @@ public :
 
 	EnemyType getType() const;
 	Rectangle getBound() const override;
+	void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
     void onCollideWith(GameObject* object) override;
 
 };

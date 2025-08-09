@@ -2,8 +2,8 @@
 #include <iostream>
 
 SoundManager::SoundManager() {
-    musicVolume = 0.5f;
-    soundVolume = 0.5f;
+    musicVolume = 0.3f;
+    soundVolume = 0.3f;
     load();
     setmusicVolume();
     setsoundVolume();
@@ -25,6 +25,7 @@ void SoundManager::load() {
 	sounds[SoundType::ITEMCOLLECT] = LoadSound("../assets/sfx/item.wav");
 	sounds[SoundType::HURRYUP] = LoadSound("../assets/sfx/hurryup.wav");
 	sounds[SoundType::FIREBALL] = LoadSound("../assets/sfx/fireball.wav");
+    sounds[SoundType::BOWSERFIREBALL] = LoadSound("../assets/sfx/bowserfire.wav");
 	sounds[SoundType::FLAGPOLE] = LoadSound("../assets/sfx/flagpole.wav");
 	sounds[SoundType::PIPEDOWN] = LoadSound("../assets/sfx/pipepowerdown.wav");
     sounds[SoundType::STOMP_AND_SWIM] = LoadSound("../assets/sfx/stompswim.wav");

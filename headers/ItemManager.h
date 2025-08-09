@@ -1,6 +1,7 @@
 #include "../headers/Mushroom.h"
 #include "../headers/Star.h"
 #include "../headers/Flower.h"
+#include "BowserFireBall.h"
 
 template <typename T>
 class Singleton;
@@ -21,7 +22,7 @@ private:
     ItemManager();
     ~ItemManager();
 public:
-    void Spawn(ItemType type, Vector2 position);
+    void Spawn(ItemType type, Vector2 position, void* extra_data = nullptr);
     void Update(float dt, Character* player, Map* map);
     void DrawHiddenItem();
     void Draw();
