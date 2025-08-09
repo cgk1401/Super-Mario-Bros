@@ -63,6 +63,7 @@ void Character::setCharacterState(CharacterStateType newState) {
 		currentState = new StarmanState(this, currentState->getStateType());
 		break;
 	default:
+		currentState = new NormalState(this);
 		break;
 	}
 	currentState->SetAnimation(this);

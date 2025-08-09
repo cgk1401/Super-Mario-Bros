@@ -69,7 +69,7 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, co
     bg.addLayer("../assets/Map/Layers/far.png", { 0, 55 , 144, 108 }, 0.1, 9.2);
     bg.addLayer("../assets/Map/Layers/middle.png", { 0, 55 , 144, 108 }, 0.2, 9.2);
     
-    //fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
+    fg.addLayer("../assets/Map/Layers/foreground.png", { 0, 34 , 176, 132 }, 0.01, 7);
     PauseButton = new Button("../assets/GUI/Pause Button.png", screenWidth * 0.03f, screenHeight * 0.02f, 75, 75, "", WHITE, 40);
 
    if(level.first >= 1 || !_extraMap_filename) cutscene.play(new ScreenEffectCutscene(SreenType::NONE, BLACK, 3, TextFormat("ROUND %d - %d\n Lives: x%d", level.first, level.second, hud->getLives())));
@@ -121,14 +121,14 @@ void PlayState::update(float dt){
         cutscene.update(dt);
         return;
     }
-
+    
     //______________________________COLLISION DETECTION____________________________
     ///______________________________WOLRD__________________________________________
     camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
     Global::camera = camera.getCamera();
     PauseButton->update(dt);
     bg.update({character->getBound().x, character->getBound().y},camera.getCamera(), dt);
-    //fg.update( mario,camera.getCamera(), dt);
+    fg.update( {character->getBound().x, character->getBound().y},camera.getCamera(), dt);
     world[level]->update();
 
     
@@ -144,6 +144,7 @@ void PlayState::update(float dt){
             e->update(dt);
         }
     }
+    
     vector<GameObject*> allObjects;
     allObjects.push_back(character);
     allObjects.insert(allObjects.end(), enemies.begin(), enemies.end());
@@ -210,7 +211,10 @@ void PlayState::update(float dt){
 
 void PlayState::render() {
     ///______________________________WORLD__________________________________________
+
     BeginMode2D(camera.getCamera());
+    //bg.draw();
+
     world[level]->drawLayer(LayerType::BACKGROUND);
     Singleton<EffectManager>::getInstance().drawHiddenEffects();
     Singleton<ItemManager>::getInstance().DrawHiddenItem();
