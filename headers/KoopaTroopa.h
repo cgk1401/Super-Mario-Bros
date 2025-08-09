@@ -34,14 +34,19 @@ public :
 	~KoopTroopa() override;
 
 	void LoadSource() override;
-	void Draw() override;
-	void Update(float deltatime, Map* map) override;
+	
 	void onDeath(DeathType type, Character* player = nullptr) override;
 	bool isDead() override;
 
 	void moveLeft();
 	void moveRight();
 	void Fall();
-	
-	EnemyType getType() const override;
+	void draw() override;
+	void update(float deltatime) override;
+
+	EnemyType getType() const;
+	Rectangle getBound() const override;
+	void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
+    void onCollideWith(GameObject* object) override;
+
 };

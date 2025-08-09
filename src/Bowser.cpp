@@ -2,7 +2,7 @@
 #include "../headers/TextureManager.h"
 #include "../headers/SoundManager.h"
 #include "../headers/Collision.h"
-
+#include "ItemManager.h"
 Bowser::Bowser():Enemy(){
 	this->position = { 150, 900 };
 	LoadSource();
@@ -15,9 +15,9 @@ Bowser::Bowser(Vector2 position, MapTheme theme) : Enemy() {
 }
 
 Bowser::~Bowser() {
-	for (auto it : fireballs) {
-		delete it;
-	}
+	// for (auto it : fireballs) {
+	// 	delete it;
+	// }
 }
 
 void Bowser::LoadSource() {
@@ -47,24 +47,17 @@ void Bowser::LoadSource() {
 	animations.durationtime = 0.3f;
 }
 
-void Bowser::Draw() {
+void Bowser::draw() {
 	Rectangle currentframe = animations.getcurrentframe();
 	currentframe.width = direction == Direction::Left ? abs(currentframe.width) : -abs(currentframe.width);
 	
-	bound = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
-	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
-	
-	DrawFireBreath();
+	Rectangle dest = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
+	DrawTexturePro(texture, currentframe, dest, { 0,0 }, 0, WHITE);
+
 }
 
-void Bowser::Update(float deltatime, Map* map) {
+void Bowser::update(float deltatime) {
 	animations.Update(deltatime);
-
-	UpdateFireBreath(deltatime);
-
-	if (this->position.x < Global::character->getPosition().x) {
-		this->direction = Direction::Right;
-	}
 
 	if (direction == Direction::Right) {
 		velocity.x = 0;
@@ -105,35 +98,8 @@ void Bowser::Update(float deltatime, Map* map) {
 		velocity.y = 0;
 	}
 
-	/*if (movingRight) {
-		velocity.x = moveSpeed;
-	}
-	else {
-		velocity.x = -moveSpeed;
-	}
-
-	moved += fabs(velocity.x * deltatime);
-
-	if (moved >= moveDistance) {
-		movingRight = !movingRight;
-		moved = 0.0f;
-		if (onGround) {
-			Jump();
-			jumpTimer = 0.0f;
-		}
-	}*/
-	
-
 	position.x += velocity.x * deltatime;
 	position.y += velocity.y * deltatime;
-
-	Rectangle currentFrame = animations.getcurrentframe();
-	bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
-
-	/*CreateFireBalls(deltatime);*/
-
-	Collision::handleEnemyCollision(this, map);
-
 }
 
 void Bowser::onDeath(DeathType type, Character* player) {
@@ -149,15 +115,24 @@ EnemyType Bowser::getType() const {
 	return EnemyType::BOWSER;
 }
 
+
+Rectangle Bowser::getBound() const {
+	Rectangle frame = animations.getcurrentframe();
+	float delta = 2.0f; //narrow the width
+	return {
+		position.x + delta,
+		position.y,
+		frame.width * scale - delta * 2,
+		frame.height * scale
+	};
+}
+
+void Bowser::onCollideWith(GameObject* object) {
+	
+}
 void Bowser::Jump() {
 	velocity.y = jumpForce;
 	onGround = false;
-}
-
-void Bowser::DrawFireBreath() {
-	for (auto& it : fireballs) {
-		it->Draw();
-	}
 }
 
 void Bowser::CreateFireBalls(float deltatime) {
@@ -165,39 +140,8 @@ void Bowser::CreateFireBalls(float deltatime) {
 	
 	if (fireBreathTimer >= fireBreathCooldown) {
 		fireBreathTimer = 0.0f;
-		fireballs.push_back(new BowserFireBall({ position.x, position.y }, Global::character->getPosition().y));
+		float posY = Global::character->getPosition().y;
+		Singleton<ItemManager>::getInstance().Spawn(ItemType::BOWSER_FIRE_BALL, position, &posY);
 		Singleton<SoundManager>::getInstance().play(SoundType::BOWSERFIREBALL);
-		
 	}
 }
-
-void Bowser::UpdateFireBreath(float deltatime) {
-	for (auto& it : fireballs) {
-		it->Update(deltatime);
-	}
-	CheckCollisionWithCharacter();
-	RemoveFireBreath();
-}
-
-void Bowser::CheckCollisionWithCharacter() {
-	for (auto it : fireballs) {
-		Collision::handleBowserball_CharacterCollision(it, Global::character);
-	}
-}
-
-void Bowser::RemoveFireBreath() {
-	for (auto it = fireballs.begin(); it != fireballs.end();) {
-		if ((*it)->getIsActive() == false) {
-			delete* it;
-			it = fireballs.erase(it);
-		}
-		else {
-			it++;
-		}
-	}
-}
-
-vector<BowserFireBall*> Bowser::getBowserFireball() {
-	return this->fireballs;
-}
-

@@ -8,20 +8,14 @@ class Star;
 class BowserFireBall;
 class Lift;
 class FireBall;
+#include "GameObject.h"
 #include <vector>
+
 using namespace std;
 
 class Collision{
 public:
-    static void handlePlayerCollision(Character* mario, Map* map, bool hasNotified = false);
-    static void handlePlayer_LiftCollision(Character* character, Lift* lift);
-    static void handleEnemyCollision(Enemy* enemies, Map* map);
-    static void handleMushroomCollisionMap(Mushroom* mushroom, Map* map);
-    static void handleStarCollision(Star* star, Map* map);
-    static void handleFireBallCollisionMap(FireBall* fire, Map* map);
-    
-    static void handleEnemy_EnemyCollison(vector<Enemy*>& enemies);
-    static void handlePlayer_EnemyCollision(Character* player, vector<Enemy*>& enemies);
-    static void handleFireball_EnemyCollision(FireBall* fireball, vector<Enemy*> enemies);
-    static void handleBowserball_CharacterCollision(BowserFireBall* bowserfireball, Character* character);
+    static void handleMapCollision(GameObject* object, Map* map);
+    static void handleObjectsCollision(GameObject* a, GameObject* b);
+    static void handleMultipleObjectCollisions(vector<GameObject*>& objects);
 };

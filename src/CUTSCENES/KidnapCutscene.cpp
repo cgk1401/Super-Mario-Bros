@@ -2,6 +2,7 @@
 #include "CUTSCENES/ScreenEffectCutscene.h"
 #include "Global.h"
 #include "cmath"
+#include "Character.h"
 #define SCALE 5.0f
 //Set states
 template <typename T>
@@ -130,12 +131,13 @@ void UFOInvader::draw(){
 
 
 //_______________________Kidnap Cutscene_________________________
-KidnapCutscene::KidnapCutscene(){
+KidnapCutscene::KidnapCutscene(Map* _map, Character* _character){
+    emojiTexture = LoadTexture("../assets/Cutscene/Kidnap/surprised emoji.png");
     princess.position = {500, 680};
     ufo.position = {550, 470};
     camera.init({0,0});
-    map = new Map({1,1});
-    map->loadFromFile({1,1});
+    map = _map;
+    character = _character;
 
     for(int i = 0; i < 4; i++) help_Ani.frame.push_back({136 +(float) i * 40, 24, 32, 16});
     help_Ani.durationtime = 0.1f;
@@ -144,6 +146,10 @@ KidnapCutscene::KidnapCutscene(){
     blackScene[0] = {-1, -screenHeight - 1, screenWidth, screenHeight};
     blackScene[1] = {0, screenHeight + 1, screenWidth, screenHeight};
     start = false;
+    princess_Disappreared = false;
+    for(int i = 0; i < 5; i++) surprise_emoji_Ani.frame.push_back({0 +(float) i * 64, 0, 64, 64});
+    surprise_emoji_Ani.loop = false;
+    surprise_emoji_Ani.durationtime = 0.1f;
 }
 void KidnapCutscene::handlePhase(float dt) {
     switch (currentPhase) {
@@ -195,9 +201,39 @@ void KidnapCutscene::handlePhase(float dt) {
         case KidnapPhase::DISAPPEAR:
             if (ufo.animation.at(ufo.currentState).isFinish()) {
                 currentPhase = KidnapPhase::WAIT;
+                princess_Disappreared  =true;
+                elapsedTime = 0;
             }
             break;
-        case KidnapPhase::WAIT: {   
+        case KidnapPhase::WAIT:
+            if(elapsedTime > 0.8f){
+                elapsedTime = 0;
+                currentPhase = KidnapPhase::MOVE_CAMERA_TO_MARIO;
+            }
+            break;
+        case KidnapPhase::MOVE_CAMERA_TO_MARIO:{
+            Vector2 targetPos;
+            targetPos.x = character->getPosition().x - 100;
+            targetPos.y = character->getPosition().y - 200;
+
+            camera.getCamera().target.x = lerp(camera.getCamera().target.x, targetPos.x, dt *  3);
+            camera.getCamera().target.y = lerp(camera.getCamera().target.y, targetPos.y, dt * 3);
+            camera.getCamera().zoom     = lerp(camera.getCamera().zoom, 2.3f, dt * 4);
+            if(elapsedTime > 1){
+                elapsedTime = 0;
+                Singleton<SoundManager>::getInstance().play(SoundType::SURPRISE_SFX);
+                currentPhase = KidnapPhase::SURPRISED_EMOJI;
+            }
+            break;
+        }
+        case KidnapPhase::SURPRISED_EMOJI:
+            surprise_emoji_Ani.Update(dt);
+            if(elapsedTime > 2){
+                elapsedTime = 0;
+                currentPhase = KidnapPhase::BACK_TO_ORIGIN;
+            }
+            break;
+        case KidnapPhase::BACK_TO_ORIGIN: {   
             Vector2 targetPos;
             targetPos.x = 0;
             targetPos.y = 0;
@@ -205,9 +241,10 @@ void KidnapCutscene::handlePhase(float dt) {
             camera.getCamera().target.x = lerp(camera.getCamera().target.x, 0, dt *  3);
             camera.getCamera().target.y = lerp(camera.getCamera().target.y, 0, dt * 3);
             camera.getCamera().zoom     = lerp(camera.getCamera().zoom, 1, dt * 4);
-               blackScene[0].y = lerp(blackScene[0].y, -screenHeight - 1, dt * 3);
-                blackScene[1].y = lerp(blackScene[1].y, screenHeight + 1, dt * 3);
-            if(elapsedTime > 11.0f){
+
+            blackScene[0].y = lerp(blackScene[0].y, -screenHeight - 1, dt * 3);
+            blackScene[1].y = lerp(blackScene[1].y, screenHeight + 1, dt * 3);
+            if(elapsedTime > 2.0f){
                 currentPhase = KidnapPhase::DONE;
             }
             break;
@@ -237,7 +274,9 @@ void KidnapCutscene::update(float dt) {
 void KidnapCutscene::draw(){
     BeginMode2D(camera.getCamera());
     map->draw();
-    if(currentPhase != KidnapPhase::WAIT){
+    character->draw();
+
+    if(princess_Disappreared == false){
         
         if(currentPhase == KidnapPhase::UFO_APPEARS || currentPhase ==KidnapPhase::HELP || currentPhase == KidnapPhase::DISAPPEAR){
             ufo.draw();
@@ -257,6 +296,14 @@ void KidnapCutscene::draw(){
                     0,
                     WHITE);
     }
+    else if(currentPhase == KidnapPhase::SURPRISED_EMOJI){
+        DrawTexturePro(emojiTexture,
+                    surprise_emoji_Ani.getcurrentframe(),
+                    {850, 150, 300, 300},
+                    {0,0},
+                    0,
+                    WHITE);
+    }
 
     
     if(currentPhase == KidnapPhase::INTRO){
@@ -266,4 +313,7 @@ void KidnapCutscene::draw(){
 }
 bool KidnapCutscene::isFinished() const{
     return currentPhase == KidnapPhase::DONE;
+}
+void KidnapCutscene::setFinish(){
+currentPhase = KidnapPhase::DONE;
 }

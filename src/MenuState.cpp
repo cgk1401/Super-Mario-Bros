@@ -89,7 +89,7 @@ void MenuState::handleInput() {
     }
 }
 void MenuState::update(float deltatime){
-    Singleton<SoundManager>::getInstance().updateMusic();
+    Singleton<SoundManager>::getInstance().updateMusic(deltatime);
     starAnimation.Update(deltatime);
     if (selectedButton == 0) {
         option_button->update(deltatime);

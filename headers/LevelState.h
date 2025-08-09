@@ -11,6 +11,7 @@ class LevelState : public GameState {
 private:
 	Texture2D background;
 	Button* backButton;
+	Button* ownMap_button;
 	vector<Button*> buttons;
 	vector<Rectangle> levelSigns;
 	Font font;

@@ -44,7 +44,7 @@ public:
     Camera2D camera{};
     Camera2D cameraEditor{};
     bool IsInsideMap(int row, int col);
-    void saveToFile();
+    void saveToFile(const char* filename);
     void saveMapToJSON(const char* filename);
     Texture2D getTextureByLevel(pair<int, int> _level) const;
     //Inherit GameState

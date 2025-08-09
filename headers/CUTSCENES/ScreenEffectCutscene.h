@@ -18,6 +18,7 @@ public:
     void update(float dt) override;
     void draw() override;
     bool isFinished() const override;
+    void setFinish() override{ finished = true;}
 private:
     Color color;
     SreenType type;
@@ -25,4 +26,5 @@ private:
     string text;
     float alpha;
     Font FONT;
+    bool finished = false;
 };

@@ -10,6 +10,7 @@ PauseState::PauseState() {
     ButtonLayoutConfig cfg(amount_button);
     const char* buttonLabels[4] = { "RESUME", "RESTART", "OPTIONS", "QUIT" };
     buttons = CreateButtons(buttonLabels, cfg);
+   Singleton<SoundManager>::getInstance().play(SoundType::PAUSE);
 }
 
 PauseState::~PauseState() {
@@ -21,9 +22,15 @@ PauseState::~PauseState() {
 void PauseState::handleInput() {
     //Button Clicking
     if (buttons[3]->IsClicked()) { //Menu 
+        vector<GameState*> states =  Singleton<Game>::getInstance().getstateStack();
+        for(auto& state: states){
+            if(auto playstate = dynamic_cast<PlayState*>(state)){
+                playstate->saveGame("savegame.json");
+                break;
+            }
+        }
         Singleton<Game>::getInstance().changeState(new MenuState);
         shouldExit = true;
-
     }
     else if (buttons[1]->IsClicked()) { //Restart
         Singleton<Game>::getInstance().changeState(new PlayState(Global::level));

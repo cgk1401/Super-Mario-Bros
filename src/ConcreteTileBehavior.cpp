@@ -60,11 +60,11 @@ void BrickTileBehavior::update(float dt, int tileRow, int tileCol, Map* map, Map
             offsetY = -bounceHeight * (1 - brickState->bounceTimer.getProgress());
         }
         //offsetY *= dt;
-        map->updateTileInstancePosition(tileRow, tileCol, { 0, offsetY });
+        map->updateTileInstancePosition(tileRow, tileCol, { 0, offsetY }, LayerType::PLATFORM);
 
         if (brickState->bounceTimer.isFinished()) {
             brickState->isBouncing = false;
-            map->updateTileInstancePosition(tileRow, tileCol, { 0, 0 }); // reset vị trí
+            map->updateTileInstancePosition(tileRow, tileCol, { 0, 0 }, LayerType::PLATFORM); // reset vị trí
         }
     }
 
@@ -128,13 +128,13 @@ void QuestionTileBehavior::update(float dt, int tileRow, int tileCol, Map* map, 
             offsetY = -bounceHeight * (1 - tileState->bounceTimer.getProgress());
         }
         //offsetY *= dt;
-        map->updateTileInstancePosition(tileRow, tileCol, { 0, offsetY });
+        map->updateTileInstancePosition(tileRow, tileCol, { 0, offsetY }, LayerType::PLATFORM);
 
         if (tileState->bounceTimer.isFinished()) {
             tileState->isBouncing = false;
-            map->updateTileInstancePosition(tileRow, tileCol, { 0, 0 }); // reset vị trí
+            map->updateTileInstancePosition(tileRow, tileCol, { 0, 0 }, LayerType::PLATFORM); // reset vị trí
             int id =  map->getTileIDFromCoords(1 +(int) map->getTile(tileInstance->tileID).theme * 2 , 5 );
-            map->setTile(tileRow, tileCol, id);
+            map->setTile(tileRow, tileCol, id, static_cast<int>(LayerType::PLATFORM));
            // cout << 1;
         }
     }

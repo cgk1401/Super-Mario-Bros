@@ -1,16 +1,13 @@
 #pragma once
 
 #include "Animation.h"
+#include "Item.h"
 #include <raylib.h>
 using namespace std;
 
-class BowserFireBall {
-	friend class Collision;
+class BowserFireBall : public Item {
 private :
-	Texture texture;
 	Animation animations;
-	Vector2 position;
-	Vector2 velocity;
 	const float scale = 3.0f;
 
 	float positionDestinationY;
@@ -25,13 +22,14 @@ public :
 	BowserFireBall(Vector2 position, float positionDestinationY);
 	~BowserFireBall();
 
-	void Update(float deltatime);
+	void update(float deltatime) override;
 	void LoadSource();
-	Rectangle getBound();
-	void Draw();
+	void draw() override;
 
 	bool getIsActive();
 	void ActiveStatus();
 	void Deactive();
 
+	void OnCollected(Character* player) override;
+    Rectangle getBound() const override;
 };

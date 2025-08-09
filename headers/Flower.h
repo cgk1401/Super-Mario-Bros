@@ -14,11 +14,12 @@ public:
         startPos = pos.y;
         fullyAppear = false;
         height = animation.getcurrentframe().height * 4;
+        this->interactWithMap = false;
     }
 
-    void Update(float dt) override {
+    void update(float deltatime) override {
         // Không di chuyển
-        animation.Update(dt);
+        animation.Update(deltatime);
         const float gravity = 1000;
            if(!fullyAppear){
             velocity.y = -100 ;
@@ -29,10 +30,10 @@ public:
         }
         else velocity.y = 0;
 
-        position.y += velocity.y * dt;
+        position.y += velocity.y * deltatime;
     }
 
-    void Draw(const Texture& texture) override {
+    void draw() override {
         Rectangle src = animation.getcurrentframe();
         DrawTexturePro(
             texture,
@@ -46,6 +47,8 @@ public:
         CharacterState* currentState = player->GetCurrentState();
         if(currentState == dynamic_cast<FireState*>(currentState)){
             //get more coin scores
+            player->collectItem(ItemType::FLOWER, position);
+            collected = true;
             return;
         }
         player->ChangeMiddleState(CharacterStateType::FireState);

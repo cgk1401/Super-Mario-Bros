@@ -40,8 +40,9 @@ MapEditor::MapEditor(pair<int, int> level ,int r, int c) : Map(level, r, c) {
     world_1_3   = LoadTexture("../assets/Map/World 1-3.png");
     world_1_4   = LoadTexture("../assets/Map/World 1-4.png");
     this->level = level;
-
-    loadFromFile(level, true);
+    string filename;
+    filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+    loadFromFile(filename.c_str(), true);
 }
 MapEditor::~MapEditor() {
     delete back_button;
@@ -51,11 +52,7 @@ MapEditor::~MapEditor() {
     brushBuffer.clear();
 }
 
-void MapEditor::saveToFile() {
-    string filename;
-    filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
-
-
+void MapEditor::saveToFile(const char* filename) {
     ofstream MyFile(filename);
 
     if (!MyFile.is_open()) {
@@ -64,28 +61,34 @@ void MapEditor::saveToFile() {
     }
     
   
-    int limitCol = columns;
+    int limitCol = 0;
    
-    for (int y = columns - 1; y >= 0; y--) {
-        for (int x = 0; x < rows; x++) {
-            if (mapData[x][y].tileID != 0) {
-                limitCol = y;
-                goto found;
+    for(auto& layer: layers){
+        for (int y = columns - 1; y >= 0; y--) {
+            for (int x = 0; x < rows; x++) {
+                if (layer.mapData[x][y].tileID != 0 && y > limitCol) {
+                    limitCol = y + 1;
+                    goto nextLayer;
+                }
             }
         }
+    nextLayer:;
     }
-    found:
+    
 
     MyFile << rows << " " << limitCol << "\n";
-    for (int x = 0; x < rows; x++) {
-        for (int y = 0; y < limitCol; y++) {
-            // Save TileID directly
-            MyFile << mapData[x][y].tileID; // Access tileID from MapTileInstance
-            if (y < columns - 1) MyFile << " ";
+    for(int i = 0; i < numberLayers; i++){
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < limitCol; y++) {
+                // Save TileID directly
+                MyFile << layers[i].mapData[x][y].tileID; // Access tileID from MapTileInstance
+                if (y < columns - 1) MyFile << " ";
+            }
+            MyFile << endl;
         }
         MyFile << endl;
+        layers[i].mapData_first = layers[i].mapData;
     }
-    mapData_first = mapData;
     cout << "Saved file successfully: " << filename << endl;
     MyFile.close();
 }
@@ -201,7 +204,11 @@ void MapEditor::handleInput() {
                                     int pasteX = (pickedTile.y + j * TILE_SIZE) / TILE_SIZE;
 
                                     if (IsInsideMap(pasteX, pasteY)) {
-                                        setTile(pasteX, pasteY, tileID);
+                                        auto it = tileCatalog.find(tileID);
+                                        if (it != tileCatalog.end()) {
+                                            int id = static_cast<int>(it->second.layerType);
+                                            setTile(pasteX, pasteY, tileID, id);
+                                        }
                                     }
                                 }
                             }
@@ -268,11 +275,15 @@ void MapEditor::handleInput() {
         editType = EditorMode::ERASE;
     }
     else if(save_button->IsClicked()){
-        saveToFile();
+         string filename;
+        filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+        saveToFile(filename.c_str());
         saveFileNoti_timer.start(1);
     }
     else if (uploadFile_button->IsClicked()) {
-        loadFromFile(level, true);
+        string filename;
+        filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+        loadFromFile(filename.c_str(), true);
     }
     else if (play_button->IsClicked()){
         _option = 2;
@@ -290,7 +301,7 @@ void MapEditor::handleInput() {
 
 void MapEditor::update(float deltatime) {
     back_button->update(deltatime);
-    Singleton<SoundManager>::getInstance().updateMusic();
+    Singleton<SoundManager>::getInstance().updateMusic(deltatime);
     Map::update(true);
     saveFileNoti_timer.update(deltatime);
     tilePicking_button->update(deltatime);
@@ -417,7 +428,9 @@ void MapEditor::render() {
         SaveConfirmationDialog* currentstate = dynamic_cast <SaveConfirmationDialog*> (Singleton<Game>::getInstance().getFirstState());
         currentstate->render();
         if (currentstate->buttonclick[0] == true) {
-            saveToFile();
+             string filename;
+            filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+            saveToFile(filename.c_str());
             saveFileNoti_timer.start(1);
             //_option_buttons = false;
             currentstate->buttonclick[0] = false;
@@ -469,10 +482,12 @@ bool operator!=(const MapTileInstance& a,const  MapTileInstance& b){
     return a.tileID != b.tileID;
 }
 bool MapEditor::hasChanged() const{
-    for(int x = 0; x < mapData.size(); x++){
-        for(int y = 0; y < mapData[x].size(); y++){
-            if(mapData[x][y] != mapData_first[x][y]){
-                return true;
+    for(auto& layer: layers){
+        for(int x = 0; x < layer.mapData.size(); x++){
+            for(int y = 0; y < layer.mapData[x].size(); y++){
+                if(layer.mapData[x][y] != layer.mapData_first[x][y]){
+                    return true;
+                }
             }
         }
     }

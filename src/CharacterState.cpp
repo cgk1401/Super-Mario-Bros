@@ -17,8 +17,8 @@ Character* CharacterState::getCharacter() {
 	{ return this->character; }
 }
 
-bool CharacterState::getIsGround() {
-	return this->character->isGround;
+bool CharacterState::getonGround() {
+	return this->character->onGround;
 }
 
 void CharacterState::SetBasePosition(float newposition) {

@@ -20,7 +20,9 @@ public :
 	~Horizontal() override {};
 
 	void LoadSource() override;
-	void Update(float deltatime) override;
-    void Draw() override;
-    Rectangle getBound() override;
+	void update(float deltatime) override;
+    void draw() override;
+    Rectangle getBound() const override;
+
+	void onCollideWith(GameObject* object) override;
 };

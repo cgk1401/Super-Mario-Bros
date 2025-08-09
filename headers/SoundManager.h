@@ -35,6 +35,7 @@ enum class SoundType {
     TELEPORT,
     SCREAM,
     FOOTSTEP,
+    SURPRISE_SFX,
 };
 
 enum class MusicType {
@@ -58,6 +59,7 @@ class SoundManager {
     template <typename T>
     friend class Singleton;
 private:
+    float musicPlayTime = 0.0f;
     unordered_map<SoundType, Sound> sounds;
     unordered_map<MusicType, Music> musics;
     MusicType currentMusicType;
@@ -79,17 +81,18 @@ public:
     void stopAllSounds();
     void playMusic(MusicType type, bool loop = true);
     void stopMusic();
-    void updateMusic(); // gọi mỗi frame!
+    void updateMusic(float dt);
     void continueMusic();
     Sound getSound(SoundType type);
     MusicType getCurrentMusicType();
     Music getCurrentMusic();
-
+    float getMusicPlayTime();
     float getmusicVolume();
     float getsoundVolume();
     void setvaluemusicVolume(float value);
     void setvaluesoundVolume(float value);
 
+    void setMusicPlayTime(float _musicPlayTime);
     void setmusicVolume();
     void setsoundVolume();
 };

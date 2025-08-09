@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <functional>
+#include <sstream>
 using namespace std;
 #define MAX_COLUMN 220
 
@@ -54,38 +55,53 @@ Map::Map(pair<int, int> _level, int r, int c) {
 
 }
 Map::~Map(){
-    for (int x = 0; x < rows; x++) {
-        for (int y = 0; y < columns; y++) {
-            delete mapData[x][y].state;
-            mapData[x][y].state = nullptr;
+    for(auto& layer: layers){
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < columns; y++) {
+                delete layer.mapData[x][y].state;
+                layer.mapData[x][y].state = nullptr;
+            }
         }
     }
     tileCatalog.clear();
     mapRects.clear();
-    mapData.clear();
+    layers.clear();
     UnloadTexture(texture);
 }
 void Map::initMap(int r, int c) {
     mapRects.clear();
-    mapData.clear();
-    mapData_first.clear();
+    layers.clear();
 
     rows = r;
     columns = c;
 
     mapRects.resize(rows, vector<Rectangle>(columns));
-    mapData.resize(rows, vector<MapTileInstance>(columns));
-    mapData_first.resize(rows, vector<MapTileInstance>(columns));
+    layers.resize(numberLayers);
 
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
-            // << x << " - " << y << endl;
             mapRects[x][y] = { (float)(y * TILE_SIZE), (float)(x * TILE_SIZE), (float)TILE_SIZE, (float)TILE_SIZE };
-            mapData[x][y] = { 0, false };
         }
     }
+    layers[0].type = LayerType::BACKGROUND;
+    layers[1].type = LayerType::PLATFORM;
+    layers[2].type = LayerType::ENEMY;
+    layers[3].type = LayerType::ITEM;
+    layers[4].type = LayerType::FOREGROUND;
 
-    mapData_first = mapData;
+    for(auto& layer: layers){
+        layer.mapData.resize(rows, vector<MapTileInstance>(columns));
+        layer.mapData_first.resize(rows, vector<MapTileInstance>(columns));
+
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < columns; y++) {
+                mapRects[x][y] = { (float)(y * TILE_SIZE), (float)(x * TILE_SIZE), (float)TILE_SIZE, (float)TILE_SIZE };
+                layer.mapData[x][y].tileID = 0;
+            }
+        }
+
+        layer.mapData_first = layer.mapData;
+    }
 }
 
 void Map::createTileAnimation() {
@@ -114,50 +130,50 @@ void Map::createTileCatalog() {
             int themeOffset = static_cast<int>(theme) * 2;
 
             for (int j = 1; j < 7; j++) {
-                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], j == 5 ? USED_QUESTION_BLOCK : GROUND, new SolidTileBehavior(), theme)); //Ground tile
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], j == 5 ? USED_QUESTION_BLOCK : GROUND, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Ground tile
             }
 
             for (int j = 7; j < 9; j++) {
-                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j - 1], BRICK, new BrickTileBehavior(), theme)); //Brick tile
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j - 1], BRICK, new BrickTileBehavior(), theme, LayerType::PLATFORM)); //Brick tile
             }
 
             for (int j = 9; j < 16; j++) {
-                if(j == 14) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], BLACK_BLOCK, new DecorationTileBehavior(), theme)); //Decoration tile
+                if(j == 14 || j == 15) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], BLACK_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
                 else
-                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme)); //Decoration tile
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
             }
 
-            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 16), Tile(getTileIDFromCoords(i + themeOffset, 16), tileSetSourceRects[i + themeOffset - 1][16 - 1], PIPE, new SolidTileBehavior(), theme)); //Pipe tile
+            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 16), Tile(getTileIDFromCoords(i + themeOffset, 16), tileSetSourceRects[i + themeOffset - 1][16 - 1], HORIZONTAL_PIPE, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Pipe tile
 
             for (int j = 17; j < 20; j++) {
-                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme)); //Decoration tile
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
             }
 
             if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme)); //Question Block tile
             else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], STAR_BRICK, new QuestionTileBehavior(), theme)); //Decoration tile
 
             for (int j = 21; j < 22; j++) {
-                if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], COIN, new DecorationTileBehavior(), theme));
+                if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], COIN, new DecorationTileBehavior(), theme, LayerType::FOREGROUND));
                 if (i % 2 == 1) {
-                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme));
-                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j + 1), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j + 1 - 1], FIREBAR_BLOCK, new SolidTileBehavior(), theme));
+                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme, LayerType::PLATFORM));
+                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j + 1), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j + 1 - 1], FIREBAR_BLOCK, new SolidTileBehavior(), theme, LayerType::PLATFORM));
                 }
             }
 
             for (int j = 23; j < 26; j++) {
-                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme)); //Decoration tile
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
             }
 
-            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 26), Tile(getTileIDFromCoords(i + themeOffset, 26), tileSetSourceRects[i + themeOffset - 1][26 - 1], LAVA_FLOOR, new DecorationTileBehavior(), theme)); //Decoration tile
+            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 26), Tile(getTileIDFromCoords(i + themeOffset, 26), tileSetSourceRects[i + themeOffset - 1][26 - 1], LAVA_FLOOR, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
 
-            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 27), Tile(getTileIDFromCoords(i + themeOffset, 27), tileSetSourceRects[i + themeOffset - 1][27 - 1], GROUND, new SolidTileBehavior(), theme)); //ground tile
+            tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 27), Tile(getTileIDFromCoords(i + themeOffset, 27), tileSetSourceRects[i + themeOffset - 1][27 - 1], GROUND, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //ground tile
 
             if (i + themeOffset == 1) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 31), Tile(getTileIDFromCoords(i + themeOffset, 31), tileSetSourceRects[i + themeOffset - 1][31 - 1], BRICK, new BrickTileBehavior(), theme)); //Brick tile
 
 
             if (i % 2 == 1) {
                 for (int j = 28; j < 31; j++) {
-                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new SolidTileBehavior(), theme)); //Ground 
+                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Ground 
                 }
             }
             else {
@@ -171,30 +187,36 @@ void Map::createTileCatalog() {
 
 
     for (int i = 9; i < 21; i++) {
-        for (int j = 1; j < 6; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], PIPE, new SolidTileBehavior())); //Pipe tiles
+        MapTheme theme = MapTheme::OVERWORLD;
+        for (int j = 1; j <= 2; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], VERTICAL_PIPE, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Pipe tiles
+        }
+        
+        for (int j = 3; j <= 5; j++) {
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], HORIZONTAL_PIPE, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Pipe tiles
         }
 
+
         for (int j = 6; j < 9; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tiles
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Ground tiles
         }
 
         for (int j = 9; j < 12; j++) {
-            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior())); //Ground tiles
-            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], GROUND, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Ground tiles
+            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tiles
         }
 
-        tileCatalog.emplace(getTileIDFromCoords(i, 12), Tile(getTileIDFromCoords(i, 12), tileSetSourceRects[i - 1][12 - 1], FINISHING_POLE, new DecorationTileBehavior())); //Ground tiles
+        tileCatalog.emplace(getTileIDFromCoords(i, 12), Tile(getTileIDFromCoords(i, 12), tileSetSourceRects[i - 1][12 - 1], FINISHING_POLE, new DecorationTileBehavior(), theme, LayerType::PLATFORM)); //Ground tiles
 
         for (int j = 13; j < 19; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tiles
         }
 
-        if ( i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(getTileIDFromCoords(i, 19), tileSetSourceRects[i - 1][19 - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
-        else if ( i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(getTileIDFromCoords(i, 19), tileSetSourceRects[i - 1][19 - 1], GROUND, new SolidTileBehavior())); //Solid tiles
+        if ( i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(getTileIDFromCoords(i, 19), tileSetSourceRects[i - 1][19 - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tiles
+        else if ( i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i, 19), Tile(getTileIDFromCoords(i, 19), tileSetSourceRects[i - 1][19 - 1], GROUND, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Solid tiles
 
         for (int j = 20; j < 25; j++) {
-            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior())); //Decoration tiles
+            tileCatalog.emplace(getTileIDFromCoords(i, j), Tile(getTileIDFromCoords(i, j), tileSetSourceRects[i - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tiles
         }
         //Decoration
     }
@@ -224,21 +246,19 @@ void Map::update(bool isEditing) {
         animation.Update(dt);
     }
 
-    for (int row = 0; row < rows; row++) {
-        for (int col = 0; col < columns; col++) {
-            int id = mapData[row][col].tileID;
-            if (id != 0) {
-                //tileCatalog[id].behavior->update(GetFrameTime(), row, col, this, &mapData[row][col]);
-               Tile tile = getTile(row, col);
+    for(auto& layer: layers){
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < columns; col++) {
+                int id = layer.mapData[row][col].tileID;
+                if (id != 0) {
+                    Tile tile = getTile(row, col, layer.type);
 
-                MapTileInstance* tileInstance = getMapTileInstance(row, col);
+                    MapTileInstance* tileInstance = getMapTileInstance(row, col, layer.type);
+                    Vector2 ori = { 0, 0 };
                 
-                //if (!tileInstance || tileInstance->tileID == 0) continue;
-                //tile.behavior->update(GetFrameTime(), x, y, map, tileInstance);
-                Vector2 ori = { 0, 0 };
-             
-                if(tile.behavior) tile.behavior->update(dt, row, col, this, tileInstance);
-                
+                    if(tile.behavior) tile.behavior->update(dt, row, col, this, tileInstance);
+                    
+                }
             }
         }
     }
@@ -251,16 +271,73 @@ void Map::draw(bool isEditing) {
             if(level == pair{1,2} || level == pair{1,4}) bgColor = {0,0,0};
         }
     ClearBackground(bgColor);
+
+    for(const Layer& layer: layers){
+        if(layer.visible == false)  continue;
+
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < columns; y++) {
+               
+                int id = layer.mapData[x][y].tileID;
+                auto it = tileCatalog.find(id);
+                if (id && it != tileCatalog.end()) {
+                    Texture2D tileTexture = texture;
+                    Rectangle src = it->second.srcRect;
+
+                    if ((it->second.type == ENEMY || it->second.type == TileType::COIN) && isEditing == false) continue;
+                    else if(it->second.type ==  TileType::QUESTION_BLOCK){
+                        src = tileAnimation.at(TileType::QUESTION_BLOCK).getcurrentframe();
+                        src.y +=  (float) it->second.theme * 16.0f;
+                        tileTexture = bricks_texture;
+                    }
+                    else if(it->second.type == TileType::STAR_BRICK){
+                        src = {272, 192  + (float) it->second.theme * 16.0f, 16, 16};
+                        tileTexture = bricks_texture;
+                    }
+
+                    Vector2 drawPos = {
+                    mapRects[x][y].x + layer.mapData[x][y].offsetPos.x,
+                        mapRects[x][y].y + layer.mapData[x][y].offsetPos.y
+                    };
+
+                    Rectangle destRect = { drawPos.x, drawPos.y, TILE_SIZE, TILE_SIZE };
+                    DrawTexturePro(tileTexture, src, destRect, { 0,0 }, 0, WHITE);
+                }
+                if (isEditing)
+                    DrawRectangleLines(mapRects[x][y].x,
+                        mapRects[x][y].y,
+                        TILE_SIZE,
+                        TILE_SIZE, 
+                        BLACK);
+            }
+        }
+    }
+}
+void Map::drawLayer(LayerType layertype){
+    
+      Color bgColor = Color{92, 148, 252};
+
+    if(level == pair{1,2} || level == pair{1,4}) bgColor = {0,0,0};
+        
+    ClearBackground(bgColor);
+
+    int layerIdx = static_cast<int>(layertype);
+    Layer layer = layers[layerIdx];
+    if(layer.visible == false)  return;
+
     for (int x = 0; x < rows; x++) {
         for (int y = 0; y < columns; y++) {
-            int id = mapData[x][y].tileID;
+                if (x >= layer.mapData.size() || y >= layer.mapData[x].size()) {
+                    continue;
+                }
+            int id = layer.mapData[x][y].tileID;
 
             auto it = tileCatalog.find(id);
             if (id && it != tileCatalog.end()) {
                 Texture2D tileTexture = texture;
                 Rectangle src = it->second.srcRect;
 
-                if ((it->second.type == ENEMY || it->second.type == TileType::COIN) && isEditing == false) continue;
+                if ((it->second.type == ENEMY || it->second.type == TileType::COIN)) continue;
                 else if(it->second.type ==  TileType::QUESTION_BLOCK){
                     src = tileAnimation.at(TileType::QUESTION_BLOCK).getcurrentframe();
                     src.y +=  (float) it->second.theme * 16.0f;
@@ -272,20 +349,14 @@ void Map::draw(bool isEditing) {
                 }
 
                 Vector2 drawPos = {
-                   mapRects[x][y].x + mapData[x][y].offsetPos.x,
-                    mapRects[x][y].y + mapData[x][y].offsetPos.y
+                mapRects[x][y].x + layer.mapData[x][y].offsetPos.x,
+                    mapRects[x][y].y + layer.mapData[x][y].offsetPos.y
                 };
 
                 Rectangle destRect = { drawPos.x, drawPos.y, TILE_SIZE, TILE_SIZE };
                 DrawTexturePro(tileTexture, src, destRect, { 0,0 }, 0, WHITE);
             }
-            if (isEditing)
-                //Draw grid lines
-                DrawRectangleLines(mapRects[x][y].x,
-                    mapRects[x][y].y,
-                    TILE_SIZE,
-                    TILE_SIZE, 
-                    BLACK);
+            
         }
     }
 }
@@ -312,22 +383,24 @@ Tile Map::getTile(int tileID) const {
         TraceLog(LOG_INFO, "inavailable in catalog");
         return Tile(0, tileSetSourceRects[0][0], EMPTY, tileCatalog.at(0).behavior);
     }
-    return Tile(it->second.id, it->second.srcRect, it->second.type, it->second.behavior, it->second.theme);
+    return Tile(it->second.id, it->second.srcRect, it->second.type, it->second.behavior, it->second.theme, it->second.layerType);
 }
 
-Tile Map::getTile(int row, int col) const {
+Tile Map::getTile(int row, int col, LayerType layerType) const {
     if (row < 0 || row >= rows || col < 0 || col >= columns) {
-        return getTile(0); // Return empty tile info for out of bounds
+        return getTile(0); 
     }
-    int tileID = mapData[row][col].tileID;
+    int layerID = static_cast<int>(layerType);
+    int tileID = layers[layerID].mapData[row][col].tileID;
     return getTile(tileID);
 }
 
-MapTileInstance* Map::getMapTileInstance(int row, int col) {
+MapTileInstance* Map::getMapTileInstance(int row, int col, LayerType layerType) {
     if (row < 0 || row >= rows || col < 0 || col >= columns) {
         return nullptr;
     }
-    return &mapData[row][col];
+    int layerID = static_cast<int>(layerType);
+    return &layers[layerID].mapData[row][col];
 }
 
 void Map::setEnemySpawnCallback(function<void(EnemyType, Vector2, MapTheme)> callback) {
@@ -352,22 +425,17 @@ EnemyType Map::getEnemyType(int ID) {
 
    return EnemyType::None;
 }
-
-void Map::setTile(int row, int col, int tileID) {
+void Map::setTile(int row, int col, int tileID, int layerIndex) {
     if (row < 0 || row >= rows || col < 0 || col >= columns) {
-        return;
+        throw std::out_of_range(to_string(row)  +  "  - " + to_string(col));
     }
 
-    //if ( mapData[row][col].tileID == tileID) return;
-    //cout << tileID << endl;
     auto it = tileCatalog.find(tileID);
     if (it == tileCatalog.end()) {
         TraceLog(LOG_ERROR, "INVALID ID");
         return;
     }
     if (it->second.type == ENEMY) {
-        //mapData[row][col].tileID = 0;
-
         if (spawnEnemyCallback) {
             EnemyType enemyType = getEnemyType(tileID);
             if(enemyType == EnemyType::None) {
@@ -381,101 +449,166 @@ void Map::setTile(int row, int col, int tileID) {
             spawnEnemyCallback(enemyType, spawnPos, it->second.theme);
         }
     }
-    mapData[row][col].tileID = tileID;
-    mapData[row][col].hasItem = false;
-    if (it->second.type == QUESTION_BLOCK || it->second.type == COINS_BLOCK) {
-        mapData[row][col].hasItem = true;
+    else if(it->second.type == TileType::COIN){
+        Singleton<ItemManager>::getInstance().Spawn(ItemType::COIN, {(float) col * TILE_SIZE, (float) row * TILE_SIZE});
+    }
+    else if(it->second.type == TileType::FIREBAR_BLOCK){
+        Singleton<ItemManager>::getInstance().Spawn(ItemType::FIRE_BAR, {(float) col * TILE_SIZE + TILE_SIZE / 3, (float) row * TILE_SIZE + TILE_SIZE / 3});
+    }
+    layers.at(layerIndex).mapData[row][col].tileID = tileID;
+}
+
+void Map::refactorMapTXT(const char* filename) {
+    ifstream in(filename);
+    if (!in.is_open()) {
+        cerr << "Failed to open " << filename << endl;
+        return;
     }
 
+    int rows, cols;
+    in >> rows >> cols;
+
+    vector<vector<int>> layerData[5]; 
+    for (int i = 0; i < 5; i++) {
+        layerData[i].resize(rows, vector<int>(cols, 0));
+    }
+
+    for (int x = 0; x < rows; x++) {
+        for (int y = 0; y < cols; y++) {
+            string s;
+            in >> s;
+
+            int tileID = 0;
+            try {
+                if (s.find(',') != string::npos) {
+                    int comma = s.find(',');
+                    int tileX = stoi(s.substr(0, comma));
+                    int tileY = stoi(s.substr(comma + 1));
+                    tileID = getTileIDFromCoords(tileX, tileY);
+                } else {
+                    tileID = stoi(s);
+                }
+
+                if (tileID != 0) {
+                    auto it = tileCatalog.find(tileID);
+                    if (it != tileCatalog.end()) {
+                        int layer = static_cast<int>(it->second.layerType);
+                        layerData[layer][x][y] = tileID;
+                    } else {
+                        TraceLog(LOG_WARNING, "Unknown tileID: %d", tileID);
+                    }
+                }
+            } catch (...) {
+                cerr << "Invalid tile value: " << s << " at (" << x << ", " << y << ")" << endl;
+            }
+        }
+    }
+
+    in.close();
+
+     string outFile = "test1.txt";
+        ofstream out(outFile);
+    for (int i = 0; i < 5; i++) {
+       
+        if (!out.is_open()) {
+            cerr << "Failed to write " << outFile << endl;
+            continue;
+        }
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < cols; y++) {
+                out << layerData[i][x][y] << " ";
+            }
+            out << "\n";
+        }
+
+        out << "\n";
+    }
+    cout << "Written: " << outFile << endl;
+    out.close();
 }
+
 void Map::removeTile(int row, int col) {
     if (row < 0 || row >= rows || col < 0 || col >= columns) return;
 
-    mapData[row][col].tileID = 0;
-    mapData[row][col].hasItem = false;
-    mapData[row][col].offsetPos = { 0, 0 };
-    
-    if (mapData[row][col].state) {
-        delete mapData[row][col].state;
-        mapData[row][col].state = nullptr;
+    for(auto& layer: layers){
+        layer.mapData[row][col].tileID = 0;
+        layer.mapData[row][col].offsetPos = { 0, 0 };
+        
+        if (layer.mapData[row][col].state) {
+            delete layer.mapData[row][col].state;
+            layer.mapData[row][col].state = nullptr;
+        }
     }
 }
 
-void Map::updateTileInstancePosition(int row, int col, Vector2 offset){
+void Map::updateTileInstancePosition(int row, int col, Vector2 offset, LayerType layerType){
     if (row >= 0 && row < rows && col >= 0 && col < columns) {
-        mapData[row][col].offsetPos = offset;
-        //cout << mapData[row][col].offsetPos.x << " - " << mapData[row][col].offsetPos.y << endl;
+        int layerID = static_cast<int>(layerType);
+        layers.at(layerID).mapData[row][col].offsetPos = offset;
     }
 }
 
 
-void Map::loadFromFile(pair<int, int> level, bool isEditing) {
-    string filename;
-    filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
-
+void Map::loadFromFile(const char* filename, bool isEditing) {
     ifstream MyReadFile(filename);
 
     if (!MyReadFile.is_open()) {
         cerr << "Error: Could not open map file " << filename << endl;
         return;
     }
-
     int fileRows, fileCols;
     MyReadFile >> fileRows >> fileCols;
-    cout << fileCols << endl;
     int loadCols = isEditing ? MAX_COLUMN : fileCols;
-    initMap(fileRows, loadCols); // Re-initialize map with new dimensions
+    initMap(fileRows, loadCols);
     columns = loadCols;
 
+    cout << "FILE COLS: " << fileCols << endl;
    
-    for (int x = 0; x < rows; x++) {
-        for (int y = 0; y < fileCols; y++) {
-            string s;
-            MyReadFile >> s;
-            int commaPos = s.find(',');
+    for(int i = 0; i < numberLayers; i++){
+        for (int x = 0; x < rows; x++) {
+            for (int y = 0; y < fileCols; y++) {
+                string s;
+                MyReadFile >> s;
+                int commaPos = s.find(',');
 
-            if (commaPos == string::npos) {
-                try {
-                    int tileID = stoi(s);
-                    setTile(x, y, tileID);
-                    int id = mapData[x][y].tileID;
-                    auto it = tileCatalog.find(id);
-                    if (id && it != tileCatalog.end()) {
-                        if(it->second.type == TileType::COIN){
-                            Singleton<ItemManager>::getInstance().Spawn(ItemType::COIN, {(float) y * TILE_SIZE, (float) x * TILE_SIZE});
-                        }
-                        else if(it->second.type == TileType::FIREBAR_BLOCK){
-                            Singleton<ItemManager>::getInstance().Spawn(ItemType::FIRE_BAR, {(float) y * TILE_SIZE + TILE_SIZE / 3, (float) x * TILE_SIZE + TILE_SIZE / 3});
-                        }
+                if (commaPos == string::npos) {
+                    try {
+                        int tileID = stoi(s);
+                        setTile(x, y, tileID, i);
+                    }
+                    catch (const std::out_of_range& e) {
+                        cerr << "Out of bounds error at (" << x << "," << y << ") in layer " << i << ": " << e.what() << endl;
+                        setTile(x, y, 0, i);  // fallback
+                    }
+                    catch (const std::exception& e) {
+                        cerr << "General error at (" << x << "," << y << ") in layer " << i << ": " << e.what() << endl;
+                        setTile(x, y, 0, i);
+                    }
+
+                }
+                else {
+                    try {
+                        int tileX = stoi(s.substr(0, commaPos));
+                        int tileY = stoi(s.substr(commaPos + 1));
+                        int tileID = getTileIDFromCoords(tileX, tileY);
+                        setTile(x, y, tileID, i);
+                    }
+                    catch (...) {
+                        cerr << "Invalid texture coordinates in map file: " << s << " at (" << x << "," << y << ")" << endl;
+                        setTile(x, y, 0, i);
                     }
                 }
-                catch (...) {
-                    cerr << "Invalid TileID in map file: " << s << " at (" << x << "," << y << ")" << endl;
-                    setTile(x, y, 0);
-                }
             }
-            else {
-                try {
-                    int tileX = stoi(s.substr(0, commaPos));
-                    int tileY = stoi(s.substr(commaPos + 1));
-                    int tileID = getTileIDFromCoords(tileX, tileY);
-                    setTile(x, y, tileID);
-                }
-                catch (...) {
-                    cerr << "Invalid texture coordinates in map file: " << s << " at (" << x << "," << y << ")" << endl;
-                    setTile(x, y, 0);
-                }
-            }
-        }
 
-        if (isEditing) {
-            for (int y = fileCols; y < MAX_COLUMN; y++) {
-                setTile(x, y, 0);
+            if (isEditing) {
+                for (int y = fileCols; y < MAX_COLUMN; y++) {
+                    setTile(x, y, 0, i);
+                }
             }
         }
+    
+        layers[i].mapData_first = layers[i].mapData;
     }
-
-    mapData_first = mapData;
     std::cout << "Loaded file successfully: " << filename << endl;
     MyReadFile.close();
 }
@@ -488,4 +621,52 @@ MapTheme Map::getMapTheme(pair<int, int> level){
 
 pair<int, int> Map::getLevel() {
     return level;
+}
+
+vector<Layer> Map::getMapData() const{
+    return this->layers;
+}
+void Map::loadMapFromJson(const nlohmann::json& mapJson) {
+    rows = mapJson["row"];
+    columns = mapJson["column"];
+    numberLayers = mapJson["layerCount"];
+
+    initMap(rows, columns);
+
+    for (const auto& layerJson : mapJson["layers"]) {
+        Layer layer;
+        layer.type = (LayerType)layerJson["type"];
+        int typeIdx = (int)  layer.type;
+
+        layers[typeIdx].type = layer.type;
+        layers[typeIdx].visible = layerJson["visible"];
+        layers[typeIdx].hasCollision = layerJson["hasCollision"];
+
+
+        auto mapDataJson = layerJson["data"]; 
+
+        for (int row = 0; row < mapDataJson.size(); row++) {
+            string s = mapDataJson[row];
+            stringstream ss(s);
+            int id;
+            int col = 0;
+            while(ss >> id){
+                 try {
+                        int tileID = stoi(s);
+                        setTile(row, col, id, (int)layer.type);
+                    }
+                    catch (const std::out_of_range& e) {
+                        cerr << "Out of bounds error at (" << row << "," << col << ") in layer " << (int)layer.type << ": " << e.what() << endl;
+                        setTile(row, col, 0, (int)layer.type); 
+                    }
+                    catch (const std::exception& e) {
+                        cerr << "General error at (" << row << "," << col << ") in layer " << (int)layer.type << ": " << e.what() << endl;
+                        setTile(row, col, 0, (int)layer.type); 
+
+                    }
+                ++col;
+            }
+        }
+        layers[typeIdx].mapData_first = layers[typeIdx].mapData;
+    }
 }

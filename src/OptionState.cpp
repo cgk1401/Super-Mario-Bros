@@ -24,6 +24,8 @@ void OptionState::handleInput() {
 	}
 	else if (buttons[1]->IsClicked()) {
 		//CONTINUE
+		Singleton<Game>::getInstance().changeState(new PlayState("savegame.json"));
+		shouldExit = true;
 	}
 	else if (buttons[2]->IsClicked()) {
 		Singleton<Game>::getInstance().addState(new LevelState());
@@ -35,7 +37,7 @@ void OptionState::handleInput() {
 	}
 }
 void OptionState::update(float deltatime) {
-	Singleton<SoundManager>::getInstance().updateMusic();
+	Singleton<SoundManager>::getInstance().updateMusic(deltatime);
 	for (auto& button : buttons)
 		button->update(deltatime);
 	backButton->update(deltatime);

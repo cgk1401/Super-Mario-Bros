@@ -43,6 +43,7 @@ void SoundManager::load() {
     sounds[SoundType::TELEPORT] = LoadSound("../assets/Cutscene/Kidnap/teleport.mp3");
     sounds[SoundType::FOOTSTEP] = LoadSound("../assets/Cutscene/Kidnap/footsteps-male.mp3");
     sounds[SoundType::SCREAM] = LoadSound("../assets/Cutscene/Kidnap/scream.mp3");
+    sounds[SoundType::SURPRISE_SFX] = LoadSound("../assets/Cutscene/Kidnap/surprise-sound.mp3");
     
     // Music
      musics[MusicType::MAIN_THEME_OVERWORLD] = LoadMusicStream("../assets/music/Mario/DEFAULT_OVERWORLD_THEME.mp3");
@@ -94,7 +95,8 @@ void SoundManager::playMusic(MusicType type, bool loop) {
     currentMusicType = type;
     PlayMusicStream(musics[type]);
     musicPlaying = true;
-
+    musicPlayTime = 0;
+    
     musics[type].looping = loop;
 }
 
@@ -105,9 +107,12 @@ void SoundManager::stopMusic() {
     }
 }
 
-void SoundManager::updateMusic() {
+void SoundManager::updateMusic(float dt) {
     if (musicPlaying)
+    {
         UpdateMusicStream(musics[currentMusicType]);
+        musicPlayTime += dt;
+    }
 }
 
 void SoundManager::continueMusic() {
@@ -125,6 +130,10 @@ MusicType SoundManager::getCurrentMusicType() {
 Music SoundManager::getCurrentMusic() {
     return musics[currentMusicType];
 }
+float SoundManager::getMusicPlayTime(){
+    return musicPlayTime;
+}
+
 
 float SoundManager::getmusicVolume() {
     return this->musicVolume;
@@ -140,6 +149,10 @@ void SoundManager::setvaluemusicVolume(float value) {
 
 void SoundManager::setvaluesoundVolume(float value) {
     this->soundVolume = value;
+}
+void SoundManager::setMusicPlayTime(float _musicPlayTime){
+    musicPlayTime = _musicPlayTime;
+    SeekMusicStream(getCurrentMusic(), musicPlayTime);
 }
 
 void SoundManager::setmusicVolume() {

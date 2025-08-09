@@ -8,6 +8,7 @@ BowserFireBall::BowserFireBall() {
 	this->velocity = { 0,0 };
 	this->position = { 0,0 };
 	this->positionDestinationY = 0;
+	interactWithMap = false;
 	LoadSource();
 }
 
@@ -19,13 +20,14 @@ BowserFireBall::BowserFireBall(Vector2 position, float positionDestinationY) {
 	if (position.y <= this->positionDestinationY) isBelow = true;
 	else isBelow = false;
 
+	interactWithMap = false;
 	LoadSource();
 }
 
 BowserFireBall::~BowserFireBall() {
 }
 
-void BowserFireBall::Update(float deltatime) {
+void BowserFireBall::update(float deltatime) {
 	if (!isActive) return;
 
 	animations.Update(deltatime);
@@ -63,14 +65,14 @@ void BowserFireBall::LoadSource() {
 	animations.durationtime = 0.3f;
 }
 
-Rectangle BowserFireBall::getBound() {
+Rectangle BowserFireBall::getBound() const{
 	if (!isActive) return { 0, 0, 0, 0 };
 
 	Rectangle currentframe = animations.getcurrentframe();
 	return Rectangle{ position.x, position.y, currentframe.width * scale, currentframe.height * scale };
 }
 
-void BowserFireBall::Draw() {
+void BowserFireBall::draw() {
 	Rectangle currentframe = animations.getcurrentframe();
 	Rectangle destination = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
 	DrawTexturePro(texture, currentframe, destination, { 0,0 }, 0, WHITE);
@@ -88,9 +90,15 @@ void BowserFireBall::ActiveStatus() {
 		) {
 		Deactive();
 	}
-	/*Collision::handleBowserball_CharacterCollision(this, Global::character);*/
 }
 
 void BowserFireBall::Deactive() {
 	this->isActive = false;
+	collected = true;
+}
+
+void BowserFireBall::OnCollected(Character* player) {
+	player->onDead();
+	Deactive();
+	collected = true;
 }

@@ -216,9 +216,6 @@
     <ClCompile Include="..\src\HUD.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\OBSERVER\Subject.cpp">
-      <Filter>Source Files\Entity</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\OBSERVER\EventDataBase.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
@@ -243,14 +240,23 @@
     <ClCompile Include="..\src\CUTSCENES\ScreenEffectCutscene.cpp">
       <Filter>Source Files\Cutscene</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\CUTSCENES\KinapCutscene.cpp">
+    <ClCompile Include="..\src\CUTSCENES\KidnapCutscene.cpp">
       <Filter>Source Files\Cutscene</Filter>
     </ClCompile>
     <ClCompile Include="..\src\CUTSCENES\FlagPoleCutscene.cpp">
       <Filter>Source Files\Cutscene</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\GameObject.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
     <ClCompile Include="..\src\Bowser.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Enemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CUTSCENES\PipeCutscene.cpp">
+      <Filter>Source Files\Cutscene</Filter>
     </ClCompile>
     <ClCompile Include="..\src\BowserFireBall.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
@@ -461,11 +467,17 @@
     <ClInclude Include="..\headers\CUTSCENES\FlagPoleCutscene.h">
       <Filter>Header Files\Cutscene</Filter>
     </ClInclude>
+    <ClInclude Include="..\headers\GameObject.h">
+      <Filter>Header Files\Entity</Filter>
+    </ClInclude>
     <ClInclude Include="..\headers\EnemyFactory.h">
       <Filter>Header Files\Entity\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\Bowser.h">
       <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CUTSCENES\PipeCutscene.h">
+      <Filter>Header Files\Cutscene</Filter>
     </ClInclude>
     <ClInclude Include="..\headers\BowserFireBall.h">
       <Filter>Header Files\Entity\Enemy</Filter>

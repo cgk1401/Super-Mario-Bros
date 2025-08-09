@@ -46,13 +46,13 @@ void GoomBa::LoadSource() {
 	
 }
 
-void GoomBa::Draw() {
+void GoomBa::draw() {
 	Rectangle currentframe = animation[currentState].getcurrentframe();
-	bound = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
-	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
+	Rectangle dest = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
+	DrawTexturePro(texture, currentframe, dest, { 0,0 }, 0, WHITE);
 }
 
-void GoomBa::Update(float deltatime, Map* map) {
+void GoomBa::update(float deltatime) {
 	animation[currentState].Update(deltatime);
 	stomp_dead_timer.update(deltatime);
 
@@ -76,12 +76,17 @@ void GoomBa::Update(float deltatime, Map* map) {
 	}
 
 	position.y += velocity.y;
+}
 
-	Rectangle currentFrame = animation[currentState].getcurrentframe();
-    bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
-
-	if (map) Collision::handleEnemyCollision(this, map);
-
+Rectangle GoomBa::getBound() const {
+	Rectangle frame = animation.at(currentState).getcurrentframe();
+	float delta = 2.0f; //narrow the width
+    return {
+        position.x + delta,
+        position.y,
+        frame.width * scale - delta * 2,
+        frame.height * scale
+    };
 }
 bool GoomBa::isDead() {
 	if (currentState == GoomBaState::DIE_STOMP)
@@ -125,17 +130,39 @@ void GoomBa::ChangeState(GoomBaState newState) {
 }
 
 void GoomBa::onDeath(DeathType type, Character* player) {
-	  switch (type) {
-        case DeathType::STOMP:
-            ChangeState(GoomBaState::DIE_STOMP);
-            break;
-        case DeathType::FALLING:
-        case DeathType::SHELL_HIT:
-            ChangeState(GoomBaState::DIE_FALLING);
-            break;
+	switch (type) {
+	case DeathType::STOMP:
+		ChangeState(GoomBaState::DIE_STOMP);
+		break;
+	case DeathType::FIREBALL_HIT:
+	case DeathType::FALLING:
+	case DeathType::SHELL_HIT:
+		ChangeState(GoomBaState::DIE_FALLING);
+		break;
     }
 }
 
 EnemyType GoomBa::getType() const {
 	return EnemyType::GOOMBA;
+}
+
+void GoomBa::onCollideWith(GameObject* object) {
+	switch (object->getObjectType())
+	{
+	case ObjectType::ENEMY:{
+		Enemy* enemy = dynamic_cast<Enemy*>(object);
+		if(!enemy || enemy->isDead()) return;
+		if(enemy->getType() == EnemyType::KOOPA_SHELL){
+			onDeath(DeathType::SHELL_HIT);
+			return;
+		}
+		if(this->direction == Direction::Right){
+			this->direction = Direction::Left;
+		}
+		else this->direction = Direction::Right;
+		break;
+	}
+	default:
+		break;
+	}
 }

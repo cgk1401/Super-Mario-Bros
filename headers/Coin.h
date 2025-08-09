@@ -3,20 +3,22 @@
 
 class Coin : public Item {
 private:
+    
     Animation animation;
 public:
     friend class Collision;
     Coin(Vector2 pos, const Animation& ani): animation(ani) { 
         position = pos;
+        interactWithMap = false;
        
     }
 
-    void Update(float dt) override {
-        animation.Update(dt);
+    void update(float deltatime) override {
+        animation.Update(deltatime);
        
     }
 
-    void Draw(const Texture& texture) override {
+    void draw() override {
         Rectangle src = animation.getcurrentframe();
         DrawTexturePro(
             texture,

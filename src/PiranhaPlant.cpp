@@ -4,6 +4,7 @@ class Map;
 
 
 PiranhaPlant::PiranhaPlant() : Enemy(){
+	interactWithMap = false;
 	basePos = { 500,200 };
 	this->position = { 500, 200 };
 	LoadSource();
@@ -12,8 +13,9 @@ PiranhaPlant::PiranhaPlant() : Enemy(){
 }
 
 PiranhaPlant::PiranhaPlant(Vector2 pipeTop, MapTheme _theme) {
-	basePos = pipeTop;
-	this->position = pipeTop;
+	interactWithMap = false;
+	basePos = {pipeTop.x + 20, pipeTop.y + 10};
+	this->position = basePos;
 	theme = _theme;
 	LoadSource();
 
@@ -22,9 +24,10 @@ PiranhaPlant::PiranhaPlant(Vector2 pipeTop, MapTheme _theme) {
 }
 
 PiranhaPlant::PiranhaPlant(Vector2 pipeTop, float riseHeight, MapTheme _theme) {
-	basePos = pipeTop;
+	interactWithMap = false;
+	basePos = {pipeTop.x + 20, pipeTop.y + 10};
+	this->position = basePos;
 	riseoffset = riseHeight;
-	this->position = pipeTop;
 	theme = _theme;
 	LoadSource();
 }
@@ -44,7 +47,7 @@ void PiranhaPlant::LoadSource() {
 	animation.frame.push_back({ 18+ (float)theme * 146, 138, 16, 24 });
 }
 
-void PiranhaPlant::Update(float deltatime, Map* map) {
+void PiranhaPlant::update(float deltatime) {
 	animation.Update(deltatime);
 
 	timer += deltatime;
@@ -79,18 +82,47 @@ void PiranhaPlant::Update(float deltatime, Map* map) {
 
 	}
 }
+void PiranhaPlant::onDeath(DeathType type, Character* player) {
+	switch (type)
+	{
+	case DeathType::FIREBALL_HIT:
+		currentState = PlantState::Die;
+		break;
+	
+	default:
+		break;
+	}
+}
+
+bool PiranhaPlant::isDead() {
+	return currentState == PlantState::Die;
+}
 
 void PiranhaPlant::ChangeState(PlantState newState) {
 	currentState = newState;
 	timer = 0;
 }
 
-void PiranhaPlant::Draw() {
+void PiranhaPlant::draw() {
 	Rectangle currentframe = animation.getcurrentframe();
-	bound = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
-	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
+	Rectangle dest = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
+	DrawTexturePro(texture, currentframe, dest, { 0,0 }, 0, WHITE);
 }
 
 EnemyType PiranhaPlant::getType() const {
 	return EnemyType::PIRANT_PLANT;
+}
+
+void PiranhaPlant::onCollideWith(GameObject* object) {
+	
+}
+Rectangle PiranhaPlant::getBound() const{
+	Rectangle frame = animation.getcurrentframe();
+	float delta = 2.0f; //narrow the width
+    return {
+        position.x + delta,
+        position.y,
+        frame.width * scale - delta * 2,
+        frame.height * scale
+    };
 }

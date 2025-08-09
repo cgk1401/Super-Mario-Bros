@@ -43,6 +43,12 @@ int HUD::getLives(){
 int HUD::getTime(){
     return time;
 }
+int HUD::getScore(){
+    return score;
+}
+int HUD::getCoin() {
+    return coins;
+}
 
 void HUD::generateTimeToCoins(){
     if(time <= 0 ) {
@@ -58,6 +64,9 @@ void HUD::onNotify(const EventType& event, void* data){
     if (event == EventType::ON_DEATH) {
         lives--;
         score = 0;
+        time = 400.5f;
+    }
+    else if(event == EventType::FINISH_LEVEL){
         time = 400.5f;
     }
    map<EventType, EventInfo> eventMap = Singleton<EventDataBase>::getInstance().getMap();

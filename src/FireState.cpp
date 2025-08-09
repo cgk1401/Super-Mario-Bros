@@ -62,7 +62,7 @@ void FireState::SetAnimation(Character* c) {
 void FireState::Update(float deltatime) {
 	HandleInput(deltatime);
 	for (auto fireball : fireballs) {
-		fireball->Update(deltatime);
+		fireball->update(deltatime);
 	}
 
 	for (auto it = fireballs.begin(); it != fireballs.end();) {
@@ -78,7 +78,7 @@ void FireState::Update(float deltatime) {
 void FireState::HandleInput(float deltatime) {
 	
 	if (IsKeyDown(KEY_DOWN)) {
-		if (character->isGround) {
+		if (character->onGround) {
 			character->velocity.x = 0;
 			character->setActionState(ActionState::Sit);
 

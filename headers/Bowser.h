@@ -1,5 +1,5 @@
-﻿#pragma once
-
+#pragma once
+#include <raylib.h>
 #include "Enemy.h"
 #include "time.h"
 #include "BowserFireBall.h"
@@ -22,7 +22,6 @@ private :
 	float jumpTimer = 0.0f;
 	bool movingRight = true;
 	
-	vector <BowserFireBall*> fireballs;
 	float fireBreathCooldown = 2.0f;
 	float fireBreathTimer = 0.0f;
 
@@ -31,20 +30,18 @@ public :
 	Bowser(Vector2 position, MapTheme theme);
 	~Bowser() override;
 	void LoadSource() override;
-	void Draw() override;
-	void Update(float deltatime, Map* map) override;
+	void draw() override;
+	void update(float deltatime) override;
 	void onDeath(DeathType type, Character* player = nullptr) override;
 	bool isDead() override;
+	bool FollowPlayer() const override{return true;}
 
 	EnemyType getType() const override;
+	Rectangle getBound() const override;
+
+	void onCollideWith(GameObject* object) override; //Collide with enities(character, enemies, item)
 	void Jump();
 
 	// BowserFireball
-	void DrawFireBreath();
 	void CreateFireBalls(float deltatime);
-	void UpdateFireBreath(float deltatime);
-	void CheckCollisionWithCharacter();
-	void RemoveFireBreath();
-	vector <BowserFireBall*> getBowserFireball();
-	
 };

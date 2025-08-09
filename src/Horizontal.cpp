@@ -17,7 +17,7 @@ Horizontal::Horizontal(Vector2 position) : Lift(position) {
 
 void Horizontal::SetDestination() {
 	this->destinationLeft = this->position.x - distance;
-	this->destinationRight = this->position.y + distance;
+    this->destinationRight = this->position.x + distance;
 }
 
 void Horizontal::LoadSource() {
@@ -31,7 +31,7 @@ void Horizontal::LoadSource() {
 	bound = { position.x, position.y, animations.getcurrentframe().width * scale, animations.getcurrentframe().height * scale };
 }
 
-void Horizontal::Update(float deltatime) {
+void Horizontal::update(float deltatime) {
 	if (movingLeft) {
 		this->velocity.x = speedX;
 	}
@@ -46,17 +46,63 @@ void Horizontal::Update(float deltatime) {
 	if (position.x <= destinationLeft|| position.x >= destinationRight) {
 		movingLeft = !movingLeft;
 	}
-
-	Collision::handlePlayer_LiftCollision(Global::character, this);
 }
 
-void Horizontal::Draw() {
+void Horizontal::draw() {
 	Rectangle currentframe = animations.getcurrentframe();
 	bound = { position.x, position.y, animations.getcurrentframe().width * scale, animations.getcurrentframe().height * scale };
 
 	DrawTexturePro(texture, currentframe, bound, { 0,0 }, 0, WHITE);
 }
 
-Rectangle Horizontal::getBound() {
+Rectangle Horizontal::getBound() const {
 	return this->bound;
+}
+
+void Horizontal::onCollideWith(GameObject* object) {
+	if (dynamic_cast<Character*> (object)) {
+		Character* character = dynamic_cast<Character*> (object);
+        Rectangle boundCharacter = character->getBound();
+        float eps = 0.1f;
+        float width = boundCharacter.width * (1 - eps * 2);
+        float height = 1;
+        Rectangle footSensor = {
+                boundCharacter.x + boundCharacter.width * eps,
+                boundCharacter.y + boundCharacter.height + height,
+                width,
+                height
+        };
+
+        if (CheckCollisionRecs(footSensor, bound)) {
+            character->position.y = bound.y - boundCharacter.height;
+            character->position.x += this->velocity.x * GetFrameTime();
+            character->velocity.y = 0;
+            character->onGround = true;
+            character->isJumpingUp = false;
+        }
+
+        if (CheckCollisionRecs(boundCharacter, bound)) {
+            float overlapX = fmin(boundCharacter.x + boundCharacter.width, bound.x + bound.width) - fmax(boundCharacter.x, bound.x);
+            float overlapY = fmin(boundCharacter.y + boundCharacter.height, bound.y + bound.height) - fmax(boundCharacter.y, bound.y);
+            if (overlapX > 0 && overlapY > 0) {
+                if (overlapY < overlapX) {
+                    // Vertical Collision
+                    if (character->velocity.y < 0) {
+                        character->position.y += overlapY;
+                        character->velocity.y = 0;
+                    }
+                }
+                else {
+                    // Horizontal Collision
+                    if (character->velocity.x < 0) {
+                        character->position.x += overlapX;
+                    }
+                    else {
+                        character->position.x -= overlapX;
+                    }
+                    character->velocity.x = 0;
+                }
+            }
+        }
+	}
 }

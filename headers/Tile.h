@@ -6,7 +6,8 @@ enum TileType {
 	EMPTY = 0,
 	GROUND,
 	BRICK,
-	PIPE,
+	HORIZONTAL_PIPE,
+	VERTICAL_PIPE,
 	COIN,
 	COINS_BLOCK,			//A block of multiple coins
 	QUESTION_BLOCK,			// consisting of coin, power-up items such as flower, star,. depending on game, level or mario's super form
@@ -30,9 +31,10 @@ public:
 	TileType type;						// loai tile: brick, pipe, empty,...
 	TileBehavior* behavior;				// behavior of each tile
 	MapTheme theme;
+	LayerType layerType;
 
-	Tile(int _id = 0, Rectangle _sourceRect = { 0 }, TileType _type = EMPTY, TileBehavior* _behavior = nullptr, MapTheme _theme = MapTheme::OVERWORLD)
-		: id(_id), srcRect(_sourceRect), type(_type), behavior(_behavior), theme(_theme){
+	Tile(int _id = 0, Rectangle _sourceRect = { 0 }, TileType _type = EMPTY, TileBehavior* _behavior = nullptr, MapTheme _theme = MapTheme::OVERWORLD, LayerType _layerType = LayerType::BACKGROUND)
+		: id(_id), srcRect(_sourceRect), type(_type), behavior(_behavior), theme(_theme), layerType(_layerType){
 	}
 
 	Tile(const Tile& other)
