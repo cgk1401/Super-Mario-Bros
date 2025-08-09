@@ -28,18 +28,19 @@ Map::Map(pair<int, int> _level, int r, int c) {
     //this is the old method, result in some invisible tiles
 
     for (int i = 0; i < 8; i += 2) {
-		tileSetSourceRects[i].resize(30);
+        if (i == 0) tileSetSourceRects[i].resize(31);
+		else tileSetSourceRects[i].resize(30);
     }
     for (int i = 1; i < 8; i += 2) {
-        tileSetSourceRects[i].resize(27);
+        tileSetSourceRects[i].resize(31);
 	}
     for (int i = 8; i < 20; i++) {
         tileSetSourceRects[i].resize(24);
     }
 
     for (int i = 20; i < tileRows; i++) {
-        if (i == 22) tileSetSourceRects[i].resize(10);
-        else tileSetSourceRects[i].resize(13);
+        if (i == 22) tileSetSourceRects[i].resize(4);
+        else tileSetSourceRects[i].resize(6);
     }
 
     for (int x = 0; x < tileRows; x++) {
@@ -134,7 +135,6 @@ void Map::createTileCatalog() {
 
             if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme)); //Question Block tile
             else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], STAR_BRICK, new QuestionTileBehavior(), theme)); //Decoration tile
-            ///////// The brick which has the star
 
             for (int j = 21; j < 22; j++) {
                 if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], COIN, new DecorationTileBehavior(), theme));
@@ -152,15 +152,22 @@ void Map::createTileCatalog() {
 
             tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 27), Tile(getTileIDFromCoords(i + themeOffset, 27), tileSetSourceRects[i + themeOffset - 1][27 - 1], GROUND, new SolidTileBehavior(), theme)); //ground tile
 
+            if (i + themeOffset == 1) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 31), Tile(getTileIDFromCoords(i + themeOffset, 31), tileSetSourceRects[i + themeOffset - 1][31 - 1], BRICK, new BrickTileBehavior(), theme)); //Brick tile
+
+
             if (i % 2 == 1) {
                 for (int j = 28; j < 31; j++) {
                     tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new SolidTileBehavior(), theme)); //Ground 
                 }
             }
+            else {
+                for (int j = 28; j < 32; j++) {
+                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme));
+                }
+            }
         }
     }
 	//catalog for first 8 rows, which follow the origin color palettes (overworld, underground, castle, underwater)
-
 
 
     for (int i = 9; i < 21; i++) {
@@ -196,22 +203,16 @@ void Map::createTileCatalog() {
     for (int i = 21; i <= 21; i++) {
         for(auto& theme: themes){
             int themeOffset = static_cast<int>(theme);
-            for (int j = 1; j < 11; j++) {
+            for (int j = 1; j < 5; j++) {
                 tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j - 1], ENEMY, new DecorationTileBehavior(), theme)); //Ground tiles
             }
 
-            for (int j = 11; j < 14; j++) {
+            for (int j = 5; j < 7; j++) {
                 if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], ENEMY, new DecorationTileBehavior(), theme)); //Ground tiles
             }
         }
     }
     //temporary enemies to add to map
-
- 
-
-    //tileCatalog.emplace(getTileIDFromCoords(1, 1), Tile(1, tileSetSourceRects[1 - 1][1 - 1], GROUND, new SolidTileBehavior())); //Ground tile
-    //tileCatalog.emplace(1, Tile(1, tile, ));
-
 
 }
 bool operator!=(Vector2 v1, Vector2 v2) {
@@ -337,14 +338,15 @@ EnemyType Map::getEnemyType(int ID) {
     for (int i = 21; i <= tileSetSourceRects.size(); i++) {
         for (int j = 1; j <= tileSetSourceRects[i-1].size(); j++) {
             if (j == 1 && ID == getTileIDFromCoords(i, j)) return EnemyType::GOOMBA;
-            else if (j == 3 && ID == getTileIDFromCoords(i, j)) {
+            else if (j == 2 && ID == getTileIDFromCoords(i, j)) {
                 if (i == 23) {
                     return EnemyType::REDKOOPA;
                 }
                 else return EnemyType::KOOPA;
             }
+            else if (j == 3 && ID == getTileIDFromCoords(i, j)) return EnemyType::KOOPA_PARATROOPA;
             else if (j == 4 && ID == getTileIDFromCoords(i, j)) return EnemyType::PIRANT_PLANT;
-            else if (j == 13 && (i == 21 || i == 22 || i == 24) && ID == getTileIDFromCoords(i, j)) return EnemyType::BOWSER;
+            else if (j == 6 && (i == 21 || i == 22 || i == 24) && ID == getTileIDFromCoords(i, j)) return EnemyType::BOWSER;
         }
     }
 
