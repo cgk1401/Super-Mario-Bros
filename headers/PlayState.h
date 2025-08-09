@@ -15,6 +15,7 @@
 #include "../headers/Enemy.h"
 #include "../headers/FireBar.h"
 #include "CUTSCENES/CutSceneManager.h"
+#include "VerticalLift.h"
 
 using namespace std;
 
@@ -50,6 +51,8 @@ private:
     Timer newRound_countDown;
 
     CutsceneManager cutscene;
+
+    VerticalLift* lift;
 };
 
 #endif

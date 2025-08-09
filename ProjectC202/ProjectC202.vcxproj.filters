@@ -255,6 +255,12 @@
     <ClCompile Include="..\src\BowserFireBall.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="VerticalLift.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\VerticalLift.cpp">
+      <Filter>Source Files\Entity\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -463,6 +469,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\BowserFireBall.h">
       <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\VerticalLift.h">
+      <Filter>Header Files\Entity\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

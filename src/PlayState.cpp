@@ -22,7 +22,8 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud) {
     }
     
     Global::character = character;
-   
+    lift = new VerticalLift({ 500, 700 });
+
     level = _level;
     Global::level = _level;
     world[level] = new Map(level);
@@ -144,7 +145,7 @@ void PlayState::update(float dt){
     //        }
     //    }
     //}
-
+    lift->Update(dt);
     ///______________________________DELETION__________________________________________
     enemies.erase(remove_if(enemies.begin(), enemies.end(),
         [](Enemy* e) {
@@ -170,6 +171,7 @@ void PlayState::render() {
     for(auto& e: enemies){
         e->Draw();
     }
+    lift->Draw();
     Singleton<EffectManager>::getInstance().draw();
     Singleton<ItemManager>::getInstance().Draw();
     //fg.draw();

@@ -185,6 +185,8 @@
     <ClCompile Include="..\src\TextureManager.cpp" />
     <ClCompile Include="..\src\SuperState.cpp" />
     <ClCompile Include="..\src\TransformState.cpp" />
+    <ClCompile Include="..\src\VerticalLift.cpp" />
+    <ClCompile Include="VerticalLift.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Animation.h" />
@@ -255,6 +257,7 @@
     <ClInclude Include="..\headers\TileBehavior.h" />
     <ClInclude Include="..\headers\Timer.h" />
     <ClInclude Include="..\headers\TransformState.h" />
+    <ClInclude Include="..\headers\VerticalLift.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
