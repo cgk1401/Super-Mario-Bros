@@ -47,7 +47,7 @@ void Horizontal::Update(float deltatime) {
 		movingLeft = !movingLeft;
 	}
 
-	Collision::handlePlayer_VerticalLiftCollision(Global::character, this);
+	Collision::handlePlayer_LiftCollision(Global::character, this);
 }
 
 void Horizontal::Draw() {

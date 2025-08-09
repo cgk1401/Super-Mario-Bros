@@ -99,7 +99,7 @@ void Collision::handlePlayerCollision(Character* player, Map* map, bool hasNotif
     }
 }
 
-void Collision::handlePlayer_VerticalLiftCollision(Character* character, Lift* lift) {
+void Collision::handlePlayer_LiftCollision(Character* character, Lift* lift) {
     Rectangle boundCharacter = character->getBound();
     Rectangle boundLift = lift->getBound();
     Rectangle footSensor = character->getFootSensor();
@@ -132,6 +132,14 @@ void Collision::handlePlayer_VerticalLiftCollision(Character* character, Lift* l
     if (dynamic_cast <VerticalLift*> (lift)) {
         if (CheckCollisionRecs(footSensor, boundLift)) {
             character->position.y = boundLift.y - boundCharacter.height;
+            character->velocity.y = 0;
+            character->isGround = true;
+            character->isJumpingUp = false;
+        }
+    }
+    else if (dynamic_cast <Horizontal*> (lift)) {
+        if (CheckCollisionRecs(footSensor, boundLift)) {
+            character->position.x += lift->getVelocity().x * GetFrameTime();
             character->velocity.y = 0;
             character->isGround = true;
             character->isJumpingUp = false;

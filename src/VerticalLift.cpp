@@ -45,7 +45,7 @@ void VerticalLift::Update(float deltatime) {
 		movingDown = !movingDown;
 	}
 
-	Collision::handlePlayer_VerticalLiftCollision(Global::character, this);
+	Collision::handlePlayer_LiftCollision(Global::character, this);
 }
 
 
