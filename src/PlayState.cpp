@@ -9,7 +9,7 @@
 #include "../headers/Luigi.h"
 #include "CUTSCENES/PipeCutscene.h"
 #include "nlohmann/json.hpp"
-
+#include "LevelCompleteState.h"
 PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, const char* _extraMap_filename) {
     if (_level == pair {1,1})      Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
     else if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
@@ -51,7 +51,7 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, co
     }
     else {
         Vector2 startPoint = { 100, 300 };
-        if (level == pair{ 1,1 }) startPoint = { 100, 12 * Map::TILE_SIZE };
+        if (level == pair{ 1,1 }) startPoint = { 11000, 12 * Map::TILE_SIZE };
 
         if (selectedCharacter == CharacterType::Mario) {
             character = new Mario(startPoint);
@@ -194,6 +194,10 @@ void PlayState::update(float dt){
 
     Global::character = character;
     
+    if(IsKeyPressed(KEY_N)){
+            Singleton<Game>::getInstance().addState(new LevelCompleteState(hud, character, world[level]));
+            return;
+    }
 
 
 

@@ -44,6 +44,7 @@ void SoundManager::load() {
     sounds[SoundType::FOOTSTEP] = LoadSound("../assets/Cutscene/Kidnap/footsteps-male.mp3");
     sounds[SoundType::SCREAM] = LoadSound("../assets/Cutscene/Kidnap/scream.mp3");
     sounds[SoundType::SURPRISE_SFX] = LoadSound("../assets/Cutscene/Kidnap/surprise-sound.mp3");
+    sounds[SoundType::lEVEL_COMPLETE] = LoadSound("../assets/sfx/level_complete.mp3");
     
     // Music
      musics[MusicType::MAIN_THEME_OVERWORLD] = LoadMusicStream("../assets/music/Mario/DEFAULT_OVERWORLD_THEME.mp3");

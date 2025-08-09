@@ -1,6 +1,7 @@
 #include "CUTSCENES/FlagPoleCutscene.h"
 #include "PlayState.h"
 #include "HUD.h"
+#include "LevelCompleteState.h"
 
 class PlayState;
 FlagPoleCutscene::FlagPoleCutscene(Character* _player, HUD* _hud, Map* _map, CameraController _camera){
@@ -79,7 +80,7 @@ bool FlagPoleCutscene::isFinished() const {
         pair<int, int> newLevel = {currentLevel.first, currentLevel.second + 1};
         if (newLevel.second <= 4) {
             player->notify(EventType::FINISH_LEVEL);
-            Singleton<Game>::getInstance().changeState(new PlayState(newLevel, hud, player));
+            Singleton<Game>::getInstance().addState(new LevelCompleteState(hud, player, map));
         }
     }
     return currentPhase == FlagPolePhase::DONE;

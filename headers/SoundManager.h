@@ -36,6 +36,7 @@ enum class SoundType {
     SCREAM,
     FOOTSTEP,
     SURPRISE_SFX,
+    lEVEL_COMPLETE,
 };
 
 enum class MusicType {
