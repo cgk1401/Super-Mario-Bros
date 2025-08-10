@@ -29,18 +29,17 @@ Map::Map(pair<int, int> _level, int r, int c) {
     //this is the old method, result in some invisible tiles
 
     for (int i = 0; i < 8; i += 2) {
-        if (i == 0) tileSetSourceRects[i].resize(31);
-		else tileSetSourceRects[i].resize(30);
+		tileSetSourceRects[i].resize(30);
     }
     for (int i = 1; i < 8; i += 2) {
-        tileSetSourceRects[i].resize(31);
+        tileSetSourceRects[i].resize(27);
 	}
     for (int i = 8; i < 20; i++) {
         tileSetSourceRects[i].resize(24);
     }
 
     for (int i = 20; i < tileRows; i++) {
-        if (i == 22) tileSetSourceRects[i].resize(4);
+        if (i == 22) tileSetSourceRects[i].resize(5);
         else tileSetSourceRects[i].resize(6);
     }
 
@@ -168,17 +167,9 @@ void Map::createTileCatalog() {
 
             tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 27), Tile(getTileIDFromCoords(i + themeOffset, 27), tileSetSourceRects[i + themeOffset - 1][27 - 1], GROUND, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //ground tile
 
-            if (i + themeOffset == 1) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 31), Tile(getTileIDFromCoords(i + themeOffset, 31), tileSetSourceRects[i + themeOffset - 1][31 - 1], BRICK, new BrickTileBehavior(), theme)); //Brick tile
-
-
             if (i % 2 == 1) {
                 for (int j = 28; j < 31; j++) {
                     tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new SolidTileBehavior(), theme, LayerType::PLATFORM)); //Ground 
-                }
-            }
-            else {
-                for (int j = 28; j < 32; j++) {
-                    tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme));
                 }
             }
         }
@@ -230,6 +221,7 @@ void Map::createTileCatalog() {
             }
 
             for (int j = 5; j < 7; j++) {
+                if (i + themeOffset == 23 && j == 5) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], GROUND, new DecorationTileBehavior(), theme)); //Ground tiles
                 if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], ENEMY, new DecorationTileBehavior(), theme)); //Ground tiles
             }
         }
