@@ -267,6 +267,9 @@
     <ClCompile Include="..\src\Horizontal.cpp">
       <Filter>Source Files\Entity\Item</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\KoopaParatroopa.cpp">
+      <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\headers\Game.h">
@@ -490,6 +493,9 @@
     </ClInclude>
     <ClInclude Include="..\headers\Horizontal.h">
       <Filter>Header Files\Entity\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\KoopaParatroopa.h">
+      <Filter>Header Files\Entity\Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

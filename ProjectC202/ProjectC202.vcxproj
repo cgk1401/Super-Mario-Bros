@@ -163,6 +163,7 @@
     <ClCompile Include="..\src\HUD.cpp" />
     <ClCompile Include="..\src\ItemManager.cpp" />
     <ClCompile Include="..\src\KoopaDeathEffect.cpp" />
+    <ClCompile Include="..\src\KoopaParatroopa.cpp" />
     <ClCompile Include="..\src\KoopaTroopa.cpp" />
     <ClCompile Include="..\src\LevelState.cpp" />
     <ClCompile Include="..\src\Luigi.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="..\headers\Item.h" />
     <ClInclude Include="..\headers\ItemManager.h" />
     <ClInclude Include="..\headers\KoopaDeathEffect.h" />
+    <ClInclude Include="..\headers\KoopaParatroopa.h" />
     <ClInclude Include="..\headers\KoopaTroopa.h" />
     <ClInclude Include="..\headers\LevelState.h" />
     <ClInclude Include="..\headers\Lift.h" />

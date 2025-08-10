@@ -2,8 +2,8 @@
 #include <iostream>
 
 SoundManager::SoundManager() {
-    musicVolume = 0.3f;
-    soundVolume = 0.3f;
+    musicVolume = 0.5f;
+    soundVolume = 0.5f;
     load();
     setmusicVolume();
     setsoundVolume();

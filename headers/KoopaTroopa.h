@@ -44,7 +44,7 @@ public :
 	void draw() override;
 	void update(float deltatime) override;
 
-	EnemyType getType() const;
+	EnemyType getType() const override;
 	Rectangle getBound() const override;
 	void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
     void onCollideWith(GameObject* object) override;

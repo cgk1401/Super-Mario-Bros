@@ -36,7 +36,7 @@ public:
 
 	void ChangeState(GoomBaState newState); // thay đổi trạng thái khi collision
 
-	EnemyType getType() const;
+	EnemyType getType() const override;
 
 	void draw() override;
 	void update(float deltatime) override;
