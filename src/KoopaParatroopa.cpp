@@ -1,6 +1,7 @@
 ﻿#include "../headers/KoopaParatroopa.h"
 #include "../headers/Singleton.h"
 #include "../headers/TextureManager.h"
+#include "../headers/EffectManager.h"
 
 KoopaParatroop::KoopaParatroop() : Enemy() {
 	interactWithMap = false;
@@ -17,7 +18,6 @@ KoopaParatroop::KoopaParatroop(Vector2 position, MapTheme theme) : Enemy() {
 	setDistance();
 }
 
-
 KoopaParatroop::~KoopaParatroop(){}
 
 void KoopaParatroop::LoadSource() {
@@ -26,32 +26,41 @@ void KoopaParatroop::LoadSource() {
 	animations.currentframe = 0.0f;
 	animations.currenttime = 0.0f;
 	animations.durationtime = 0.3f;
-
-	if (theme == MapTheme::OVERWORLD) {
-		animations.frame.push_back({ 36, 112, 16, 24 });
-		animations.frame.push_back({ 54, 112, 16, 24 });
-	}
-	else if (theme == MapTheme::UNDERGROUND || theme == MapTheme::CASTLE) {
-		animations.frame.push_back({ 182, 112, 16, 24 });
-		animations.frame.push_back({ 200, 112, 16, 24 });
-	}
-	else if (theme == MapTheme::UNDERWATER) {
-		animations.frame.push_back({ 328, 112, 16, 24 });
-		animations.frame.push_back({ 346, 112, 16, 24 });
-	}
+	CreateFrame(animations);
 }
 
 void KoopaParatroop::setDistance() {
 	destinationAbove = this->position.y - distance;
-	destionationBelow = this->position.y + distance;
+	destinationBelow = this->position.y + distance;
 }
 
 void KoopaParatroop::onDeath(DeathType type, Character* player) {
-
+	switch (type)
+	{
+	case DeathType::FIREBALL_HIT:
+		ChangeState(KoopParatroopState::Die);
+		break;
+	default:
+		break;
+	}
 }
 
 bool KoopaParatroop::isDead() {
-	return false;
+	return currentState == KoopParatroopState::Die;
+}
+
+void KoopaParatroop::ChangeState(KoopParatroopState state) {
+	currentState = state;
+	animations.durationtime = 0.0f;
+	animations.currentframe = 0.0f;
+	
+	Animation animationdead;
+	animationdead.currentframe = 0;
+	animationdead.durationtime = 0.1f;
+	animationdead.currenttime = 0.0f;
+	CreateFrame(animationdead, KoopParatroopState::Die);
+
+	Singleton<EffectManager>::getInstance().koopaDeath(this->position, texture, animationdead);
 }
 
 EnemyType KoopaParatroop::getType() const {
@@ -66,13 +75,51 @@ void KoopaParatroop::draw() {
 
 void KoopaParatroop::update(float deltatime) {
 	animations.Update(deltatime);
+
+	if (movingDown) {
+		velocity.y = speedY;
+	}
+	else if (!movingDown) {
+		velocity.y = -speedY;
+	}
+
+	position.x += velocity.x * deltatime;
+	position.y += velocity.y * deltatime;
+
+	if (position.y >= destinationBelow || position.y <= destinationAbove) {
+		movingDown = !movingDown;
+	}
+
 }
 
-Rectangle KoopaParatroop::getBound() const
-{
-	return Rectangle();
+Rectangle KoopaParatroop::getBound() const {
+	Rectangle frame = animations.getcurrentframe();
+	float delta = 2.0f; //narrow the width
+	return {
+		position.x + delta,
+		position.y,
+		frame.width * scale - delta * 2,
+		frame.height * scale
+	};
 }
 
-void KoopaParatroop::onCollideWith(GameObject* object)
-{
+void KoopaParatroop::CreateFrame(Animation& animations, KoopParatroopState currentState) {
+	float inverse = 1;
+	if (currentState == KoopParatroopState::Alive) inverse = 1;
+	else inverse = -1;
+
+	if (theme == MapTheme::OVERWORLD) {
+		animations.frame.push_back({ 36, 112, inverse* 16, inverse *24 });
+		animations.frame.push_back({ 54, 112, inverse * 16, inverse * 24 });
+	}
+	else if (theme == MapTheme::UNDERGROUND || theme == MapTheme::CASTLE) {
+		animations.frame.push_back({ 182, 112, inverse * 16, inverse * 24 });
+		animations.frame.push_back({ 200, 112, inverse * 16, inverse * 24 });
+	}
+	else if (theme == MapTheme::UNDERWATER) {
+		animations.frame.push_back({ 328, 112, inverse * 16, inverse * 24 });
+		animations.frame.push_back({ 346, 112, inverse * 16, inverse * 24 });
+	}
 }
+
+void KoopaParatroop::onCollideWith(GameObject* object) {}

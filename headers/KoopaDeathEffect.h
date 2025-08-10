@@ -16,6 +16,7 @@ private:
 public:
     KoopaDeathEffect() {}
     KoopaDeathEffect(Vector2 position, const Texture2D& texture, Rectangle frame);
+    KoopaDeathEffect(Vector2 position, const Texture2D& texture, Animation animations);
     
     void update(float dt) override;
     void draw(const Texture2D& texture) override;

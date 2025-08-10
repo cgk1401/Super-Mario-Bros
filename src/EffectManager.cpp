@@ -49,7 +49,10 @@ void EffectManager::koopaDeath(Vector2 position, const Texture2D& texture, Recta
     effects.emplace_back(new KoopaDeathEffect(position, texture, frame));
 }
 
-
+void EffectManager::koopaDeath(Vector2 position, const Texture2D& texture, Animation animations) {
+    cout << "Effet animation\n";
+    effects.emplace_back(new KoopaDeathEffect(position, texture, animations));
+}
 
 void EffectManager::onNotify(const EventType& event, void* data){
     map<EventType, EventInfo> eventMap = Singleton<EventDataBase>::getInstance().getMap();

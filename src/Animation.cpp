@@ -30,6 +30,6 @@ Rectangle Animation::getcurrentframe() const {
 }
 
 void Animation::reset(){
-	 currenttime = 0;
+	currenttime = 0;
     currentframe = 0;
 }
