@@ -2,6 +2,7 @@
 #include "../headers/GoomBa.h"
 #include "../headers/PiranhaPlant.h"
 #include "../headers/KoopaTroopa.h"
+#include "../headers/KoopaParatroopa.h"
 #include "../headers/Bowser.h"
 #include "../headers/Global.h"
 
@@ -18,6 +19,8 @@ public:
                 return new PiranhaPlant(pos, theme);
             case EnemyType::BOWSER :
                 return new Bowser(pos, theme);
+            case EnemyType::KOOPA_PARATROOPA :
+                return new KoopaParatroop(pos, theme);
             default:
                 return nullptr;
         }

@@ -16,5 +16,4 @@ public :
 	bool isFinish() const;
 	Rectangle getcurrentframe() const;
 	void reset();
-	
 };

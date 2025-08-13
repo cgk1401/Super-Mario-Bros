@@ -1,7 +1,8 @@
 #include "../headers/KoopaDeathEffect.h"
 #include "../headers/TextureManager.h"
 
-KoopaDeathEffect::KoopaDeathEffect(Vector2 position, const Texture2D& texture, Rectangle frame) : pos(position), texture(texture) {
+KoopaDeathEffect::KoopaDeathEffect(Vector2 position, const Texture2D& texture, Rectangle frame) 
+    : pos(position), texture(texture) {
 
     vector<Rectangle> frames;
     frames.push_back(frame);
@@ -11,16 +12,23 @@ KoopaDeathEffect::KoopaDeathEffect(Vector2 position, const Texture2D& texture, R
     anim.durationtime = 0.1;
     anim.reset();
 }
+
+KoopaDeathEffect::KoopaDeathEffect(Vector2 position, const Texture2D& texture, Animation animations) 
+    : pos(position), texture(texture) {
+    anim = animations;
+    anim.durationtime = 0.3f;
+    anim.reset();
+}
+
+
 void KoopaDeathEffect::update(float dt) {
     anim.Update(dt);
-    
     const float gravity = 1000;
     speed += gravity * dt;
     pos.y += speed * dt;
 
 }
 void KoopaDeathEffect::draw(const Texture2D& texture) {
-   
     Rectangle src = anim.getcurrentframe();
     const float scale = 3;
     DrawTexturePro(this->texture,
