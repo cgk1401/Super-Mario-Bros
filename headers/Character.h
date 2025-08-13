@@ -40,11 +40,12 @@ protected:
 	float BasePosition;
 
 	PhysicsConfig config;
-	bool isJumpingUp = false;
+	//bool isJumpingUp = false;
 	float jumpTimeElapsed = 0;
-
 public:
+	bool isJumpingUp = false;
 	bool isControlled = false; 
+	bool applyGravity = true;
 
 	virtual ~Character();
 

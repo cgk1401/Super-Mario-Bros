@@ -5,7 +5,7 @@
 #include "../headers/CharacterSelection.h"
 #include "../headers/AudioSettingsMenu.h"
 #include "../headers/LevelState.h"
-
+#include "KeyBindingState.h"
 MenuState::MenuState() {
     Singleton<SoundManager>::getInstance().playMusic(MusicType::MENU_, true);
     TraceLog(LOG_INFO, "Menu: Constructor");
@@ -13,7 +13,7 @@ MenuState::MenuState() {
     const int amount_button = 3;
     buttons.resize(amount_button);
 
-    ButtonLayoutConfig cfg(amount_button);
+    ButtonLayoutConfig cfg(amount_button, 40);
     const char* buttonLabels[amount_button] = {"PLAY", "LEVEL DESIGN", "EXIT"};
     buttons = CreateButtons(buttonLabels, cfg);
 
@@ -100,6 +100,10 @@ void MenuState::update(float deltatime){
     else if (selectedButton == 1) {
         for (auto& button : setting_buttons) button->update(deltatime);
         backButton->update(deltatime);
+    }
+
+    if(IsKeyPressed(KEY_N)){
+        Singleton<Game>::getInstance().addState(new KeyBindingState);
     }
 }
 

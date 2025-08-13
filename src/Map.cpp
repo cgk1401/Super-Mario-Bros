@@ -39,8 +39,8 @@ Map::Map(pair<int, int> _level, int r, int c) {
     }
 
     for (int i = 20; i < tileRows; i++) {
-        if (i == 22) tileSetSourceRects[i].resize(10);
-        else tileSetSourceRects[i].resize(13);
+        if (i == 22) tileSetSourceRects[i].resize(5);
+        else tileSetSourceRects[i].resize(6);
     }
 
     for (int x = 0; x < tileRows; x++) {
@@ -148,9 +148,8 @@ void Map::createTileCatalog() {
                 tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
             }
 
-            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme, LayerType::PLATFORM)); //Question Block tile
-            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], STAR_BRICK, new QuestionTileBehavior(), theme, LayerType::PLATFORM )); //Decoration tile
-            ///////// The brick which has the star
+            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme)); //Question Block tile
+            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], STAR_BRICK, new QuestionTileBehavior(), theme)); //Decoration tile
 
             for (int j = 21; j < 22; j++) {
                 if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], COIN, new DecorationTileBehavior(), theme, LayerType::FOREGROUND));
@@ -176,7 +175,6 @@ void Map::createTileCatalog() {
         }
     }
 	//catalog for first 8 rows, which follow the origin color palettes (overworld, underground, castle, underwater)
-
 
 
     for (int i = 9; i < 21; i++) {
@@ -218,15 +216,18 @@ void Map::createTileCatalog() {
     for (int i = 21; i <= 21; i++) {
         for(auto& theme: themes){
             int themeOffset = static_cast<int>(theme);
-            for (int j = 1; j < 11; j++) {
-                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j - 1], ENEMY, new DecorationTileBehavior(), theme, LayerType::ENEMY)); //Ground tiles
+            for (int j = 1; j < 5; j++) {
+                tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset- 1][j - 1], ENEMY, new DecorationTileBehavior(), theme)); //Ground tiles
             }
 
-            for (int j = 11; j < 14; j++) {
-                if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], ENEMY, new DecorationTileBehavior(), theme, LayerType::ENEMY)); //Ground tiles
+            for (int j = 5; j < 7; j++) {
+                if (i + themeOffset == 23 && j == 5) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], VERTICAL_LIFT, new DecorationTileBehavior(), theme)); //Ground tiles
+                if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], ENEMY, new DecorationTileBehavior(), theme)); //Ground tiles
             }
         }
     }
+    //temporary enemies to add to map
+
 }
 bool operator!=(Vector2 v1, Vector2 v2) {
     return v1.x != v2.x || v1.y != v2.y;
@@ -275,7 +276,7 @@ void Map::draw(bool isEditing) {
                     Texture2D tileTexture = texture;
                     Rectangle src = it->second.srcRect;
 
-                    if ((it->second.type == ENEMY || it->second.type == TileType::COIN) && isEditing == false) continue;
+                    if ((it->second.type == ENEMY || it->second.type == TileType::COIN || it->second.type == VERTICAL_LIFT || it->second.type == HORIZONTAL_LIFT ) && isEditing == false) continue;
                     else if(it->second.type ==  TileType::QUESTION_BLOCK){
                         src = tileAnimation.at(TileType::QUESTION_BLOCK).getcurrentframe();
                         src.y +=  (float) it->second.theme * 16.0f;
@@ -402,14 +403,15 @@ EnemyType Map::getEnemyType(int ID) {
     for (int i = 21; i <= tileSetSourceRects.size(); i++) {
         for (int j = 1; j <= tileSetSourceRects[i-1].size(); j++) {
             if (j == 1 && ID == getTileIDFromCoords(i, j)) return EnemyType::GOOMBA;
-            else if (j == 3 && ID == getTileIDFromCoords(i, j)) {
+            else if (j == 2 && ID == getTileIDFromCoords(i, j)) {
                 if (i == 23) {
                     return EnemyType::REDKOOPA;
                 }
                 else return EnemyType::KOOPA;
             }
+            else if (j == 3 && ID == getTileIDFromCoords(i, j)) return EnemyType::KOOPA_PARATROOPA;
             else if (j == 4 && ID == getTileIDFromCoords(i, j)) return EnemyType::PIRANT_PLANT;
-            else if (j == 13 && (i == 21 || i == 22 || i == 24) && ID == getTileIDFromCoords(i, j)) return EnemyType::BOWSER;
+            else if (j == 6 && (i == 21 || i == 22 || i == 24) && ID == getTileIDFromCoords(i, j)) return EnemyType::BOWSER;
         }
     }
 
@@ -444,6 +446,9 @@ void Map::setTile(int row, int col, int tileID, int layerIndex) {
     }
     else if(it->second.type == TileType::FIREBAR_BLOCK){
         Singleton<ItemManager>::getInstance().Spawn(ItemType::FIRE_BAR, {(float) col * TILE_SIZE + TILE_SIZE / 3, (float) row * TILE_SIZE + TILE_SIZE / 3});
+    }
+    else if (it->second.type == VERTICAL_LIFT){
+        Singleton<ItemManager>::getInstance().Spawn(ItemType::HORIZONATAL_LIFT, {(float) col * TILE_SIZE + TILE_SIZE / 3, (float) row * TILE_SIZE + TILE_SIZE / 3});
     }
     layers.at(layerIndex).mapData[row][col].tileID = tileID;
 }

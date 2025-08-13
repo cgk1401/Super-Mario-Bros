@@ -8,6 +8,7 @@
 #include "../headers/TransformState.h"
 #include "../headers/Enemy.h"
 #include "Global.h"
+#include "KeyBindingState.h"
 #include <iostream>
 using namespace std;
 
@@ -84,18 +85,14 @@ CharacterState* Character::GetCurrentState() const {
 
 void Character::setActionState(ActionState newActionState) {
 	if (currentAction != newActionState) {
-		//avoid conflict between 2 frames if they are different of size
 		Vector2 prevFrame = {animations[currentAction].getcurrentframe().width, animations[currentAction].getcurrentframe().height};
 		Vector2 newFrame = {animations[newActionState].getcurrentframe().width, animations[newActionState].getcurrentframe().height};
 		float heightDiff = prevFrame.y - newFrame.y;
 		float widthDiff = prevFrame.x - newFrame.x;
 		position.y += heightDiff * scale;
-		//position.x += widthDiff * scale;
 
 		currentAction = newActionState;
 		animations[currentAction].reset();
-		//Rectangle currentframe = animations[currentAction].getcurrentframe();
-		//position.y = BasePosition - currentframe.height * scale;
 	}
 }
 
@@ -149,27 +146,27 @@ void Character::HandleInput(float deltatime) {
 	float targetspeed = IsKeyDown(KEY_LEFT_CONTROL) ? config.MAX_SPEED : config.SPEED;
 	float acc = config.ACCELERATION;
 
-	if (IsKeyDown(KEY_RIGHT)) {
+	if (IsKeyDown(KeyBindingState::controls.moveRight)) {
 		if (velocity.x < 0) acc *= 3.0f; // tăng gia tốc khi đổi hướng
 		velocity.x = approach(velocity.x, targetspeed, acc * deltatime);
 		setActionState(ActionState::Run);
 		setDirection(Direction::Right);
 	}
-	else if (IsKeyDown(KEY_LEFT)) {
+	else if (IsKeyDown(KeyBindingState::controls.moveLeft)) {
 		if (velocity.x > 0) acc *= 3.0f;
 		velocity.x = approach(velocity.x, -targetspeed, acc * deltatime);
 		setActionState(ActionState::Run);
 		setDirection(Direction::Left);
 	}
 
-	if (!IsKeyDown(KEY_LEFT) && !IsKeyDown(KEY_RIGHT)) {
+	if (!IsKeyDown(KeyBindingState::controls.moveLeft) && !IsKeyDown(KeyBindingState::controls.moveRight)) {
 		if (onGround) {
 			velocity.x = 0.0f;
 			setActionState(ActionState::Idle);
 		}
 	}
 	 //xử lý nhảy
-	 if (IsKeyPressed(KEY_SPACE) && onGround) {
+	 if ((IsKeyPressed(KeyBindingState::controls.jump) || IsKeyPressed(KEY_SPACE)) && onGround) {
 		velocity.y = config.JUMPFORCE;
 		onGround = false;
 		isJumpingUp = true;
@@ -180,10 +177,10 @@ void Character::HandleInput(float deltatime) {
 		else  Singleton<SoundManager>::getInstance().play(SoundType::JUMP);
 	 }
 
-	 if (IsKeyDown(KEY_SPACE) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !onGround) {
+	 if ((IsKeyDown(KeyBindingState::controls.jump) || IsKeyDown(KEY_SPACE)) && isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && !onGround) {
 		jumpTimeElapsed += deltatime;
 	 }
-	 else if (isJumpingUp && !IsKeyDown(KEY_SPACE)) {
+	 else if (isJumpingUp && !(IsKeyDown(KeyBindingState::controls.jump) || IsKeyDown(KEY_SPACE))) {
 		isJumpingUp = false;
 	 }
 	
@@ -200,25 +197,22 @@ void Character::update(float deltatime) {
 
 		if (!onGround) {
 			if(currentAction != ActionState::FlagpoleHold){
-				if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && IsKeyDown(KEY_SPACE)) {
-					velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
-				}
-				else {
-					velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
-				
+				if(applyGravity){
+					if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && (IsKeyDown(KeyBindingState::controls.jump) || IsKeyDown(KEY_SPACE))) {
+						velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
+					}
+					else {
+						velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
+					
+					}
 				}
 				if(isJumpingUp) setActionState(ActionState::Jump);
 			}
 		}
-		else {
-			velocity.y = 0; 
-			isJumpingUp = false;
-			if (fabs(velocity.x) < 0.1f) {
-				if (IsKeyDown(KEY_P)) {
-					setActionState(ActionState::FlagpoleHold);
-				} 
-			} 
-		}
+		// else {
+		// 	velocity.y = 0; 
+		// 	isJumpingUp = false;
+		// }
 	
 
 	position.x += velocity.x * deltatime;

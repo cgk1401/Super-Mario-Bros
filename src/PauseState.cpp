@@ -8,7 +8,7 @@ PauseState::PauseState() {
     buttons.resize(amount_button);
 
     ButtonLayoutConfig cfg(amount_button);
-    const char* buttonLabels[4] = { "RESUME", "RESTART", "OPTIONS", "QUIT" };
+    const char* buttonLabels[4] = { "RESUME", "RESTART", "SETTINGS", "QUIT" };
     buttons = CreateButtons(buttonLabels, cfg);
    Singleton<SoundManager>::getInstance().play(SoundType::PAUSE);
 }

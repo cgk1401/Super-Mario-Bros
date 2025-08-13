@@ -16,6 +16,15 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, co
     else if (_level == pair {1,3}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
     else if (_level == pair {1,4}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_CASTLE, true);
 
+    if (selectedCharacter == CharacterType::Mario) {
+        character = new Mario({ 100, 300 });
+    }
+    else if (selectedCharacter == CharacterType::Luigi) {
+        character = new Luigi({ 100, 300 });
+    }
+    
+    Global::character = character;
+
     level = _level;
     Global::level = _level;
     world[level] = new Map(level);
@@ -51,7 +60,7 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, co
     }
     else {
         Vector2 startPoint = { 100, 300 };
-        if (level == pair{ 1,1 }) startPoint = { 11000, 12 * Map::TILE_SIZE };
+        if (level == pair{ 1,1 }) startPoint = { 100, 12 * Map::TILE_SIZE };
 
         if (selectedCharacter == CharacterType::Mario) {
             character = new Mario(startPoint);
@@ -130,7 +139,6 @@ void PlayState::update(float dt){
     bg.update({character->getBound().x, character->getBound().y},camera.getCamera(), dt);
     fg.update( {character->getBound().x, character->getBound().y},camera.getCamera(), dt);
     world[level]->update();
-
     
     for(auto& e: enemies){
         if(e->isActive()) {
@@ -145,26 +153,8 @@ void PlayState::update(float dt){
         }
     }
     
-    vector<GameObject*> allObjects;
-    allObjects.push_back(character);
-    allObjects.insert(allObjects.end(), enemies.begin(), enemies.end());
-    vector<Item*> items = Singleton<ItemManager>::getInstance().getItems();
-    allObjects.insert(allObjects.end(), items.begin(), items.end());
-    FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
-    if (fireState) {
-        auto& fireballs = fireState->getFireBall(); 
-        for (auto& f : fireballs) {
-           allObjects.push_back(f);
-        }
-    }
-    for(auto& object: allObjects){
-        Collision::handleMapCollision(object, world[level]);
-    }
-
-    Collision::handleMultipleObjectCollisions(allObjects);
-
+  
     ///______________________________ENTITIES__________________________________________
-    Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
     if (character->getCurrentAction() != ActionState::Die) {
         Singleton<SoundManager>::getInstance().updateMusic(dt);
         if(character->getCharacterStateType() !=  CharacterStateType::TransformState) character->HandleInput(dt);
@@ -191,14 +181,26 @@ void PlayState::update(float dt){
         }
     }
     Singleton<EffectManager>::getInstance().update(dt);
+    Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
 
     Global::character = character;
-    
-    if(IsKeyPressed(KEY_N)){
-            Singleton<Game>::getInstance().addState(new LevelCompleteState(hud, character, world[level]));
-            return;
-    }
 
+    vector<GameObject*> allObjects;
+    allObjects.push_back(character);
+    allObjects.insert(allObjects.end(), enemies.begin(), enemies.end());
+    vector<Item*> items = Singleton<ItemManager>::getInstance().getItems();
+    allObjects.insert(allObjects.end(), items.begin(), items.end());
+    FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
+    if (fireState) {
+        auto& fireballs = fireState->getFireBall(); 
+        for (auto& f : fireballs) {
+           allObjects.push_back(f);
+        }
+    }
+    for(auto& object: allObjects){
+        Collision::handleMapCollision(object, world[level]);
+    }
+    Collision::handleMultipleObjectCollisions(allObjects);
 
 
     ///______________________________DELETION__________________________________________
@@ -280,7 +282,7 @@ void PlayState::saveGame(const char* filename) {
 
     // Save player data
     j["player"]["x"] = character->getPosition().x;
-    j["player"]["y"] = character->getPosition().y;
+    j["player"]["y"] = character->getPosition().y - Map::TILE_SIZE;
     j["player"]["type"] = character->getCharacterType();
     j["player"]["state"] = character->getCharacterStateType();
     j["player"]["action"] = character->getCurrentAction();

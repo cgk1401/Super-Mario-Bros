@@ -5,8 +5,14 @@ class Enemy;
 class Map;
 class Mushroom;
 class Star;
-#include "FireBall.h"
+class BowserFireBall;
+class Lift;
+class FireBall;
 #include "GameObject.h"
+#include <vector>
+
+using namespace std;
+
 class Collision{
 public:
     static void handleMapCollision(GameObject* object, Map* map);

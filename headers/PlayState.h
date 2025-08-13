@@ -15,6 +15,9 @@
 #include "../headers/Enemy.h"
 #include "../headers/FireBar.h"
 #include "CUTSCENES/CutSceneManager.h"
+#include "Lift.h"
+#include "VerticalLift.h"
+#include "Horizontal.h"
 
 using namespace std;
 
@@ -50,6 +53,7 @@ private:
 
     CutsceneManager cutscene;
     void loadGame(const char* filename);
+    
 };
 
 #endif

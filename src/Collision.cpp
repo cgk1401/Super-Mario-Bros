@@ -9,6 +9,11 @@
 #include "../headers/GoomBa.h"
 #include "../headers/KoopaTroopa.h"
 #include "../headers/ConcreteTileBehavior.h"
+#include "../headers/BowserFireBall.h"
+#include "../headers/FireBall.h"
+#include "../headers/Lift.h"
+#include "../headers/VerticalLift.h"
+#include "../headers/Horizontal.h"
 #include <cmath>
 
 

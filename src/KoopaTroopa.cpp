@@ -2,6 +2,7 @@
 #include "../headers/Collision.h"
 #include "../headers/TextureManager.h"
 #include "../headers/EffectManager.h"
+#include "../headers/Character.h"
 class Map;
 
 KoopTroopa::KoopTroopa(EnemyType type) : Enemy() {

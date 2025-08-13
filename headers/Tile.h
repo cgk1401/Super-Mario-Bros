@@ -20,6 +20,8 @@ enum TileType {
 	STAR_BRICK,
 	FIREBAR_BLOCK,
 	BLACK_BLOCK,
+	VERTICAL_LIFT,
+	HORIZONTAL_LIFT,
 	//list ra hết mấy loại tile nha...
 };
 

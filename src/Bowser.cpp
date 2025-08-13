@@ -59,11 +59,6 @@ void Bowser::draw() {
 void Bowser::update(float deltatime) {
 	animations.Update(deltatime);
 
-	//Follow player?
-	// if (this->position.x < Global::character->getPosition().x) {
-	// 	this->direction = Direction::Right;
-	// }
-
 	if (direction == Direction::Right) {
 		velocity.x = 0;
 	}
@@ -103,35 +98,8 @@ void Bowser::update(float deltatime) {
 		velocity.y = 0;
 	}
 
-	/*if (movingRight) {
-		velocity.x = moveSpeed;
-	}
-	else {
-		velocity.x = -moveSpeed;
-	}
-
-	moved += fabs(velocity.x * deltatime);
-
-	if (moved >= moveDistance) {
-		movingRight = !movingRight;
-		moved = 0.0f;
-		if (onGround) {
-			Jump();
-			jumpTimer = 0.0f;
-		}
-	}*/
-	
-
 	position.x += velocity.x * deltatime;
 	position.y += velocity.y * deltatime;
-
-	// Rectangle currentFrame = animations.getcurrentframe();
-	// bound = { position.x, position.y, currentFrame.width * scale, currentFrame.height * scale };
-
-	/*CreateFireBalls(deltatime);*/
-
-	//Collision::handleEnemyCollision(this, map);
-
 }
 
 void Bowser::onDeath(DeathType type, Character* player) {

@@ -3,7 +3,7 @@
 OptionState::OptionState() {
 	const int amount_button = 3;
 	buttons.resize(amount_button);
-	ButtonLayoutConfig cfg(amount_button);
+	ButtonLayoutConfig cfg(amount_button, 40);
 	const char* buttonLabels[amount_button] = {"NEW GAME", "CONTINUE", "LEVEL"};
 	buttons = CreateButtons(buttonLabels, cfg);
 

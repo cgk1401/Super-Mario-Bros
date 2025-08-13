@@ -25,6 +25,7 @@ private :
     float LEFT_MARGIN = 30;
     bool draggingMusicSlider;
     bool draggingSoundSlider;
+    Rectangle keybindingButton;
 
 public :
     AudioSettingsMenu();

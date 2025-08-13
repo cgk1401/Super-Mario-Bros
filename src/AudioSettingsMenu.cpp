@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <cstdio>
 #include "MenuState.h"
-
+#include "KeyBindingState.h"
 AudioSettingsMenu::AudioSettingsMenu() {
 	background = Singleton<TextureManager>::getInstance().load(TextureType::BACKGROUND_1);
 	audioPanel = Singleton<TextureManager>::getInstance().load(TextureType::AUDIOPANEL);
@@ -30,6 +30,8 @@ AudioSettingsMenu::AudioSettingsMenu() {
 	soundSliderHandle = { soundSlider.x + widthslider * currentsoundVolume, soundSlider.y - 10, 10, 40 };
 	draggingMusicSlider = false;
 	draggingSoundSlider = false;
+
+	keybindingButton = {positionPanel.x + 23, positionPanel.y + 101, 93, 93};
 }
 
 AudioSettingsMenu::~AudioSettingsMenu() {
@@ -59,6 +61,11 @@ void AudioSettingsMenu::handleInput() {
 		Singleton<Game>::getInstance().pop();
 		shouldExit = true;
 	}
+
+	 if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), keybindingButton)){
+            Singleton<SoundManager>::getInstance().play(SoundType::CLICK_BUTTON);
+        Singleton<Game>::getInstance().replaceState(new KeyBindingState);
+     }
 }
 
 void AudioSettingsMenu::update(float deltatime) {
@@ -82,17 +89,18 @@ void AudioSettingsMenu::update(float deltatime) {
 }
 
 void AudioSettingsMenu::render() {
-	DrawTexture(background, 0, 0, WHITE); DrawTexturePro(background,
-		{ 0,0, (float)background.width,(float)background.height },
-		{ 0,0, screenWidth, screenHeight },
-		{ 0,0 }, 0, WHITE);
-	DrawRectangleRec(Rectangle{ 0, 0, screenWidth, screenHeight }, Fade(BLACK, 0.4f));
+	// DrawTexture(background, 0, 0, WHITE); DrawTexturePro(background,
+	// 	{ 0,0, (float)background.width,(float)background.height },
+	// 	{ 0,0, screenWidth, screenHeight },
+	// 	{ 0,0 }, 0, WHITE);
+	DrawRectangleRec(Rectangle{ 0, 0, screenWidth, screenHeight }, Fade(BLACK, 0.6f));
 	backButton->draw();
 	DrawTexture(audioPanel, positionPanel.x, positionPanel.y, WHITE);
-	DrawText(musicText, positionPanel.x + LEFT_MARGIN, musicSlider.y, 20, darkYellow);
-	DrawText(soundText, positionPanel.x + LEFT_MARGIN, soundSlider.y, 20, darkYellow);
-	DrawText(TextFormat("%.2f", currentmusicVolume), positionPanel.x + LEFT_MARGIN + MeasureText(musicText, 20) + 8, musicSlider.y, 20, WHITE);
-	DrawText(TextFormat("%.2f", currentsoundVolume), positionPanel.x + LEFT_MARGIN + MeasureText(soundText, 20) + 8, soundSlider.y, 20, WHITE);
+	float textPosX = positionPanel.x + 200;
+	DrawText(musicText, textPosX, musicSlider.y, 20, darkYellow);
+	DrawText(soundText, textPosX, soundSlider.y, 20, darkYellow);
+	DrawText(TextFormat("%.2f", currentmusicVolume), textPosX + LEFT_MARGIN + MeasureText(musicText, 20) + 8, musicSlider.y, 20, WHITE);
+	DrawText(TextFormat("%.2f", currentsoundVolume), textPosX + LEFT_MARGIN + MeasureText(soundText, 20) + 8, soundSlider.y, 20, WHITE);
 	DrawRectangleRounded(musicSlider, 0.4f, 15, DARKGRAY);
 	DrawRectangleRounded(soundSlider, 0.4f, 15, DARKGRAY);
 	DrawRectangleRounded({ musicSlider.x, musicSlider.y, musicSliderHandle.x - musicSlider.x, musicSlider.height }, 0.4f, 15, darkYellow);

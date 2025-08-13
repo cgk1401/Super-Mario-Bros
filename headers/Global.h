@@ -83,6 +83,7 @@ enum class EnemyType {
 	GOOMBA,
 	KOOPA,
 	REDKOOPA,
+	KOOPA_PARATROOPA,
 	KOOPA_SHELL,
 	REDKOOP_SHELL,
 	PIRANT_PLANT,
@@ -92,13 +93,15 @@ enum class EnemyType {
 
 
 enum class ItemType {
-	NONE = 0,
-	COIN = 1,
-	MUSHROOM = 2,
-	FLOWER = 3,
-	STAR = 4,
-	FIRE_BAR = 5,
+	NONE,
+	COIN,
+	MUSHROOM,
+	FLOWER,
+	STAR,
+	FIRE_BAR,
 	BOWSER_FIRE_BALL,
+	VERTICAL_LIFT,
+	HORIZONATAL_LIFT,
 };
 
 enum class DeathType

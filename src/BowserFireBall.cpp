@@ -90,7 +90,6 @@ void BowserFireBall::ActiveStatus() {
 		) {
 		Deactive();
 	}
-	/*Collision::handleBowserball_CharacterCollision(this, Global::character);*/
 }
 
 void BowserFireBall::Deactive() {

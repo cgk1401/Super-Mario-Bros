@@ -3,6 +3,8 @@
 #include "../headers/Collision.h"
 #include "../headers/Coin.h"
 #include "FireBar.h"
+#include "VerticalLift.h"
+#include "Horizontal.h"
 ItemManager::ItemManager(){
     texture = Singleton<TextureManager>::getInstance().load(TextureType::ITEM);
 
@@ -50,9 +52,15 @@ void ItemManager::Spawn(ItemType type, Vector2 position, void* extra_data) {
                 item = new BowserFireBall(position, *positionDestinationY);
             break;
         }
+        case ItemType::VERTICAL_LIFT:
+            item = new VerticalLift(position);
+            break;
+        case ItemType::HORIZONATAL_LIFT:
+            item = new Horizontal(position);
+            break;
     }
     if (item) {
-        if(auto f = dynamic_cast<FireBar*>(item)){
+        if(type == ItemType::FIRE_BAR ||type == ItemType::HORIZONATAL_LIFT || type == ItemType::VERTICAL_LIFT){
             items.push_back(item);
         }
         else
