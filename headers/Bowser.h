@@ -25,6 +25,8 @@ private :
 	float fireBreathCooldown = 2.0f;
 	float fireBreathTimer = 0.0f;
 
+	float health = 100;
+	Rectangle healthBar;
 public :
 	Bowser();
 	Bowser(Vector2 position, MapTheme theme);

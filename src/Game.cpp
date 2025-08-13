@@ -1,5 +1,6 @@
 #include "../headers/Game.h"
 #include "../headers/SoundManager.h"
+#include "PlayState.h"
 #include <iostream>
 using namespace std;
 
@@ -42,6 +43,14 @@ void Game::run(){
             }
            
         EndDrawing();
+
+        // if(WindowShouldClose()){
+        //     for(auto& state: stateStack){
+        //         if(auto playstate = dynamic_cast<PlayState*>(state)){
+        //             playstate->saveGame("savegame.json");
+        //         }
+        //     }
+        // }
     }
     
 }

@@ -85,7 +85,6 @@ void QuestionTileBehavior::onHeadCollision(Character* character, int tileRow, in
         tileState = new QuestionTileState();
         tileInstance->state = tileState;
     }
-
     if(!tileState->isBouncing){
         tileState->isBouncing = true;
         tileState->bounceTimer.start(0.2f);

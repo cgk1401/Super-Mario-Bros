@@ -148,8 +148,8 @@ void Map::createTileCatalog() {
                 tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], DECORATION_BLOCK, new DecorationTileBehavior(), theme, LayerType::BACKGROUND)); //Decoration tile
             }
 
-            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme)); //Question Block tile
-            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], STAR_BRICK, new QuestionTileBehavior(), theme)); //Decoration tile
+            if (i % 2 == 1) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], QUESTION_BLOCK, new QuestionTileBehavior(), theme, LayerType::PLATFORM)); //Question Block tile
+            else if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, 20), Tile(getTileIDFromCoords(i + themeOffset, 20), tileSetSourceRects[i + themeOffset - 1][20 - 1], STAR_BRICK, new QuestionTileBehavior(), theme, LayerType::PLATFORM)); //Decoration tile
 
             for (int j = 21; j < 22; j++) {
                 if (i % 2 == 0) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], COIN, new DecorationTileBehavior(), theme, LayerType::FOREGROUND));

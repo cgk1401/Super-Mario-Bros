@@ -45,6 +45,8 @@ void Bowser::LoadSource() {
 	animations.currentframe = 0;
 	animations.currenttime = 0.0f;
 	animations.durationtime = 0.3f;
+
+	healthBar = {this->position.x, position.y - 10, this->getBound().width, 10};
 }
 
 void Bowser::draw() {
@@ -54,11 +56,19 @@ void Bowser::draw() {
 	Rectangle dest = { position.x, position.y, currentframe.width * scale, currentframe.height * scale };
 	DrawTexturePro(texture, currentframe, dest, { 0,0 }, 0, WHITE);
 
+	DrawRectangleRec(healthBar, WHITE);
+	Rectangle healthRemainBar = {healthBar.x, healthBar.y, healthBar.width * (health / 100.0f), healthBar.height};
+	DrawRectangleRec(healthRemainBar, RED);
 }
 
 void Bowser::update(float deltatime) {
 	animations.Update(deltatime);
-
+	if(health <= 0 ) {
+		health = 0;
+		this->interactWithMap = false;
+		this->position.y += (velocity.y += 800.0f * deltatime) * deltatime;
+		return;
+	}
 	if (direction == Direction::Right) {
 		velocity.x = 0;
 	}
@@ -100,11 +110,21 @@ void Bowser::update(float deltatime) {
 
 	position.x += velocity.x * deltatime;
 	position.y += velocity.y * deltatime;
+
+	healthBar = {this->position.x, position.y - 10, this->getBound().width, 10};
 }
 
 void Bowser::onDeath(DeathType type, Character* player) {
 	animations.durationtime = 0.1f;
 	Singleton<SoundManager>::getInstance().play(SoundType::BOWSERFALL);
+
+
+	if(type == DeathType::FIREBALL_HIT){
+		health -= 30;
+	}
+	else if(type == DeathType::STOMP){
+		health -= 20;
+	}
 }
 
 bool Bowser::isDead() {
@@ -128,7 +148,6 @@ Rectangle Bowser::getBound() const {
 }
 
 void Bowser::onCollideWith(GameObject* object) {
-	
 }
 void Bowser::Jump() {
 	velocity.y = jumpForce;
