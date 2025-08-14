@@ -44,13 +44,13 @@ void Game::run(){
            
         EndDrawing();
 
-        // if(WindowShouldClose()){
-        //     for(auto& state: stateStack){
-        //         if(auto playstate = dynamic_cast<PlayState*>(state)){
-        //             playstate->saveGame("savegame.json");
-        //         }
-        //     }
-        // }
+        if(WindowShouldClose()){
+            for(auto& state: stateStack){
+                if(auto playstate = dynamic_cast<PlayState*>(state)){
+                    playstate->saveGame("savegame.json");
+                }
+            }
+        }
     }
     
 }

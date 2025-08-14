@@ -12,69 +12,6 @@ void setState(T& current,T newState){
     }
 }
 //____________________________PRINCESS_________________ 
-Princess::Princess(){
-    texture = LoadTexture("../assets/Cutscene/Kidnap/Princess Peach.png");
-    Animation idle;
-    idle.frame.push_back({8, 72, 24, 32});
-    idle.frame.push_back({8, 72, 24, 32});
-    idle.frame.push_back({8, 72, 24, 32});
-    idle.frame.push_back({136, 72, 24, 32});
-    idle.durationtime = 0.2;
-    animation[PrincessState::IDLE] = idle;
-
-    Animation walk;
-    walk.frame.push_back({72, 72, 24, 32});
-    walk.frame.push_back({104, 72, 24, 32});
-    walk.durationtime = 0.1f;
-    animation[PrincessState::WALK] = walk;
-
-    Animation kidnap;
-    for(int i = 0; i < 4; i++){
-        kidnap.frame.push_back({8 + (float) 32 * i, 24, 24 , 24});
-    }
-    kidnap.durationtime = 0.1f;
-    animation[PrincessState::KIDNAP] = kidnap;
-
-    Animation disappear;
-    for(int i = 0; i < 4; i++){
-        disappear.frame.push_back({8 + (float) 32 * i, 24, 24 , 24});
-        disappear.frame.push_back({263, 72, 24, 24});
-    }
-    disappear.durationtime = 0.05f;
-    animation[PrincessState::DISAPPEAR] = disappear;
-
-    position = {500, 600};
-    currentState = PrincessState::IDLE;
-}
-void Princess::moveLeft(){
-    direction = Direction::Left;
-    setState(currentState, PrincessState::WALK);
-    position.x += -speed;
-}
-
-void Princess::moveRight(){
-    direction = Direction::Right;
-    setState(currentState, PrincessState::WALK);
-    position.x += speed;
-}
-
-void Princess::update(float dt){
-    animation.at(currentState).Update(dt);
-}
-void Princess::draw(){
-    Rectangle currentframe = animation[currentState].getcurrentframe();
-	
-	if (direction == Direction::Right) {
-		currentframe.width = -abs(currentframe.width);
-	}
-	else if (direction == Direction::Left) {
-		currentframe.width = abs(currentframe.width);
-	}
-
-	Rectangle destination = { position.x, position.y, currentframe.width * SCALE, currentframe.height * SCALE };
-    bound = destination;
-	DrawTexturePro(texture, currentframe, destination, { 0,0 }, 0, WHITE);
-}
 
 
 //_________________________UFO_______________________
@@ -133,8 +70,8 @@ void UFOInvader::draw(){
 //_______________________Kidnap Cutscene_________________________
 KidnapCutscene::KidnapCutscene(Map* _map, Character* _character){
     emojiTexture = LoadTexture("../assets/Cutscene/Kidnap/surprised emoji.png");
-    princess.position = {500, 680};
     ufo.position = {550, 470};
+    princess.position = {500, 700};
     camera.init({0,0});
     map = _map;
     character = _character;
@@ -150,6 +87,9 @@ KidnapCutscene::KidnapCutscene(Map* _map, Character* _character){
     for(int i = 0; i < 5; i++) surprise_emoji_Ani.frame.push_back({0 +(float) i * 64, 0, 64, 64});
     surprise_emoji_Ani.loop = false;
     surprise_emoji_Ani.durationtime = 0.1f;
+}
+KidnapCutscene::~KidnapCutscene(){
+
 }
 void KidnapCutscene::handlePhase(float dt) {
     switch (currentPhase) {
@@ -315,5 +255,5 @@ bool KidnapCutscene::isFinished() const{
     return currentPhase == KidnapPhase::DONE;
 }
 void KidnapCutscene::setFinish(){
-currentPhase = KidnapPhase::DONE;
+    currentPhase = KidnapPhase::DONE;
 }

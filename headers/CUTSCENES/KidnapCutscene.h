@@ -5,36 +5,11 @@
 #include "Global.h"
 #include "CameraController.h"
 #include "Map.h"
+#include "Princess.h"
 #include <string>
 #include <raylib.h>
 #include <map>
 using namespace std;
-
-//_______________PRINCESS_________________ 
-enum class PrincessState{
-    IDLE,
-    KIDNAP,
-    WALK,
-    RUN,
-    DISAPPEAR,
-};
-class Princess {
-    friend class KidnapCutscene;
-private: 
-    Texture2D texture;
-    map<PrincessState, Animation> animation;
-    PrincessState currentState;
-    Vector2 position;
-    Rectangle bound;
-    Direction direction;
-    float speed = 1;
-public:
-    Princess();
-    void update(float dt);
-    void draw();
-    void moveLeft();
-    void moveRight();
-};
 
 //________________UFO_______________________
 enum class UFOState{
@@ -43,6 +18,7 @@ enum class UFOState{
     FLY,
 };
 class UFOInvader {
+    friend class PrincessRescueCutscene;
     friend class KidnapCutscene;
 private: 
     Texture2D texture;
@@ -74,7 +50,7 @@ enum class KidnapPhase {
 class KidnapCutscene : public Cutscene {
 public:
     KidnapCutscene(Map* _map, Character* _character);
-    ~KidnapCutscene() = default;
+    ~KidnapCutscene();
 
     void update(float dt) override;
     void draw() override;

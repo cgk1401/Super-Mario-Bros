@@ -37,6 +37,10 @@ enum class SoundType {
     FOOTSTEP,
     SURPRISE_SFX,
     lEVEL_COMPLETE,
+    PRINCESS_KISS,
+    DRAMATIC_CINEMA_GLITCH,
+    FAR_BOOM,
+    WHOOSH,
 };
 
 enum class MusicType {
@@ -54,6 +58,7 @@ enum class MusicType {
     HURRY_UNDERWATER,
     STARMAN,
     MENU_,
+    CASTLE_DANCE,
 };
 
 class SoundManager {

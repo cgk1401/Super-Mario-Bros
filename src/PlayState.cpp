@@ -9,12 +9,16 @@
 #include "../headers/Luigi.h"
 #include "CUTSCENES/PipeCutscene.h"
 #include "nlohmann/json.hpp"
+#include "CUTSCENES/PrincessRescueCutscene.h"
 #include "LevelCompleteState.h"
 PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, const char* _extraMap_filename) {
     if (_level == pair {1,1})      Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
     else if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
     else if (_level == pair {1,3}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
-    else if (_level == pair {1,4}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_CASTLE, true);
+    else if (_level == pair {1,4}) {
+        Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_CASTLE, true);
+        princess = new Princess({9720, 688});
+    }
 
     if (selectedCharacter == CharacterType::Mario) {
         character = new Mario({ 100, 300 });
@@ -106,7 +110,13 @@ PlayState::PlayState(const char* filename){
 
 }
 PlayState::~PlayState() {
-    for (auto& [level, mapPtr] : world) {  
+    /*if(level == pair{1,4}){
+        delete hud;
+        delete character;
+        delete world[level];
+    }*/
+    for (auto& [level, mapPtr] : world) {
+        if(mapPtr)
             delete mapPtr;
             mapPtr = nullptr;
     }
@@ -130,7 +140,6 @@ void PlayState::update(float dt){
         cutscene.update(dt);
         return;
     }
-    
     //______________________________COLLISION DETECTION____________________________
     ///______________________________WOLRD__________________________________________
     camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
@@ -202,7 +211,15 @@ void PlayState::update(float dt){
     }
     Collision::handleMultipleObjectCollisions(allObjects);
 
-
+   
+    if(princess &&  CheckCollisionRecs(princess->getBound(), character->getBound())){
+        cutscene.play(new PrincessRescueCutscene(character, camera, princess, hud, world[level]));
+        return;
+    }
+     if(princess) {
+        princess->salute();
+        princess->update(dt);
+    }
     ///______________________________DELETION__________________________________________
       enemies.erase(remove_if(enemies.begin(), enemies.end(),
         [](Enemy* e) {
@@ -229,7 +246,7 @@ void PlayState::render() {
         e->draw();
     }
     world[level]->drawLayer(LayerType::PLATFORM);
-
+    if(princess) princess->draw();
     if (character->getCurrentAction() != ActionState::Die) {
         Tile tile = world[level]->getTile((character->getBound().y + character->getBound().height / 2) / Map::TILE_SIZE, character->getBound().x / Map::TILE_SIZE, LayerType::PLATFORM);
         if (tile.type != TileType::BLACK_BLOCK) character->draw();

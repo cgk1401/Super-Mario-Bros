@@ -18,7 +18,7 @@
 #include "Lift.h"
 #include "VerticalLift.h"
 #include "Horizontal.h"
-
+#include "Princess.h"
 using namespace std;
 
 class PlayState : public GameState, public Observer{
@@ -41,6 +41,7 @@ private:
     pair<int, int> level = {1, 1};
 
     Character* character;
+    Princess* princess = nullptr;
     vector<Enemy*> enemies;
     
     CameraController camera;

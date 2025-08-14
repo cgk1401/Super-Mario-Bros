@@ -2,8 +2,8 @@
 #include <iostream>
 
 SoundManager::SoundManager() {
-    musicVolume = 0.0f;
-    soundVolume = 0.0f;
+    musicVolume = 0.3f;
+    soundVolume = 0.3f;
     load();
     setmusicVolume();
     setsoundVolume();
@@ -45,6 +45,10 @@ void SoundManager::load() {
     sounds[SoundType::SCREAM] = LoadSound("../assets/Cutscene/Kidnap/scream.mp3");
     sounds[SoundType::SURPRISE_SFX] = LoadSound("../assets/Cutscene/Kidnap/surprise-sound.mp3");
     sounds[SoundType::lEVEL_COMPLETE] = LoadSound("../assets/sfx/level_complete.mp3");
+    sounds[SoundType::PRINCESS_KISS] = LoadSound("../assets/Cutscene/PrincessSaved/kisses.mp3");
+    sounds[SoundType::DRAMATIC_CINEMA_GLITCH] = LoadSound("../assets/Cutscene/PrincessSaved/drammatic-cinematic-glitch.mp3");
+    sounds[SoundType::FAR_BOOM] = LoadSound("../assets/Cutscene/PrincessSaved/far boom.mp3");
+    sounds[SoundType::WHOOSH] = LoadSound("../assets/Cutscene/PrincessSaved/whoosh.mp3");
     
     // Music
      musics[MusicType::MAIN_THEME_OVERWORLD] = LoadMusicStream("../assets/music/Mario/DEFAULT_OVERWORLD_THEME.mp3");
@@ -61,7 +65,7 @@ void SoundManager::load() {
 	 musics[MusicType::HURRY_UNDERWATER] = LoadMusicStream("../assets/music/Mario/HURRY_UNDERWATER.mp3");
      musics[MusicType::STARMAN] = LoadMusicStream("../assets/music/Mario/Starman.mp3");
      musics[MusicType::MENU_] = LoadMusicStream("../assets/music/childhood_theme_music.mp3");
-
+     musics[MusicType::CASTLE_DANCE] = LoadMusicStream("../assets/Cutscene/PrincessSaved/castle_dance.mp3");
 }
 
 void SoundManager::unload() {
@@ -103,7 +107,7 @@ void SoundManager::playMusic(MusicType type, bool loop) {
 
 void SoundManager::stopMusic() {
     if (musicPlaying && musics.count(currentMusicType)) {
-        StopMusicStream(musics[currentMusicType]);
+        //StopMusicStream(musics[currentMusicType]);
         musicPlaying = false;
     }
 }
@@ -117,7 +121,10 @@ void SoundManager::updateMusic(float dt) {
 }
 
 void SoundManager::continueMusic() {
-    PlayMusicStream(musics[currentMusicType]);
+    if (!musicPlaying && musics.count(currentMusicType)) {    
+        //PlayMusicStream(musics[currentMusicType]);
+        musicPlaying = true;
+    }
 }
 
 Sound SoundManager::getSound(SoundType type) {

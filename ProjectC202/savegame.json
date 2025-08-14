@@ -1,9 +1,9 @@
 {
     "hud": {
-        "coins": 4,
-        "lives": 2,
-        "score": 1750,
-        "time": 283
+        "coins": 1,
+        "lives": 3,
+        "score": 200,
+        "time": 376
     },
     "level": {
         "map": 1,
@@ -127,14 +127,14 @@
         "row": 15
     },
     "music": {
-        "playtime": 49.091163635253906
+        "playtime": 9.666505813598633
     },
     "player": {
-        "action": 4,
+        "action": 0,
         "direction": 1,
         "state": 0,
         "type": 0,
-        "x": 3467.2080078125,
-        "y": 664.263427734375
+        "x": 1536.9095458984375,
+        "y": 704.0
     }
 }

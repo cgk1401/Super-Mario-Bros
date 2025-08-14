@@ -1,6 +1,9 @@
 #include "../headers/LevelCompleteState.h"
 
 LevelCompleteState::LevelCompleteState(HUD* _hud, Character* _player, Map* _map) {
+	hud = _hud;
+	player = _player;
+	map = _map;
 	int amount_button = 2;
 	buttons.resize(amount_button);
 	vector<string> txt(amount_button);
@@ -8,14 +11,12 @@ LevelCompleteState::LevelCompleteState(HUD* _hud, Character* _player, Map* _map)
 	background = LoadTexture("../assets/GUI/level complete.png");
 	//completePanel = LoadTexture("../assets/GUI/LevelCompletePanel.png");
 	txt[0] = string("MENU");
-	txt[1] = string("NEXT");
+	txt[1] = map->getLevel().second != 4 ? ("NEXT") : "RESTART";
 	buttons[0] = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), screenWidth *0.33f, screenHeight * 0.72f, 200, 120, txt[0].c_str(), WHITE);
 	buttons[1] = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), screenWidth *0.33f + 200 + 20, screenHeight * 0.72f, 200, 120, txt[1].c_str(), WHITE);
 	font = LoadFont("../assets/font/knightwarrior.otf");
 
-	hud = _hud;
-	player = _player;
-	map = _map;
+	
 
 	score = hud->getScore();
 	level = map->getLevel().second;
@@ -39,8 +40,11 @@ void LevelCompleteState::handleInput() {
         pair<int, int> currentLevel = map->getLevel();
         pair<int, int> newLevel = {currentLevel.first, currentLevel.second + 1};
         if (newLevel.second <= 4) {
-            Singleton<Game>::getInstance().changeState(new PlayState(newLevel, hud, player));
+             Singleton<Game>::getInstance().changeState(new PlayState(newLevel, hud, player));
         }
+		else Singleton<Game>::getInstance().changeState(new PlayState({1,1}));
+
+
 	}
 }
 void LevelCompleteState::update(float dt) {
