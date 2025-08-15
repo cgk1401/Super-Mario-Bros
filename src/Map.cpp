@@ -39,8 +39,7 @@ Map::Map(pair<int, int> _level, int r, int c) {
     }
 
     for (int i = 20; i < tileRows; i++) {
-        if (i == 22) tileSetSourceRects[i].resize(5);
-        else tileSetSourceRects[i].resize(6);
+        tileSetSourceRects[i].resize(6);
     }
 
     for (int x = 0; x < tileRows; x++) {
@@ -222,6 +221,7 @@ void Map::createTileCatalog() {
 
             for (int j = 5; j < 7; j++) {
                 if (i + themeOffset == 23 && j == 5) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], VERTICAL_LIFT, new DecorationTileBehavior(), theme)); //Ground tiles
+                if (i + themeOffset == 23 && j == 6) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], HORIZONTAL_LIFT, new DecorationTileBehavior(), theme)); //Ground tiles
                 if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], ENEMY, new DecorationTileBehavior(), theme)); //Ground tiles
             }
         }
