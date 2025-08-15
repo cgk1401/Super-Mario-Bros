@@ -20,6 +20,7 @@
 #include "Horizontal.h"
 #include "Princess.h"
 using namespace std;
+class EnemyFactory;
 
 class PlayState : public GameState, public Observer{
 public:
@@ -51,10 +52,11 @@ private:
     Button* PauseButton;
 
     Timer newRound_countDown;
+    unordered_map<EnemyType, std::unique_ptr<EnemyFactory>> enemyFactories;
 
     CutsceneManager cutscene;
     void loadGame(const char* filename);
-    
+    void spawnEnemy();
 };
 
 #endif

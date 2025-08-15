@@ -65,6 +65,7 @@ void Bowser::update(float deltatime) {
 	animations.Update(deltatime);
 	if(health <= 0 ) {
 		health = 0;
+		if(this->interactWithMap == true) Singleton<SoundManager>::getInstance().play(SoundType::BOWSERFALL);
 		this->interactWithMap = false;
 		this->position.y += (velocity.y += 800.0f * deltatime) * deltatime;
 		return;
@@ -116,7 +117,6 @@ void Bowser::update(float deltatime) {
 
 void Bowser::onDeath(DeathType type, Character* player) {
 	animations.durationtime = 0.1f;
-	Singleton<SoundManager>::getInstance().play(SoundType::BOWSERFALL);
 
 
 	if(type == DeathType::FIREBALL_HIT){

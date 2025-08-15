@@ -309,6 +309,7 @@ void Character::onCollideWith(GameObject* object) {
 		if(!enemy || enemy->isDead()) return;
         Direction dir = getCollisionDirection(this, enemy);
         if (dir == Direction::Bottom) { //bottom of mario
+			Singleton<SoundManager>::getInstance().play(SoundType::KICKKILL);
 			killEnemy(enemy->getType(), enemy->position);
             enemy->onDeath(DeathType::STOMP, this);
             this->velocity.y = -300;

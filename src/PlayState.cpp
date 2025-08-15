@@ -10,6 +10,7 @@
 #include "CUTSCENES/PipeCutscene.h"
 #include "nlohmann/json.hpp"
 #include "CUTSCENES/PrincessRescueCutscene.h"
+#include "EnemyFactory.h"
 #include "LevelCompleteState.h"
 PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, const char* _extraMap_filename) {
     if (_level == pair {1,1})      Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
@@ -36,12 +37,7 @@ PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, co
     if(_hud) hud = _hud;
     else hud = new HUD(level);
     
-    world[level]->setEnemySpawnCallback(
-        [this](EnemyType type, Vector2 pos, MapTheme theme) {
-            enemies.push_back(EnemyFactory::createEnemy(type, pos, theme));
-        }
-    );
-
+    spawnEnemy();
     Singleton<ItemManager>::getInstance().clearItems();
 
      string filename;
@@ -169,6 +165,10 @@ void PlayState::update(float dt){
         if(character->getCharacterStateType() !=  CharacterStateType::TransformState) character->HandleInput(dt);
         hud->update(dt); 
         character->update(dt);
+
+        if(hud->getTime() <= 0){
+            character->onDead();
+        }
     }
     else {
         if (newRound_countDown.isRunning()) {
@@ -375,12 +375,7 @@ void PlayState::loadGame(const char* filename) {
     Singleton<SoundManager>::getInstance().setMusicPlayTime(musicPlayTime);
     // Load map data
     world[level] = new Map(level);
-    world[level]->setEnemySpawnCallback(
-        [this](EnemyType type, Vector2 pos, MapTheme theme) {
-            enemies.push_back(EnemyFactory::createEnemy(type, pos, theme));
-        }
-    );
-   cout << "before loading" << endl;
+    spawnEnemy();
     world[level]->loadMapFromJson(j["map"]);
 
     // Load player state
@@ -409,4 +404,26 @@ void PlayState::loadGame(const char* filename) {
     hud->setCoins(j["hud"]["coins"]);
     hud->setLives(j["hud"]["lives"]);
     hud->setTime(j["hud"]["time"]);
+}
+
+void PlayState::spawnEnemy(){
+
+
+    //Setup factory map
+    enemyFactories[EnemyType::GOOMBA] = make_unique<GoomBaFactory>();
+    enemyFactories[EnemyType::KOOPA] = make_unique<KoopaTroopaFactory>(EnemyType::KOOPA);
+    enemyFactories[EnemyType::REDKOOPA] = make_unique<KoopaTroopaFactory>(EnemyType::REDKOOPA);
+    enemyFactories[EnemyType::PIRANT_PLANT] = make_unique<PiranhaPlantFactory>();
+    enemyFactories[EnemyType::BOWSER] = make_unique<BowserFactory>();
+    enemyFactories[EnemyType::KOOPA_PARATROOPA] = make_unique<KoopaParatroopaFactory>();
+
+    world[level]->setEnemySpawnCallback(
+        [this](EnemyType type, Vector2 pos, MapTheme theme) {
+            auto it = enemyFactories.find(type);
+            if (it != enemyFactories.end()) {
+                enemies.push_back(it->second->createEnemy(pos, theme));
+            }
+        }
+    );
+
 }

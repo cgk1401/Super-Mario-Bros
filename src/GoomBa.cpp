@@ -132,6 +132,7 @@ void GoomBa::ChangeState(GoomBaState newState) {
 void GoomBa::onDeath(DeathType type, Character* player) {
 	switch (type) {
 	case DeathType::STOMP:
+		Singleton<SoundManager>::getInstance().play(SoundType::KICKKILL);
 		ChangeState(GoomBaState::DIE_STOMP);
 		break;
 	case DeathType::FIREBALL_HIT:
