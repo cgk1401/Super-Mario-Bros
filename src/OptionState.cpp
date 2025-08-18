@@ -1,4 +1,5 @@
 #include "../headers/OptionState.h"
+#include "TextureManager.h"
 #include "../headers/CharacterSelection.h"
 OptionState::OptionState() {
 	const int amount_button = 3;
@@ -8,14 +9,13 @@ OptionState::OptionState() {
 	buttons = CreateButtons(buttonLabels, cfg);
 
 	backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
-	font = LoadFont("../assets/font/knightwarrior.otf");
+	font = Singleton<TextureManager>::getInstance().load(MyFontType::KNIGHT_WARRIOR);
 	background = Singleton<TextureManager>::getInstance().load(TextureType::BACKGROUND_2);
 }
 OptionState::~OptionState() {
 	for (auto& button : buttons)
 		delete button;
 	delete backButton;
-	UnloadFont(font);
 }
 
 void OptionState::handleInput() {

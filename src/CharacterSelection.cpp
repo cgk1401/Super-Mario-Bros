@@ -3,7 +3,7 @@
 #include "../headers/MenuState.h"
 
 CharacterSelection::CharacterSelection() {
-    font = LoadFont("../assets/font/knightwarrior.otf");
+    font = Singleton<TextureManager>::getInstance().load(MyFontType::KNIGHT_WARRIOR);
 
     backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
     play_button = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), screenWidth, screenHeight * 0.85f, screenWidth * 0.23f, screenHeight * 0.25f * 0.5f, "START GAME", WHITE, 35);
@@ -26,7 +26,6 @@ CharacterSelection::~CharacterSelection() {
     delete backButton;
 
     UnloadTexture(background);
-    UnloadFont(font);
 }
 
 void CharacterSelection::handleInput() {

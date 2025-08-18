@@ -68,9 +68,9 @@ void Horizontal::onCollideWith(GameObject* object) {
 	if (dynamic_cast<Character*> (object)) {
 		Character* character = dynamic_cast<Character*> (object);
         Rectangle boundCharacter = character->getBound();
-        float eps = 0.1f;
+        float eps = 0.2f;
         float width = boundCharacter.width * (1 - eps * 2);
-        float height = 1;
+        float height = 4;
         Rectangle footSensor = {
                 boundCharacter.x + boundCharacter.width * eps,
                 boundCharacter.y + boundCharacter.height + height,
@@ -84,9 +84,10 @@ void Horizontal::onCollideWith(GameObject* object) {
             character->velocity.y = 0;
             character->onGround = true;
             character->isJumpingUp = false;
+            character->standingOnLift = true;
         }
-
-        if (CheckCollisionRecs(boundCharacter, bound)) {
+        else if (CheckCollisionRecs(boundCharacter, bound)) {
+            
             float overlapX = fmin(boundCharacter.x + boundCharacter.width, bound.x + bound.width) - fmax(boundCharacter.x, bound.x);
             float overlapY = fmin(boundCharacter.y + boundCharacter.height, bound.y + bound.height) - fmax(boundCharacter.y, bound.y);
             if (overlapX > 0 && overlapY > 0) {

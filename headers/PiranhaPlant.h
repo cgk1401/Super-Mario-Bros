@@ -13,7 +13,7 @@ enum class PlantState {
 class PiranhaPlant : public Enemy {
 private:
 	Animation animation;
-	const float hiddenhold = 5.0f; // thời gian giữa các lần mọc lên
+	const float hiddenhold = 2.0f; // thời gian giữa các lần mọc lên
 	const float risetime = 0.5f; // thời gian mọc lên và tụt xuống
 	float riseoffset; // chiều cao của cây
 	Vector2 basePos; // vị trí mép ống

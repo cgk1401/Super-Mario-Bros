@@ -13,11 +13,11 @@
 #include "EnemyFactory.h"
 #include "LevelCompleteState.h"
 PlayState::PlayState(pair<int, int> _level, HUD* _hud, Character* _character, const char* _extraMap_filename) {
-    if (_level == pair {1,1})      Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
-    else if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, true);
-    else if (_level == pair {1,3}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, true);
+    if (_level == pair {1,1})      Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, false);
+    else if (_level == pair {1,2}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_UNDERGROUND, false);
+    else if (_level == pair {1,3}) Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_OVERWORLD, false);
     else if (_level == pair {1,4}) {
-        Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_CASTLE, true);
+        Singleton<SoundManager>::getInstance().playMusic(MusicType::MAIN_THEME_CASTLE, false);
         princess = new Princess({9720, 688});
     }
 
@@ -157,8 +157,25 @@ void PlayState::update(float dt){
             e->update(dt);
         }
     }
+     vector<GameObject*> allObjects;
+    allObjects.push_back(character);
+    allObjects.insert(allObjects.end(), enemies.begin(), enemies.end());
+    vector<Item*> items = Singleton<ItemManager>::getInstance().getItems();
+    allObjects.insert(allObjects.end(), items.begin(), items.end());
+    FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
+    if (fireState) {
+        auto& fireballs = fireState->getFireBall(); 
+        for (auto& f : fireballs) {
+           allObjects.push_back(f);
+        }
+    }
+    character->standingOnLift = false;
+    Collision::handleMultipleObjectCollisions(allObjects);
+    for(auto& object: allObjects){
+        Collision::handleMapCollision(object, world[level]);
+    }
+
     
-  
     ///______________________________ENTITIES__________________________________________
     if (character->getCurrentAction() != ActionState::Die) {
         Singleton<SoundManager>::getInstance().updateMusic(dt);
@@ -193,24 +210,8 @@ void PlayState::update(float dt){
     Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
 
     Global::character = character;
-
-    vector<GameObject*> allObjects;
-    allObjects.push_back(character);
-    allObjects.insert(allObjects.end(), enemies.begin(), enemies.end());
-    vector<Item*> items = Singleton<ItemManager>::getInstance().getItems();
-    allObjects.insert(allObjects.end(), items.begin(), items.end());
-    FireState* fireState = dynamic_cast<FireState*>(character->GetCurrentState());
-    if (fireState) {
-        auto& fireballs = fireState->getFireBall(); 
-        for (auto& f : fireballs) {
-           allObjects.push_back(f);
-        }
-    }
-    for(auto& object: allObjects){
-        Collision::handleMapCollision(object, world[level]);
-    }
-    Collision::handleMultipleObjectCollisions(allObjects);
-
+    
+    
    
     if(princess &&  CheckCollisionRecs(princess->getBound(), character->getBound())){
         cutscene.play(new PrincessRescueCutscene(character, camera, princess, hud, world[level]));
@@ -220,6 +221,9 @@ void PlayState::update(float dt){
         princess->salute();
         princess->update(dt);
     }
+
+    
+   
     ///______________________________DELETION__________________________________________
       enemies.erase(remove_if(enemies.begin(), enemies.end(),
         [](Enemy* e) {

@@ -19,7 +19,7 @@ LevelState::LevelState(bool _isEditorMode) {
 	}
 	backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
 	ownMap_button = new Button("", screenWidth * 0.8f, 10, 200, 100, "YOUR OWN MAP", WHITE, 30, "Start with your own map");
-	font = LoadFont("../assets/font/knightwarrior.otf");
+	font = Singleton<TextureManager>::getInstance().load(MyFontType::KNIGHT_WARRIOR);
 	
 }
 LevelState::~LevelState() {
@@ -27,7 +27,6 @@ LevelState::~LevelState() {
 	for (auto& button : buttons) {
 		delete button;
 	}
-	UnloadFont(font);
 }
 
 void LevelState::handleInput() {

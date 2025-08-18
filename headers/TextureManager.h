@@ -20,13 +20,20 @@ enum class TextureType {
     BACKGROUND_2,
 };
 
+enum class MyFontType {
+    DANGER,
+    KNIGHT_WARRIOR,
+    POLYGON_PARTY,
+};
 class TextureManager{
     template <typename T>
     friend class Singleton;
 private:
     unordered_map<TextureType, Texture2D> texture;
+    unordered_map<MyFontType, Font> font;
     TextureManager();
     ~TextureManager();
 public:
     Texture2D& load(TextureType type);
+    Font& load(MyFontType type);
 };

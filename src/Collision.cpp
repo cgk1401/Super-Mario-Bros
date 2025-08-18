@@ -20,6 +20,17 @@
 void Collision::handleMapCollision(GameObject* object, Map* map){
     if(object->interactWithMap == false) return;
 
+    
+    Character* character = dynamic_cast<Character*>(object);
+    if (character) {
+        if (character->standingOnLift) {
+            object->onGround = true;
+            character->isJumpingUp = false;
+            character->velocity.y = 0;
+            return;
+        }
+    }
+    
     object->onGround = false;
 
     Rectangle bound      = object->getBound();
@@ -60,6 +71,7 @@ void Collision::handleMapCollision(GameObject* object, Map* map){
                     object->onGround = true;
                     object->onFootCollision(tile, x, y, map, tileInstance);
                 }
+                bound = object->getBound();
             }
         }
         for (int x = startRow; x <= endRow; x++) {
@@ -125,11 +137,21 @@ void Collision::handleObjectsCollision(GameObject* a, GameObject* b){
         a->onCollideWith(b);
         b->onCollideWith(a);
     }
+    /*else if(CheckCollisionRecs(a->getBound(), b->getBound()) == false &&a->getObjectType() == ObjectType::CHARACTER && b->getObjectType() == ObjectType::ITEM){
+        Character* character = dynamic_cast<Character*>(a);
+        VerticalLift* vLift = dynamic_cast<VerticalLift*>(b);
+        Horizontal* hLift = dynamic_cast<Horizontal*>(b);
+        if(character &&(vLift || hLift)){
+            character->standingOnLift = false;
+        }
+    }*/
 }
 
 void Collision::handleMultipleObjectCollisions(vector<GameObject*>& objects) {
     for (size_t i = 0; i < objects.size(); ++i) {
-        for (size_t j = i + 1; j < objects.size(); ++j) {
+        for (size_t j = 0; j < objects.size(); ++j) {
+            if (i == j) continue;
+            if (objects[j]->getObjectType() == ObjectType::CHARACTER) swap(objects[i], objects[j]);
             handleObjectsCollision(objects[i], objects[j]);
         }
     }

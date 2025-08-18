@@ -1,9 +1,10 @@
 #include "CUTSCENES/ScreenEffectCutscene.h"
+#include "TextureManager.h"
 #include "Global.h"
 ScreenEffectCutscene::ScreenEffectCutscene(SreenType _type, Color _color, float _time, string _text): type(_type), color(_color), text(_text){
     time.start(_time);
     alpha = 1;
-    FONT = LoadFont("../assets/font/PolygonParty.ttf");
+    FONT = Singleton<TextureManager>::getInstance().load(MyFontType::POLYGON_PARTY);
  }
 void ScreenEffectCutscene::update(float dt){
     time.update(dt);

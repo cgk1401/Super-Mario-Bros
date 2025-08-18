@@ -11,6 +11,7 @@ enum class EventType {
 
     ENEMY_KILL_GOOMBA,
     ENEMY_KILL_KOOPA,
+    ENEMY_KILL_BOWSER,
     ENEMY_KILL_BY_SHELL,
     ENEMY_KILL_BY_FIREBALL,
     ENEMY_MULTI_KILL,
@@ -38,15 +39,12 @@ struct EventInfo {
 class EventDataBase {
     template <typename T>
     friend class Singleton;
-private:
-    map<EventType, EventInfo> eventMap;
-
-    EventDataBase();
-   
 public:
     ~EventDataBase();   
-    map<EventType, EventInfo> getMap() const{
+    map<EventType, EventInfo>& getMap() {
         return eventMap;
     }
-
+private:
+    map<EventType, EventInfo> eventMap;
+    EventDataBase();
 };

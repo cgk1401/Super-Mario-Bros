@@ -26,7 +26,7 @@ vector<Button*> SaveConfirmationDialog::createButtons(Texture2D& buttonPanel, in
 	float BUTTON_WEIGHT = (width_buttonPanel - BUTTON_SPACING * (amount_buttons -1) - 2 * LEFT_MARGIN) / amount_buttons;
 	float BUTTON_HEIGHT = 40.0f;
 
-	float drawStartPos_Y = positionButtonPanel.y + 200;
+	float drawStartPos_Y = positionButtonPanel.y + 350;
 	float drawStartPos_X = positionButtonPanel.x + LEFT_MARGIN;
 
 	for (int i = 0; i < amount_buttons; i++) {
@@ -47,11 +47,13 @@ vector<Button*> SaveConfirmationDialog::createButtons(Texture2D& buttonPanel, in
 
 SaveConfirmationDialog::SaveConfirmationDialog() {
 	buttonPanel = Singleton<TextureManager>::getInstance().load(TextureType::BUTTONPANEL);
-
+	const float scale = 1.6f;
+	buttonPanel.width *= scale;
+	buttonPanel.height *= scale;
 	int width_buttonPanel = buttonPanel.width;
 	int height_buttonPanel = buttonPanel.height;
 	position.x = float(screenWidth - width_buttonPanel) / 2;
-	position.y = float(screenHeight - height_buttonPanel) - 50;
+	position.y = float(screenHeight - height_buttonPanel) / 2 + 100;
 
 	int amount_buttons = 3;
 	const char* labelButtons[3] = { "Save", "No", "Cancel" };
@@ -70,9 +72,11 @@ SaveConfirmationDialog::SaveConfirmationDialog() {
 	buttonclick.resize(amount_buttons);
 	for (int i = 0; i < amount_buttons; i++) buttonclick[i] = false;
 
-	float textwidth = MeasureText(text, 25);
-	posistionText.x = this->position.x + (buttonPanel.width - textwidth) * float(1) / 2;
-	posistionText.y = this->position.y + 50;
+	float textwidth = MeasureTextEx(font, text,30, 5).x;
+	posistionText.x = this->position.x + 100 ;
+	posistionText.y = this->position.y + 100;
+
+	font = Singleton<TextureManager>::getInstance().load(MyFontType::POLYGON_PARTY);
 }
 
 SaveConfirmationDialog::~SaveConfirmationDialog() {
@@ -99,7 +103,7 @@ void SaveConfirmationDialog::update(float deltatime) {
 void SaveConfirmationDialog::render() {
 	DrawRectangleRec(Rectangle{ 0, 0, screenWidth, screenHeight }, Fade(BLACK, 0.6f));
 	DrawTexture(buttonPanel, position.x, position.y, WHITE);
-	DrawText(text, posistionText.x, posistionText.y, 25, WHITE);
+	DrawTextEx(font, text, {posistionText.x, posistionText.y}, 30, 5, WHITE);
 	for (int i = 0; i < 3; i++) {
 		buttonsettings[i]->draw();
 	}

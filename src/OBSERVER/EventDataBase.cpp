@@ -8,12 +8,13 @@ EventDataBase::EventDataBase(){
 
     eventMap[EventType::ENEMY_KILL_GOOMBA]        = {100, "100", true};
     eventMap[EventType::ENEMY_KILL_KOOPA]         = {200, "200", true};
+    eventMap[EventType::ENEMY_KILL_BOWSER]         = {500, "500", true};
     eventMap[EventType::ENEMY_KILL_BY_SHELL]      = {300, "300", true};
     eventMap[EventType::ENEMY_KILL_BY_FIREBALL]   = {200, "200", true};
     eventMap[EventType::ENEMY_MULTI_KILL]         = {500, "500", true};
 
     eventMap[EventType::FLAG_REACH]               = {400, "400", true};
-    eventMap[EventType::TIME_BONUS]               = {0,   "",     false}; // handled separately
+    eventMap[EventType::TIME_BONUS]               = {0,   "",     false};
 
     eventMap[EventType::POWERUP_COLLECT_MUSHROOM] = {1000,   "1000",     true};
     eventMap[EventType::POWERUP_COLLECT_FLOWER]     = {1000,   "1000",     false};

@@ -185,7 +185,7 @@ void MapEditor::handleInput() {
     // Check if mouse is over the map area
     float wheel = GetMouseWheelMove();
     Vector2 mouseWorld = GetScreenToWorld2D(GetMousePosition(), camera);
-    Rectangle mapDrawingArea = { 0, 0, (float)mapWidth, (float)screenHeight };
+    Rectangle mapDrawingArea = { 0, camera.offset.y - 1, screenWidth * 0.75f, screenHeight - camera.offset.y + 1};
     if (CheckCollisionPointRec(GetMousePosition(), mapDrawingArea)) {
         for (int x = 0; x < rows; x++) {
             for (int y = 0; y < columns; y++) {

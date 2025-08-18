@@ -1,19 +1,17 @@
-#include "../headers/Game.h"
-#include "../headers/SoundManager.h"
+#include "Game.h"
+#include "SoundManager.h"
+#include "MenuState.h"
 #include "PlayState.h"
 #include <iostream>
 using namespace std;
 
-//Constructor
 Game::Game(){
-    // cout << "Game: Constructor is called" << endl;
-    init();   
-    
+    InitAudioDevice();
+    InitWindow(screenWidth, screenHeight, "My Mario Game - Group 10");
+    SetTargetFPS(60);
 }
 
-//Destructor
 Game::~Game(){
-    // cout << "Game: Destructor is called" << endl;
     for (auto& s : stateStack) delete s;
     CloseAudioDevice();
     CloseWindow();
@@ -21,9 +19,8 @@ Game::~Game(){
 }
 
 void Game::run(){
- 
+    addState(new MenuState());
     while(!WindowShouldClose()){
-        //Xử lí event
         float deltatime = GetFrameTime();
         for (int i = stateStack.size() - 1; i >= 0; i--) {
             stateStack[i]->handleInput();
@@ -36,12 +33,9 @@ void Game::run(){
         BeginDrawing();
             Color bgColor = Color{92, 148, 252};
             ClearBackground(bgColor);
-            //Vẽ 
-            
             for (int i = 0; i < stateStack.size(); i++) {
                 stateStack[i]->render();
             }
-           
         EndDrawing();
 
         if(WindowShouldClose()){
@@ -55,21 +49,12 @@ void Game::run(){
     
 }
 
-void Game::init(){
-    InitAudioDevice();
-}
-
-//void Game::changeState(GameState* newState){
-//    if (currentState) delete currentState;
-//    currentState = newState;
-// }
-
 void Game::addState(GameState* newGameState) {
     stateStack.push_back(newGameState);
 }
 void Game::pop() {
     if (stateStack.size() > 1) {
-        delete stateStack.back();  // FREE
+        delete stateStack.back(); 
         stateStack.pop_back();
     }
 }

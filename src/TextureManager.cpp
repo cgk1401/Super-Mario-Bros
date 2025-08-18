@@ -14,6 +14,12 @@ TextureManager::TextureManager(){
     texture.emplace(TextureType::AUDIOPANEL, LoadTexture("../Assets/Gui/volume slider.png"));
     texture.emplace(TextureType::BACKGROUND_1, LoadTexture("../assets/GUI/Menu Background.png"));
     texture.emplace(TextureType::BACKGROUND_2, LoadTexture("../assets/GUI/option_background.png"));
+
+
+    font.emplace(MyFontType::DANGER, LoadFont("../assets/font/danger.ttf"));
+    font.emplace(MyFontType::KNIGHT_WARRIOR, LoadFont("../assets/font/knightwarrior.otf"));
+    font.emplace(MyFontType::POLYGON_PARTY, LoadFont("../assets/font/PolygonParty.ttf"));
+
 }
 
  TextureManager::~TextureManager(){
@@ -25,10 +31,19 @@ TextureManager::TextureManager(){
 
 
 Texture2D& TextureManager::load(TextureType type){
-    // if (texture.find(type) == texture.end()) {
-    //    TraceLog(LOG_ERROR, "INVALID TYPE");
-    //    return ;
-    //}
+    /*if (texture.find(type) == texture.end()) {
+       TraceLog(LOG_ERROR, "INVALID TYPE");
+       return Te{};
+    }*/
     return texture[type];
 }
+
+Font& TextureManager::load(MyFontType type){
+    if (font.find(type) == font.end()) {
+       TraceLog(LOG_ERROR, "INVALID TYPE");
+       return font[MyFontType::DANGER];
+    }
+    return font[type];
+}
+
 

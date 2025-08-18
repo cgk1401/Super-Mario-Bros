@@ -220,8 +220,8 @@ void Map::createTileCatalog() {
             }
 
             for (int j = 5; j < 7; j++) {
-                if (i + themeOffset == 23 && j == 5) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], VERTICAL_LIFT, new DecorationTileBehavior(), theme)); //Ground tiles
-                if (i + themeOffset == 23 && j == 6) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], HORIZONTAL_LIFT, new DecorationTileBehavior(), theme)); //Ground tiles
+                if (i + themeOffset == 23 && j == 5) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], HORIZONTAL_LIFT, new DecorationTileBehavior(), theme, LayerType::PLATFORM)); //Ground tiles
+                if (i + themeOffset == 23 && j == 6) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset, j), tileSetSourceRects[i + themeOffset - 1][j - 1], VERTICAL_LIFT  , new DecorationTileBehavior(), theme, LayerType::PLATFORM)); //Ground tiles
                 if (themeOffset != 2) tileCatalog.emplace(getTileIDFromCoords(i + themeOffset, j), Tile(getTileIDFromCoords(i + themeOffset , j), tileSetSourceRects[i + themeOffset - 1][j - 1], ENEMY, new DecorationTileBehavior(), theme)); //Ground tiles
             }
         }
@@ -276,7 +276,7 @@ void Map::draw(bool isEditing) {
                     Texture2D tileTexture = texture;
                     Rectangle src = it->second.srcRect;
 
-                    if ((it->second.type == ENEMY || it->second.type == TileType::COIN || it->second.type == VERTICAL_LIFT || it->second.type == HORIZONTAL_LIFT ) && isEditing == false) continue;
+                    if ((it->second.type == ENEMY || it->second.type == TileType::COIN || it->second.type == TileType::VERTICAL_LIFT || it->second.type == TileType::HORIZONTAL_LIFT ) && isEditing == false) continue;
                     else if(it->second.type ==  TileType::QUESTION_BLOCK){
                         src = tileAnimation.at(TileType::QUESTION_BLOCK).getcurrentframe();
                         src.y +=  (float) it->second.theme * 16.0f;
@@ -329,7 +329,7 @@ void Map::drawLayer(LayerType layertype){
                 Texture2D tileTexture = texture;
                 Rectangle src = it->second.srcRect;
 
-                if ((it->second.type == ENEMY || it->second.type == TileType::COIN)) continue;
+                if ((it->second.type == ENEMY || it->second.type == TileType::COIN || it->second.type == TileType::VERTICAL_LIFT || it->second.type == TileType::HORIZONTAL_LIFT )) continue;
                 else if(it->second.type ==  TileType::QUESTION_BLOCK){
                     src = tileAnimation.at(TileType::QUESTION_BLOCK).getcurrentframe();
                     src.y +=  (float) it->second.theme * 16.0f;
@@ -448,6 +448,9 @@ void Map::setTile(int row, int col, int tileID, int layerIndex) {
         Singleton<ItemManager>::getInstance().Spawn(ItemType::FIRE_BAR, {(float) col * TILE_SIZE + TILE_SIZE / 3, (float) row * TILE_SIZE + TILE_SIZE / 3});
     }
     else if (it->second.type == VERTICAL_LIFT){
+        Singleton<ItemManager>::getInstance().Spawn(ItemType::VERTICAL_LIFT, {(float) col * TILE_SIZE + TILE_SIZE / 3, (float) row * TILE_SIZE + TILE_SIZE / 3});
+    }
+    else if (it->second.type == HORIZONTAL_LIFT){
         Singleton<ItemManager>::getInstance().Spawn(ItemType::HORIZONATAL_LIFT, {(float) col * TILE_SIZE + TILE_SIZE / 3, (float) row * TILE_SIZE + TILE_SIZE / 3});
     }
     layers.at(layerIndex).mapData[row][col].tileID = tileID;

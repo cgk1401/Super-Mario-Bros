@@ -18,9 +18,7 @@ Character::~Character() {
 		currentState = nullptr;
 	}
 }
-void Character::collectCoin(){
-	notify(EventType::COIN_COLLECT);
-}
+
 void Character::ChangeState(CharacterStateType newState, CharacterStateType previosState) {
 	if (currentState) {
 		delete currentState;
@@ -189,36 +187,35 @@ void Character::update(float deltatime) {
 	currentState->Update(deltatime);
 	//DO NOT UPDATE WHEN MARIO IS TRANSFORMING
 	if (currentState->getStateType() == CharacterStateType::TransformState) return;
-
 		animations[currentAction].Update(deltatime);
 	// cập nhật Baseposition
 	Rectangle currentframe = animations[currentAction].getcurrentframe();
 	BasePosition = position.y +  currentframe.height * scale;
 
-		if (!onGround) {
-			if(currentAction != ActionState::FlagpoleHold){
-				if(applyGravity){
-					if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && (IsKeyDown(KeyBindingState::controls.jump) || IsKeyDown(KEY_SPACE))) {
-						velocity.y += config.GRAVITY * 0.1f * deltatime; // Trọng lực nhẹ hơn khi giữ phím nhảy
-					}
-					else {
-						velocity.y += config.GRAVITY * deltatime; // Trọng lực bình thường khi không giữ hoặc hết thời gian tối đa
-					
-					}
+	if (!onGround) {
+		if(currentAction != ActionState::FlagpoleHold){
+			if(applyGravity){
+				if (isJumpingUp && jumpTimeElapsed < config.MAXJUMPTIME && (IsKeyDown(KeyBindingState::controls.jump) || IsKeyDown(KEY_SPACE))) {
+					velocity.y += config.GRAVITY * 0.1f * deltatime;
 				}
-				if(isJumpingUp) setActionState(ActionState::Jump);
+				else {
+					velocity.y += config.GRAVITY * deltatime;
+				}
 			}
+			if(isJumpingUp) setActionState(ActionState::Jump);
 		}
-		// else {
-		// 	velocity.y = 0; 
-		// 	isJumpingUp = false;
-		// }
-	
-
+	}
+	else {
+		velocity.y = 0;
+		isJumpingUp = false;
+	}
 	position.x += velocity.x * deltatime;
 	position.y += velocity.y * deltatime;
 
 	if(position.y > screenHeight + 10) onDead();
+}
+void Character::collectCoin(){
+	notify(EventType::COIN_COLLECT);
 }
 void Character::onDead(){
 	if (currentAction == ActionState::Die) return;

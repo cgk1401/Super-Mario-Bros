@@ -12,7 +12,7 @@ HUD::HUD(pair<int, int> level){
     map_level = level;
     lives = 3;
     hudRect = Rectangle{ 0, 0,  screenWidth, 0.2f * screenHeight };
-    font = LoadFont("../assets/font/PolygonParty.ttf");
+    font = Singleton<TextureManager>::getInstance().load(MyFontType::POLYGON_PARTY);
     fontSize = 40;
     
     //mario = Mario(50, 50);

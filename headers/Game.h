@@ -18,10 +18,7 @@ private:
     ~Game();
 
 public:
-
     void run();
-    void init();
-
     void changeState(GameState* newState);
     void replaceState(GameState* newState);
     void addState(GameState* newGameState);

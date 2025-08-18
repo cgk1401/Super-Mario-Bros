@@ -83,6 +83,7 @@ void VerticalLift::onCollideWith(GameObject* object) {
 			character->velocity.y = 0;
 			character->onGround = true;
 			character->isJumpingUp = false;
+			character->standingOnLift = true;
 		}
 
 		 else if (CheckCollisionRecs(boundCharacter, bound)) {

@@ -29,7 +29,7 @@ Button::Button(float x, float y, float width, float height, const char* labelTex
     isHovered = false;
     useTexture = false; 
     Tooltip = tooltip;
-    FONT = LoadFont("../assets/font/PolygonParty.ttf");
+    FONT = Singleton<TextureManager>::getInstance().load(MyFontType::POLYGON_PARTY);
 }
 
 Button::Button(const char* imagePath, float x, float y, float width, float height, const char* labelText, Color textCol, int fontSize, const char* tooltip) {
@@ -42,7 +42,7 @@ Button::Button(const char* imagePath, float x, float y, float width, float heigh
 
     Tooltip = tooltip;
     texture = LoadTexture(imagePath);
-    FONT = LoadFont("../assets/font/PolygonParty.ttf");
+    FONT = Singleton<TextureManager>::getInstance().load(MyFontType::POLYGON_PARTY);
 
 }
 Button::Button(const Texture2D& texture, float x, float y, float width, float height, const char* labelText, Color textCol, int fontSize, const char* tooltip){
@@ -55,7 +55,7 @@ Button::Button(const Texture2D& texture, float x, float y, float width, float he
 
     Tooltip = tooltip;
     this->texture = texture;
-    FONT = LoadFont("../assets/font/PolygonParty.ttf");
+    FONT = Singleton<TextureManager>::getInstance().load(MyFontType::POLYGON_PARTY);
 
 }
 

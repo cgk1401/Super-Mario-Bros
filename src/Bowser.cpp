@@ -125,6 +125,10 @@ void Bowser::onDeath(DeathType type, Character* player) {
 	else if(type == DeathType::STOMP){
 		health -= 20;
 	}
+
+	if(health <= 0 && interactWithMap){
+		player->notify(EventType::ENEMY_KILL_BOWSER);
+	}
 }
 
 bool Bowser::isDead() {

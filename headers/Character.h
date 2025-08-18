@@ -46,7 +46,7 @@ public:
 	bool isJumpingUp = false;
 	bool isControlled = false; 
 	bool applyGravity = true;
-
+	bool standingOnLift = false;
 	virtual ~Character();
 
 	void ChangeState(CharacterStateType newState, CharacterStateType previousState);

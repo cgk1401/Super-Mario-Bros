@@ -95,7 +95,10 @@ void SoundManager::stopAllSounds(){
 void SoundManager::playMusic(MusicType type, bool loop) {
     if (!musics.count(type)) return;
 
-    if (musicPlaying) stopMusic();
+    if (musicPlaying) {
+        StopMusicStream(musics[currentMusicType]);
+        stopMusic();
+    }
 
     currentMusicType = type;
     PlayMusicStream(musics[type]);

@@ -1,5 +1,6 @@
 #include "CUTSCENES/PrincessRescueCutscene.h"
 #include "LevelCompleteState.h" 
+#include "TextureManager.h"
 #include "Global.h"
 PrincessRescueCutscene::PrincessRescueCutscene(Character* _player, CameraController& _camera, Princess* _princess, HUD* _hud, Map* _map){
    player = _player;
@@ -13,7 +14,7 @@ PrincessRescueCutscene::PrincessRescueCutscene(Character* _player, CameraControl
    blackScene.resize(2);
    blackScene[0] = {-screenWidth,0, screenWidth, screenHeight};
    blackScene[1] = {screenWidth, 0, screenWidth, screenHeight};
-   FONT = LoadFont("../assets/font/PolygonParty.ttf");
+   FONT = Singleton<TextureManager>::getInstance().load(MyFontType::POLYGON_PARTY);
    Singleton<SoundManager>::getInstance().playMusic(MusicType::CASTLE_DANCE, false);
     ufo.position = {princess->position.x - 50, princess->position.y - 150};
     ufo.direction = Direction::Right;

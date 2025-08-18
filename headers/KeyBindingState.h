@@ -6,7 +6,7 @@
 struct Controls {
     int moveLeft = KEY_LEFT;
     int moveRight = KEY_RIGHT;
-    int jump = KEY_SPACE;
+    int jump = KEY_UP;
     int crouch = KEY_DOWN;
 };
     static std::unordered_map<int, std::string> keyNames = {

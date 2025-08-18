@@ -5,31 +5,26 @@
 #include "../headers/CharacterSelection.h"
 #include "../headers/AudioSettingsMenu.h"
 #include "../headers/LevelState.h"
+#include "TextureManager.h"
 #include "KeyBindingState.h"
 MenuState::MenuState() {
     Singleton<SoundManager>::getInstance().playMusic(MusicType::MENU_, true);
-    TraceLog(LOG_INFO, "Menu: Constructor");
-    // Mario Mario : fontsize = 100;
     const int amount_button = 3;
     buttons.resize(amount_button);
-
     ButtonLayoutConfig cfg(amount_button, 40);
     const char* buttonLabels[amount_button] = {"PLAY", "LEVEL DESIGN", "EXIT"};
     buttons = CreateButtons(buttonLabels, cfg);
-
     const int amount_setting_button = 3;
     const char* setting_buttonLabels[amount_setting_button] = { "CHARACTER", "LEVEL", "MAP EDITOR" };
     ButtonLayoutConfig _cfg(amount_setting_button);
     setting_buttons = CreateButtons(setting_buttonLabels, amount_setting_button);
-
     backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
     option_button = new Button("../assets/GUI/option_button.png", 10, 10, 100, 100, "", WHITE);
-    font       = LoadFont("../assets/font/knightwarrior.otf");
+    font       = Singleton<TextureManager>::getInstance().load(MyFontType::KNIGHT_WARRIOR);
     background      = Singleton<TextureManager>::getInstance().load(TextureType::BACKGROUND_1);
     mario_character = LoadTexture("../assets/GUI/menu_mario.png");
     luigi_character = LoadTexture("../assets/GUI/menu_luigi.png");
     textbox = TextBox(0, 0, 200, 40, "", RED, GRAY, BLACK);
-
     for(int i = 0; i < 5; i++){
         starAnimation.frame.push_back({(float)i * 600, 0, 600, 600});
     }
@@ -53,7 +48,6 @@ MenuState::~MenuState() {
     }
 
     UnloadTexture(mario_character);
-    UnloadFont(font);
 }
 
 

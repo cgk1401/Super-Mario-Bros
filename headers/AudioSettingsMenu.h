@@ -27,6 +27,7 @@ private :
     bool draggingSoundSlider;
     Rectangle keybindingButton;
 
+    Font font;
 public :
     AudioSettingsMenu();
     ~AudioSettingsMenu();

@@ -22,6 +22,7 @@ private :
     const char* text = "DO YOU WANT TO SAVE YOUR WORK?";
     Vector2 posistionText;
 
+    Font font;
 
 public :
 	SaveConfirmationDialog();

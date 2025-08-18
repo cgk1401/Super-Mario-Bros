@@ -11,7 +11,7 @@ Controls KeyBindingState::controls;
     for(int i = 0; i < 4; i++){
         buttons[i] = {800, 250 + (h + 31) * i, w, h};
     }
-    FONT  = LoadFont("../assets/font/knightwarrior.otf");
+    FONT  = Singleton<TextureManager>::getInstance().load(MyFontType::KNIGHT_WARRIOR);
     backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
 	audioButton = {(screenWidth - texture.width) / 2.0f + 23, (screenHeight -  texture.height) / 2.0f, 93, 93};
 
@@ -41,6 +41,8 @@ void KeyBindingState::handleInput()  {
 }
 void KeyBindingState::update(float dt)  {
     backButton->update(dt);
+    Singleton<SoundManager>::getInstance().updateMusic(dt);
+
     if (waitingForKey) {
         int newKey = GetKeyPressed();
         keyPress = GetCharPressed();

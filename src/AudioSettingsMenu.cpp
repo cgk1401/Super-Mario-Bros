@@ -19,10 +19,10 @@ AudioSettingsMenu::AudioSettingsMenu() {
 	backButton = new Button("../assets/GUI/back_button.png", 10, 10, 100, 100, "", WHITE);
 
 	float widthslider = 400;
-	float heightslider = 20;
+	float heightslider = 25;
 	float widthText = MeasureText(musicText, 20);
 
-	float spacingX = (widthPanel - widthslider - LEFT_MARGIN - widthText) * float(1) / 2;
+	float spacingX = (widthPanel - widthslider - LEFT_MARGIN - widthText) * float(1) / 2 + 100;
 	float spacingY = (heightPanel - heightslider * 2) * float(1) / 3;
 	musicSlider = { positionPanel.x + LEFT_MARGIN + widthText + spacingX, positionPanel.y + spacingY, widthslider, heightslider };
 	soundSlider = { positionPanel.x + LEFT_MARGIN + widthText + spacingX, positionPanel.y + spacingY * 2 + heightslider, widthslider, heightslider };
@@ -32,6 +32,7 @@ AudioSettingsMenu::AudioSettingsMenu() {
 	draggingSoundSlider = false;
 
 	keybindingButton = {positionPanel.x + 23, positionPanel.y + 101, 93, 93};
+	font = Singleton<TextureManager>::getInstance().load(MyFontType::POLYGON_PARTY);
 }
 
 AudioSettingsMenu::~AudioSettingsMenu() {
@@ -89,18 +90,15 @@ void AudioSettingsMenu::update(float deltatime) {
 }
 
 void AudioSettingsMenu::render() {
-	// DrawTexture(background, 0, 0, WHITE); DrawTexturePro(background,
-	// 	{ 0,0, (float)background.width,(float)background.height },
-	// 	{ 0,0, screenWidth, screenHeight },
-	// 	{ 0,0 }, 0, WHITE);
 	DrawRectangleRec(Rectangle{ 0, 0, screenWidth, screenHeight }, Fade(BLACK, 0.6f));
 	backButton->draw();
 	DrawTexture(audioPanel, positionPanel.x, positionPanel.y, WHITE);
 	float textPosX = positionPanel.x + 200;
-	DrawText(musicText, textPosX, musicSlider.y, 20, darkYellow);
-	DrawText(soundText, textPosX, soundSlider.y, 20, darkYellow);
-	DrawText(TextFormat("%.2f", currentmusicVolume), textPosX + LEFT_MARGIN + MeasureText(musicText, 20) + 8, musicSlider.y, 20, WHITE);
-	DrawText(TextFormat("%.2f", currentsoundVolume), textPosX + LEFT_MARGIN + MeasureText(soundText, 20) + 8, soundSlider.y, 20, WHITE);
+	float fontSize = 30;
+	DrawTextEx(font ,musicText, {textPosX, musicSlider.y}, fontSize, 5, darkYellow);
+	DrawTextEx(font, soundText,{ textPosX, soundSlider.y}, fontSize, 5, darkYellow);
+	DrawTextEx(font, TextFormat("%.2f", currentmusicVolume), {textPosX + LEFT_MARGIN + MeasureText(musicText, fontSize) + 20, musicSlider.y}, 30, 5, WHITE);
+	DrawTextEx(font, TextFormat("%.2f", currentsoundVolume), {textPosX + LEFT_MARGIN + MeasureText(soundText, fontSize) + 20, soundSlider.y}, 30, 5, WHITE);
 	DrawRectangleRounded(musicSlider, 0.4f, 15, DARKGRAY);
 	DrawRectangleRounded(soundSlider, 0.4f, 15, DARKGRAY);
 	DrawRectangleRounded({ musicSlider.x, musicSlider.y, musicSliderHandle.x - musicSlider.x, musicSlider.height }, 0.4f, 15, darkYellow);

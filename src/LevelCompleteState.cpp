@@ -14,7 +14,8 @@ LevelCompleteState::LevelCompleteState(HUD* _hud, Character* _player, Map* _map)
 	txt[1] = map->getLevel().second != 4 ? ("NEXT") : "RESTART";
 	buttons[0] = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), screenWidth *0.33f, screenHeight * 0.72f, 200, 120, txt[0].c_str(), WHITE);
 	buttons[1] = new Button(Singleton<TextureManager>::getInstance().load(TextureType::BUTTON), screenWidth *0.33f + 200 + 20, screenHeight * 0.72f, 200, 120, txt[1].c_str(), WHITE);
-	font = LoadFont("../assets/font/knightwarrior.otf");
+	font = Singleton<TextureManager>::getInstance().load(MyFontType::KNIGHT_WARRIOR);
+	
 
 	
 
@@ -27,7 +28,6 @@ LevelCompleteState::LevelCompleteState(HUD* _hud, Character* _player, Map* _map)
 LevelCompleteState::~LevelCompleteState() {
 	for (auto button : buttons)
 		delete button;
-	UnloadFont(font);
 }
 
 
