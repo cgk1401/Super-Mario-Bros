@@ -112,7 +112,7 @@ void KidnapCutscene::handlePhase(float dt) {
         case KidnapPhase::UFO_APPEARS:
                Vector2 targetPos;
                 targetPos.x = princess.position.x - 300;
-                targetPos.y = princess.position.y - 150;
+                targetPos.y = princess.position.y - 180;
 
                 camera.getCamera().target.x = lerp(camera.getCamera().target.x, targetPos.x, dt * 3);
                 camera.getCamera().target.y = lerp(camera.getCamera().target.y, targetPos.y, dt * 3);
