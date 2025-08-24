@@ -4,27 +4,6 @@
 #include "Button.h"
 
 class Game;
-
-struct ButtonLayoutConfig {
-    int amount_button;
-
-    float MARGIN_ON;
-    float MENU_BUTTON_HEIGHT;
-
-    float BUTTON_MARGIN_X;
-    float FIRST_POSITION_Y_BUTTON;
-    float BUTTON_SPACING;
-
-    float BUTTON_HEIGHT;
-    float BUTTON_WIDTH;
-
-    int FONT_SIZE;
-    ButtonLayoutConfig(int amount_button, int fontSize = 30);
-};
-
-std::vector <Button*> CreateButtons(const char* buttonLabels[], const ButtonLayoutConfig& other);
-
-//Lớp cha ảo => quản lí trạng thái của game: PlayState, PauseState,..
 //State Pattern
 class GameState{
 public:

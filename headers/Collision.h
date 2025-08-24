@@ -13,9 +13,10 @@ class FireBall;
 
 using namespace std;
 
-class Collision{
+class Collision
+{
 public:
-    static void handleMapCollision(GameObject* object, Map* map);
-    static void handleObjectsCollision(GameObject* a, GameObject* b);
-    static void handleMultipleObjectCollisions(vector<GameObject*>& objects);
+    static void handleMapCollision(GameObject *object, Map *map);
+    static void handleObjectsCollision(GameObject *a, GameObject *b);
+    static void handleMultipleObjectCollisions(vector<GameObject *> &objects);
 };

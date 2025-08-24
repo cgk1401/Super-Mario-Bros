@@ -12,20 +12,24 @@
 using namespace std;
 
 //________________UFO_______________________
-enum class UFOState{
+enum class UFOState
+{
     APPEAR,
     DISAPPEAR,
     FLY,
 };
-class UFOInvader {
+class UFOInvader
+{
     friend class PrincessRescueCutscene;
     friend class KidnapCutscene;
-private: 
+
+private:
     Texture2D texture;
     map<UFOState, Animation> animation;
     Vector2 position;
     UFOState currentState;
     Direction direction;
+
 public:
     UFOInvader();
     void update(float dt);
@@ -35,30 +39,33 @@ public:
 };
 
 //__________________Kidnap Cutscene__________________
-enum class KidnapPhase {
-    INTRO,   
-    WALKING,    
+enum class KidnapPhase
+{
+    INTRO,
+    WALKING,
     UFO_APPEARS,
-    HELP,    
+    HELP,
     DISAPPEAR,
     WAIT,
     MOVE_CAMERA_TO_MARIO,
     SURPRISED_EMOJI,
     BACK_TO_ORIGIN,
-    DONE ,     
+    DONE,
 };
-class KidnapCutscene : public Cutscene {
+class KidnapCutscene : public Cutscene
+{
 public:
-    KidnapCutscene(Map* _map, Character* _character);
+    KidnapCutscene(Map *_map, Character *_character);
     ~KidnapCutscene();
 
     void update(float dt) override;
     void draw() override;
     bool isFinished() const override;
-     void setFinish() override;
+    void setFinish() override;
+
 private:
-    ///Texture2D background;
-    Texture2D emojiTexture; 
+    /// Texture2D background;
+    Texture2D emojiTexture;
     bool done = false;
     float elapsedTime = 0.0f;
     KidnapPhase currentPhase = KidnapPhase::INTRO;
@@ -68,8 +75,8 @@ private:
     CameraController camera;
     Animation help_Ani;
     Animation surprise_emoji_Ani;
-    Map* map;
-    Character* character;
+    Map *map;
+    Character *character;
 
     vector<Rectangle> blackScene;
     bool start;
@@ -78,5 +85,4 @@ private:
 
 private:
     void handlePhase(float dt);
-
 };

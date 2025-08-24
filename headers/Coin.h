@@ -2,9 +2,7 @@
 #include "../headers/TransformState.h"
 
 class Coin : public Item {
-private:
-    
-    Animation animation;
+
 public:
     friend class Collision;
     Coin(Vector2 pos, const Animation& ani): animation(ani) { 
@@ -47,4 +45,6 @@ public:
             frame.height * 4
         };
     }
+private:
+    Animation animation;
 };

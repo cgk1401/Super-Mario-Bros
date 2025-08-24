@@ -7,17 +7,6 @@
 class Game;
 
 class HUD : public Observer {
-private:
-    float time;
-    int score;
-    int coins;
-    pair<int, int> map_level;
-    int lives;
-    
-    Font font;
-    int fontSize;
-    Rectangle hudRect; //vùng giới hạn các position của các thông số trên 
-   
 public:
     HUD(pair<int, int> level = {1,1});
     HUD(const HUD& a) = default;
@@ -36,5 +25,17 @@ public:
     void update(float dt);
     void draw();
     void onNotify(const EventType& event, void* data = nullptr) override;
+private:
+    float time;
+    int score;
+    int coins;
+    pair<int, int> map_level;
+    int lives;
+    
+    Font font;
+    int fontSize;
+    Rectangle hudRect; //vùng giới hạn các position của các thông số trên 
+   
+
 };
 #endif

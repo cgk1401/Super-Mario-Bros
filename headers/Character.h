@@ -27,21 +27,6 @@ class Character : public GameObject, public Subject {
 	friend class FireState;
 	friend class FireBall;
 	friend class StarmanState;
-
-protected:
-	Texture texture;
-	map <ActionState, Animation> animations;
-	CharacterType type;
-	CharacterState* currentState;
-	ActionState currentAction;
-	Direction currentdirection;
-
-	float scale = 4.0f;
-	float BasePosition;
-
-	PhysicsConfig config;
-	//bool isJumpingUp = false;
-	float jumpTimeElapsed = 0;
 public:
 	bool isJumpingUp = false;
 	bool isControlled = false; 
@@ -87,4 +72,19 @@ public:
 	void onGeneralCollision(Direction collideSide, Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
     void onHeadCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
     void onCollideWith(GameObject* object) override;
+protected:
+	Texture texture;
+	map <ActionState, Animation> animations;
+	CharacterType type;
+	CharacterState* currentState;
+	ActionState currentAction;
+	Direction currentdirection;
+
+	float scale = 4.0f;
+	float BasePosition;
+
+	PhysicsConfig config;
+	//bool isJumpingUp = false;
+	float jumpTimeElapsed = 0;
+
 };

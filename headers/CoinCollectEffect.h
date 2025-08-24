@@ -10,6 +10,13 @@ using namespace std;
 
 
 class CoinCollectEffect : public BaseEffect {
+public:
+    CoinCollectEffect() {}
+    CoinCollectEffect(Vector2 position);
+    
+    void update(float dt) override;
+    void draw(const Texture2D& texture) override;
+    bool isFinished() const override;
 private:
     Vector2 pos;
     float height;
@@ -18,13 +25,6 @@ private:
     Animation anim;
     Timer time;
 
-public:
-    CoinCollectEffect() {}
-    CoinCollectEffect(Vector2 position);
-    
-    void update(float dt) override;
-    void draw(const Texture2D& texture) override;
-    bool isFinished() const override;
    
 };
 

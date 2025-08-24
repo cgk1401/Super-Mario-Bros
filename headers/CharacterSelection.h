@@ -5,6 +5,16 @@
 using namespace std;
 
 class CharacterSelection : public GameState {
+
+public:
+    CharacterSelection();
+    ~CharacterSelection();
+
+    void handleInput() override;
+    void update(float deltatime) override;
+    void render() override;
+    bool allowUpdateBelow() override { return false; }
+    Texture2D* getSelectedCharacter(){return  selectCharacter;}
 private:
     Button* backButton;
     Button* play_button;
@@ -20,14 +30,4 @@ private:
     // bool startLaunching = false;
     // float scale = 1;
 
-
-public:
-    CharacterSelection();
-    ~CharacterSelection();
-
-    void handleInput() override;
-    void update(float deltatime) override;
-    void render() override;
-    bool allowUpdateBelow() override { return false; }
-    Texture2D* getSelectedCharacter(){return  selectCharacter;}
 };

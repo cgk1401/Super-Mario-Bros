@@ -5,7 +5,28 @@
 #include <string>
 #include "../headers/Timer.h"
 
-class Button {
+class Button
+{
+    public:
+    Button();
+    Button(float x, float y, float width, float height, const char *labelText, Color buttonColor, Color hoverCol, Color textCol, int fontSize = 30, const char *tooltip = "");
+    Button(const char *imagePath, float x, float y, float width, float height, const char *labelText, Color textColor, int fontSize = 30, const char *tooltip = "");
+    Button(const Texture2D &texture, float x, float y, float width, float height, const char *labelText, Color textColor, int fontSize = 30, const char *tooltip = "");
+
+    ~Button();
+
+    void operator=(const Button &b);
+    void update(float deltatime);
+    void draw(Color tint = WHITE);
+
+    void updatePos(Vector2 newPos);
+    void updateScale(float newScale);
+    bool IsClicked();
+    bool IsMouseDown();
+    bool IsHovered() const;
+    Rectangle getBounds() const;
+    Rectangle getScaledRect() const;
+    Vector2 getPosition() const;
 private:
     Rectangle bounds;
     std::string label;
@@ -23,26 +44,8 @@ private:
     std::string Tooltip;
 
     Font FONT;
-public:
-    Button();
-    Button(float x, float y, float width, float height, const char* labelText, Color buttonColor, Color hoverCol, Color textCol, int fontSize = 30, const char* tooltip = "");
-    Button(const char* imagePath, float x, float y, float width, float height, const char* labelText, Color textColor, int fontSize = 30, const char* tooltip = "");
-    Button(const Texture2D& texture, float x, float y, float width, float height, const char* labelText, Color textColor, int fontSize = 30, const char* tooltip = "");
 
-    ~Button();
 
-    void operator=(const Button& b);
-    void update(float deltatime);
-    void draw(Color tint = WHITE);
-
-    void updatePos(Vector2 newPos);
-    void updateScale(float newScale);
-    bool IsClicked();
-    bool IsMouseDown();
-    bool IsHovered() const;
-    Rectangle getBounds() const;
-    Rectangle getScaledRect() const;
-    Vector2 getPosition() const;
 };
 
 #endif

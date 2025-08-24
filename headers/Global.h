@@ -130,4 +130,25 @@ float approach(float current, float target, float increase);
 Direction getCollisionDirection(GameObject* a, GameObject* b);
 Direction getCollisionDirection(const Rectangle& rectA, const Rectangle& rectB);
 
+
+
+
+struct ButtonLayoutConfig {
+    int amount_button;
+
+    float MARGIN_ON;
+    float MENU_BUTTON_HEIGHT;
+
+    float BUTTON_MARGIN_X;
+    float FIRST_POSITION_Y_BUTTON;
+    float BUTTON_SPACING;
+
+    float BUTTON_HEIGHT;
+    float BUTTON_WIDTH;
+
+    int FONT_SIZE;
+    ButtonLayoutConfig(int amount_button, int fontSize = 30);
+};
+
+std::vector <Button*> CreateButtons(const char* buttonLabels[], const ButtonLayoutConfig& other);
 #endif 

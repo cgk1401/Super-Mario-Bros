@@ -7,10 +7,6 @@
 using namespace std;
 
 class CutsceneManager {
-private:
-    Button* skip_button;
-    vector<Cutscene*> cutscenes;
-    Timer time;
 public:
     CutsceneManager();
     ~CutsceneManager();
@@ -19,4 +15,8 @@ public:
     void update(float dt);
     void draw();
     bool isActive() const;
+private:
+    Button* skip_button;
+    vector<Cutscene*> cutscenes;
+    Timer time;
 };

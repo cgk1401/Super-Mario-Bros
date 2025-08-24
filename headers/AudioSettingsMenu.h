@@ -4,6 +4,14 @@
 #include "../headers/Global.h"
 
 class AudioSettingsMenu : public GameState {
+public :
+    AudioSettingsMenu();
+    ~AudioSettingsMenu();
+
+    void handleInput() override;
+    void update(float deltatime) override;
+    void render() override;
+    bool allowUpdateBelow() override { return false; }
 private :
     Texture background;
     Texture audioPanel;
@@ -28,13 +36,5 @@ private :
     Rectangle keybindingButton;
 
     Font font;
-public :
-    AudioSettingsMenu();
-    ~AudioSettingsMenu();
-
-    void handleInput() override;
-    void update(float deltatime) override;
-    void render() override;
-    bool allowUpdateBelow() override { return false; }
 };
 

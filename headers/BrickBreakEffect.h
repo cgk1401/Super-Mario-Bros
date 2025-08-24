@@ -8,14 +8,6 @@
 using namespace std;
 
 class BrickBreakEffect : public BaseEffect {
-private:
-    Vector2 pos;
-    vector<Vector2> particle;
-    vector<Vector2> velocity;
-    Animation anim;
-    Timer time;
-
-    MapTheme maptheme;
 public:
     BrickBreakEffect() {}
     BrickBreakEffect(Vector2 position, MapTheme _theme);
@@ -24,6 +16,14 @@ public:
     void update(float dt) override;
     void draw(const Texture2D& texture) override;
     bool isFinished() const override;
+private:
+    Vector2 pos;
+    vector<Vector2> particle;
+    vector<Vector2> velocity;
+    Animation anim;
+    Timer time;
+
+    MapTheme maptheme;
    
 };
 

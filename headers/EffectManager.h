@@ -13,31 +13,32 @@ using namespace std;
 template <typename T>
 class Singleton;
 
-class EffectManager : public Observer{
+class EffectManager : public Observer
+{
     template <typename T>
     friend class Singleton;
-private:
-    Texture texture;
-    //EFFECTs
-    vector<BaseEffect*> effects;
-    vector<BaseEffect*> hidden_effects;
-    EffectManager();
-    ~EffectManager() {};
-public:
 
-    //EFFECT METHODs
+public:
+    // EFFECT METHODs
     void spawnBrickBreak(int row, int col, MapTheme theme);
     void spawnCoin(int row, int col);
     void explosionEffect(Vector2 pos);
     void goombaDead(Vector2 pos);
-    void marioDead(Vector2 position, const Texture2D& texture, Rectangle frame);
-    void koopaDeath(Vector2 position, const Texture2D& texture, Rectangle frame);
-    void koopaDeath(Vector2 position, const Texture2D& texture, Animation animations);
+    void marioDead(Vector2 position, const Texture2D &texture, Rectangle frame);
+    void koopaDeath(Vector2 position, const Texture2D &texture, Rectangle frame);
+    void koopaDeath(Vector2 position, const Texture2D &texture, Animation animations);
 
     void update(float dt);
     void draw();
     void drawHiddenEffects();
 
-    void onNotify(const EventType& event, void* data = nullptr);
-};
+    void onNotify(const EventType &event, void *data = nullptr);
 
+private:
+    Texture texture;
+    // EFFECTs
+    vector<BaseEffect *> effects;
+    vector<BaseEffect *> hidden_effects;
+    EffectManager();
+    ~EffectManager() {};
+};

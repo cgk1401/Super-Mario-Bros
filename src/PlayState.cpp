@@ -138,7 +138,6 @@ void PlayState::update(float dt){
     }
     //______________________________COLLISION DETECTION____________________________
     ///______________________________WOLRD__________________________________________
-    camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
     Global::camera = camera.getCamera();
     PauseButton->update(dt);
     bg.update({character->getBound().x, character->getBound().y},camera.getCamera(), dt);
@@ -157,7 +156,7 @@ void PlayState::update(float dt){
             e->update(dt);
         }
     }
-     vector<GameObject*> allObjects;
+    vector<GameObject*> allObjects;
     allObjects.push_back(character);
     allObjects.insert(allObjects.end(), enemies.begin(), enemies.end());
     vector<Item*> items = Singleton<ItemManager>::getInstance().getItems();
@@ -208,10 +207,7 @@ void PlayState::update(float dt){
     }
     Singleton<EffectManager>::getInstance().update(dt);
     Singleton<ItemManager>::getInstance().Update(dt, character, world[level]);
-
-    Global::character = character;
-    
-    
+                                                                                                                                                                                        Global::character = character;
    
     if(princess &&  CheckCollisionRecs(princess->getBound(), character->getBound())){
         cutscene.play(new PrincessRescueCutscene(character, camera, princess, hud, world[level]));
@@ -222,8 +218,7 @@ void PlayState::update(float dt){
         princess->update(dt);
     }
 
-    
-   
+    camera.update(character->getBound(), world[level]->columns * Map::TILE_SIZE);
     ///______________________________DELETION__________________________________________
       enemies.erase(remove_if(enemies.begin(), enemies.end(),
         [](Enemy* e) {

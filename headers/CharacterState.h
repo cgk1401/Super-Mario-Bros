@@ -16,9 +16,6 @@ struct PhysicsConfig {
 
 class CharacterState {
 	friend class Collision;
-protected :
-	Character* character;
-
 public :
 	CharacterState(Character* character);
 	virtual ~CharacterState() = default;
@@ -32,4 +29,7 @@ public :
 	Character* getCharacter();
 	bool getonGround();
 	void SetBasePosition(float newposition);
+protected :
+	Character* character;
+
 };

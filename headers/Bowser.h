@@ -8,26 +8,7 @@
 #include "PlayState.h"
 using namespace std;
 
-class Bowser : public Enemy{
-private :
-	Animation animations;
-	const float scale = 3.0f;
-	bool isdied = false;
-
-	float moveDistance = 120.0f;
-	float moved = 0.0f;
-	float moveSpeed = 50.0f;
-	float jumpForce = -500.0f; 
-	float jumpCooldown = 3.0f;
-	float jumpTimer = 0.0f;
-	bool movingRight = true;
-	
-	float fireBreathCooldown = 2.0f;
-	float fireBreathTimer = 0.0f;
-
-	float health = 100;
-	Rectangle healthBar;
-public :
+class Bowser : public Enemy{public :
 	Bowser();
 	Bowser(Vector2 position, MapTheme theme);
 	~Bowser() override;
@@ -46,4 +27,23 @@ public :
 
 	// BowserFireball
 	void CreateFireBalls(float deltatime);
+private :
+	Animation animations;
+	const float scale = 3.0f;
+	bool isdied = false;
+
+	float moveDistance = 120.0f;
+	float moved = 0.0f;
+	float moveSpeed = 50.0f;
+	float jumpForce = -500.0f; 
+	float jumpCooldown = 3.0f;
+	float jumpTimer = 0.0f;
+	bool movingRight = true;
+	
+	float fireBreathCooldown = 2.0f;
+	float fireBreathTimer = 0.0f;
+
+	float health = 100;
+	Rectangle healthBar;
+
 };

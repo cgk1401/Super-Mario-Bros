@@ -11,15 +11,14 @@ class Singleton;
 class AnimationManager {
 	template <typename T>
 	friend class Singleton;
-
+public:
+	void LoadAnimation(const string& filename, CharacterStateType statetype);
+	Animation getAnimation(CharacterType charactertype, CharacterStateType statetype, ActionState actiontype);
 private :
 	map <CharacterType, map <CharacterStateType, map <ActionState, Animation>>> animations;
 
 	AnimationManager() {};
 	~AnimationManager() {};
-public:
-	void LoadAnimation(const string& filename, CharacterStateType statetype);
-	Animation getAnimation(CharacterType charactertype, CharacterStateType statetype, ActionState actiontype);
 
 
 };

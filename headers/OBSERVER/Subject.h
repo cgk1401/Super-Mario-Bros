@@ -16,7 +16,7 @@ public:
     void removeObserver(Observer* obs){
          observers.erase(remove(observers.begin(), observers.end(), obs), observers.end());
     }
-public:
+    
     void notify(const EventType& event, void* data = nullptr) {
         for (auto obs : observers)
             obs->onNotify(event, data);

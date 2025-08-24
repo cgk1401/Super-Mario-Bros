@@ -6,27 +6,30 @@
 template <typename T>
 class Singleton;
 
-class ItemManager {
+class ItemManager
+{
     template <typename T>
     friend class Singleton;
+
+public:
+    void Spawn(ItemType type, Vector2 position, void *extra_data = nullptr);
+    void Update(float dt, Character *player, Map *map);
+    void DrawHiddenItem();
+    void Draw();
+    void clearItems();
+
+    vector<Item *> getItems() const;
+
 private:
     Texture texture;
-    vector<Item*> items;
-    vector<Item*> hiddenItems;
+    vector<Item *> items;
+    vector<Item *> hiddenItems;
     Animation mushroomAni;
     Animation flowerAni;
     Animation starAni;
     Animation coinAni;
     Animation firebarAni;
-    
+
     ItemManager();
     ~ItemManager();
-public:
-    void Spawn(ItemType type, Vector2 position, void* extra_data = nullptr);
-    void Update(float dt, Character* player, Map* map);
-    void DrawHiddenItem();
-    void Draw();
-    void clearItems();
-    
-    vector<Item*> getItems() const;
 };

@@ -12,29 +12,33 @@ using namespace std;
 
 class HUD;
 
-enum class FlagPolePhase{
+enum class FlagPolePhase
+{
     SLIDE_DOWN,
     WALK,
     INTO_CASTLE,
     WAIT,
     DONE,
 };
-class FlagPoleCutscene : public Cutscene {
+class FlagPoleCutscene : public Cutscene
+{
 public:
-    FlagPoleCutscene(Character* _player, HUD* _hud, Map* _map, CameraController _camera);
+    FlagPoleCutscene(Character *_player, HUD *_hud, Map *_map, CameraController _camera);
     ~FlagPoleCutscene() = default;
 
     void update(float dt) override;
     void draw() override;
     bool isFinished() const override;
-     void setFinish() override;
+    void setFinish() override;
+
 private:
-    Character* player;
-    HUD* hud;
-    Map* map;
+    Character *player;
+    HUD *hud;
+    Map *map;
     CameraController camera;
     float elapsedTime = 0.0f;
     FlagPolePhase currentPhase = FlagPolePhase::SLIDE_DOWN;
+
 private:
     void handlePhase(float dt);
 };

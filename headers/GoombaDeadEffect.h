@@ -8,11 +8,6 @@
 using namespace std;
 
 class GoombaDeadEffect : public BaseEffect {
-private:
-    Texture2D texture;
-    Vector2 pos;
-    Animation anim;
-    float speed = -100;
 public:
     GoombaDeadEffect() {}
     GoombaDeadEffect(Vector2 position);
@@ -20,6 +15,11 @@ public:
     void update(float dt) override;
     void draw(const Texture2D& texture) override;
     bool isFinished() const override;
+private:
+    Texture2D texture;
+    Vector2 pos;
+    Animation anim;
+    float speed = -100;
 };
 
 

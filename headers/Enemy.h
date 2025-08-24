@@ -4,23 +4,20 @@
 #include "GameObject.h"
 class Character;
 
-class Enemy : public GameObject{
-protected:
-	Texture texture;
-	Direction direction;
-	MapTheme theme;
+class Enemy : public GameObject
+{
+	friend class Collision;
+
 public:
 	Enemy();
 
-	friend class Collision;
 	virtual ~Enemy() = default;
 	virtual void LoadSource() = 0;
-	virtual void onDeath(DeathType type, Character* player = nullptr) = 0;
-	virtual bool isDead() = 0; 
+	virtual void onDeath(DeathType type, Character *player = nullptr) = 0;
+	virtual bool isDead() = 0;
 
 	virtual EnemyType getType() const = 0;
 	virtual void changeDirection(Direction newDirection);
-	
 
 	virtual bool isActive() const;
 	virtual bool FollowPlayer() const;
@@ -30,11 +27,16 @@ public:
 	virtual Rectangle getBound() const override = 0;
 	ObjectType getObjectType() const;
 
-	//Collide with map
-	virtual void onFootCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
-	virtual void onGeneralCollision(Direction collideSide, Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance);
-	virtual void onHeadCollision(Tile& tile, int row, int col, Map* map, MapTileInstance* tileInstance) override;
-	
-	//Collide with entities
-    virtual void onCollideWith(GameObject* object) override = 0;
+	// Collide with map
+	virtual void onFootCollision(Tile &tile, int row, int col, Map *map, MapTileInstance *tileInstance) override;
+	virtual void onGeneralCollision(Direction collideSide, Tile &tile, int row, int col, Map *map, MapTileInstance *tileInstance);
+	virtual void onHeadCollision(Tile &tile, int row, int col, Map *map, MapTileInstance *tileInstance) override;
+
+	// Collide with entities
+	virtual void onCollideWith(GameObject *object) override = 0;
+
+protected:
+	Texture texture;
+	Direction direction;
+	MapTheme theme;
 };

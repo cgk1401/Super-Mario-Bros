@@ -40,9 +40,9 @@ MapEditor::MapEditor(pair<int, int> level ,int r, int c) : Map(level, r, c) {
     world_1_3   = LoadTexture("../assets/Map/World 1-3.png");
     world_1_4   = LoadTexture("../assets/Map/World 1-4.png");
     this->level = level;
-    string filename;
-    filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
-    loadFromFile(filename.c_str(), true);
+    // string filename;
+    // filename = "map" + to_string(level.first) + "_" + to_string(level.second) + ".txt"; //e.g. map1_1.txt, map1_2.txt
+    // loadFromFile(filename.c_str(), true);
 }
 MapEditor::~MapEditor() {
     delete back_button;

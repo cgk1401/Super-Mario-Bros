@@ -204,9 +204,6 @@
     <ClCompile Include="..\src\AnimationManager.cpp">
       <Filter>Source Files\Core</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\GameState.cpp">
-      <Filter>Source Files\States</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Textbox.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -252,9 +249,6 @@
     <ClCompile Include="..\src\Bowser.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Enemy.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\CUTSCENES\PipeCutscene.cpp">
       <Filter>Source Files\Cutscene</Filter>
     </ClCompile>
@@ -275,6 +269,15 @@
     </ClCompile>
     <ClCompile Include="..\src\KoopaParatroopa.cpp">
       <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Enemy.cpp">
+      <Filter>Source Files\Entity\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Princess.cpp">
+      <Filter>Source Files\Cutscene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\CUTSCENES\PrincessRescueCutscene.cpp">
+      <Filter>Source Files\Cutscene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -508,6 +511,12 @@
     </ClInclude>
     <ClInclude Include="..\headers\KoopaParatroopa.h">
       <Filter>Header Files\Entity\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\CUTSCENES\PrincessRescueCutscene.h">
+      <Filter>Header Files\Cutscene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\headers\Princess.h">
+      <Filter>Header Files\Cutscene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
